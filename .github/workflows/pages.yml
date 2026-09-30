@@ -1,5 +1,11 @@
 name: Site (GitHub Pages)
 
+# Atualiza o site sozinho:
+# - push/merge na main  -> build + deploy (o site muda em ~1 min)
+# - Pull Request        -> só build (valida links e CSS, não publica)
+# - "Run workflow"      -> build + deploy manual
+# Pré-requisito (uma vez só): Settings -> Pages -> Source: "GitHub Actions".
+
 on:
   push:
     branches: [main]
@@ -9,15 +15,24 @@ on:
 permissions:
   contents: read
 
+# PRs: uma execução nova cancela a anterior da mesma branch.
+# Deploys: entram em fila e nunca são cancelados no meio da publicação.
 concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.ref) || 'pages-deploy' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
     steps:
       - uses: actions/checkout@v7
+
+      # Falha logo no começo, com mensagem clara, se o Pages não estiver ativado.
+      - if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v6
 
       # O site.css é gerado pelo Tailwind e fica no repositório (quem só escreve
       # Markdown não precisa de Node). Aqui conferimos se ele está atualizado.
