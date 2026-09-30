@@ -16,6 +16,7 @@ import re
 from mkdocs.structure.files import File, InclusionLevel
 from mkdocs.structure.nav import Section
 from mkdocs.utils import get_relative_url
+from pymdownx.slugs import slugify
 
 from _componentes import COR_DO_NIVEL, NIVEL, NIVEL_DO_EXERCICIO, cartao, grade, sem_emoji
 
@@ -37,7 +38,7 @@ PASTAS_OCULTAS = {"img"}
 
 # Ordem das abas do topo. O que não estiver aqui fica no meio, em ordem alfabética.
 ORDEM_TOPO_INICIO = ["README.md", "GUIA-DE-ACESSO.md"]
-ORDEM_TOPO_FIM = ["niveis.md", "CONTRIBUTING.md"]
+ORDEM_TOPO_FIM = ["niveis.md", "CONTRIBUTING.md"]  # "simulados" fica no meio, depois de "conteudo"
 
 ORDEM_NIVEIS = {"facil": 1, "intermediario": 2, "dificil": 3}
 
@@ -45,6 +46,7 @@ LINK = re.compile(r"(\]\()(?!https?:|mailto:|#)([^)\s#]+)(#[^)\s]*)?(\))")
 H1 = re.compile(r"^#\s+(.+)$", re.M)
 
 _estado = {}
+_slug = slugify(case="lower")  # o mesmo do mkdocs.yml (ids iguais aos do GitHub)
 
 
 def _titulo_da_pasta(docs_dir, pasta):
@@ -209,7 +211,7 @@ def on_files(files, config):
             texto = open(f.abs_src_path, encoding="utf-8").read()
             for secao in re.split(r"\n(?=## )", texto):
                 titulo = secao.splitlines()[0].lstrip("# ").strip()
-                ancora = re.sub(r"[^\w\- ]", "", titulo.lower()).strip().replace(" ", "-")
+                ancora = _slug(re.sub(r"[`*_]", "", titulo), "-")
                 for _, alvo, _, _ in LINK.findall(secao):
                     if alvo.endswith(".py"):
                         py = posixpath.normpath(posixpath.join(posixpath.dirname(f.src_uri), alvo))

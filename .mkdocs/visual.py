@@ -41,8 +41,20 @@ EXEMPLO = re.compile(r"\*\*Entrada:\*\*\n```text\n(.*?)```\n\*\*Saída:\*\*\n```
 # Tabela-índice: "| [**Python**](python/README.md) | descrição |" vira uma grade de cartões.
 TABELA_INDICE = re.compile(r"^\|[^\n]+\|\n\|[ :|-]+\|\n((?:\| \[\*\*[^\]]+\*\*\]\([^)]+\) \| [^\n]+ \|\n?)+)", re.M)
 LINHA_INDICE = re.compile(r"^\| \[\*\*([^\]]+)\*\*\]\(([^)]+)\) \| (.+?) \|$", re.M)
-VER_RESPOSTA = re.compile(r"^\[✅ Ver resposta\]\(([^)]+)\)\s*$", re.M)
-CAIXAS = {"💡": ("tip", "Dica"), "⚠️": ("warning", "Atenção"), "📖": ("info", "Antes de começar")}
+# [ \t]* e não \s*: \s* engoliria a linha em branco e o "---" seguinte viraria um título.
+VER_RESPOSTA = re.compile(r"^\[✅ Ver resposta\]\(([^)]+)\)[ \t]*$", re.M)
+CAIXAS = {
+    "💡": ("tip", "Dica"),
+    "⚠️": ("warning", "Atenção"),
+    "📖": ("info", "Antes de começar"),
+    "📌": ("note", "Importante"),
+}
+# Linha de cabeçalho dos simulados: vira a "folha de prova" com cronômetro.
+FOLHA_DE_PROVA = re.compile(
+    r"^\*\*Duração sugerida:\*\* (?P<duracao>[^·]+?) · \*\*Pontuação:\*\* (?P<pontos>[^·]+?)"
+    r" · \*\*Assuntos:\*\* (?P<assuntos>.+?)\s*$",
+    re.M,
+)
 
 
 def _fora_de_codigo(linhas):
@@ -130,6 +142,59 @@ def _exemplos(markdown):
     return "".join(secoes)
 
 
+def _minutos(duracao):
+    """'1h40' -> 100, '2h' -> 120, '90min' -> 90."""
+    horas = re.search(r"(\d+)\s*h", duracao)
+    minutos = re.search(r"h\s*(\d+)|(\d+)\s*min", duracao)
+    total = int(horas.group(1)) * 60 if horas else 0
+    if minutos:
+        total += int(minutos.group(1) or minutos.group(2))
+    return total or 60
+
+
+def _folha_de_prova(m):
+    minutos = _minutos(m.group("duracao"))
+    info = [("Duração", m.group("duracao")), ("Pontuação", m.group("pontos")), ("Assuntos", m.group("assuntos"))]
+    campos = [("Nome", "flex-1 min-w-48"), ("Data", "w-32"), ("Nota", "w-24")]
+    return (
+        '<div class="my-6 overflow-hidden rounded-2xl border-2 border-slate-800 bg-white shadow-sm '
+        'dark:border-slate-400 dark:bg-white/5">'
+        '<div class="flex flex-wrap items-center justify-between gap-2 bg-slate-800 px-5 py-2 text-white '
+        'dark:bg-slate-700">'
+        '<span class="text-[0.7rem] font-extrabold uppercase tracking-[0.2em]">Folha de prova</span>'
+        '<span class="text-[0.65rem] uppercase tracking-wider text-slate-300">Simulado · sem consulta</span></div>'
+        '<div class="grid gap-px bg-slate-200 sm:grid-cols-3 dark:bg-white/10">'
+        + "".join(
+            f'<div class="bg-white px-5 py-3 dark:bg-slate-900"><div class="text-[0.6rem] font-bold uppercase '
+            f'tracking-wider text-slate-500 dark:text-slate-400">{rotulo}</div>'
+            f'<div class="text-[0.8rem] font-semibold text-slate-900 dark:text-slate-100">{valor}</div></div>'
+            for rotulo, valor in info
+        )
+        + '</div><div class="flex flex-wrap gap-x-6 gap-y-3 px-5 pt-4 pb-2">'
+        + "".join(
+            f'<div class="{largura}"><span class="text-[0.65rem] font-bold uppercase tracking-wider text-slate-500 '
+            f'dark:text-slate-400">{campo}</span><div class="mt-4" style="border-bottom: 1.5px dashed #94a3b8"></div></div>'
+            for campo, largura in campos
+        )
+        + f'</div><div class="flex flex-wrap items-center gap-3 px-5 pt-2 pb-4" data-cronometro="{minutos}">'
+        '<span class="visor font-mono text-[1.3rem] font-bold tabular-nums text-slate-900 dark:text-slate-100" '
+        'role="timer" aria-label="Tempo restante"></span>'
+        '<button type="button" class="iniciar md-button md-button--primary">Iniciar</button>'
+        '<button type="button" class="zerar md-button">Zerar</button></div></div>'
+        "<script>(function(){document.querySelectorAll('[data-cronometro]').forEach(function(caixa){"
+        "var total=+caixa.dataset.cronometro*60,resto=total,relogio=null;"
+        "var visor=caixa.querySelector('.visor'),iniciar=caixa.querySelector('.iniciar'),zerar=caixa.querySelector('.zerar');"
+        "function mostrar(){var h=Math.floor(resto/3600),m=Math.floor(resto%3600/60),s=resto%60;"
+        "visor.textContent=h+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');"
+        "visor.classList.toggle('text-rose-600',resto<=300);}"
+        "iniciar.onclick=function(){if(relogio){clearInterval(relogio);relogio=null;iniciar.textContent='Continuar';return;}"
+        "iniciar.textContent='Pausar';relogio=setInterval(function(){if(resto>0){resto--;mostrar();}"
+        "else{clearInterval(relogio);relogio=null;visor.textContent='Tempo esgotado!';iniciar.disabled=true;}},1000);};"
+        "zerar.onclick=function(){clearInterval(relogio);relogio=null;resto=total;iniciar.textContent='Iniciar';"
+        "iniciar.disabled=false;mostrar();};mostrar();});})();</script>"
+    )
+
+
 def _url(files, page, src):
     arquivo = files.get_file_from_path(src)
     return get_relative_url(arquivo.url, page.url) if arquivo else "#"
@@ -152,8 +217,8 @@ def _inicio(markdown, page, files):
     # Tira o título, a introdução e o aviso "Leia no site" (redundante aqui).
     markdown = re.sub(r"\A# .+?\n\n.+?\n\n", "", markdown, flags=re.S)
     markdown = re.sub(r"^> 🌐 \*\*Leia no site:\*\*.*\n\n?", "", markdown, flags=re.M)
-    # "Primeiros passos" e "Conteúdo" são o que o hero e os cartões já mostram.
-    for secao in ("Primeiros passos", "Conteúdo"):
+    # "Primeiros passos", "Conteúdo" e "Simulados" são o que o hero e os cartões já mostram.
+    for secao in ("Primeiros passos", "Conteúdo", "Simulados"):
         markdown = re.sub(rf"^## [^\n]*{secao}[^\n]*\n.*?(?=^## )", "", markdown, flags=re.S | re.M)
     heroi = (
         '<div class="clear-both mb-10 overflow-hidden rounded-2xl border border-indigo-100 bg-linear-to-br from-indigo-50 '
@@ -177,6 +242,10 @@ def _inicio(markdown, page, files):
                "Comandos, branches e como desfazer erros", "ferramenta"),
         cartao(_url(files, page, "GUIA-DE-ACESSO.md"), "Guia de Acesso",
                "Conta, chave SSH, commits assinados e PR", "chave"),
+        cartao(_url(files, page, "simulados/README.md"), "Simulados",
+               "Provas de treino com tempo, pontuação e cronômetro", "relogio"),
+        cartao(_url(files, page, "niveis.md"), "Por nível",
+               "Todo o conteúdo, do iniciante ao avançado", "livro"),
         cartao(_url(files, page, "CONTRIBUTING.md"), "Como contribuir",
                "Onde colocar cada coisa e padrões de commit", "maos"),
     ])
@@ -221,6 +290,8 @@ def on_page_markdown(markdown, page, config, files):
     markdown = "\n".join(linhas)
     markdown = _exemplos(markdown)
     markdown = _tabelas_indice(markdown, page, files)
+    if page.file.src_uri.startswith("simulados/"):
+        markdown = FOLHA_DE_PROVA.sub(_folha_de_prova, markdown)
     markdown = VER_RESPOSTA.sub(r"[Ver resposta →](\1){ .md-button }", markdown)
     if page.file.src_uri == "README.md":
         markdown = _inicio(markdown, page, files)

@@ -126,6 +126,16 @@
   color: var(--md-default-fg-color--light);
 }
 
+/* Modo escuro: botões secundários em índigo claro (contraste AA sobre o fundo escuro). */
+[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary) {
+  color: #a5b4fc;
+  border-color: #a5b4fc;
+}
+[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary):is(:hover, :focus) {
+  color: #0f172a;
+  background-color: #a5b4fc;
+}
+
 /* ---------- Exemplos de Entrada/Saída: blocos de código mais juntos ---------- */
 .md-typeset .exemplo .highlight,
 .md-typeset .exemplo pre {

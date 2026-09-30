@@ -17,6 +17,7 @@ conteudo/<tema>/          ← python, git, math...
 - **Pastas e arquivos:** minúsculas, sem acento, palavras separadas por hífen.
   Exemplos: `estruturas-condicionais.md`, `lista-01.md`, `lista-01-resolucao.py`.
 - **Arquivos Python** usam `_` no lugar do hífen (padrão da linguagem): `ex01_par_ou_impar.py`.
+- **Simulado novo:** crie `simulados/<tema>/simulado-NN/README.md` com a prova e `respostas/qN_nome.py` com uma resposta por questão. Logo abaixo do nível, coloque a linha `**Duração sugerida:** 1h40 · **Pontuação:** 100 pontos · **Assuntos:** ...`: no site, ela vira a folha de prova com cronômetro. Use questões **próprias ou adaptadas**, nunca a prova original de uma disciplina. Depois, adicione o simulado na tabela de [`simulados/README.md`](simulados/README.md).
 - **Nível de cada assunto:** logo abaixo do título, coloque uma linha `**Nível:** 🟢 Iniciante`, `**Nível:** 🟡 Intermediário` ou `**Nível:** 🔴 Avançado`. No site, ela vira uma etiqueta e entra na página "Por nível". Os exercícios não precisam dela, porque o nível vem do nome do arquivo (fácil, intermediário, difícil).
 - **Numere o que tem ordem:** `01-variaveis.md`, `02-condicionais.md`, ...
 - **O material é organizado por tema, e não por matéria ou período.** Um mesmo tema (ex.: `python`) serve para qualquer disciplina que o use.

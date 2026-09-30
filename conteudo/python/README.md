@@ -17,6 +17,8 @@ Siga na ordem: leia o resumo e depois faça os exercícios, do fácil ao difíci
 
 Como praticar e as regras dos exercícios estão em [Exercícios](exercicios/README.md).
 
+> 💡 **Terminou o roteiro?** Teste-se com os [simulados de Python](../../simulados/README.md), que têm tempo marcado e pontuação.
+
 ## 🔗 Links úteis
 
 - [Tutorial oficial do Python (em português)](https://docs.python.org/pt-br/3/tutorial/index.html)

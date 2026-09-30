@@ -19,6 +19,10 @@ Todo o material fica em [**conteudo/**](conteudo/README.md), com uma pasta por t
 | [**Python**](conteudo/python/README.md) | Resumos (condicionais, listas, matrizes) e 27 exercícios com resposta comentada, em 3 níveis |
 | [**Git**](conteudo/git/README.md) | O que é o Git, comandos do dia a dia, branches e como desfazer erros |
 
+## 📝 Simulados
+
+Provas de treino com tempo, pontuação e regras de prova de verdade, para testar o que você aprendeu. Veja [**simulados/**](simulados/README.md).
+
 ## 🗂️ Como o repositório está organizado
 
 ```
@@ -27,6 +31,7 @@ school-cc/
 ├── GUIA-DE-ACESSO.md       ← setup de Git, SSH e assinatura de commits
 ├── CONTRIBUTING.md         ← como adicionar material
 ├── .mkdocs/                ← configuração do site (GitHub Pages)
+├── simulados/              ← provas de treino (enunciado + respostas)
 └── conteudo/
     ├── README.md           ← índice dos temas
     └── <tema>/             ← python, git, math...
