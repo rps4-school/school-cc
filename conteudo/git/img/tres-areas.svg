@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" role="img" aria-labelledby="titulo desc">
+  <title id="titulo">As 3 áreas do Git</title>
+  <desc id="desc">Os arquivos saem do Working Directory para a Staging Area com git add e da Staging Area para o Repositório com git commit. Com git restore --staged, eles voltam do staging; com git switch ou git restore, uma versão salva volta para a pasta.</desc>
+  <defs>
+    <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+    <style>
+      .t { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #111827; }
+      .h { font-size: 19px; font-weight: 700; }
+      .s { font-size: 13px; fill: #6b7280; }
+      .f { font-size: 14px; }
+      .c { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; fill: #111827; }
+      .m { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 14px; font-weight: 700; fill: #ffffff; }
+      .b { font-family: Inter, system-ui, sans-serif; font-size: 11px; font-weight: 700; fill: #ffffff; }
+      .linha { stroke: #374151; stroke-width: 2.5; fill: none; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="500" rx="16" fill="#ffffff"/>
+  <text class="t" x="500" y="44" text-anchor="middle" font-size="22" font-weight="700">As 3 áreas do Git · tudo isso acontece no seu computador</text>
+
+  <!-- 1. Working Directory -->
+  <rect x="40" y="80" width="240" height="260" rx="14" fill="#FFF7ED" stroke="#F59E0B" stroke-width="2"/>
+  <text class="t h" x="160" y="112" text-anchor="middle">Working Directory</text>
+  <text class="t s" x="160" y="132" text-anchor="middle">a pasta onde você edita</text>
+  <path d="M120 152 h28 l8 10 h44 a6 6 0 0 1 6 6 v40 a6 6 0 0 1 -6 6 h-80 a6 6 0 0 1 -6 -6 v-50 a6 6 0 0 1 6 -6 z" fill="#F59E0B"/>
+  <path d="M114 176 h92" stroke="#ffffff" stroke-width="2"/>
+  <path d="M60 236 h14 l6 6 v20 h-20 z" fill="#ffffff" stroke="#9CA3AF" stroke-width="1.5"/>
+  <text class="t f" x="88" y="254">resumo.md</text>
+  <rect x="180" y="240" width="88" height="20" rx="10" fill="#F59E0B"/>
+  <text class="b" x="224" y="254" text-anchor="middle">modificado</text>
+  <path d="M60 281 h14 l6 6 v20 h-20 z" fill="#ffffff" stroke="#9CA3AF" stroke-width="1.5"/>
+  <text class="t f" x="88" y="299">lista-01.py</text>
+  <rect x="180" y="285" width="88" height="20" rx="10" fill="#EF4444"/>
+  <text class="b" x="224" y="299" text-anchor="middle">novo</text>
+
+  <!-- 2. Staging Area -->
+  <rect x="380" y="80" width="240" height="260" rx="14" fill="#EFF6FF" stroke="#3B82F6" stroke-width="2"/>
+  <text class="t h" x="500" y="112" text-anchor="middle">Staging Area</text>
+  <text class="t s" x="500" y="132" text-anchor="middle">o que vai no próximo commit</text>
+  <path d="M455 168 l45 -14 l45 14 v42 l-45 13 l-45 -13 z" fill="#3B82F6"/>
+  <path d="M455 168 l45 13 l45 -13 M500 181 v42" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <path d="M400 236 h14 l6 6 v20 h-20 z" fill="#ffffff" stroke="#9CA3AF" stroke-width="1.5"/>
+  <text class="t f" x="428" y="254">resumo.md</text>
+  <rect x="520" y="240" width="88" height="20" rx="10" fill="#3B82F6"/>
+  <text class="b" x="564" y="254" text-anchor="middle">pronto</text>
+  <text class="t s" x="500" y="300" text-anchor="middle">o lista-01.py ficou de fora:</text>
+  <text class="t s" x="500" y="318" text-anchor="middle">você escolhe o que entra</text>
+
+  <!-- 3. Repositório -->
+  <rect x="720" y="80" width="240" height="260" rx="14" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+  <text class="t h" x="840" y="112" text-anchor="middle">Repositório</text>
+  <text class="t s" x="840" y="132" text-anchor="middle">o histórico (pasta .git)</text>
+  <path d="M780 188 H900" stroke="#10B981" stroke-width="4"/>
+  <circle cx="780" cy="188" r="14" fill="#ffffff" stroke="#10B981" stroke-width="4"/>
+  <circle cx="840" cy="188" r="14" fill="#ffffff" stroke="#10B981" stroke-width="4"/>
+  <circle cx="900" cy="188" r="14" fill="#10B981"/>
+  <text class="c" x="740" y="254"><tspan fill="#B45309" font-weight="700">e5f6</tspan> docs: resumo</text>
+  <text class="c" x="740" y="279"><tspan fill="#B45309" font-weight="700">c3d4</tspan> feat: lista 01</text>
+  <text class="c" x="740" y="304"><tspan fill="#B45309" font-weight="700">a1b2</tspan> primeiro commit</text>
+
+  <!-- Setas de ida -->
+  <path class="linha" d="M286 205 H374" marker-end="url(#seta)"/>
+  <rect x="287" y="160" width="86" height="28" rx="14" fill="#111827"/>
+  <text class="m" x="330" y="179" text-anchor="middle">git add</text>
+  <path class="linha" d="M626 205 H714" marker-end="url(#seta)"/>
+  <rect x="617" y="160" width="106" height="28" rx="14" fill="#111827"/>
+  <text class="m" x="670" y="179" text-anchor="middle">git commit</text>
+
+  <!-- Setas de volta -->
+  <path class="linha" d="M500 342 V385 H170 V347" stroke-dasharray="7 5" marker-end="url(#seta)"/>
+  <rect x="240" y="371" width="190" height="28" rx="14" fill="#3B82F6"/>
+  <text class="m" x="335" y="390" text-anchor="middle">git restore --staged</text>
+  <path class="linha" d="M840 342 V440 H110 V347" stroke-dasharray="7 5" marker-end="url(#seta)"/>
+  <rect x="400" y="426" width="250" height="28" rx="14" fill="#10B981"/>
+  <text class="m" x="525" y="445" text-anchor="middle">git switch · git restore</text>
+
+  <text class="t s" x="500" y="484" text-anchor="middle">setas cheias: guardar mudanças · setas tracejadas: voltar atrás</text>
+</svg>

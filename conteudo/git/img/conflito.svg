@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" role="img" aria-labelledby="titulo desc">
+  <title id="titulo">Como nasce um conflito</title>
+  <desc id="desc">A main e a sua branch mudaram a mesma linha do arquivo resumo.md. No merge, o Git marca as duas versões com &lt;&lt;&lt;&lt;&lt;&lt;&lt;, ======= e &gt;&gt;&gt;&gt;&gt;&gt;&gt;, e você escolhe o texto final.</desc>
+  <defs>
+    <marker id="seta4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+    <style>
+      .t { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #111827; }
+      .h { font-size: 16px; font-weight: 700; }
+      .s { font-size: 13px; fill: #6b7280; }
+      .c { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13.5px; fill: #111827; }
+      .k { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13.5px; font-weight: 700; fill: #B91C1C; }
+      .linha { stroke: #374151; stroke-width: 2.5; fill: none; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="420" rx="16" fill="#ffffff"/>
+  <text class="t" x="500" y="42" text-anchor="middle" font-size="22" font-weight="700">Como nasce um conflito</text>
+
+  <!-- Sua branch -->
+  <rect x="30" y="75" width="370" height="130" rx="12" fill="#EFF6FF" stroke="#3B82F6" stroke-width="2"/>
+  <text class="t h" x="50" y="104">Na sua branch (HEAD)</text>
+  <text class="t s" x="50" y="124">resumo.md · linha 3</text>
+  <rect x="46" y="140" width="338" height="30" rx="6" fill="#DBEAFE"/>
+  <text class="c" x="56" y="160">Listas começam na posição 0 (zero).</text>
+
+  <!-- main -->
+  <rect x="30" y="245" width="370" height="130" rx="12" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+  <text class="t h" x="50" y="274">Na main (alguém mudou antes)</text>
+  <text class="t s" x="50" y="294">resumo.md · linha 3</text>
+  <rect x="46" y="310" width="338" height="30" rx="6" fill="#D1FAE5"/>
+  <text class="c" x="56" y="330">Listas começam no índice 0.</text>
+
+  <!-- Setas -->
+  <path class="linha" d="M404 140 C 450 140, 450 200, 488 200" marker-end="url(#seta4)"/>
+  <path class="linha" d="M404 310 C 450 310, 450 240, 488 240" marker-end="url(#seta4)"/>
+  <text class="t" x="446" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="#374151">merge</text>
+
+  <!-- Resultado -->
+  <rect x="495" y="75" width="475" height="300" rx="12" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="2"/>
+  <text class="t h" x="515" y="104">resumo.md depois do git merge main</text>
+  <text class="t s" x="515" y="124">o Git não sabe qual escolher, então mostra as duas</text>
+  <text class="k" x="515" y="164">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</text>
+  <rect x="510" y="174" width="445" height="30" rx="6" fill="#DBEAFE"/>
+  <text class="c" x="520" y="194">Listas começam na posição 0 (zero).</text>
+  <text class="k" x="515" y="230">=======</text>
+  <rect x="510" y="240" width="445" height="30" rx="6" fill="#D1FAE5"/>
+  <text class="c" x="520" y="260">Listas começam no índice 0.</text>
+  <text class="k" x="515" y="296">&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</text>
+  <text class="t s" x="515" y="336">Você escolhe o texto final e apaga as 3 linhas vermelhas.</text>
+  <text class="t s" x="515" y="356">Depois: git add resumo.md e git commit.</text>
+
+  <text class="t s" x="500" y="404" text-anchor="middle">Só dá conflito quando as duas branches mudam a mesma linha. Linhas diferentes, o Git junta sozinho.</text>
+</svg>

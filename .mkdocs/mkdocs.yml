@@ -1,0 +1,110 @@
+# Configuração do site (GitHub Pages).
+# O conteúdo é a raiz do repositório; esta pasta só guarda a configuração.
+# Rodar localmente: mkdocs serve -f .mkdocs/mkdocs.yml
+
+site_name: school-cc
+site_description: Material de estudo de Ciência da Computação, feito de aluno para aluno
+site_url: https://rps4-school.github.io/school-cc/
+repo_url: https://github.com/rps4-school/school-cc
+repo_name: rps4-school/school-cc
+edit_uri: edit/main/
+
+# Rodapé: nosso texto no lugar de "Made with Material for MkDocs".
+copyright: Feito de Aluno para Aluno
+extra:
+  generator: false
+  # Cor da etiqueta de cada nível (classes .md-tag--<valor> no tailwind.css).
+  tags:
+    Iniciante: iniciante
+    Intermediário: intermediario
+    Avançado: avancado
+
+docs_dir: ..
+# Precisa ficar fora da raiz do repositório (o MkDocs não deixa o build dentro do conteúdo).
+site_dir: !ENV [SITE_DIR, ../../school-cc-site]
+
+exclude_docs: |
+  CLAUDE.md
+
+hooks:
+  - hooks.py   # estrutura: páginas de pasta, .py, links e menu
+  - visual.py  # apresentação: só muda como o site mostra o conteúdo
+
+# Gerado a partir de tailwind.css com: npm run css --prefix .mkdocs
+extra_css:
+  - assets/stylesheets/site.css
+
+theme:
+  name: material
+  language: pt-BR
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    logo: material/school
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Modo escuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Modo claro
+  features:
+    - navigation.tabs
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - navigation.path
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+    - content.action.view
+
+plugins:
+  - search:
+      lang: pt
+  # Níveis dos assuntos. O visual.py lê a linha "**Nível:** ..." e vira tag.
+  - tags:
+      tags_allowed:
+        - Iniciante
+        - Intermediário
+        - Avançado
+
+markdown_extensions:
+  - toc:
+      permalink: true
+      # Gera os mesmos ids que o GitHub, para as âncoras funcionarem nos dois lugares.
+      slugify: !!python/object/apply:pymdownx.slugs.slugify {kwds: {case: lower}}
+  - tables
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences:
+      # Diagramas ```mermaid (o GitHub também renderiza).
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+validation:
+  links:
+    not_found: warn
+    anchors: warn
+    absolute_links: info
+    unrecognized_links: warn

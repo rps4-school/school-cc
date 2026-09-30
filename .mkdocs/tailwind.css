@@ -1,0 +1,167 @@
+/*
+ * CSS do site. Compile com:  npm run css --prefix .mkdocs
+ *
+ * Só o tema e os utilitários do Tailwind, SEM o preflight (o reset global),
+ * para não quebrar o tema Material. Os utilitários são !important para
+ * vencer as regras do Material (.md-typeset a, h1...) nos componentes.
+ */
+@layer theme, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) important;
+
+@source "./hooks.py";
+@source "./visual.py";
+@source "./_componentes.py";
+
+/* O modo escuro segue o seletor de tema do Material. */
+@custom-variant dark (&:where([data-md-color-scheme="slate"], [data-md-color-scheme="slate"] *));
+
+/* ---------- Cores: índigo do Tailwind nos dois modos ---------- */
+:root,
+[data-md-color-scheme="default"],
+[data-md-color-scheme="slate"] {
+  --md-primary-bg-color: #ffffff;
+  --md-primary-bg-color--light: rgb(255 255 255 / 0.78);
+}
+:root,
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: #4f46e5;
+  --md-primary-fg-color--light: #6366f1;
+  --md-primary-fg-color--dark: #4338ca;
+  --md-accent-fg-color: #4338ca;
+  --md-typeset-a-color: #4f46e5;
+}
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #4338ca;
+  --md-primary-fg-color--light: #6366f1;
+  --md-primary-fg-color--dark: #3730a3;
+  --md-accent-fg-color: #a5b4fc;
+  --md-typeset-a-color: #a5b4fc;
+  --md-default-bg-color: #0f172a;
+  --md-code-bg-color: #1e293b;
+}
+
+/* ---------- Tipografia: hierarquia clara e leitura confortável ---------- */
+.md-typeset {
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+.md-typeset h1 {
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--md-default-fg-color);
+  margin-bottom: 1rem;
+}
+.md-typeset h2 {
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin-top: 2.2em;
+}
+.md-typeset h3 {
+  font-weight: 650;
+}
+.md-typeset hr {
+  margin: 2.5em 0;
+}
+
+/* ---------- Tabelas: letra legível e cabeçalho destacado ---------- */
+.md-typeset table:not([class]) {
+  font-size: 0.74rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+}
+.md-typeset table:not([class]) th {
+  background: var(--md-code-bg-color);
+  font-weight: 650;
+}
+
+/* ---------- Imagens e diagramas ---------- */
+.md-typeset img {
+  border-radius: 0.75rem;
+}
+.md-typeset p > img[src$=".svg"] {
+  display: block;
+  margin-inline: auto;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.06), 0 0 0 1px rgb(15 23 42 / 0.08);
+}
+[data-md-color-scheme="slate"] .md-typeset p > img[src$=".svg"] {
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.1);
+}
+
+/* Celular: diagramas largos ficam num tamanho legível e rolam de lado sozinhos. */
+@media (max-width: 44.9375em) {
+  .md-typeset p:has(> img[src$=".svg"]) {
+    overflow-x: auto;
+    padding: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .md-typeset p > img[src$=".svg"] {
+    width: 40rem;
+    max-width: none;
+  }
+}
+
+/* ---------- Componentes do Material com cantos e tamanhos uniformes ---------- */
+.md-typeset .md-button {
+  border-radius: 0.6rem;
+  font-size: 0.72rem;
+  padding: 0.55em 1.25em;
+  margin: 0.25em 0.5em 0.25em 0;
+}
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 0.75rem;
+  font-size: 0.76rem;
+  border-width: 1px;
+}
+.md-typeset pre > code,
+.md-typeset .highlight {
+  border-radius: 0.6rem;
+}
+.md-typeset blockquote {
+  border-left-width: 3px;
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: var(--md-code-bg-color);
+  padding: 0.4em 1em;
+  color: var(--md-default-fg-color--light);
+}
+
+/* ---------- Exemplos de Entrada/Saída: blocos de código mais juntos ---------- */
+.md-typeset .exemplo .highlight,
+.md-typeset .exemplo pre {
+  margin: 0.2em 0 0.9em;
+}
+
+/* ---------- Trilha de navegação: quebra linha em vez de rolar de lado ---------- */
+.md-path__list {
+  flex-wrap: wrap;
+  row-gap: 0.15rem;
+}
+
+/* ---------- Etiquetas de nível (semáforo) ---------- */
+.md-typeset .md-tag {
+  font-weight: 650;
+  border-radius: 999px;
+}
+.md-typeset .md-tag--iniciante { background-color: #d1fae5; color: #065f46; }
+.md-typeset .md-tag--intermediario { background-color: #fef3c7; color: #92400e; }
+.md-typeset .md-tag--avancado { background-color: #ffe4e6; color: #9f1239; }
+[data-md-color-scheme="slate"] .md-typeset .md-tag--iniciante { background-color: rgb(52 211 153 / 0.15); color: #6ee7b7; }
+[data-md-color-scheme="slate"] .md-typeset .md-tag--intermediario { background-color: rgb(251 191 36 / 0.15); color: #fcd34d; }
+[data-md-color-scheme="slate"] .md-typeset .md-tag--avancado { background-color: rgb(251 113 133 / 0.15); color: #fda4af; }
+
+/* ---------- Rodapé no mesmo tom do cabeçalho ---------- */
+.md-footer {
+  background-color: #1e1b4b;
+}
+.md-footer-meta {
+  background-color: #17153b;
+}
+
+/* ---------- Toque: alvos maiores no menu do celular ---------- */
+@media (max-width: 76.2344em) {
+  .md-nav__link {
+    min-height: 2.2rem;
+    align-items: center;
+  }
+}

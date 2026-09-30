@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400" role="img" aria-labelledby="titulo desc">
+  <title id="titulo">Fluxo do dia a dia com Git</title>
+  <desc id="desc">Oito passos: atualizar a main, criar uma branch, editar, preparar com git add, salvar com git commit, enviar com git push, abrir um Pull Request e fazer o merge.</desc>
+  <defs>
+    <marker id="seta3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+    <style>
+      .t { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #111827; }
+      .h { font-size: 16px; font-weight: 700; }
+      .s { font-size: 12.5px; fill: #4B5563; }
+      .c { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11.5px; fill: #111827; }
+      .n { font-family: Inter, system-ui, sans-serif; font-size: 14px; font-weight: 800; fill: #ffffff; }
+      .linha { stroke: #374151; stroke-width: 2.5; fill: none; }
+      .local { fill: #EFF6FF; stroke: #3B82F6; stroke-width: 2; }
+      .gh { fill: #F5F3FF; stroke: #8B5CF6; stroke-width: 2; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="400" rx="16" fill="#ffffff"/>
+  <text class="t" x="500" y="42" text-anchor="middle" font-size="22" font-weight="700">O fluxo do dia a dia</text>
+
+  <!-- Linha 1 -->
+  <rect class="local" x="30" y="75" width="210" height="110" rx="12"/>
+  <circle cx="54" cy="99" r="14" fill="#3B82F6"/><text class="n" x="54" y="104" text-anchor="middle">1</text>
+  <text class="t h" x="76" y="104">Atualizar</text>
+  <text class="c" x="46" y="140">git switch main</text>
+  <text class="c" x="46" y="160">git pull</text>
+
+  <rect class="local" x="275" y="75" width="210" height="110" rx="12"/>
+  <circle cx="299" cy="99" r="14" fill="#3B82F6"/><text class="n" x="299" y="104" text-anchor="middle">2</text>
+  <text class="t h" x="321" y="104">Criar uma branch</text>
+  <text class="c" x="291" y="140">git switch -c minha-branch</text>
+
+  <rect class="local" x="520" y="75" width="210" height="110" rx="12"/>
+  <circle cx="544" cy="99" r="14" fill="#3B82F6"/><text class="n" x="544" y="104" text-anchor="middle">3</text>
+  <text class="t h" x="566" y="104">Editar</text>
+  <text class="t s" x="536" y="140">escreva os resumos,</text>
+  <text class="t s" x="536" y="158">exercícios e códigos</text>
+
+  <rect class="local" x="765" y="75" width="210" height="110" rx="12"/>
+  <circle cx="789" cy="99" r="14" fill="#3B82F6"/><text class="n" x="789" y="104" text-anchor="middle">4</text>
+  <text class="t h" x="811" y="104">Preparar</text>
+  <text class="c" x="781" y="140">git status</text>
+  <text class="c" x="781" y="160">git add .</text>
+
+  <!-- Linha 2 (da direita para a esquerda) -->
+  <rect class="local" x="765" y="245" width="210" height="110" rx="12"/>
+  <circle cx="789" cy="269" r="14" fill="#3B82F6"/><text class="n" x="789" y="274" text-anchor="middle">5</text>
+  <text class="t h" x="811" y="274">Salvar</text>
+  <text class="c" x="781" y="310">git commit -m "..."</text>
+
+  <rect class="local" x="520" y="245" width="210" height="110" rx="12"/>
+  <circle cx="544" cy="269" r="14" fill="#3B82F6"/><text class="n" x="544" y="274" text-anchor="middle">6</text>
+  <text class="t h" x="566" y="274">Enviar</text>
+  <text class="c" x="536" y="310">git push -u origin HEAD</text>
+
+  <rect class="gh" x="275" y="245" width="210" height="110" rx="12"/>
+  <circle cx="299" cy="269" r="14" fill="#8B5CF6"/><text class="n" x="299" y="274" text-anchor="middle">7</text>
+  <text class="t h" x="321" y="274">Pull Request</text>
+  <text class="t s" x="291" y="310">abra no GitHub e</text>
+  <text class="t s" x="291" y="328">peça uma revisão</text>
+
+  <rect class="gh" x="30" y="245" width="210" height="110" rx="12"/>
+  <circle cx="54" cy="269" r="14" fill="#8B5CF6"/><text class="n" x="54" y="274" text-anchor="middle">8</text>
+  <text class="t h" x="76" y="274">Merge</text>
+  <text class="t s" x="46" y="310">aprovado: sua branch</text>
+  <text class="t s" x="46" y="328">entra na main</text>
+
+  <!-- Setas -->
+  <path class="linha" d="M242 130 H271" marker-end="url(#seta3)"/>
+  <path class="linha" d="M487 130 H516" marker-end="url(#seta3)"/>
+  <path class="linha" d="M732 130 H761" marker-end="url(#seta3)"/>
+  <path class="linha" d="M870 187 V241" marker-end="url(#seta3)"/>
+  <path class="linha" d="M763 300 H734" marker-end="url(#seta3)"/>
+  <path class="linha" d="M518 300 H489" marker-end="url(#seta3)"/>
+  <path class="linha" d="M273 300 H244" marker-end="url(#seta3)"/>
+  <path class="linha" d="M135 243 V189" stroke-dasharray="7 5" marker-end="url(#seta3)"/>
+  <text class="t s" x="145" y="222">e recomeça</text>
+
+  <rect x="610" y="370" width="14" height="14" rx="3" class="local"/>
+  <text class="t s" x="630" y="382">no seu computador</text>
+  <rect x="770" y="370" width="14" height="14" rx="3" class="gh"/>
+  <text class="t s" x="790" y="382">no site do GitHub</text>
+</svg>

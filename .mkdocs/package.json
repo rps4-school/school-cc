@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "description": "Compila o CSS do site (Tailwind). O resultado, site.css, vai para o repositório.",
+  "scripts": {
+    "css": "tailwindcss -i tailwind.css -o site.css --minify",
+    "css:watch": "tailwindcss -i tailwind.css -o site.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "4.3.3",
+    "tailwindcss": "4.3.3"
+  }
+}

@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 470" role="img" aria-labelledby="titulo desc">
+  <title id="titulo">Como desfazer, dependendo de onde a mudança está</title>
+  <desc id="desc">Mudança só editada: git restore descarta, git stash guarda. No staging: git restore --staged. Em commit local: git commit --amend ou git reset --soft HEAD~1. Já no GitHub: git revert. Perdeu algo: git reflog.</desc>
+  <defs>
+    <marker id="seta5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+    <style>
+      .t { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #111827; }
+      .h { font-size: 16px; font-weight: 700; }
+      .s { font-size: 12px; fill: #4B5563; }
+      .c { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; font-weight: 700; fill: #111827; }
+      .a { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; font-weight: 700; fill: #374151; }
+      .linha { stroke: #374151; stroke-width: 2.5; fill: none; }
+      .cmd { fill: #ffffff; stroke-width: 1.5; }
+    </style>
+  </defs>
+
+  <rect width="1100" height="470" rx="16" fill="#ffffff"/>
+  <text class="t" x="550" y="42" text-anchor="middle" font-size="22" font-weight="700">Errei! Como desfazer? Depende de onde a mudança está</text>
+
+  <!-- Estações -->
+  <rect x="30" y="75" width="220" height="70" rx="12" fill="#FFF7ED" stroke="#F59E0B" stroke-width="2"/>
+  <text class="t h" x="140" y="105" text-anchor="middle">Só editei</text>
+  <text class="t s" x="140" y="125" text-anchor="middle">ainda não fiz git add</text>
+
+  <rect x="300" y="75" width="220" height="70" rx="12" fill="#EFF6FF" stroke="#3B82F6" stroke-width="2"/>
+  <text class="t h" x="410" y="105" text-anchor="middle">Já fiz git add</text>
+  <text class="t s" x="410" y="125" text-anchor="middle">está no staging</text>
+
+  <rect x="570" y="75" width="220" height="70" rx="12" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+  <text class="t h" x="680" y="105" text-anchor="middle">Já fiz commit</text>
+  <text class="t s" x="680" y="125" text-anchor="middle">mas ainda não fiz push</text>
+
+  <rect x="840" y="75" width="220" height="70" rx="12" fill="#F5F3FF" stroke="#8B5CF6" stroke-width="2"/>
+  <text class="t h" x="950" y="105" text-anchor="middle">Já fiz push</text>
+  <text class="t s" x="950" y="125" text-anchor="middle">está no GitHub</text>
+
+  <path class="linha" d="M252 110 H296" marker-end="url(#seta5)"/>
+  <text class="a" x="274" y="100" text-anchor="middle">add</text>
+  <path class="linha" d="M522 110 H566" marker-end="url(#seta5)"/>
+  <text class="a" x="544" y="97" text-anchor="middle">commit</text>
+  <path class="linha" d="M792 110 H836" marker-end="url(#seta5)"/>
+  <text class="a" x="814" y="100" text-anchor="middle">push</text>
+
+  <text class="t" x="30" y="182" font-size="13" font-weight="700" fill="#6b7280">PARA DESFAZER:</text>
+
+  <!-- Coluna 1 -->
+  <rect class="cmd" x="30" y="195" width="220" height="50" rx="10" stroke="#F59E0B"/>
+  <text class="c" x="44" y="216">git restore &lt;arquivo&gt;</text>
+  <text class="t s" x="44" y="235"><tspan fill="#B91C1C" font-weight="700">apaga</tspan> a mudança</text>
+  <rect class="cmd" x="30" y="255" width="220" height="50" rx="10" stroke="#F59E0B"/>
+  <text class="c" x="44" y="276">git stash</text>
+  <text class="t s" x="44" y="295">guarda para depois (stash pop)</text>
+
+  <!-- Coluna 2 -->
+  <rect class="cmd" x="300" y="195" width="220" height="50" rx="10" stroke="#3B82F6"/>
+  <text class="c" x="314" y="216">git restore --staged &lt;arq&gt;</text>
+  <text class="t s" x="314" y="235">tira do staging, mantém a edição</text>
+
+  <!-- Coluna 3 -->
+  <rect class="cmd" x="570" y="195" width="220" height="50" rx="10" stroke="#10B981"/>
+  <text class="c" x="584" y="216">git commit --amend</text>
+  <text class="t s" x="584" y="235">corrige o último commit</text>
+  <rect class="cmd" x="570" y="255" width="220" height="50" rx="10" stroke="#10B981"/>
+  <text class="c" x="584" y="276">git reset --soft HEAD~1</text>
+  <text class="t s" x="584" y="295">desfaz, mas mantém as mudanças</text>
+  <rect class="cmd" x="570" y="315" width="220" height="50" rx="10" stroke="#10B981"/>
+  <text class="c" x="584" y="336">git reset --hard HEAD~1</text>
+  <text class="t s" x="584" y="355"><tspan fill="#B91C1C" font-weight="700">apaga</tspan> o commit e as mudanças</text>
+
+  <!-- Coluna 4 -->
+  <rect class="cmd" x="840" y="195" width="220" height="50" rx="10" stroke="#8B5CF6"/>
+  <text class="c" x="854" y="216">git revert &lt;hash&gt;</text>
+  <text class="t s" x="854" y="235">cria um commit que desfaz</text>
+  <text class="t s" x="850" y="272">Não reescreva o que já está</text>
+  <text class="t s" x="850" y="290">no GitHub: os outros já podem</text>
+  <text class="t s" x="850" y="308">ter baixado.</text>
+
+  <!-- Rodapé -->
+  <rect x="30" y="395" width="1030" height="50" rx="12" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+  <text class="t" x="545" y="426" text-anchor="middle" font-size="14"><tspan font-weight="700">Perdeu um commit?</tspan> Rode <tspan font-family="ui-monospace, Menlo, Consolas, monospace" font-weight="700">git reflog</tspan>: ele lista tudo o que você fez, até o que parece apagado.</text>
+</svg>
