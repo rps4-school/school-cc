@@ -26,10 +26,21 @@ TITULOS = {
     "enunciados": "Enunciados",
     "respostas": "Respostas",
     "resumos": "Resumos",
+    "aulas": "Aulas",
     "materiais": "Materiais",
     "facil": "Fácil",
     "intermediario": "Intermediário",
     "dificil": "Difícil",
+    # Assuntos dos exercícios de Sistemas Digitais (o número da pasta sai antes de consultar).
+    "analogico-e-digital": "Analógico e digital",
+    "binario": "Binário",
+    "codificacao": "Codificação",
+    "adicao-binaria": "Adição binária",
+    "numeros-negativos": "Números negativos",
+    "algebra-booleana": "Álgebra booleana",
+    "circuitos": "Circuitos",
+    "karnaugh": "Mapa de Karnaugh",
+    "sistemas-digitais": "Sistemas Digitais",  # pasta dos simulados
 }
 
 # Pastas de apoio (ex.: imagens usadas nas páginas): os arquivos são publicados,
@@ -60,6 +71,8 @@ def _titulo_da_pasta(docs_dir, pasta):
     if nome in TITULOS:
         return TITULOS[nome]
     nome = re.sub(r"^\d+-", "", nome)  # "01-condicionais" -> "condicionais"
+    if nome in TITULOS:
+        return TITULOS[nome]
     return nome.replace("-", " ").replace("_", " ").capitalize()
 
 

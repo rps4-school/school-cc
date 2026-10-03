@@ -7,11 +7,13 @@ Roda depois do hooks.py (ordem em mkdocs.yml). Tudo aqui é só visual:
 - troca citações com 💡 / ⚠️ / 📖 por caixas de dica, atenção e leitura;
 - mostra Entrada e Saída dos exercícios lado a lado;
 - transforma "✅ Ver resposta" em botão;
-- nos simulados, põe um editor de Python (editor.js) antes da resposta de cada questão;
+- nos simulados de Python, põe um editor (editor.js) antes da resposta de cada questão;
+- nas perguntas com "**Resposta:**" dentro de <details>, põe o corretor automático (corretor.js);
 - monta a página inicial (hero + cartões);
 - transforma a linha "**Nível:** ..." em tag e gera a página "Por nível".
 """
 
+import html
 import os
 import posixpath
 import re
@@ -28,6 +30,7 @@ ARQUIVOS_DO_SITE = {
     "site.css": "assets/stylesheets/site.css",
     "editor.js": "assets/javascripts/editor.js",
     "python-worker.js": "assets/javascripts/python-worker.js",
+    "corretor.js": "assets/javascripts/corretor.js",
 }
 PAGINA_NIVEIS = "niveis.md"
 CONTEUDO_NIVEIS = """# Por nível
@@ -61,6 +64,9 @@ FOLHA_DE_PROVA = re.compile(
     re.M,
 )
 QUESTAO = re.compile(r"^## Questão (\d+)")
+# Pergunta com corretor: dentro do <details>, a primeira linha "**Resposta:** `...`" (ou Expressão).
+RESPOSTA = re.compile(r"^\*\*(Resposta|Expressão|Expressão mínima):\*\* `([^`]+)`", re.M)
+TIPOS_DE_RESPOSTA = {"Resposta": "valor", "Expressão": "expressao", "Expressão mínima": "minima"}
 
 
 def _fora_de_codigo(linhas):
@@ -215,6 +221,22 @@ def _editores(markdown):
     return "".join(secoes)
 
 
+def _corretores(markdown):
+    """Põe o campo do corretor (corretor.js) antes de cada <details> que traz uma resposta conferível."""
+    linhas = markdown.split("\n")
+    fora = {i for i, _ in _fora_de_codigo(linhas)}
+    saida = []
+    for i, linha in enumerate(linhas):
+        if i in fora and linha.startswith("<details"):
+            fim = next((j for j in range(i + 1, len(linhas)) if linhas[j].startswith("</details>")), len(linhas))
+            m = RESPOSTA.search("\n".join(linhas[i:fim]))
+            if m:
+                resposta = html.escape(m.group(2), quote=True)
+                saida += [f'<div class="corretor" data-tipo="{TIPOS_DE_RESPOSTA[m.group(1)]}" data-resposta="{resposta}"></div>', ""]
+        saida.append(linha)
+    return "\n".join(saida)
+
+
 def _url(files, page, src):
     arquivo = files.get_file_from_path(src)
     return get_relative_url(arquivo.url, page.url) if arquivo else "#"
@@ -258,6 +280,8 @@ def _inicio(markdown, page, files):
     cartoes = grade([
         cartao(_url(files, page, "conteudo/python/README.md"), "Python",
                "Resumos e 27 exercícios com resposta", "codigo"),
+        cartao(_url(files, page, "conteudo/sistemas-digitais/README.md"), "Sistemas Digitais",
+               "Aulas completas, do binário ao Mapa de Karnaugh", "chip"),
         cartao(_url(files, page, "conteudo/git/README.md"), "Git",
                "Comandos, branches e como desfazer erros", "ferramenta"),
         cartao(_url(files, page, "GUIA-DE-ACESSO.md"), "Guia de Acesso",
@@ -294,7 +318,7 @@ def _nivel(markdown, page):
     if m:
         nivel = m.group(1)
         markdown = markdown[: m.start()] + markdown[m.end():]
-    elif "/enunciados/" in page.file.src_uri:
+    elif "/exercicios/" in page.file.src_uri:  # fácil, intermediário ou difícil pelo nome do arquivo
         nivel = NIVEL_DO_EXERCICIO.get(posixpath.splitext(posixpath.basename(page.file.src_uri))[0])
     if nivel:
         page.meta["tags"] = [nivel]
@@ -312,7 +336,9 @@ def on_page_markdown(markdown, page, config, files):
     markdown = _tabelas_indice(markdown, page, files)
     if page.file.src_uri.startswith("simulados/") and FOLHA_DE_PROVA.search(markdown):
         markdown = FOLHA_DE_PROVA.sub(_folha_de_prova, markdown)
-        markdown = _editores(markdown)
+        if page.file.src_uri.startswith("simulados/python/"):
+            markdown = _editores(markdown)
+    markdown = _corretores(markdown)
     markdown = VER_RESPOSTA.sub(r"[Ver resposta →](\1){ .md-button }", markdown)
     if page.file.src_uri == "README.md":
         markdown = _inicio(markdown, page, files)
