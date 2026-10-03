@@ -34,6 +34,10 @@ hooks:
 extra_css:
   - assets/stylesheets/site.css
 
+# Editor de Python dos simulados. Publicado pelo visual.py; nas outras páginas não faz nada.
+extra_javascript:
+  - assets/javascripts/editor.js
+
 theme:
   name: material
   language: pt-BR

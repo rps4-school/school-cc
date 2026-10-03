@@ -9,7 +9,7 @@ Provas de treino no **formato de uma prova de verdade**: tempo marcado, pontuaç
 1. **Estude antes** o conteúdo do tema, por exemplo [Python](../conteudo/python/README.md).
 2. **Separe o tempo sugerido** e ligue o cronômetro. No site, cada simulado tem um.
 3. **Sem consulta:** nada de internet, anotações ou IA. Só você e o Python.
-4. Crie **um arquivo por questão** (`q1.py`, `q2.py`...).
+4. Crie **um arquivo por questão** (`q1.py`, `q2.py`...). No site, cada questão tem um **editor de Python** com terminal: dá para escrever, rodar e baixar o `.py` sem instalar nada.
 5. Quando o tempo acabar, rode seus programas com as entradas dos **exemplos de execução** e compare as saídas.
 6. **Só então** abra as respostas. Confira também se você usou os **comandos exigidos**.
 
