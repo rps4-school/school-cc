@@ -1,0 +1,40 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 680 310' width='680' height='310' role='img' aria-label='Circuito do controle de acesso com cinco portas numeradas e saída X'>
+<title>Circuito do controle de acesso com cinco portas numeradas e saída X</title>
+<rect width='680' height='310' rx='12' fill='#ffffff'/>
+<text x='40' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>A</text>
+<text x='74' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>B</text>
+<text x='108' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>C</text>
+<text x='142' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>D</text>
+<text x='176' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>E</text>
+<polyline points='40,40 40,290' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='74,40 74,290' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='108,40 108,290' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='142,40 142,290' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='176,40 176,290' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<path d='M250,50 H280 A20.0,20.0 0 0 1 280,90 H250 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<circle cx='305.0' cy='70.0' r='5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<text x='278' y='44' font-size='11' fill='#64748b' text-anchor='middle' font-weight='normal' font-family='Inter, Segoe UI, Arial, sans-serif'>①</text>
+<path d='M400,70 Q416,90.0 400,110 Q442,110 460,90.0 Q442,70 400,70 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='400,83.33333333333333 407.1111111111111,83.33333333333333' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='400,96.66666666666667 407.1111111111111,96.66666666666667' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<text x='428' y='64' font-size='11' fill='#64748b' text-anchor='middle' font-weight='normal' font-family='Inter, Segoe UI, Arial, sans-serif'>②</text>
+<path d='M250,200.0 L290,220.0 L250,240.0 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<circle cx='295' cy='220.0' r='5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<text x='278' y='194' font-size='11' fill='#64748b' text-anchor='middle' font-weight='normal' font-family='Inter, Segoe UI, Arial, sans-serif'>③</text>
+<path d='M400,180 Q416,200.0 400,220 Q442,220 460,200.0 Q442,180 400,180 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='400,193.33333333333334 407.1111111111111,193.33333333333334' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='400,206.66666666666666 407.1111111111111,206.66666666666666' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<text x='428' y='174' font-size='11' fill='#64748b' text-anchor='middle' font-weight='normal' font-family='Inter, Segoe UI, Arial, sans-serif'>④</text>
+<path d='M540,120 H570 A20.0,20.0 0 0 1 570,160 H540 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<text x='568' y='114' font-size='11' fill='#64748b' text-anchor='middle' font-weight='normal' font-family='Inter, Segoe UI, Arial, sans-serif'>⑤</text>
+<polyline points='40,63.333333333333336 250,63.333333333333336' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='40' cy='63.333333333333336' r='3.5' fill='#1e293b'/>
+<polyline points='74,76.66666666666667 250,76.66666666666667' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='74' cy='76.66666666666667' r='3.5' fill='#1e293b'/>
+<polyline points='310.0,70.0 365,70.0 365,83.33333333333333 400,83.33333333333333' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='108,96.66666666666667 400,96.66666666666667' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='108' cy='96.66666666666667' r='3.5' fill='#1e293b'/>
+<polyline points='176,220.0 250,220.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='176' cy='220.0' r='3.5' fill='#1e293b'/>
+<polyline points='142,193.33333333333334 400,193.33333333333334' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='142' cy='193.33333333333334' r='3.5' fill='#1e293b'/>
+<polyline points='300,220.0 365,220.0 365,206.66666666666666 400,206.66666666666666' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='460,90.0 505,90.0 505,133.33333333333334 540,133.33333333333334' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='460,200.0 505,200.0 505,146.66666666666666 540,146.66666666666666' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='590.0,140.0 620.0,140.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><text x='626.0' y='145.0' font-size='15' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>X</text>
+</svg>
