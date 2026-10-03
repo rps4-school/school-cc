@@ -7,9 +7,10 @@ Antes de começar, siga o [Guia de Acesso](GUIA-DE-ACESSO.md) para configurar o 
 ## Onde colocar cada coisa
 
 ```
-conteudo/<tema>/          ← python, git, math...
+conteudo/<tema>/          ← python, git, sistemas-digitais...
 ├── README.md     ← sobre o tema, roteiro de estudo e links
 ├── resumos/      ← um .md por assunto
+├── aulas/        ← aulas completas, quando um resumo não basta
 ├── exercicios/   ← listas e resoluções
 └── materiais/    ← slides, PDFs e afins
 ```
@@ -17,10 +18,31 @@ conteudo/<tema>/          ← python, git, math...
 - **Pastas e arquivos:** minúsculas, sem acento, palavras separadas por hífen.
   Exemplos: `estruturas-condicionais.md`, `lista-01.md`, `lista-01-resolucao.py`.
 - **Arquivos Python** usam `_` no lugar do hífen (padrão da linguagem): `ex01_par_ou_impar.py`.
-- **Simulado novo:** crie `simulados/<tema>/simulado-NN/README.md` com a prova e `respostas/qN_nome.py` com uma resposta por questão. Logo abaixo do nível, coloque a linha `**Duração sugerida:** 1h40 · **Pontuação:** 100 pontos · **Assuntos:** ...`: no site, ela vira a folha de prova com cronômetro. Use questões **próprias ou adaptadas**, nunca a prova original de uma disciplina. Depois, adicione o simulado na tabela de [`simulados/README.md`](simulados/README.md).
+- **Simulado novo:** crie `simulados/<tema>/simulado-NN/README.md` com a prova e `respostas/qN_nome.py` com uma resposta por questão. Logo abaixo do nível, coloque a linha `**Duração sugerida:** 1h40 · **Pontuação:** 100 pontos · **Assuntos:** ...`: no site, ela vira a folha de prova com cronômetro. Use questões **próprias ou adaptadas**, nunca a prova original de uma disciplina. Depois, adicione o simulado na tabela de [`simulados/README.md`](simulados/README.md). Nos simulados de **Sistemas Digitais** não há `respostas/`: cada item de `## Questão NN · Assunto · N pontos` tem a resposta num `<details>` com corretor (veja abaixo), e itens abertos trazem uma "Resposta esperada" sem corretor.
 - **Nível de cada assunto:** logo abaixo do título, coloque uma linha `**Nível:** 🟢 Iniciante`, `**Nível:** 🟡 Intermediário` ou `**Nível:** 🔴 Avançado`. No site, ela vira uma etiqueta e entra na página "Por nível". Os exercícios não precisam dela, porque o nível vem do nome do arquivo (fácil, intermediário, difícil).
 - **Numere o que tem ordem:** `01-variaveis.md`, `02-condicionais.md`, ...
 - **O material é organizado por tema, e não por matéria ou período.** Um mesmo tema (ex.: `python`) serve para qualquer disciplina que o use.
+- **Pergunta com correção automática:** coloque a resposta dentro de um bloco `<details>`, na primeira linha, num destes formatos. No GitHub o bloco vira "Ver resposta"; no site, ganha também um campo para o aluno digitar e conferir na hora:
+
+    ```markdown
+    **1.** Converta 45 para binário.
+
+    <details>
+    <summary>Ver resposta</summary>
+
+    **Resposta:** `101101`
+
+    Passo a passo...
+    </details>
+    ```
+
+    | Primeira linha | O corretor aceita |
+    | -------------- | ----------------- |
+    | `` **Resposta:** `valor` `` | O mesmo valor, sem ligar para espaços, maiúsculas, acentos, `0x` ou vírgula/ponto. Separe alternativas com uma barra vertical entre espaços |
+    | `` **Expressão:** `A'B + C` `` | Qualquer expressão booleana **equivalente** (compara a tabela-verdade) |
+    | `` **Expressão mínima:** `A'B + C` `` | Equivalente **e** sem letras a mais (para perguntas de simplificação) |
+
+- **Exercícios de Sistemas Digitais:** um arquivo por assunto e nível em `conteudo/sistemas-digitais/exercicios/<NN-tema>/<facil|intermediario|dificil>.md`, numerados de 01 a 09 como os de Python. A resposta fica no próprio arquivo, num `<details>` com corretor (veja o item acima), seguida da resolução passo a passo.
 - **Tema novo:** crie `conteudo/<tema>/README.md` e só as pastas que tiverem conteúdo. Depois adicione o tema nas tabelas de [`conteudo/README.md`](conteudo/README.md) e do [README principal](README.md).
 
 ## Branches
@@ -61,7 +83,8 @@ Todo o repositório vira o site <https://rps4-school.github.io/school-cc/>, publ
 - os links "← voltar" e os emojis dos títulos somem (o site já tem menu e trilha de navegação);
 - citações que começam com 💡, ⚠️ ou 📖 viram caixas de dica, atenção e leitura;
 - os exemplos `**Entrada:**` / `**Saída:**` aparecem lado a lado;
-- nos simulados, cada `## Questão NN` ganha um editor de Python (o mesmo do VS Code) com terminal, que roda no navegador. Basta manter o título `## Questão NN · ...` e o link `[✅ Ver resposta]`.
+- perguntas com `**Resposta:**` dentro de `<details>` ganham um corretor automático (veja acima);
+- nos simulados de Python, cada `## Questão NN` ganha um editor de Python (o mesmo do VS Code) com terminal, que roda no navegador. Basta manter o título `## Questão NN · ...` e o link `[✅ Ver resposta]`.
 
 O build roda em todo PR e **falha se houver link ou âncora quebrados**. Para ver o site no seu computador antes de abrir o PR:
 
