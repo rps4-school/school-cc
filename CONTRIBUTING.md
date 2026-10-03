@@ -60,7 +60,8 @@ Todo o repositório vira o site <https://rps4-school.github.io/school-cc/>, publ
 - pastas sem README viram uma página de cartões, e cada `.py` vira uma página com o código colorido;
 - os links "← voltar" e os emojis dos títulos somem (o site já tem menu e trilha de navegação);
 - citações que começam com 💡, ⚠️ ou 📖 viram caixas de dica, atenção e leitura;
-- os exemplos `**Entrada:**` / `**Saída:**` aparecem lado a lado.
+- os exemplos `**Entrada:**` / `**Saída:**` aparecem lado a lado;
+- nos simulados, cada `## Questão NN` ganha um editor de Python (o mesmo do VS Code) com terminal, que roda no navegador. Basta manter o título `## Questão NN · ...` e o link `[✅ Ver resposta]`.
 
 O build roda em todo PR e **falha se houver link ou âncora quebrados**. Para ver o site no seu computador antes de abrir o PR:
 
