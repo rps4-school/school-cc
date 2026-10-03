@@ -12,6 +12,7 @@
 @source "./hooks.py";
 @source "./visual.py";
 @source "./_componentes.py";
+@source "./editor.js";
 
 /* O modo escuro segue o seletor de tema do Material. */
 @custom-variant dark (&:where([data-md-color-scheme="slate"], [data-md-color-scheme="slate"] *));
@@ -140,6 +141,45 @@
 .md-typeset .exemplo .highlight,
 .md-typeset .exemplo pre {
   margin: 0.2em 0 0.9em;
+}
+
+/* ---------- Editor de Python dos simulados (editor.js) ---------- */
+.md-typeset .editor-python .md-button {
+  font-size: 0.65rem;
+  padding: 0.35em 1em;
+  margin: 0;
+}
+.md-typeset .editor-python .md-button:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+/* Dá para puxar o canto de baixo para aumentar o editor. */
+.editor-python .codigo {
+  height: 22rem;
+  min-height: 8rem;
+  resize: vertical;
+  overflow: hidden;
+}
+.editor-python .tela {
+  max-height: 24rem;
+  min-height: 4rem;
+  overflow-y: auto;
+  font-family: var(--md-code-font-family);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  tab-size: 8;
+}
+.editor-python .campo {
+  min-width: 12ch;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  caret-color: currentColor;
 }
 
 /* ---------- Trilha de navegação: quebra linha em vez de rolar de lado ---------- */
