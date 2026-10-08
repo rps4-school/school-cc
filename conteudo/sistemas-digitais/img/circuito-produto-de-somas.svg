@@ -1,0 +1,30 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 660 240' width='660' height='240' role='img' aria-label='Circuito de x = (A + B)(B&#x27; + C)'>
+<title>Circuito de x = (A + B)(B&#x27; + C)</title>
+<rect width='660' height='240' rx='12' fill='#ffffff'/>
+<text x='40' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>A</text>
+<text x='74' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>B</text>
+<text x='108' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>C</text>
+<polyline points='40,40 40,220' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='74,40 74,220' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='108,40 108,220' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<path d='M150,100.0 L190,120.0 L150,140.0 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<circle cx='195' cy='120.0' r='5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<path d='M230,45 Q246,65.0 230,85 Q272,85 290,65.0 Q272,45 230,45 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='230,58.333333333333336 237.11111111111111,58.333333333333336' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='230,71.66666666666667 237.11111111111111,71.66666666666667' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<path d='M230,130 Q246,150.0 230,170 Q272,170 290,150.0 Q272,130 230,130 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='230,143.33333333333334 237.11111111111111,143.33333333333334' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='230,156.66666666666666 237.11111111111111,156.66666666666666' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<path d='M360,85 H390 A20.0,20.0 0 0 1 390,125 H360 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='40,58.333333333333336 230,58.333333333333336' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='40' cy='58.333333333333336' r='3.5' fill='#1e293b'/>
+<polyline points='74,71.66666666666667 230,71.66666666666667' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='74' cy='71.66666666666667' r='3.5' fill='#1e293b'/>
+<polyline points='74,120.0 150,120.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='74' cy='120.0' r='3.5' fill='#1e293b'/>
+<polyline points='200,120.0 215,120.0 215,143.33333333333334 230,143.33333333333334' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='108,156.66666666666666 230,156.66666666666666' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='108' cy='156.66666666666666' r='3.5' fill='#1e293b'/>
+<polyline points='290,65.0 330,65.0 330,98.33333333333333 360,98.33333333333333' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='290,150.0 330,150.0 330,111.66666666666667 360,111.66666666666667' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<text x='294' y='59.0' font-size='12' fill='#4338ca' text-anchor='start' font-weight='normal' font-family='JetBrains Mono, Consolas, monospace'>A + B</text>
+<text x='294' y='168.0' font-size='12' fill='#4338ca' text-anchor='start' font-weight='normal' font-family='JetBrains Mono, Consolas, monospace'>B' + C</text>
+<text x='194' y='108.0' font-size='12' fill='#4338ca' text-anchor='start' font-weight='normal' font-family='JetBrains Mono, Consolas, monospace'>B'</text>
+<polyline points='410.0,105.0 440.0,105.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><text x='446.0' y='110.0' font-size='15' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>x = (A + B)·(B' + C)</text>
+</svg>
