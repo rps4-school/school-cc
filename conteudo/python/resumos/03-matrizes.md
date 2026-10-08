@@ -1,6 +1,6 @@
 # 🔢 Matrizes
 
-> [← Listas](02-listas.md) · [Voltar para Python](../README.md)
+> [← Listas](02-listas.md) · Próximo: [Strings →](04-strings.md)
 
 **Nível:** 🟡 Intermediário
 

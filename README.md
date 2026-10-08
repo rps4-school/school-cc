@@ -16,7 +16,7 @@ Todo o material fica em [**conteudo/**](conteudo/README.md), com uma pasta por t
 
 | Tema | O que tem |
 | ---- | --------- |
-| [**Python**](conteudo/python/README.md) | Resumos (condicionais, listas, matrizes) e 27 exercícios com resposta comentada, em 3 níveis |
+| [**Python**](conteudo/python/README.md) | Resumos (condicionais, listas, matrizes, strings) e 36 exercícios com resposta comentada, em 3 níveis |
 | [**Sistemas Digitais**](conteudo/sistemas-digitais/README.md) | 9 aulas completas, do binário ao Mapa de Karnaugh, e 81 exercícios com correção automática no site |
 | [**Git**](conteudo/git/README.md) | O que é o Git, comandos do dia a dia, branches e como desfazer erros |
 

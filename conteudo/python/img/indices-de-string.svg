@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 812 280" role="img" aria-labelledby="titulo desc">
+  <title id="titulo">Índices de uma string</title>
+  <desc id="desc">A string "Bom dia!" tem 8 caracteres. Contando da esquerda para a direita, os índices vão de 0 a 7. Contando da direita para a esquerda, os índices negativos vão de -8 a -1.</desc>
+  <style>
+    .t { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .c { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 30px; fill: #111827; }
+    .p { font-family: Inter, system-ui, sans-serif; font-size: 20px; font-weight: 700; fill: #1d4ed8; }
+    .n { font-family: Inter, system-ui, sans-serif; font-size: 18px; fill: #b45309; }
+    .l { font-family: Inter, system-ui, sans-serif; font-size: 15px; fill: #4b5563; }
+  </style>
+  <rect width="812" height="280" fill="#ffffff"/>
+  <text x="70" y="30" class="l">Índice negativo (da direita para a esquerda)</text>
+  <rect x="70" y="100" width="84" height="64" rx="6" fill="#ffffff" stroke="#374151" stroke-width="2"/>
+  <text x="112.0" y="142" text-anchor="middle" class="c">B</text>
+  <text x="112.0" y="196" text-anchor="middle" class="p">0</text>
+  <text x="112.0" y="84" text-anchor="middle" class="n">-8</text>
+  <rect x="154" y="100" width="84" height="64" rx="6" fill="#ffffff" stroke="#374151" stroke-width="2"/>
+  <text x="196.0" y="142" text-anchor="middle" class="c">o</text>
+  <text x="196.0" y="196" text-anchor="middle" class="p">1</text>
+  <text x="196.0" y="84" text-anchor="middle" class="n">-7</text>
+  <rect x="238" y="100" width="84" height="64" rx="6" fill="#ffffff" stroke="#374151" stroke-width="2"/>
+  <text x="280.0" y="142" text-anchor="middle" class="c">m</text>
+  <text x="280.0" y="196" text-anchor="middle" class="p">2</text>
+  <text x="280.0" y="84" text-anchor="middle" class="n">-6</text>
+  <rect x="322" y="100" width="84" height="64" rx="6" fill="#ffffff" stroke="#374151" stroke-width="2"/>
+  <text x="364.0" y="142" text-anchor="middle" class="c">␣</text>
+  <text x="364.0" y="196" text-anchor="middle" class="p">3</text>
+  <text x="364.0" y="84" text-anchor="middle" class="n">-5</text>
+  <rect x="406" y="100" width="84" height="64" rx="6" fill="#ffffff" stroke="#374151" stroke-width="2"/>
+  <text x="448.0" y="142" text-anchor="middle" class="c">d</text>
+  <text x="448.0" y="196" text-anchor="middle" class="p">4</text>
+  <text x="448.0" y="84" text-anchor="middle" class="n">-4</text>
+  <rect x="490" y="100" width="84" height="64" rx="6" fill="#ffffff" stroke="#374151" stroke-width="2"/>
+  <text x="532.0" y="142" text-anchor="middle" class="c">i</text>
+  <text x="532.0" y="196" text-anchor="middle" class="p">5</text>
+  <text x="532.0" y="84" text-anchor="middle" class="n">-3</text>
+  <rect x="574" y="100" width="84" height="64" rx="6" fill="#ffffff" stroke="#374151" stroke-width="2"/>
+  <text x="616.0" y="142" text-anchor="middle" class="c">a</text>
+  <text x="616.0" y="196" text-anchor="middle" class="p">6</text>
+  <text x="616.0" y="84" text-anchor="middle" class="n">-2</text>
+  <rect x="658" y="100" width="84" height="64" rx="6" fill="#ffffff" stroke="#374151" stroke-width="2"/>
+  <text x="700.0" y="142" text-anchor="middle" class="c">!</text>
+  <text x="700.0" y="196" text-anchor="middle" class="p">7</text>
+  <text x="700.0" y="84" text-anchor="middle" class="n">-1</text>
+  <text x="70" y="240" class="l">Índice positivo (da esquerda para a direita, começa em 0)</text>
+  <text x="70" y="260" class="l">O último caractere é sempre o índice len(texto) - 1, ou -1.</text>
+</svg>
