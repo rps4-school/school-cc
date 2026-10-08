@@ -1,0 +1,26 @@
+name: CLAUDE.md protegido
+
+# O CLAUDE.md só pode ser editado direto na main. Um PR que mexe nele falha aqui.
+# Para o bloqueio valer de verdade, marque "Proteger CLAUDE.md" como check obrigatório
+# (Settings -> Branches -> regra da main -> Require status checks).
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  proteger:
+    name: Proteger CLAUDE.md
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: O PR não pode alterar o CLAUDE.md
+        run: |
+          if git diff --name-only "origin/${{ github.base_ref }}...HEAD" | grep -qx 'CLAUDE.md'; then
+            echo "::error file=CLAUDE.md::O CLAUDE.md não pode ser alterado em PR. Remova a mudança (git checkout origin/main -- CLAUDE.md) e faça o squash. Mudanças nele são feitas direto na main."
+            exit 1
+          fi
