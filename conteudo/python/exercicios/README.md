@@ -12,6 +12,7 @@ Leia os resumos, na ordem:
 2. [Condicionais](../resumos/01-condicionais.md)
 3. [Listas](../resumos/02-listas.md)
 4. [Matrizes](../resumos/03-matrizes.md)
+5. [Strings](../resumos/04-strings.md)
 
 ## 📝 Exercícios
 
@@ -20,6 +21,7 @@ Leia os resumos, na ordem:
 | **Condicionais** | [01 a 03](enunciados/01-condicionais/facil.md) | [04 a 06](enunciados/01-condicionais/intermediario.md) | [07 a 09](enunciados/01-condicionais/dificil.md) |
 | **Listas** | [01 a 03](enunciados/02-listas/facil.md) | [04 a 06](enunciados/02-listas/intermediario.md) | [07 a 09](enunciados/02-listas/dificil.md) |
 | **Matrizes** | [01 a 03](enunciados/03-matrizes/facil.md) | [04 a 06](enunciados/03-matrizes/intermediario.md) | [07 a 09](enunciados/03-matrizes/dificil.md) |
+| **Strings** | [01 a 03](enunciados/04-strings/facil.md) | [04 a 06](enunciados/04-strings/intermediario.md) | [07 a 09](enunciados/04-strings/dificil.md) |
 
 ## 🗂️ Como está organizado
 
@@ -31,14 +33,16 @@ exercicios/
 │   │   ├── intermediario.md
 │   │   └── dificil.md
 │   ├── 02-listas/
-│   └── 03-matrizes/
+│   ├── 03-matrizes/
+│   └── 04-strings/
 └── respostas/           ← as resoluções comentadas (.py)
     ├── 01-condicionais/
     │   ├── facil/
     │   ├── intermediario/
     │   └── dificil/
     ├── 02-listas/
-    └── 03-matrizes/
+    ├── 03-matrizes/
+    └── 04-strings/
 ```
 
 ## ✅ Como praticar
