@@ -53,6 +53,10 @@ fix(git): corrige exemplo de rebase
 
 Todos os commits devem ser **assinados** (veja o [passo 8 do Guia de Acesso](GUIA-DE-ACESSO.md#8-assinar-commits)).
 
+## CLAUDE.md
+
+**Não altere o `CLAUDE.md` em PR.** Ele só é editado direto na `main`, por quem mantém o repositório. Um PR que mexe nele falha no check **Proteger CLAUDE.md**. Se a sua mudança precisa de uma regra nova lá, avise no PR.
+
 ## Site (GitHub Pages)
 
 Todo o repositório vira o site <https://rps4-school.github.io/school-cc/>, publicado automaticamente a cada merge na `main`. **Não é preciso fazer nada além de escrever o Markdown.** No site:
