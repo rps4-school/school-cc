@@ -1,0 +1,19 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 210' width='560' height='210' role='img' aria-label='Somador de 1 bit feito com uma porta XOR e uma porta AND'>
+<title>Somador de 1 bit feito com uma porta XOR e uma porta AND</title>
+<rect width='560' height='210' rx='12' fill='#ffffff'/>
+<text x='50' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>A</text>
+<text x='84' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>B</text>
+<polyline points='50,40 50,190' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='84,40 84,190' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<path d='M200,50 Q216,70.0 200,90 Q242,90 260,70.0 Q242,50 200,50 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<path d='M191,50 Q207,70.0 191,90' fill='none' stroke='#1e293b' stroke-width='2'/>
+<polyline points='191,63.333333333333336 207.11111111111111,63.333333333333336' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='191,76.66666666666667 207.11111111111111,76.66666666666667' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<path d='M200,130 H230 A20.0,20.0 0 0 1 230,170 H200 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='50,63.333333333333336 191,63.333333333333336' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='50' cy='63.333333333333336' r='3.5' fill='#1e293b'/>
+<polyline points='84,76.66666666666667 191,76.66666666666667' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='84' cy='76.66666666666667' r='3.5' fill='#1e293b'/>
+<polyline points='50,143.33333333333334 200,143.33333333333334' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='50' cy='143.33333333333334' r='3.5' fill='#1e293b'/>
+<polyline points='84,156.66666666666666 200,156.66666666666666' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='84' cy='156.66666666666666' r='3.5' fill='#1e293b'/>
+<polyline points='260,70.0 290,70.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><text x='296' y='75.0' font-size='15' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>S (soma) = A ⊕ B</text>
+<polyline points='250.0,150.0 280.0,150.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><text x='286.0' y='155.0' font-size='15' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>V (vai um) = A·B</text>
+</svg>

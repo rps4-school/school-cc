@@ -1,0 +1,31 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 270' width='640' height='270' role='img' aria-label='Circuito com quatro portas numeradas para descobrir a expressão'>
+<title>Circuito com quatro portas numeradas para descobrir a expressão</title>
+<rect width='640' height='270' rx='12' fill='#ffffff'/>
+<text x='40' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>A</text>
+<text x='74' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>B</text>
+<text x='108' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>C</text>
+<text x='142' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>D</text>
+<polyline points='40,40 40,250' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='74,40 74,250' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='108,40 108,250' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='142,40 142,250' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<path d='M220,50 H250 A20.0,20.0 0 0 1 250,90 H220 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<text x='248' y='44' font-size='11' fill='#64748b' text-anchor='middle' font-weight='normal' font-family='Inter, Segoe UI, Arial, sans-serif'>①</text>
+<path d='M220,125.0 L260,145.0 L220,165.0 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<circle cx='265' cy='145.0' r='5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<text x='248' y='119' font-size='11' fill='#64748b' text-anchor='middle' font-weight='normal' font-family='Inter, Segoe UI, Arial, sans-serif'>②</text>
+<path d='M340,80 Q356,100.0 340,120 Q382,120 400,100.0 Q382,80 340,80 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='340,93.33333333333333 347.1111111111111,93.33333333333333' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='340,106.66666666666667 347.1111111111111,106.66666666666667' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<text x='368' y='74' font-size='11' fill='#64748b' text-anchor='middle' font-weight='normal' font-family='Inter, Segoe UI, Arial, sans-serif'>③</text>
+<path d='M460,130 H490 A20.0,20.0 0 0 1 490,170 H460 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<text x='488' y='124' font-size='11' fill='#64748b' text-anchor='middle' font-weight='normal' font-family='Inter, Segoe UI, Arial, sans-serif'>④</text>
+<polyline points='40,63.333333333333336 220,63.333333333333336' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='40' cy='63.333333333333336' r='3.5' fill='#1e293b'/>
+<polyline points='74,76.66666666666667 220,76.66666666666667' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='74' cy='76.66666666666667' r='3.5' fill='#1e293b'/>
+<polyline points='108,145.0 220,145.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='108' cy='145.0' r='3.5' fill='#1e293b'/>
+<polyline points='270.0,70.0 310,70.0 310,93.33333333333333 340,93.33333333333333' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='270,145.0 310,145.0 310,106.66666666666667 340,106.66666666666667' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='400,100.0 430,100.0 430,143.33333333333334 460,143.33333333333334' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='142,230 440,230 440,156.66666666666666 460,156.66666666666666' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='142' cy='230' r='3.5' fill='#1e293b'/>
+<polyline points='510.0,150.0 540.0,150.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><text x='546.0' y='155.0' font-size='15' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>y = ?</text>
+</svg>
