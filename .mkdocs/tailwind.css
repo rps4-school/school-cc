@@ -13,6 +13,7 @@
 @source "./visual.py";
 @source "./_componentes.py";
 @source "./editor.js";
+@source "./corretor.js";
 
 /* O modo escuro segue o seletor de tema do Material. */
 @custom-variant dark (&:where([data-md-color-scheme="slate"], [data-md-color-scheme="slate"] *));

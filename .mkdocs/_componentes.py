@@ -38,6 +38,8 @@ ICONES = {
     "pasta": _SVG.format('<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'),
     "pagina": _SVG.format('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>'),
     "codigo": _SVG.format('<path d="m9 8-4 4 4 4M15 8l4 4-4 4"/>'),
+    "chip": _SVG.format('<rect x="7" y="7" width="10" height="10" rx="1"/>'
+                        '<path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/>'),
     "arquivo": _SVG.format('<path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/>'),
     "chave": _SVG.format('<circle cx="8" cy="15" r="4"/><path d="m10.8 12.2 8.2-8.2M17 6l2 2M14 9l2 2"/>'),
     "livro": _SVG.format('<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7"/>'),

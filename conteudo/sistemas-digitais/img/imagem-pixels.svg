@@ -1,0 +1,57 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 370 260' width='370' height='260' role='img' aria-label='Imagem 5 por 5 em preto e branco e os bits de cada pixel'>
+<title>Imagem 5 por 5 em preto e branco e os bits de cada pixel</title>
+<rect width='370' height='260' rx='12' fill='#ffffff'/>
+<text x='180' y='26' font-size='14' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Imagem 5×5 em preto e branco (1 bit por pixel)</text>
+<rect x='30' y='50' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='230' y='73' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='64' y='50' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='256' y='73' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='98' y='50' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='282' y='73' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='132' y='50' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='308' y='73' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='166' y='50' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='334' y='73' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='30' y='84' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='230' y='107' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='64' y='84' width='34' height='34' fill='#0f172a' stroke='#94a3b8'/>
+<text x='256' y='107' font-size='16' fill='#e11d48' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>0</text>
+<rect x='98' y='84' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='282' y='107' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='132' y='84' width='34' height='34' fill='#0f172a' stroke='#94a3b8'/>
+<text x='308' y='107' font-size='16' fill='#e11d48' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>0</text>
+<rect x='166' y='84' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='334' y='107' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='30' y='118' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='230' y='141' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='64' y='118' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='256' y='141' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='98' y='118' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='282' y='141' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='132' y='118' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='308' y='141' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='166' y='118' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='334' y='141' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='30' y='152' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='230' y='175' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='64' y='152' width='34' height='34' fill='#0f172a' stroke='#94a3b8'/>
+<text x='256' y='175' font-size='16' fill='#e11d48' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>0</text>
+<rect x='98' y='152' width='34' height='34' fill='#0f172a' stroke='#94a3b8'/>
+<text x='282' y='175' font-size='16' fill='#e11d48' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>0</text>
+<rect x='132' y='152' width='34' height='34' fill='#0f172a' stroke='#94a3b8'/>
+<text x='308' y='175' font-size='16' fill='#e11d48' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>0</text>
+<rect x='166' y='152' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='334' y='175' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='30' y='186' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='230' y='209' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='64' y='186' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='256' y='209' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='98' y='186' width='34' height='34' fill='#0f172a' stroke='#94a3b8'/>
+<text x='282' y='209' font-size='16' fill='#e11d48' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>0</text>
+<rect x='132' y='186' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='308' y='209' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<rect x='166' y='186' width='34' height='34' fill='#ffffff' stroke='#94a3b8'/>
+<text x='334' y='209' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='JetBrains Mono, Consolas, monospace'>1</text>
+<text x='285' y='242' font-size='12' fill='#64748b' text-anchor='middle' font-weight='normal' font-family='Inter, Segoe UI, Arial, sans-serif'>0 = preto · 1 = branco</text>
+<text x='115' y='242' font-size='12' fill='#64748b' text-anchor='middle' font-weight='normal' font-family='Inter, Segoe UI, Arial, sans-serif'>imagem</text>
+</svg>

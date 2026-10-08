@@ -1,0 +1,30 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 270' width='600' height='270' role='img' aria-label='Circuito de votação por maioria com três entradas'>
+<title>Circuito de votação por maioria com três entradas</title>
+<rect width='600' height='270' rx='12' fill='#ffffff'/>
+<text x='40' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>A</text>
+<text x='74' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>B</text>
+<text x='108' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>C</text>
+<polyline points='40,40 40,250' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='74,40 74,250' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='108,40 108,250' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<path d='M200,45 H230 A20.0,20.0 0 0 1 230,85 H200 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<path d='M200,115 H230 A20.0,20.0 0 0 1 230,155 H200 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<path d='M200,185 H230 A20.0,20.0 0 0 1 230,225 H200 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<path d='M340,105 Q356,135.0 340,165 Q382,165 400,135.0 Q382,105 340,105 Z' fill='#eef2ff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='340,120.0 346.0,120.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='340,135.0 348.0,135.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='340,150.0 346.0,150.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='40,58.333333333333336 200,58.333333333333336' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='40' cy='58.333333333333336' r='3.5' fill='#1e293b'/>
+<polyline points='74,71.66666666666667 200,71.66666666666667' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='74' cy='71.66666666666667' r='3.5' fill='#1e293b'/>
+<polyline points='250.0,65.0 315,65.0 315,120.0 340,120.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<text x='252.0' y='59.0' font-size='11' fill='#4338ca' text-anchor='start' font-weight='normal' font-family='JetBrains Mono, Consolas, monospace'>AB</text>
+<polyline points='74,128.33333333333334 200,128.33333333333334' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='74' cy='128.33333333333334' r='3.5' fill='#1e293b'/>
+<polyline points='108,141.66666666666666 200,141.66666666666666' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='108' cy='141.66666666666666' r='3.5' fill='#1e293b'/>
+<polyline points='250.0,135.0 315,135.0 315,135.0 340,135.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<text x='252.0' y='129.0' font-size='11' fill='#4338ca' text-anchor='start' font-weight='normal' font-family='JetBrains Mono, Consolas, monospace'>BC</text>
+<polyline points='40,198.33333333333334 200,198.33333333333334' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='40' cy='198.33333333333334' r='3.5' fill='#1e293b'/>
+<polyline points='108,211.66666666666666 200,211.66666666666666' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><circle cx='108' cy='211.66666666666666' r='3.5' fill='#1e293b'/>
+<polyline points='250.0,205.0 315,205.0 315,150.0 340,150.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<text x='252.0' y='199.0' font-size='11' fill='#4338ca' text-anchor='start' font-weight='normal' font-family='JetBrains Mono, Consolas, monospace'>AC</text>
+<polyline points='400,135.0 430,135.0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><text x='436' y='140.0' font-size='15' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>M = AB + BC + AC</text>
+</svg>
