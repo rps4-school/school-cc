@@ -58,7 +58,7 @@ A study-material repository for Computer Science (Ciência da Computação) stud
   - turns `[✅ Ver resposta]` into a button, and index tables (`| [**X**](link) | desc |`) into cards;
   - builds the home page (hero + cards, no sidebars).
 - Styling: `.mkdocs/tailwind.css` → **`.mkdocs/site.css` is committed** (compiled with `npm run css --prefix .mkdocs`; CI fails if it's stale). Tailwind is loaded **without preflight** and with `important` utilities, so it doesn't break Material. Dark mode follows `[data-md-color-scheme=slate]`. After changing classes in the hooks, recompile the CSS.
-- Validate locally, the same way as CI:
+- Validate locally, the same way as CI (first time: `pip install -r .mkdocs/requirements.txt` and `npm ci --prefix .mkdocs`):
 
   ```bash
   SITE_DIR=/tmp/school-cc-site mkdocs build --strict -f .mkdocs/mkdocs.yml
@@ -75,4 +75,7 @@ A study-material repository for Computer Science (Ciência da Computação) stud
   - scope = the topic folder name (`python`, `git`...), or `site` for `.mkdocs/`.
 
   Changes go through a branch and a PR to `main` (see `CONTRIBUTING.md` and `GUIA-DE-ACESSO.md`).
+- Branch names: `resumo/<tema>-<assunto>`, `exercicio/<tema>-<assunto>`, `fix/<descricao>`, `docs/<descricao>`.
+- PR reviews: the `revisor-de-pr` agent (`.claude/agents/`) is set up for this repo.
+- **`CLAUDE.md` is only edited directly on `main`, never in a PR or feature branch.** Don't commit changes to it on any other branch; if a PR touches it, restore it with `git checkout origin/main -- CLAUDE.md` before squashing. The `Proteger CLAUDE.md` check (`.github/workflows/claude-md.yml`) fails PRs that change it.
 - Links are all relative. After moving or renaming files, check that none are broken.
