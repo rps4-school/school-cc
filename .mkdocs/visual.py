@@ -7,6 +7,7 @@ Roda depois do hooks.py (ordem em mkdocs.yml). Tudo aqui é só visual:
 - troca citações com 💡 / ⚠️ / 📖 por caixas de dica, atenção e leitura;
 - mostra Entrada e Saída dos exercícios lado a lado;
 - transforma "✅ Ver resposta" em botão;
+- nos simulados, põe um editor de Python (editor.js) antes da resposta de cada questão;
 - monta a página inicial (hero + cartões);
 - transforma a linha "**Nível:** ..." em tag e gera a página "Por nível".
 """
@@ -22,8 +23,12 @@ from pymdownx.slugs import slugify
 
 from _componentes import EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, cartao, grade, sem_emoji
 
-CSS_ORIGEM = "site.css"  # relativo a esta pasta
-CSS_DESTINO = "assets/stylesheets/site.css"
+# Arquivos desta pasta publicados no site (o MkDocs ignora pastas que começam com ".").
+ARQUIVOS_DO_SITE = {
+    "site.css": "assets/stylesheets/site.css",
+    "editor.js": "assets/javascripts/editor.js",
+    "python-worker.js": "assets/javascripts/python-worker.js",
+}
 PAGINA_NIVEIS = "niveis.md"
 CONTEUDO_NIVEIS = """# Por nível
 
@@ -55,6 +60,7 @@ FOLHA_DE_PROVA = re.compile(
     r" · \*\*Assuntos:\*\* (?P<assuntos>.+?)\s*$",
     re.M,
 )
+QUESTAO = re.compile(r"^## Questão (\d+)")
 
 
 def _fora_de_codigo(linhas):
@@ -195,6 +201,20 @@ def _folha_de_prova(m):
     )
 
 
+def _editores(markdown):
+    """Põe o editor de Python antes do "Ver resposta" de cada "## Questão NN" (o editor.js monta)."""
+    secoes = re.split(r"(?=^## )", markdown, flags=re.M)
+    for s, secao in enumerate(secoes):
+        m = QUESTAO.match(secao)
+        if not m:
+            continue
+        editor = f'<div class="editor-python" data-questao="{m.group(1)}" data-arquivo="q{int(m.group(1))}.py"></div>'
+        secoes[s], trocas = VER_RESPOSTA.subn(lambda r: f"{editor}\n\n{r.group(0)}", secao, count=1)
+        if not trocas:
+            secoes[s] = f"{secao.rstrip()}\n\n{editor}\n\n"
+    return "".join(secoes)
+
+
 def _url(files, page, src):
     arquivo = files.get_file_from_path(src)
     return get_relative_url(arquivo.url, page.url) if arquivo else "#"
@@ -260,9 +280,9 @@ def on_config(config):
 
 
 def on_files(files, config):
-    caminho = os.path.join(os.path.dirname(__file__), CSS_ORIGEM)
-    with open(caminho, encoding="utf-8") as f:
-        files.append(File.generated(config, CSS_DESTINO, content=f.read(), inclusion=InclusionLevel.NOT_IN_NAV))
+    for origem, destino in ARQUIVOS_DO_SITE.items():
+        with open(os.path.join(os.path.dirname(__file__), origem), encoding="utf-8") as f:
+            files.append(File.generated(config, destino, content=f.read(), inclusion=InclusionLevel.NOT_IN_NAV))
     files.append(File.generated(config, PAGINA_NIVEIS, content=CONTEUDO_NIVEIS, inclusion=InclusionLevel.INCLUDED))
     return files
 
@@ -290,8 +310,9 @@ def on_page_markdown(markdown, page, config, files):
     markdown = "\n".join(linhas)
     markdown = _exemplos(markdown)
     markdown = _tabelas_indice(markdown, page, files)
-    if page.file.src_uri.startswith("simulados/"):
+    if page.file.src_uri.startswith("simulados/") and FOLHA_DE_PROVA.search(markdown):
         markdown = FOLHA_DE_PROVA.sub(_folha_de_prova, markdown)
+        markdown = _editores(markdown)
     markdown = VER_RESPOSTA.sub(r"[Ver resposta →](\1){ .md-button }", markdown)
     if page.file.src_uri == "README.md":
         markdown = _inicio(markdown, page, files)
