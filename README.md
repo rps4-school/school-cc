@@ -18,6 +18,7 @@ Todo o material fica em [**conteudo/**](conteudo/README.md), com uma pasta por t
 | ---- | --------- |
 | [**Python**](conteudo/python/README.md) | Resumos (condicionais, listas, matrizes, strings) e 36 exercícios com resposta comentada, em 3 níveis |
 | [**Sistemas Digitais**](conteudo/sistemas-digitais/README.md) | 9 aulas completas, do binário ao Mapa de Karnaugh, e 81 exercícios com correção automática no site |
+| [**Cálculo**](conteudo/calculo/README.md) | 10 aulas com mapas mentais, de funções a integrais (com bisseção e Newton), 90 exercícios e 4 simulados com correção automática no site |
 | [**Git**](conteudo/git/README.md) | O que é o Git, comandos do dia a dia, branches e como desfazer erros |
 
 ## 📝 Simulados
@@ -35,7 +36,7 @@ school-cc/
 ├── simulados/              ← provas de treino (enunciado + respostas)
 └── conteudo/
     ├── README.md           ← índice dos temas
-    └── <tema>/             ← python, git, sistemas-digitais...
+    └── <tema>/             ← python, git, sistemas-digitais, calculo...
         ├── README.md       ← sobre o tema, roteiro de estudo e links
         ├── resumos/        ← um resumo por assunto
         ├── aulas/          ← aulas completas (quando o tema precisa de mais que um resumo)

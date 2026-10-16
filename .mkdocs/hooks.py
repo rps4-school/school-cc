@@ -41,6 +41,15 @@ TITULOS = {
     "circuitos": "Circuitos",
     "karnaugh": "Mapa de Karnaugh",
     "sistemas-digitais": "Sistemas Digitais",  # pasta dos simulados
+    # Assuntos dos exercícios de Cálculo.
+    "calculo": "Cálculo",  # pasta dos simulados
+    "funcoes": "Funções",
+    "limites-no-infinito": "Limites no infinito",
+    "regras-de-derivacao": "Regras de derivação",
+    "aplicacoes-da-derivada": "Aplicações da derivada",
+    "bissecao": "Bisseção",
+    "metodo-de-newton": "Método de Newton",
+    "integral-definida": "Integral definida",
 }
 
 # Pastas de apoio (ex.: imagens usadas nas páginas): os arquivos são publicados,

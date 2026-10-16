@@ -6,6 +6,9 @@
  *   **Resposta:** `101101`          → confere o valor (número, texto, código)
  *   **Expressão:** `A'B + C`        → aceita qualquer expressão equivalente
  *   **Expressão mínima:** `B + C`   → equivalente E sem literais a mais
+ *   **Número:** `1/4`               → o mesmo valor (0,25, 2/8, √2/2...); aceita "± tolerância"
+ *   **Função:** `6x`                → função equivalente (testada em vários pontos)
+ *   **Primitiva:** `x^3/3 + C`      → igual a menos de uma constante, e com o "+ C"
  * Aqui o div vira um campo com o botão "Conferir". Nada vai para servidor nenhum.
  */
 (function () {
@@ -179,6 +182,252 @@
     return { certo: true };
   }
 
+  // ---------- Matemática: 1/4, √2/2, 3x^2 + 2, ln(x) + C... ----------
+
+  var FUNCOES_MAT = {
+    sqrt: Math.sqrt, raiz: Math.sqrt, cbrt: Math.cbrt, ln: Math.log, exp: Math.exp, abs: Math.abs,
+    sen: Math.sin, sin: Math.sin, cos: Math.cos, tg: Math.tan, tan: Math.tan,
+    log: function (x) { return Math.log10(x); },
+  };
+  var NOMES_FUNCOES = Object.keys(FUNCOES_MAT).sort(function (a, b) { return b.length - a.length; });
+  var SOBRESCRITOS = { "²": "^2", "³": "^3", "⁴": "^4", "⁵": "^5", "⁻¹": "^(-1)", "½": "(1/2)" };
+
+  function lerTokensMat(texto) {
+    texto = texto.replace(/[−–]/g, "-").replace(/[×·⋅*]/g, "*").replace(/÷/g, "/")
+      .replace(/infinito|inf/gi, "∞").replace(/π/g, "pi");
+    Object.keys(SOBRESCRITOS).forEach(function (s) { texto = texto.split(s).join(SOBRESCRITOS[s]); });
+    var tokens = [];
+    var i = 0;
+    while (i < texto.length) {
+      var c = texto[i];
+      if (/\s/.test(c)) { i++; continue; }
+      var num = /^\d+(?:[.,]\d+)?|^[.,]\d+/.exec(texto.slice(i));
+      if (num) {
+        tokens.push({ tipo: "num", valor: parseFloat(num[0].replace(",", ".")) });
+        i += num[0].length;
+        continue;
+      }
+      if (/[a-z]/i.test(c)) {
+        var resto = texto.slice(i).toLowerCase();
+        var nome = NOMES_FUNCOES.find(function (n) { return resto.indexOf(n) === 0; });
+        if (nome) {
+          i += nome.length;
+          // log com base: log_5(x), log5(x) ou log_{5}(x)
+          var base = nome === "log" ? /^_?\{?(\d+(?:[.,]\d+)?)\}?/.exec(texto.slice(i)) : null;
+          if (base) {
+            var b = parseFloat(base[1].replace(",", "."));
+            tokens.push({ tipo: "func", f: function (x) { return Math.log(x) / Math.log(b); } });
+            i += base[0].length;
+          } else {
+            tokens.push({ tipo: "func", f: FUNCOES_MAT[nome] });
+          }
+          continue;
+        }
+        if (resto.indexOf("pi") === 0) { tokens.push({ tipo: "num", valor: Math.PI }); i += 2; continue; }
+        if (c === "e") { tokens.push({ tipo: "num", valor: Math.E }); i++; continue; }
+        tokens.push({ tipo: "var", nome: c });
+        i++;
+        continue;
+      }
+      if ("+-*/^()|√∛∞".indexOf(c) >= 0) { tokens.push({ tipo: c }); i++; continue; }
+      if (c === "[" || c === "{") { tokens.push({ tipo: "(" }); i++; continue; }
+      if (c === "]" || c === "}") { tokens.push({ tipo: ")" }); i++; continue; }
+      throw new Error("símbolo “" + c + "”");
+    }
+    return tokens;
+  }
+
+  // Precedência: + − ; * / e multiplicação implícita ; sinal ; ^ (associa à direita).
+  function analisarMat(texto) {
+    var tokens = lerTokensMat(texto);
+    var pos = 0;
+    var dentroDeModulo = 0;
+    var variaveis = {};
+
+    function olhar() { return tokens[pos] && tokens[pos].tipo; }
+    function comecaFator(t) {
+      return t === "num" || t === "var" || t === "func" || t === "(" || t === "√" || t === "∛" || t === "∞" ||
+        (t === "|" && !dentroDeModulo);
+    }
+    function soma() {
+      var a = produto();
+      while (olhar() === "+" || olhar() === "-") {
+        var op = tokens[pos++].tipo, b = produto();
+        a = op === "+" ? juntar(a, b, function (x, y) { return x + y; }) : juntar(a, b, function (x, y) { return x - y; });
+      }
+      return a;
+    }
+    function produto() {
+      var a = sinal();
+      for (;;) {
+        var t = olhar();
+        if (t === "*") { pos++; a = juntar(a, sinal(), function (x, y) { return x * y; }); }
+        else if (t === "/") { pos++; a = juntar(a, sinal(), function (x, y) { return x / y; }); }
+        else if (comecaFator(t)) a = juntar(a, potencia(), function (x, y) { return x * y; }); // 2x, x(x+1)
+        else return a;
+      }
+    }
+    function sinal() {
+      if (olhar() === "-") { pos++; var a = sinal(); return function (v) { return -a(v); }; }
+      if (olhar() === "+") { pos++; return sinal(); }
+      return potencia();
+    }
+    function potencia() {
+      var base = primario();
+      if (olhar() === "^") { pos++; var exp = sinal(); return juntar(base, exp, potenciaReal); }
+      return base;
+    }
+    function primario() {
+      var t = tokens[pos++];
+      if (!t) throw new Error("expressão incompleta");
+      if (t.tipo === "num") return function () { return t.valor; };
+      if (t.tipo === "∞") return function () { return Infinity; };
+      if (t.tipo === "var") { variaveis[t.nome] = true; return function (v) { return v[t.nome]; }; }
+      if (t.tipo === "(") {
+        var a = soma();
+        if (olhar() !== ")") throw new Error("falta fechar um parêntese");
+        pos++;
+        return a;
+      }
+      if (t.tipo === "|") {
+        dentroDeModulo++;
+        var m = soma();
+        dentroDeModulo--;
+        if (olhar() !== "|") throw new Error("falta fechar o módulo |");
+        pos++;
+        return function (v) { return Math.abs(m(v)); };
+      }
+      if (t.tipo === "√" || t.tipo === "∛") {
+        var r = olhar() === "(" ? primario() : potencia();
+        var f = t.tipo === "√" ? Math.sqrt : Math.cbrt;
+        return function (v) { return f(r(v)); };
+      }
+      if (t.tipo === "func") {
+        var arg = olhar() === "(" ? primario() : potencia(); // ln x, sen x, ln x^2 = ln(x^2)
+        return function (v) { return t.f(arg(v)); };
+      }
+      throw new Error("algo faltando antes de “" + t.tipo + "”");
+    }
+    function juntar(a, b, op) { return function (v) { return op(a(v), b(v)); }; }
+
+    var valor = soma();
+    if (pos < tokens.length) throw new Error("sobrou algo no fim");
+    return { valor: valor, variaveis: Object.keys(variaveis) };
+  }
+
+  // Potência que aceita base negativa com expoente fracionário de denominador ímpar: (−8)^(1/3) = −2.
+  function potenciaReal(b, e) {
+    var r = Math.pow(b, e);
+    if (isNaN(r) && b < 0) {
+      for (var q = 1; q <= 9; q += 2) {
+        var p = e * q;
+        if (Math.abs(p - Math.round(p)) < 1e-9) return Math.pow(-Math.pow(-b, 1 / q), Math.round(p));
+      }
+    }
+    return r;
+  }
+
+  function perto(a, b, tol) {
+    if (a === b) return true; // inclusive ∞ = ∞
+    if (!isFinite(a) || !isFinite(b)) return false;
+    return Math.abs(a - b) <= (tol !== undefined ? tol : 1e-7 * Math.max(1, Math.abs(a), Math.abs(b)));
+  }
+
+  function numeroBonito(x) {
+    if (!isFinite(x)) return x > 0 ? "∞" : "−∞";
+    var r = Math.round(x * 1e4) / 1e4;
+    return String(r).replace(".", ",").replace("-", "−");
+  }
+
+  function valorConstante(texto) {
+    var a = analisarMat(texto);
+    if (a.variaveis.length) throw new Error("tem variável");
+    return a.valor({});
+  }
+
+  function conferirNumero(resposta, digitado) {
+    var opcoes = resposta.split(" | ");
+    var aluno = null;
+    try { aluno = valorConstante(digitado.replace(/^[^=]*=(?!=)/, "")); } catch (e) { /* talvez seja texto */ }
+    var casas = (/[.,](\d+)\s*$/.exec(digitado.trim()) || [, ""])[1].length;
+    var quase = false;
+    for (var i = 0; i < opcoes.length; i++) {
+      var op = opcoes[i].split("±");
+      var certa = null;
+      try { certa = valorConstante(op[0]); } catch (e) { /* alternativa em texto */ }
+      if (certa === null) {
+        if (limpar(opcoes[i]) === limpar(digitado)) return { certo: true };
+        continue;
+      }
+      if (aluno === null || isNaN(aluno)) continue;
+      var tol = op[1] ? valorConstante(op[1]) : undefined;
+      if (perto(aluno, certa, tol)) return { certo: true };
+      // Decimal arredondado ou truncado com pelo menos 2 casas: 0,33 ou 0,3333 para 1/3.
+      if (tol === undefined && casas >= 2 && isFinite(certa) && Math.abs(aluno - certa) <= Math.pow(10, -casas) + 1e-12) return { certo: true };
+      if (isFinite(certa) && Math.abs(aluno - certa) <= 0.05 * Math.max(1, Math.abs(certa))) quase = true;
+    }
+    if (aluno === null) {
+      return { certo: false, dica: "Não entendi o número. Use vírgula ou ponto (0,25), fração (1/4), √, π, e, ln ou ∞." };
+    }
+    return quase ? { certo: false, dica: "Perto! Confira as contas ou use mais casas decimais (ou a fração exata)." } : { certo: false };
+  }
+
+  // Pontos de teste: valores "quebrados" para não acertar por coincidência; os negativos testam o domínio.
+  var PONTOS = [0.37, 1.23, 2.71, 0.81, 3.17, 1.59, 4.42, 0.53, 2.06, -0.63, -1.37, -2.18, 1.91, 3.83];
+
+  function separarConstante(texto) {
+    var sem = texto.replace(/\s*\+\s*[ck]\s*$/i, "").replace(/^\s*[ck]\s*\+\s*/i, "");
+    return { texto: sem, temConstante: sem !== texto };
+  }
+
+  function conferirFuncao(resposta, digitado, primitiva) {
+    var limpo = digitado.replace(/^[^=]*=(?!=)/, "");
+    var temC = false;
+    if (primitiva) {
+      var s = separarConstante(limpo);
+      limpo = s.texto;
+      temC = s.temConstante;
+    }
+    resposta = resposta.replace(/^[^=]*=(?!=)/, "");
+    var certa = analisarMat(primitiva ? separarConstante(resposta).texto : resposta);
+    var aluno;
+    try {
+      aluno = analisarMat(limpo);
+    } catch (e) {
+      return {
+        certo: false,
+        dica: "Não entendi a expressão (" + e.message + "). Exemplos: 3x^2 + 2, (x+1)/(x-2), √x, x^(1/3), e^(2x), ln(x), sen(x)" +
+          (primitiva ? ", e no fim + C." : "."),
+      };
+    }
+    var nomes = certa.variaveis.concat(aluno.variaveis).filter(function (n, i, l) { return l.indexOf(n) === i; }).sort();
+    var sobrando = aluno.variaveis.filter(function (n) { return certa.variaveis.indexOf(n) < 0; });
+    if (sobrando.length) return { certo: false, dica: "A resposta não usa a letra “" + sobrando[0] + "”. Confira a variável." };
+    var validos = 0, diferenca = null;
+    for (var k = 0; k < PONTOS.length; k++) {
+      var v = {};
+      nomes.forEach(function (n, j) { v[n] = PONTOS[(k + 3 * j) % PONTOS.length]; });
+      var esperado = certa.valor(v), obtido = aluno.valor(v);
+      if (!isFinite(esperado) || !isFinite(obtido)) continue; // fora do domínio de uma das duas
+      validos++;
+      var d = obtido - esperado;
+      if (primitiva) {
+        if (diferenca === null) { diferenca = d; continue; }
+        if (perto(d, diferenca, 1e-6 * Math.max(1, Math.abs(esperado)))) continue;
+      } else if (perto(obtido, esperado)) continue;
+      var ponto = nomes.map(function (n) { return n + " = " + numeroBonito(v[n]); }).join(", ");
+      return {
+        certo: false,
+        dica: primitiva
+          ? "Derive a sua resposta e compare com a função do enunciado: as duas não diferem só por uma constante."
+          : "Para " + ponto + ", a sua dá " + numeroBonito(obtido) + " e a certa dá " + numeroBonito(esperado) + ".",
+      };
+    }
+    if (validos < 5) return { certo: false, dica: "Não deu para testar a sua expressão (ela não existe nos pontos de teste). Confira o domínio." };
+    if (primitiva && !temC) return { certo: false, aviso: true, dica: "Quase lá: falta a constante “+ C” no final." };
+    return { certo: true };
+  }
+
   // ---------- Placar da página ----------
 
   function lerAcertos() {
@@ -207,7 +456,17 @@
 
   // ---------- Montagem ----------
 
-  var EXEMPLOS = { valor: "Sua resposta", expressao: "Ex.: A'B + C", minima: "Ex.: A'B + C" };
+  var EXEMPLOS = {
+    valor: "Sua resposta", expressao: "Ex.: A'B + C", minima: "Ex.: A'B + C",
+    numero: "Ex.: 1/4 ou 0,25", funcao: "Ex.: 3x^2 + 2", primitiva: "Ex.: x^3/3 + C",
+  };
+
+  function conferirPorTipo(tipo, resposta, digitado) {
+    if (tipo === "valor") return conferirValor(resposta, digitado);
+    if (tipo === "numero") return conferirNumero(resposta, digitado);
+    if (tipo === "funcao" || tipo === "primitiva") return conferirFuncao(resposta, digitado, tipo === "primitiva");
+    return conferirExpressao(resposta, digitado, tipo === "minima");
+  }
 
   function montar(caixa, indice, total, acertos) {
     var tipo = caixa.dataset.tipo;
@@ -238,7 +497,7 @@
     function conferir() {
       var digitado = campo.value.trim();
       if (!digitado) return mostrar("Digite a sua resposta primeiro.", AVISO);
-      var r = tipo === "valor" ? conferirValor(resposta, digitado) : conferirExpressao(resposta, digitado, tipo === "minima");
+      var r = conferirPorTipo(tipo, resposta, digitado);
       if (r.certo) {
         mostrar("✅ Certo!", CERTO);
         caixa.dataset.acertou = "1";
@@ -273,6 +532,11 @@
     atualizarPlacar(caixas.length);
   }
 
+  // Nos testes (Node) não há página: só exporta as funções de conferência.
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = { conferirPorTipo: conferirPorTipo, analisarMat: analisarMat };
+    return;
+  }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", iniciar);
   else iniciar();
 })();

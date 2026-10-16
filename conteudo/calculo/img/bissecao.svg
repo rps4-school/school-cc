@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 345" width="720" height="345" role="img" aria-label="Método da bisseção em x³ + 2x − 5 no intervalo [1, 2]: a cada passo o intervalo cai pela metade e o ponto médio se aproxima da raiz">
+<title>Método da bisseção em x³ + 2x − 5 no intervalo [1, 2]: a cada passo o intervalo cai pela metade e o ponto médio se aproxima da raiz</title>
+<rect width="720" height="345" rx="12" fill="#ffffff"/>
+<clipPath id="quadro7"><rect x="50" y="25" width="620" height="200"/></clipPath>
+<line x1="101.7" y1="25" x2="101.7" y2="225" stroke="#e2e8f0" stroke-width="1"/>
+<line x1="230.8" y1="25" x2="230.8" y2="225" stroke="#e2e8f0" stroke-width="1"/>
+<line x1="360.0" y1="25" x2="360.0" y2="225" stroke="#e2e8f0" stroke-width="1"/>
+<line x1="489.2" y1="25" x2="489.2" y2="225" stroke="#e2e8f0" stroke-width="1"/>
+<line x1="618.3" y1="25" x2="618.3" y2="225" stroke="#e2e8f0" stroke-width="1"/>
+<line x1="50" y1="206.8" x2="670" y2="206.8" stroke="#e2e8f0" stroke-width="1"/>
+<line x1="50" y1="134.1" x2="670" y2="134.1" stroke="#e2e8f0" stroke-width="1"/>
+<line x1="50" y1="97.7" x2="670" y2="97.7" stroke="#e2e8f0" stroke-width="1"/>
+<line x1="50" y1="61.4" x2="670" y2="61.4" stroke="#e2e8f0" stroke-width="1"/>
+<line x1="50" y1="170.5" x2="670" y2="170.5" stroke="#64748b" stroke-width="1.5"/>
+<line x1="50.0" y1="25" x2="50.0" y2="225" stroke="#64748b" stroke-width="1.5"/>
+<g clip-path="url(#quadro7)">
+<polyline points="60.3,213.8 62.3,213.4 64.3,213.1 66.3,212.8 68.3,212.5 70.3,212.1 72.3,211.8 74.3,211.5 76.3,211.1 78.3,210.8 80.3,210.5 82.3,210.1 84.3,209.8 86.3,209.5 88.3,209.1 90.3,208.8 92.3,208.4 94.3,208.1 96.3,207.8 98.3,207.4 100.3,207.1 102.3,206.7 104.3,206.4 106.3,206.0 108.3,205.6 110.3,205.3 112.3,204.9 114.3,204.6 116.3,204.2 118.3,203.8 120.3,203.5 122.3,203.1 124.3,202.7 126.3,202.4 128.3,202.0 130.3,201.6 132.3,201.2 134.3,200.9 136.2,200.5 138.2,200.1 140.2,199.7 142.2,199.3 144.2,198.9 146.2,198.6 148.2,198.2 150.2,197.8 152.2,197.4 154.2,197.0 156.2,196.6 158.2,196.2 160.2,195.8 162.2,195.4 164.2,195.0 166.2,194.6 168.2,194.2 170.2,193.8 172.2,193.3 174.2,192.9 176.2,192.5 178.2,192.1 180.2,191.7 182.2,191.3 184.2,190.8 186.2,190.4 188.2,190.0 190.2,189.5 192.2,189.1 194.2,188.7 196.2,188.3 198.2,187.8 200.2,187.4 202.2,186.9 204.2,186.5 206.2,186.0 208.2,185.6 210.2,185.2 212.2,184.7 214.2,184.3 216.2,183.8 218.2,183.3 220.2,182.9 222.2,182.4 224.2,182.0 226.1,181.5 228.1,181.0 230.1,180.6 232.1,180.1 234.1,179.6 236.1,179.1 238.1,178.7 240.1,178.2 242.1,177.7 244.1,177.2 246.1,176.7 248.1,176.3 250.1,175.8 252.1,175.3 254.1,174.8 256.1,174.3 258.1,173.8 260.1,173.3 262.1,172.8 264.1,172.3 266.1,171.8 268.1,171.3 270.1,170.8 272.1,170.2 274.1,169.7 276.1,169.2 278.1,168.7 280.1,168.2 282.1,167.6 284.1,167.1 286.1,166.6 288.1,166.1 290.1,165.5 292.1,165.0 294.1,164.5 296.1,163.9 298.1,163.4 300.1,162.8 302.1,162.3 304.1,161.7 306.1,161.2 308.1,160.6 310.1,160.1 312.1,159.5 314.1,159.0 316.0,158.4 318.0,157.8 320.0,157.3 322.0,156.7 324.0,156.1 326.0,155.6 328.0,155.0 330.0,154.4 332.0,153.8 334.0,153.2 336.0,152.7 338.0,152.1 340.0,151.5 342.0,150.9 344.0,150.3 346.0,149.7 348.0,149.1 350.0,148.5 352.0,147.9 354.0,147.3 356.0,146.7 358.0,146.1 360.0,145.5 362.0,144.8 364.0,144.2 366.0,143.6 368.0,143.0 370.0,142.3 372.0,141.7 374.0,141.1 376.0,140.5 378.0,139.8 380.0,139.2 382.0,138.5 384.0,137.9 386.0,137.2 388.0,136.6 390.0,135.9 392.0,135.3 394.0,134.6 396.0,134.0 398.0,133.3 400.0,132.7 402.0,132.0 404.0,131.3 405.9,130.6 407.9,130.0 409.9,129.3 411.9,128.6 413.9,127.9 415.9,127.2 417.9,126.6 419.9,125.9 421.9,125.2 423.9,124.5 425.9,123.8 427.9,123.1 429.9,122.4 431.9,121.7 433.9,121.0 435.9,120.3 437.9,119.5 439.9,118.8 441.9,118.1 443.9,117.4 445.9,116.7 447.9,115.9 449.9,115.2 451.9,114.5 453.9,113.7 455.9,113.0 457.9,112.3 459.9,111.5 461.9,110.8 463.9,110.0 465.9,109.3 467.9,108.5 469.9,107.7 471.9,107.0 473.9,106.2 475.9,105.5 477.9,104.7 479.9,103.9 481.9,103.1 483.9,102.4 485.9,101.6 487.9,100.8 489.9,100.0 491.9,99.2 493.9,98.4 495.8,97.6 497.8,96.8 499.8,96.0 501.8,95.2 503.8,94.4 505.8,93.6 507.8,92.8 509.8,92.0 511.8,91.2 513.8,90.4 515.8,89.5 517.8,88.7 519.8,87.9 521.8,87.0 523.8,86.2 525.8,85.4 527.8,84.5 529.8,83.7 531.8,82.8 533.8,82.0 535.8,81.1 537.8,80.3 539.8,79.4 541.8,78.6 543.8,77.7 545.8,76.8 547.8,75.9 549.8,75.1 551.8,74.2 553.8,73.3 555.8,72.4 557.8,71.5 559.8,70.7 561.8,69.8 563.8,68.9 565.8,68.0 567.8,67.1 569.8,66.2 571.8,65.3 573.8,64.3 575.8,63.4 577.8,62.5 579.8,61.6 581.8,60.7 583.8,59.7 585.7,58.8 587.7,57.9 589.7,56.9 591.7,56.0 593.7,55.1 595.7,54.1 597.7,53.2 599.7,52.2 601.7,51.2 603.7,50.3 605.7,49.3 607.7,48.4 609.7,47.4 611.7,46.4 613.7,45.4 615.7,44.5 617.7,43.5 619.7,42.5 621.7,41.5 623.7,40.5 625.7,39.5 627.7,38.5 629.7,37.5 631.7,36.5 633.7,35.5 635.7,34.5 637.7,33.5 639.7,32.5 641.7,31.5 643.7,30.4 645.7,29.4 647.7,28.4 649.7,27.3 651.7,26.3 653.7,25.3 655.7,24.2 657.7,23.2 659.7,22.1" fill="none" stroke="#4f46e5" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+</g>
+<polygon points="670,170.5 663,166.5 663,174.5" fill="#64748b"/>
+<polygon points="50.0,25 46.0,32 54.0,32" fill="#64748b"/>
+<text x="666.0" y="186.5" font-size="12" fill="#64748b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">x</text>
+<text x="58.0" y="37.0" font-size="12" fill="#64748b" text-anchor="start" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">y</text>
+<text x="101.7" y="185.5" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">1</text>
+<text x="230.8" y="185.5" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">1,25</text>
+<text x="360.0" y="185.5" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">1,5</text>
+<text x="489.2" y="185.5" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">1,75</text>
+<text x="618.3" y="185.5" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">2</text>
+<text x="44.0" y="210.8" font-size="11" fill="#64748b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">−2</text>
+<text x="44.0" y="138.1" font-size="11" fill="#64748b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">2</text>
+<text x="44.0" y="101.7" font-size="11" fill="#64748b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">4</text>
+<text x="44.0" y="65.4" font-size="11" fill="#64748b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">6</text>
+<circle cx="271.3" cy="170.5" r="4" fill="#e11d48" stroke="#e11d48" stroke-width="2"/>
+<text x="271.3" y="160.5" font-size="12" fill="#e11d48" text-anchor="middle" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">raiz</text>
+<circle cx="101.7" cy="206.8" r="4" fill="#64748b" stroke="#64748b" stroke-width="2"/>
+<circle cx="618.3" cy="43.2" r="4" fill="#64748b" stroke="#64748b" stroke-width="2"/>
+<text x="42" y="255" font-size="12" fill="#1e293b" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif">k = 0</text>
+<line x1="101.7" y1="250" x2="618.3" y2="250" stroke="#4f46e5" stroke-width="4" stroke-linecap="round"/>
+<circle cx="360.0" cy="250" r="5" fill="#d97706"/>
+<text x="628.3" y="255" font-size="12" fill="#64748b" font-family="Inter, Segoe UI, Arial, sans-serif">[1; 2]  x0 = 1,5</text>
+<text x="42" y="277" font-size="12" fill="#1e293b" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif">k = 1</text>
+<line x1="101.7" y1="272" x2="360.0" y2="272" stroke="#4f46e5" stroke-width="4" stroke-linecap="round"/>
+<circle cx="230.8" cy="272" r="5" fill="#d97706"/>
+<text x="370.0" y="277" font-size="12" fill="#64748b" font-family="Inter, Segoe UI, Arial, sans-serif">[1; 1,5]  x1 = 1,25</text>
+<text x="42" y="299" font-size="12" fill="#1e293b" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif">k = 2</text>
+<line x1="230.8" y1="294" x2="360.0" y2="294" stroke="#4f46e5" stroke-width="4" stroke-linecap="round"/>
+<circle cx="295.4" cy="294" r="5" fill="#d97706"/>
+<text x="370.0" y="299" font-size="12" fill="#64748b" font-family="Inter, Segoe UI, Arial, sans-serif">[1,25; 1,5]  x2 = 1,375</text>
+<text x="42" y="321" font-size="12" fill="#1e293b" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif">k = 3</text>
+<line x1="230.8" y1="316" x2="295.4" y2="316" stroke="#4f46e5" stroke-width="4" stroke-linecap="round"/>
+<circle cx="263.1" cy="316" r="5" fill="#d97706"/>
+<text x="305.4" y="321" font-size="12" fill="#64748b" font-family="Inter, Segoe UI, Arial, sans-serif">[1,25; 1,375]  x3 = 1,3125</text>
+<line x1="271.3" y1="238" x2="271.3" y2="326" stroke="#e11d48" stroke-width="1.5" stroke-dasharray="4 4"/>
+</svg>

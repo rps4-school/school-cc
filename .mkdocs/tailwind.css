@@ -216,3 +216,17 @@
     align-items: center;
   }
 }
+
+/* ---------- Fórmulas (KaTeX): fórmula longa rola sozinha, sem empurrar a página no celular ---------- */
+/* O KaTeX põe uma cópia em MathML (para leitores de tela) com position: absolute; sem isto ela escapa da caixa. */
+.md-typeset .arithmatex {
+  position: relative;
+}
+.md-typeset div.arithmatex {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.1rem 0;
+}
+.md-typeset div.arithmatex > .katex-display {
+  margin: 0.6em 0;
+}

@@ -9,8 +9,8 @@ Provas de treino no **formato de uma prova de verdade**: tempo marcado, pontuaç
 1. **Estude antes** o conteúdo do tema, por exemplo [Python](../conteudo/python/README.md).
 2. **Separe o tempo sugerido** e ligue o cronômetro. No site, cada simulado tem um.
 3. **Sem consulta:** nada de internet, anotações, calculadora ou IA.
-4. **Python:** crie **um arquivo por questão** (`q1.py`, `q2.py`...). No site, cada questão tem um **editor de Python** com terminal: dá para escrever, rodar e baixar o `.py` sem instalar nada. **Sistemas Digitais:** resolva no papel, mostrando as contas.
-5. Quando o tempo acabar, confira. Em Python, rode seus programas com as entradas dos **exemplos de execução** e compare as saídas; em Sistemas Digitais, digite cada resposta no campo de correção do site.
+4. **Python:** crie **um arquivo por questão** (`q1.py`, `q2.py`...). No site, cada questão tem um **editor de Python** com terminal: dá para escrever, rodar e baixar o `.py` sem instalar nada. **Sistemas Digitais e Cálculo:** resolva no papel, mostrando as contas (em Cálculo, com calculadora científica).
+5. Quando o tempo acabar, confira. Em Python, rode seus programas com as entradas dos **exemplos de execução** e compare as saídas; em Sistemas Digitais e Cálculo, digite cada resposta no campo de correção do site.
 6. **Só então** abra as respostas. Confira também se você usou os **comandos exigidos**.
 
 ## 🐍 Python
@@ -32,6 +32,17 @@ Doze questões por prova, uma de cada assunto, da [aula 1 à 9](../conteudo/sist
 | [**Simulado 02**](sistemas-digitais/simulado-02/README.md) | 🟡 Intermediário | 1h | Todos: binário, hexa, codificação, C2, portas, circuitos e Karnaugh |
 | [**Simulado 03**](sistemas-digitais/simulado-03/README.md) | 🔴 Avançado | 1h30 | Todos, com ponto fixo, overflow e projeto de circuitos |
 | [**Simulado 04**](sistemas-digitais/simulado-04/README.md) | 🔴 Avançado | 1h30 | Todos, com ponto fixo, overflow e projeto de circuitos |
+
+## 📈 Cálculo
+
+Dez questões por prova, uma de cada assunto, da [aula 1 à 10](../conteudo/calculo/README.md). Cada item tem resolução comentada e, no site, um campo para conferir a resposta (vale fração, decimal, $\pi$, $e$ e funções equivalentes).
+
+| Simulado | Nível | Duração | Assuntos |
+| -------- | ----- | ------- | -------- |
+| [**Simulado 01**](calculo/simulado-01/README.md) | 🟡 Intermediário | 1h | Todos: funções, limites, derivadas, bisseção, Newton e integrais |
+| [**Simulado 02**](calculo/simulado-02/README.md) | 🟡 Intermediário | 1h | Todos: funções, limites, derivadas, bisseção, Newton e integrais |
+| [**Simulado 03**](calculo/simulado-03/README.md) | 🔴 Avançado | 1h30 | Todos, com otimização, métodos numéricos com precisão e áreas entre curvas |
+| [**Simulado 04**](calculo/simulado-04/README.md) | 🔴 Avançado | 1h30 | Todos, com otimização, métodos numéricos com precisão e áreas entre curvas |
 
 ## 📊 Como se avaliar
 

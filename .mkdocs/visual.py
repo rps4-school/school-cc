@@ -31,6 +31,7 @@ ARQUIVOS_DO_SITE = {
     "editor.js": "assets/javascripts/editor.js",
     "python-worker.js": "assets/javascripts/python-worker.js",
     "corretor.js": "assets/javascripts/corretor.js",
+    "katex-init.js": "assets/javascripts/katex-init.js",
 }
 PAGINA_NIVEIS = "niveis.md"
 CONTEUDO_NIVEIS = """# Por nível
@@ -65,8 +66,11 @@ FOLHA_DE_PROVA = re.compile(
 )
 QUESTAO = re.compile(r"^## Questão (\d+)")
 # Pergunta com corretor: dentro do <details>, a primeira linha "**Resposta:** `...`" (ou Expressão).
-RESPOSTA = re.compile(r"^\*\*(Resposta|Expressão|Expressão mínima):\*\* `([^`]+)`", re.M)
-TIPOS_DE_RESPOSTA = {"Resposta": "valor", "Expressão": "expressao", "Expressão mínima": "minima"}
+RESPOSTA = re.compile(r"^\*\*(Resposta|Expressão|Expressão mínima|Número|Função|Primitiva):\*\* `([^`]+)`", re.M)
+TIPOS_DE_RESPOSTA = {
+    "Resposta": "valor", "Expressão": "expressao", "Expressão mínima": "minima",
+    "Número": "numero", "Função": "funcao", "Primitiva": "primitiva",
+}
 
 
 def _fora_de_codigo(linhas):
@@ -282,6 +286,8 @@ def _inicio(markdown, page, files):
                "Resumos e 27 exercícios com resposta", "codigo"),
         cartao(_url(files, page, "conteudo/sistemas-digitais/README.md"), "Sistemas Digitais",
                "Aulas completas, do binário ao Mapa de Karnaugh", "chip"),
+        cartao(_url(files, page, "conteudo/calculo/README.md"), "Cálculo",
+               "Funções, limites, derivadas, métodos numéricos e integrais", "integral"),
         cartao(_url(files, page, "conteudo/git/README.md"), "Git",
                "Comandos, branches e como desfazer erros", "ferramenta"),
         cartao(_url(files, page, "GUIA-DE-ACESSO.md"), "Guia de Acesso",
