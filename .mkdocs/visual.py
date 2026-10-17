@@ -35,6 +35,7 @@ from _componentes import (
     NOME_DO_NIVEL, fim_de_pagina, grade, heroi, informacoes, item_trilha, marcador_de_visita, plural, sem_emoji,
     simulados_do_tema, trilha, aviso_local, resumo_estudo, progresso_do_tema, revisar,
 )
+from _trilha import rotulo_da_unidade
 
 # Arquivos desta pasta publicados no site (o MkDocs ignora pastas que começam com ".").
 ARQUIVOS_DO_SITE = {
@@ -324,7 +325,7 @@ def _por_nivel(page, files):
         for t in temas:
             itens = []
             for u in t.unidades:
-                itens.append(("aula", f"{_rotulo_da_unidade(u)} {u.numero} · {u.titulo}", u.src, u.nivel, f"~{u.minutos} min"))
+                itens.append(("aula", f"{rotulo_da_unidade(u)} {u.numero} · {u.titulo}", u.src, u.nivel, f"~{u.minutos} min"))
                 for e in u.exercicios:
                     meta = plural(e.perguntas, "pergunta", "perguntas") if e.perguntas else plural(e.exercicios, "exercício", "exercícios")
                     itens.append(("exercicio", f"{u.titulo} · {NOME_DO_NIVEL[e.nivel]}", e.src, NIVEL_DO_EXERCICIO[e.nivel], meta))
@@ -362,12 +363,6 @@ def _areas(page, files):
     return f'<div class="areas">{blocos}</div>'
 
 
-def _rotulo_da_unidade(unidade):
-    """"Aula", "Resumo" ou "Parte", pela pasta da unidade."""
-    pasta = posixpath.basename(posixpath.dirname(unidade.src))
-    return {"aulas": "Aula", "resumos": "Resumo"}.get(pasta, "Parte")
-
-
 def _leitura(minutos):
     return f"~{round(minutos / 60)} h de leitura" if minutos >= 90 else f"~{minutos} min de leitura"
 
@@ -389,7 +384,7 @@ def _pagina_do_tema(markdown, tema, page, files):
     itens = [
         item_trilha(u.numero, u.titulo, url(u.src), _chave(files, u.src), u.descricao, u.nivel, u.minutos,
                     [(e.nivel, url(e.src), _chave(files, e.src), e.perguntas) for e in u.exercicios],
-                    _rotulo_da_unidade(u))
+                    rotulo_da_unidade(u))
         for u in tema.unidades
     ]
     antes, depois = markdown[: m.start()], markdown[m.end():]
@@ -427,7 +422,7 @@ def _pagina_da_trilha(markdown, lugar, page, files):
         partes, link, titulo = [tema.titulo, "Simulado", s.duracao], None, f"{s.titulo} · {tema.titulo}"
         fim = fim_de_pagina(chave, "Marcar como feito", feito="Feito")
     else:
-        rotulo = _rotulo_da_unidade(unidade)
+        rotulo = rotulo_da_unidade(unidade)
         rotulo_proxima, botao, feito, rever = TEXTOS_DA_UNIDADE[rotulo]
         seguinte = _proxima_unidade(tema, unidade)
         proximo = (rotulo_proxima, seguinte.titulo, url(seguinte.src)) if seguinte else None
@@ -467,7 +462,7 @@ def _meu_progresso(page, files):
             elif lugar.exercicio:
                 titulo = f"{lugar.unidade.titulo} · {NOME_DO_NIVEL[lugar.exercicio.nivel]}"
             else:
-                titulo = f"{_rotulo_da_unidade(lugar.unidade)} {lugar.unidade.numero} · {lugar.unidade.titulo}"
+                titulo = f"{rotulo_da_unidade(lugar.unidade)} {lugar.unidade.numero} · {lugar.unidade.titulo}"
             titulos[_chave(files, src)] = titulo
     # Num atributo, e não num <script>: com navigation.instant o Material reexecuta os <script> do conteúdo.
     dados = html.escape(json.dumps(titulos, ensure_ascii=False), quote=True)
