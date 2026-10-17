@@ -513,7 +513,17 @@
       'aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></span>' +
       '<button type="button" class="recomecar">Recomeçar</button>';
     p.querySelector(".recomecar").onclick = recomecar;
-    (document.querySelector(".md-content__inner") || document.body).appendChild(p);
+    // Exercícios e simulados são só perguntas: o placar fica preso embaixo da tela. Numa aula, o
+    // teste rápido fica no fim: o placar entra logo depois da última pergunta, sem atrapalhar a leitura.
+    if (/\/(exercicios|simulados)\//.test(location.pathname)) {
+      p.classList.add("placar-pagina--fixo");
+      (document.querySelector(".md-content__inner") || document.body).appendChild(p);
+    } else {
+      var caixas = document.querySelectorAll(".corretor[data-montado]");
+      var ultima = caixas[caixas.length - 1];
+      var depois = ultima.nextElementSibling && ultima.nextElementSibling.tagName === "DETAILS" ? ultima.nextElementSibling : ultima;
+      depois.insertAdjacentElement("afterend", p);
+    }
     return p;
   }
 

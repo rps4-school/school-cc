@@ -4,7 +4,9 @@ Tudo aqui é HTML em uma linha só: o Markdown trata blocos HTML sem indentaçã
 como HTML puro, sem tentar interpretar o conteúdo.
 """
 
+import html as _html
 import re
+import unicodedata
 
 # Um emoji, com os modificadores que vêm grudados nele (variação, ZWJ, tom de pele).
 EMOJI = re.compile(
@@ -79,3 +81,194 @@ def cartao(url, titulo, descricao="", icone="pagina", cor="padrao"):
 
 def grade(cartoes):
     return '<div class="my-6 grid gap-3 sm:grid-cols-2">' + "".join(cartoes) + "</div>"
+
+
+# ---------- Portal: componentes da home, do tema e do fim das páginas ----------
+# As cores e o desenho ficam no tailwind.css (classes com o nome do componente). Os atributos
+# data-* são o contrato com o portal.js, que lê o progresso do aluno e só decora o HTML.
+
+
+# Área do tema -> valor do data-area (cor da área no tailwind.css). Área nova sem cor: "outros".
+AREAS = ("programacao", "engenharia-de-software", "matematica", "hardware")
+NIVEL_SLUG = {"Iniciante": "facil", "Intermediário": "intermediario", "Avançado": "dificil"}
+NOME_DO_NIVEL = {"facil": "Fácil", "intermediario": "Intermediário", "dificil": "Difícil"}
+
+_LUPA = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+         'aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>')
+
+
+def _e(texto):
+    return _html.escape(str(texto), quote=True)
+
+
+def area_slug(area):
+    sem_acento = unicodedata.normalize("NFKD", area).encode("ascii", "ignore").decode().lower()
+    slug = re.sub(r"[^a-z0-9]+", "-", sem_acento).strip("-")
+    return slug if slug in AREAS else "outros"
+
+
+def inline(texto):
+    """Markdown de uma linha (tabelas do README) -> HTML seguro: só `código` e **negrito**."""
+    texto = _e(sem_emoji(texto))
+    texto = re.sub(r"`([^`]+)`", r"<code>\1</code>", texto)
+    return re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", texto)
+
+
+def plural(n, singular, varios):
+    return f"{n} {singular if n == 1 else varios}"
+
+
+def barra(rotulo):
+    return (f'<span class="barra-progresso" role="progressbar" aria-label="{_e(rotulo)}" aria-valuemin="0" '
+            'aria-valuemax="100" aria-valuenow="0"><span></span></span>')
+
+
+def _nivel(nivel):
+    """Etiqueta de nível (Iniciante/Intermediário/Avançado) com a cor do semáforo."""
+    if not nivel:
+        return ""
+    return f'<span class="nivel nivel--{NIVEL_SLUG.get(nivel, "facil")}">{_e(nivel)}</span>'
+
+
+def cartao_tema(tema, url, paginas, numeros):
+    return (
+        f'<a class="cartao-tema" href="{_e(url)}" data-area="{area_slug(tema.area)}" '
+        f'data-progresso-tema="{_e(tema.slug)}" data-paginas="{_e(" ".join(paginas))}">'
+        f'<span class="cartao-tema__topo"><span class="cartao-tema__icone">{ICONES.get(tema.icone, ICONES["pasta"])}</span>'
+        f'<span class="cartao-tema__area">{_e(tema.area)}</span>{_nivel(tema.nivel)}</span>'
+        f'<span class="cartao-tema__titulo">{_e(tema.titulo)}</span>'
+        f'<span class="cartao-tema__descricao">{inline(tema.descricao)}</span>'
+        f'<span class="cartao-tema__numeros">{_e(numeros)}</span>'
+        f'<span class="cartao-tema__progresso" data-so-com-progresso>{barra("Progresso em " + tema.titulo)}'
+        '<span data-progresso-texto>0%</span></span></a>'
+    )
+
+
+def bloco_continuar(url_temas):
+    """Os dois estados ocupam o mesmo espaço: a página não pula quando o portal.js troca um pelo outro."""
+    return (
+        '<div class="continuar" data-continuar>'
+        '<div class="continuar__estado" data-estado="vazio">'
+        '<p class="continuar__rotulo">Primeira vez aqui?</p>'
+        '<ol class="continuar__passos"><li>Escolha um tema</li><li>Leia a aula e faça o teste rápido</li>'
+        '<li>Pratique, do fácil ao difícil</li></ol>'
+        f'<a class="md-button md-button--primary" href="{_e(url_temas)}">Ver temas</a></div>'
+        '<div class="continuar__estado" data-estado="progresso" hidden>'
+        '<p class="continuar__rotulo">Continue de onde parou</p>'
+        '<p class="continuar__tema" data-continuar-tema></p>'
+        '<p class="continuar__titulo" data-continuar-titulo></p>'
+        '<a class="md-button md-button--primary" data-continuar-link href="#">Continuar</a></div></div>'
+    )
+
+
+def heroi(numeros, continuar):
+    """numeros: [(4, "temas"), ...]. A busca é um <label> do campo do Material (abre sem JavaScript)."""
+    itens = "".join(f"<div><dt>{_e(nome)}</dt><dd>{_e(n)}</dd></div>" for n, nome in numeros)
+    return (
+        '<section class="heroi">'
+        '<div class="heroi__texto">'
+        '<p class="heroi__selo">Ciência da Computação · de aluno para aluno</p>'
+        '<h1 class="heroi__titulo">Estude por trilhas. <span class="heroi__marca">Pratique com correção na hora.</span></h1>'
+        '<p class="heroi__sub">Aulas, exercícios e simulados organizados por tema, do básico ao avançado. '
+        'Aberto, gratuito e escrito por quem está no curso.</p>'
+        f'<label class="heroi__busca" for="__search" tabindex="0" role="button">{_LUPA}'
+        '<span>Buscar aulas, exercícios, fórmulas…</span><kbd>/</kbd></label>'
+        f'<dl class="heroi__numeros">{itens}</dl></div>'
+        f"{continuar}</section>"
+    )
+
+
+def faixa_como_estudar(url_simulados):
+    passos = (
+        ("01", "Aprenda", "Aulas curtas, com exemplos resolvidos e um teste rápido no fim."),
+        ("02", "Pratique", "Exercícios em três níveis. Digite a resposta e o site corrige na hora."),
+        ("03", "Teste-se", f'<a href="{_e(url_simulados)}">Simulados</a> com tempo marcado, como na prova.'),
+    )
+    return (
+        '<ol class="como-estudar">'
+        + "".join(f'<li><span class="como-estudar__n">{n}</span><strong>{titulo}</strong><span>{texto}</span></li>'
+                  for n, titulo, texto in passos)
+        + "</ol>"
+    )
+
+
+def cabecalho_tema(tema, numeros, primeira_url, paginas):
+    return (
+        f'<div class="curso" data-area="{area_slug(tema.area)}" data-progresso-tema="{_e(tema.slug)}" '
+        f'data-paginas="{_e(" ".join(paginas))}">'
+        f'<div class="curso__topo"><span class="cartao-tema__icone">{ICONES.get(tema.icone, ICONES["pasta"])}</span>'
+        f'<span class="cartao-tema__area">{_e(tema.area)}</span>{_nivel(tema.nivel)}</div>'
+        f'<p class="curso__numeros">{_e(numeros)}</p>'
+        f'<div class="curso__progresso"><span data-progresso-texto>0% concluído</span>{barra("Progresso em " + tema.titulo)}</div>'
+        f'<a class="md-button md-button--primary curso__acao" data-proxima href="{_e(primeira_url)}">Começar a trilha</a>'
+        "</div>"
+    )
+
+
+def _exercicios(exercicios):
+    """Botões Fácil/Intermediário/Difícil; o portal.js escreve "x de n" no [data-acertos]."""
+    return "".join(
+        f'<a class="exercicio nivel--{nivel}" href="{_e(url)}" data-pagina="{_e(chave)}" data-perguntas="{perguntas}">'
+        f'{NOME_DO_NIVEL[nivel]}<span class="exercicio__acertos" data-acertos></span></a>'
+        for nivel, url, chave, perguntas in exercicios
+    )
+
+
+def item_trilha(numero, titulo, url, chave, descricao, nivel, minutos, exercicios, rotulo):
+    """Uma estação da trilha. exercicios: [(nivel, url, chave, perguntas)]."""
+    meta = _nivel(nivel) + f'<span class="etapa__tempo">~{minutos} min</span>'
+    return (
+        f'<li class="etapa" data-unidade data-pagina="{_e(chave)}" data-titulo="{_e(rotulo + " " + numero + " · " + titulo)}">'
+        f'<span class="etapa__numero" aria-hidden="true">{_e(numero)}</span>'
+        '<div class="etapa__corpo">'
+        f'<a class="etapa__titulo" href="{_e(url)}">{_e(titulo)}<span class="sr-only" data-estado-texto></span></a>'
+        + (f'<p class="etapa__descricao">{inline(descricao)}</p>' if descricao else "")
+        + f'<p class="etapa__meta">{meta}</p>'
+        + (f'<p class="etapa__exercicios"><span class="etapa__rotulo">Exercícios</span>{_exercicios(exercicios)}</p>'
+           if exercicios else "")
+        + "</div></li>"
+    )
+
+
+def trilha(itens, area):
+    return f'<ol class="trilha" data-area="{area_slug(area)}">' + "".join(itens) + "</ol>"
+
+
+def simulados_do_tema(simulados):
+    """simulados: [(titulo, url, chave, perguntas, nivel, duracao)]."""
+    cartoes = "".join(
+        f'<a class="simulado" href="{_e(url)}" data-pagina="{_e(chave)}" data-perguntas="{perguntas}">'
+        f'<span class="simulado__titulo">{_e(titulo)}</span>'
+        f'<span class="simulado__meta">{_nivel(nivel)}<span>{_e(duracao)}</span></span>'
+        '<span class="simulado__estado" data-acertos></span></a>'
+        for titulo, url, chave, perguntas, nivel, duracao in simulados
+    )
+    return f'<div class="simulados">{cartoes}</div>'
+
+
+def informacoes(partes, link=None):
+    """A linha abaixo do título: "Cálculo · Aula 4 de 10 · ~12 min"."""
+    itens = "".join(f"<span>{_e(p)}</span>" for p in partes if p)
+    if link:
+        itens += f'<a href="{_e(link[1])}">{_e(link[0])}</a>'
+    return f'<p class="informacoes">{itens}</p>'
+
+
+def fim_de_pagina(chave, texto_botao, pratique=None, proximo=None):
+    """Concluir + próximos passos. pratique: [(nivel, url, chave, perguntas)]; proximo: (rótulo, título, url)."""
+    partes = [
+        f'<button type="button" class="fim__concluir" data-concluir="{_e(chave)}" aria-pressed="false">'
+        f'<span class="fim__marca" aria-hidden="true"></span><span data-concluir-texto>{_e(texto_botao)}</span></button>'
+    ]
+    if pratique:
+        partes.append(f'<div class="fim__bloco"><p class="fim__rotulo">Pratique agora</p>'
+                      f'<p class="etapa__exercicios">{_exercicios(pratique)}</p></div>')
+    if proximo:
+        rotulo, titulo, url = proximo
+        partes.append(f'<a class="fim__bloco fim__proximo" href="{_e(url)}"><span class="fim__rotulo">{_e(rotulo)}</span>'
+                      f'<span class="fim__titulo">{_e(titulo)} <span aria-hidden="true">→</span></span></a>')
+    return '<section class="fim" aria-label="Próximos passos">' + "".join(partes) + "</section>"
+
+
+def marcador_de_visita(tema_slug, titulo):
+    return f'<span hidden data-visita data-tema="{_e(tema_slug)}" data-titulo="{_e(titulo)}"></span>'
