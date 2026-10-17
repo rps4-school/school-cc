@@ -23,8 +23,11 @@ from mkdocs.structure.nav import Section
 from mkdocs.utils import get_relative_url
 from pymdownx.slugs import slugify
 
-from _catalogo import fora_de_codigo, perguntas
-from _componentes import EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, cartao, grade, sem_emoji
+from _catalogo import fora_de_codigo, lugares, montar, perguntas, totais
+from _componentes import (
+    EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, bloco_continuar, cartao, cartao_tema, faixa_como_estudar, grade, heroi,
+    plural, sem_emoji,
+)
 
 # Arquivos desta pasta publicados no site (o MkDocs ignora pastas que começam com ".").
 ARQUIVOS_DO_SITE = {
@@ -47,6 +50,7 @@ Todo o conteúdo, do mais simples ao mais avançado. Os exercícios seguem a mes
 """
 
 _slug = slugify(case="lower")  # o mesmo do mkdocs.yml, que imita o GitHub
+_estado = {}  # catálogo do portal (temas, trilhas, contagens), montado no on_files
 
 CERCA = re.compile(r"^(`{3,}|~{3,})")
 TITULO = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
@@ -249,47 +253,44 @@ def _tabelas_indice(markdown, page, files):
     return TABELA_INDICE.sub(grade_de, markdown)
 
 
-def _inicio(markdown, page, files):
-    # Tira o título, a introdução e o aviso "Leia no site" (redundante aqui).
-    markdown = re.sub(r"\A# .+?\n\n.+?\n\n", "", markdown, flags=re.S)
-    markdown = re.sub(r"^> 🌐 \*\*Leia no site:\*\*.*\n\n?", "", markdown, flags=re.M)
-    # "Primeiros passos", "Conteúdo" e "Simulados" são o que o hero e os cartões já mostram.
-    for secao in ("Primeiros passos", "Conteúdo", "Simulados"):
-        markdown = re.sub(rf"^## [^\n]*{secao}[^\n]*\n.*?(?=^## )", "", markdown, flags=re.S | re.M)
-    heroi = (
-        '<div class="clear-both mb-10 overflow-hidden rounded-2xl border border-indigo-100 bg-linear-to-br from-indigo-50 '
-        "via-white to-sky-50 px-6 py-10 sm:px-10 sm:py-14 dark:border-white/10 dark:from-indigo-500/15 "
-        'dark:via-transparent dark:to-sky-500/10">'
-        '<span class="inline-block rounded-full bg-indigo-600/10 px-3 py-1 text-[0.62rem] font-semibold uppercase '
-        'tracking-wider text-indigo-700 dark:bg-indigo-400/15 dark:text-indigo-200">Ciência da Computação · De aluno para aluno</span>'
-        '<h1 class="mt-4 mb-3 text-[1.7rem] leading-tight font-extrabold tracking-tight text-slate-900 sm:text-[2.2rem] '
-        'dark:text-white">Material de estudo, em um só lugar</h1>'
-        '<p class="m-0 max-w-2xl text-[0.85rem] leading-relaxed text-slate-600 dark:text-slate-300">Resumos curtos, '
-        "exercícios com resposta comentada e guias práticos, organizados por tema.</p>"
-        '<div class="mt-7 flex flex-wrap gap-3">'
-        f'<a class="md-button md-button--primary" href="{_url(files, page, "conteudo/README.md")}">Começar a estudar</a>'
-        f'<a class="md-button" href="{_url(files, page, "GUIA-DE-ACESSO.md")}">Primeiro acesso</a>'
-        "</div></div>"
+def _chave(files, src):
+    """Chave do progresso de uma página: o endereço dela a partir da raiz do site (o File.url)."""
+    arquivo = files.get_file_from_path(src)
+    return arquivo.url if arquivo else src
+
+
+def _numeros_do_tema(tema):
+    """'10 aulas · 90 exercícios · 4 simulados' (o que o tema não tem fica de fora)."""
+    pastas = {posixpath.basename(posixpath.dirname(u.src)) for u in tema.unidades}
+    nome = ("aula", "aulas") if "aulas" in pastas else ("resumo", "resumos") if "resumos" in pastas else ("página", "páginas")
+    partes = [plural(len(tema.unidades), *nome) if tema.unidades else ""]
+    if tema.total_exercicios:
+        partes.append(plural(tema.total_exercicios, "exercício", "exercícios"))
+    if tema.simulados:
+        partes.append(plural(len(tema.simulados), "simulado", "simulados"))
+    return " · ".join(p for p in partes if p)
+
+
+def _temas(page, files):
+    """A grade de cartões de tema (home e Conteúdo) e o link para "Por nível"."""
+    cartoes = [
+        cartao_tema(tema, _url(files, page, tema.src), [_chave(files, src) for src in tema.paginas], _numeros_do_tema(tema))
+        for tema in _estado["temas"]
+    ]
+    return (f'<div class="temas">{"".join(cartoes)}</div>\n\n'
+            f'<p class="temas-rodape"><a href="{_url(files, page, PAGINA_NIVEIS)}">Ver todo o conteúdo por nível →</a></p>')
+
+
+def _inicio(page, files):
+    """A home do site é só o portal: o README da raiz continua igual no GitHub."""
+    t = totais(_estado["temas"])
+    numeros = [(t["temas"], "temas"), (t["aulas"], "aulas e resumos"), (t["exercicios"], "exercícios"),
+               (t["simulados"], "simulados")]
+    continuar = bloco_continuar(_url(files, page, "conteudo/README.md"))
+    return (
+        f"{heroi(numeros, continuar)}\n\n## Temas\n\n{_temas(page, files)}\n\n"
+        f"## Como estudar aqui\n\n{faixa_como_estudar(_url(files, page, 'simulados/README.md'))}\n"
     )
-    cartoes = grade([
-        cartao(_url(files, page, "conteudo/python/README.md"), "Python",
-               "Resumos e 27 exercícios com resposta", "codigo"),
-        cartao(_url(files, page, "conteudo/sistemas-digitais/README.md"), "Sistemas Digitais",
-               "Aulas completas, do binário ao Mapa de Karnaugh", "chip"),
-        cartao(_url(files, page, "conteudo/calculo/README.md"), "Cálculo",
-               "Funções, limites, derivadas, métodos numéricos e integrais", "integral"),
-        cartao(_url(files, page, "conteudo/git/README.md"), "Git",
-               "Comandos, branches e como desfazer erros", "ferramenta"),
-        cartao(_url(files, page, "GUIA-DE-ACESSO.md"), "Guia de Acesso",
-               "Conta, chave SSH, commits assinados e PR", "chave"),
-        cartao(_url(files, page, "simulados/README.md"), "Simulados",
-               "Provas de treino com tempo, pontuação e cronômetro", "relogio"),
-        cartao(_url(files, page, "niveis.md"), "Por nível",
-               "Todo o conteúdo, do iniciante ao avançado", "livro"),
-        cartao(_url(files, page, "CONTRIBUTING.md"), "Como contribuir",
-               "Onde colocar cada coisa e padrões de commit", "maos"),
-    ])
-    return f"{heroi}\n\n## Por onde começar\n\n{cartoes}\n\n{markdown}"
 
 
 def on_config(config):
@@ -300,6 +301,8 @@ def on_config(config):
 
 
 def on_files(files, config):
+    _estado["temas"] = montar(config["docs_dir"])
+    _estado["lugares"] = lugares(_estado["temas"])
     for origem, destino in ARQUIVOS_DO_SITE.items():
         with open(os.path.join(os.path.dirname(__file__), origem), encoding="utf-8") as f:
             files.append(File.generated(config, destino, content=f.read(), inclusion=InclusionLevel.NOT_IN_NAV))
@@ -329,6 +332,8 @@ def on_page_markdown(markdown, page, config, files):
     linhas = _caixas(linhas)
     markdown = "\n".join(linhas)
     markdown = _exemplos(markdown)
+    if page.file.src_uri == "conteudo/README.md":  # a tabela de temas vira o catálogo do portal
+        markdown = TABELA_INDICE.sub(lambda m: _temas(page, files) + "\n", markdown, count=1)
     markdown = _tabelas_indice(markdown, page, files)
     if page.file.src_uri.startswith("simulados/") and FOLHA_DE_PROVA.search(markdown):
         markdown = FOLHA_DE_PROVA.sub(_folha_de_prova, markdown)
@@ -337,9 +342,10 @@ def on_page_markdown(markdown, page, config, files):
     markdown = _corretores(markdown)
     markdown = VER_RESPOSTA.sub(r"[Ver resposta →](\1){ .md-button }", markdown)
     if page.file.src_uri == "README.md":
-        markdown = _inicio(markdown, page, files)
+        markdown = _inicio(page, files)
         # Página inicial sem menu lateral nem índice: mais espaço para o hero e os cartões.
         page.meta["hide"] = ["navigation", "toc"]
+        page.edit_url = None  # sem "editar"/"ver fonte": a home do site não é o README
     return markdown
 
 
