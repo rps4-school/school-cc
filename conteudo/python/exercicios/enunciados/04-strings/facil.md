@@ -1,6 +1,6 @@
 # 🔤 Strings · 🟢 Fácil
 
-> [← voltar para Exercícios](../../README.md) · 📖 Antes, leia: [Strings](../../../resumos/04-strings.md) · Próximo: [Intermediário →](intermediario.md)
+> [← voltar para Exercícios](../../README.md) · 📖 Antes, leia: [Strings](../../../aulas/04-strings.md) · Próximo: [Intermediário →](intermediario.md)
 
 Em todos os exercícios de strings, cada entrada vem **em uma linha** e é lida com `input()`.
 

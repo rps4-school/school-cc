@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 340" role="img" aria-labelledby="titulo desc">
+  <title id="titulo">Lista e dicionário</title>
+  <desc id="desc">À esquerda, uma lista com os nomes Ana, Bia e Caio nas posições 0, 1 e 2: para achar Bia, usa-se o índice 1. À direita, um dicionário em que cada nome é uma chave ligada a um telefone: para achar o telefone de Bia, usa-se a chave "Bia".</desc>
+  <style>
+    .t { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .h { font-family: Inter, system-ui, sans-serif; font-size: 19px; font-weight: 700; fill: #1e1b4b; }
+    .c { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 20px; fill: #111827; }
+    .cod { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 17px; fill: #111827; }
+    .p { font-family: Inter, system-ui, sans-serif; font-size: 18px; font-weight: 700; fill: #1d4ed8; }
+    .k { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 18px; font-weight: 700; fill: #92400e; }
+    .l { font-family: Inter, system-ui, sans-serif; font-size: 15px; fill: #4b5563; }
+  </style>
+  <defs>
+    <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <rect width="880" height="340" fill="#ffffff"/>
+
+  <text x="40" y="42" class="h">Lista: você acha pela posição</text>
+  <rect x="40" y="80" width="110" height="58" rx="6" fill="#ffffff" stroke="#374151" stroke-width="2"/>
+  <text x="95" y="116" text-anchor="middle" class="c">"Ana"</text>
+  <rect x="150" y="80" width="110" height="58" rx="6" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3"/>
+  <text x="205" y="116" text-anchor="middle" class="c">"Bia"</text>
+  <rect x="260" y="80" width="110" height="58" rx="6" fill="#ffffff" stroke="#374151" stroke-width="2"/>
+  <text x="315" y="116" text-anchor="middle" class="c">"Caio"</text>
+  <text x="95" y="166" text-anchor="middle" class="p">0</text>
+  <text x="205" y="166" text-anchor="middle" class="p">1</text>
+  <text x="315" y="166" text-anchor="middle" class="p">2</text>
+  <text x="40" y="214" class="cod">nomes[1]  →  "Bia"</text>
+  <text x="40" y="250" class="l">O índice é um número de posição.</text>
+  <text x="40" y="272" class="l">Inseriu no meio? As posições mudam.</text>
+
+  <line x1="430" y1="30" x2="430" y2="300" stroke="#e5e7eb" stroke-width="2"/>
+
+  <text x="470" y="42" class="h">Dicionário: você acha pela chave</text>
+  <rect x="470" y="68" width="110" height="44" rx="22" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="525" y="97" text-anchor="middle" class="k">"Ana"</text>
+  <line x1="584" y1="90" x2="640" y2="90" stroke="#6b7280" stroke-width="2" marker-end="url(#seta)"/>
+  <rect x="646" y="68" width="190" height="44" rx="6" fill="#ffffff" stroke="#374151" stroke-width="2"/>
+  <text x="741" y="97" text-anchor="middle" class="c">"99999-1234"</text>
+  <rect x="470" y="124" width="110" height="44" rx="22" fill="#fde68a" stroke="#b45309" stroke-width="3"/>
+  <text x="525" y="153" text-anchor="middle" class="k">"Bia"</text>
+  <line x1="584" y1="146" x2="640" y2="146" stroke="#6b7280" stroke-width="2" marker-end="url(#seta)"/>
+  <rect x="646" y="124" width="190" height="44" rx="6" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3"/>
+  <text x="741" y="153" text-anchor="middle" class="c">"98888-4321"</text>
+  <rect x="470" y="180" width="110" height="44" rx="22" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="525" y="209" text-anchor="middle" class="k">"Caio"</text>
+  <line x1="584" y1="202" x2="640" y2="202" stroke="#6b7280" stroke-width="2" marker-end="url(#seta)"/>
+  <rect x="646" y="180" width="190" height="44" rx="6" fill="#ffffff" stroke="#374151" stroke-width="2"/>
+  <text x="741" y="209" text-anchor="middle" class="c">"97777-0000"</text>
+  <text x="525" y="246" text-anchor="middle" class="l">chave</text>
+  <text x="741" y="246" text-anchor="middle" class="l">valor</text>
+  <text x="470" y="282" class="cod">agenda["Bia"]  →  "98888-4321"</text>
+  <text x="470" y="312" class="l">A chave é um nome que você escolhe. Não muda.</text>
+</svg>

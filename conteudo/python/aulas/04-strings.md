@@ -1,6 +1,6 @@
 # 🔤 Strings
 
-> [← Matrizes](03-matrizes.md) · [Voltar para Python](../README.md)
+> [← Matrizes](03-matrizes.md) · Próximo: [Dicionários →](05-dicionarios.md)
 
 **Nível:** 🟢 Iniciante
 

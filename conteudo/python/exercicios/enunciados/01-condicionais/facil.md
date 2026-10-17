@@ -1,6 +1,6 @@
 # 🔀 Condicionais · 🟢 Fácil
 
-> [← voltar para Exercícios](../../README.md) · 📖 Antes, leia: [Condicionais](../../../resumos/01-condicionais.md) · Próximo: [Intermediário →](intermediario.md)
+> [← voltar para Exercícios](../../README.md) · 📖 Antes, leia: [Condicionais](../../../aulas/01-condicionais.md) · Próximo: [Intermediário →](intermediario.md)
 
 ---
 
