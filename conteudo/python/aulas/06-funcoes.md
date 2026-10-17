@@ -1,6 +1,6 @@
 # 🧩 Funções
 
-> [← Dicionários](05-dicionarios.md) · [Voltar para Python](../README.md)
+> [← Dicionários](05-dicionarios.md) · [Voltar para Python →](../README.md)
 
 **Nível:** 🟡 Intermediário
 

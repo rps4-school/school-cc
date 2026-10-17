@@ -1,6 +1,6 @@
 # 🧩 Funções · 🟢 Fácil
 
-> [← voltar para Exercícios](../../README.md) · 📖 Antes, leia: [Funções](../../../resumos/06-funcoes.md) · Próximo: [Intermediário →](intermediario.md)
+> [← voltar para Exercícios](../../README.md) · 📖 Antes, leia: [Funções](../../../aulas/06-funcoes.md) · Próximo: [Intermediário →](intermediario.md)
 
 Em todos os exercícios de funções, **crie as funções pedidas com `def`** e use-as no programa. A leitura (`input`) e a saída (`print`) ficam fora delas, a não ser que o enunciado diga outra coisa.
 

@@ -1,6 +1,6 @@
 # 📋 Listas · 🟢 Fácil
 
-> [← voltar para Exercícios](../../README.md) · 📖 Antes, leia: [Listas](../../../resumos/02-listas.md) · Próximo: [Intermediário →](intermediario.md)
+> [← voltar para Exercícios](../../README.md) · 📖 Antes, leia: [Listas](../../../aulas/02-listas.md) · Próximo: [Intermediário →](intermediario.md)
 
 Em todos os exercícios de listas, os números vêm **na mesma linha**, separados por espaço.
 

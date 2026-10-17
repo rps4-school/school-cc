@@ -1,6 +1,6 @@
 # 📒 Dicionários · 🟢 Fácil
 
-> [← voltar para Exercícios](../../README.md) · 📖 Antes, leia: [Dicionários](../../../resumos/05-dicionarios.md) · Próximo: [Intermediário →](intermediario.md)
+> [← voltar para Exercícios](../../README.md) · 📖 Antes, leia: [Dicionários](../../../aulas/05-dicionarios.md) · Próximo: [Intermediário →](intermediario.md)
 
 Nestes exercícios, cada informação vem **em uma linha** e é lida com `input()`. Quando a linha tem duas informações, separe com `split()`.
 

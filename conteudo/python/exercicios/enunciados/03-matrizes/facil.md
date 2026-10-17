@@ -1,6 +1,6 @@
 # 🔢 Matrizes · 🟢 Fácil
 
-> [← voltar para Exercícios](../../README.md) · 📖 Antes, leia: [Matrizes](../../../resumos/03-matrizes.md) · Próximo: [Intermediário →](intermediario.md)
+> [← voltar para Exercícios](../../README.md) · 📖 Antes, leia: [Matrizes](../../../aulas/03-matrizes.md) · Próximo: [Intermediário →](intermediario.md)
 
 Formato de entrada: a primeira linha traz `linhas colunas`, e depois vem uma linha da matriz por vez. Nas matrizes **quadradas**, a primeira linha traz só `N`.
 
