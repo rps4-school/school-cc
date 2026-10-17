@@ -62,6 +62,15 @@ class RepositorioReal(unittest.TestCase):
         u = self.temas["git"].unidades[0]
         self.assertEqual((u.titulo, u.src), ("Introdução", "conteudo/git/README.md"))
 
+    def test_introducao_e_a_primeira_frase_do_readme(self):
+        self.assertEqual(self.temas["sistemas-digitais"].introducao,
+                         "Como o computador guarda números, letras e cores usando só 0 e 1, e como ele faz contas e toma "
+                         "decisões com portas lógicas.")
+        self.assertTrue(self.temas["python"].introducao.startswith("Lógica de programação com Python puro"))
+        self.assertTrue(self.temas["git"].introducao.startswith("O Git é um sistema de controle de versão"))
+        for t in self.lista:
+            self.assertNotRegex(t.introducao, r"[*`\[\]]", t.slug)  # sem markdown
+
     def test_contagens_batem_com_os_arquivos(self):
         for t in self.lista:
             for u in t.unidades:
@@ -158,6 +167,12 @@ class CasosDeBorda(unittest.TestCase):
         grupos = c.agrupar_por_area(["python", "sistemas-digitais", "calculo", "git", "redes"])
         self.assertEqual(grupos, [("Programação", ["python", "git"]), ("Hardware", ["sistemas-digitais"]),
                                   ("Matemática", ["calculo"]), ("Outros", ["redes"])])
+
+    def test_introducao_ignora_citacao_tabela_e_codigo(self):
+        md = ("# T\n\n> [← voltar](../README.md)\n\n**Nível:** 🟢 Iniciante\n\n| a | b |\n| - | - |\n\n```\ncodigo\n```\n\n"
+              "Um [tema](x.md) com **negrito** e `código`. Segunda frase.\n")
+        self.assertEqual(c.introducao(md), "Um tema com negrito e código.")
+        self.assertEqual(c.introducao("# Só título\n\n## Seção\n"), "")
 
     def test_perguntas_dentro_de_codigo_nao_contam(self):
         md = "```\n<details>\n**Número:** `1`\n</details>\n```\n\n<details>\n\n**Função:** `2x`\n</details>\n"

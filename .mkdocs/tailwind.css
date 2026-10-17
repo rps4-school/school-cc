@@ -736,85 +736,40 @@
   line-height: 1.3;
 }
 
-/* ---------- Catálogo (Conteúdo): cartões compactos, todos da mesma altura ----------
-   Ícone à esquerda; título e nível; duas linhas de descrição; números; progresso.
-   A "aba de fichário" no topo leva a cor da área. */
-.md-typeset .temas {
-  display: grid;
-  gap: 0.75rem;
-  margin: 0.6rem 0 1.4rem;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+/* ---------- Catálogo (Conteúdo): lista editorial, como na Educative ----------
+   Um painel por área; cada tema é uma linha: ícone, título e nível, uma linha de descrição,
+   números com ícones, progresso num anel e a seta. Fácil de varrer e escala para muitos temas. */
+.md-typeset .painel-temas {
+  overflow: hidden;
+  margin: 0.5rem 0 1.4rem;
+  border: 1px solid var(--borda);
+  border-radius: 1rem;
+  background: var(--cartao);
 }
 .md-typeset a.cartao-tema {
-  position: relative;
   display: grid;
-  grid-template-columns: 2.3rem minmax(0, 1fr);
-  gap: 0.8rem;
-  align-items: start;
-  height: 100%;
-  overflow: hidden;
-  padding: 0.95rem 1rem 0.85rem;
-  border: 1px solid var(--borda);
-  border-radius: 0.9rem;
-  background: var(--cartao);
+  grid-template-columns: 2.3rem minmax(0, 1fr) auto 2.1rem 0.9rem;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.8rem 0.95rem;
   color: var(--texto);
-  box-shadow: 0 1px 2px rgb(30 27 75 / 0.04);
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  transition: background-color 0.15s;
+}
+/* Linha divisória entre as linhas visíveis (com filtro, as escondidas não deixam linha dupla). */
+.md-typeset .painel-temas > .cartao-tema:not([hidden]) ~ .cartao-tema:not([hidden]) {
+  border-top: 1px solid var(--borda);
+}
+.md-typeset a.cartao-tema:hover {
+  background: color-mix(in srgb, var(--area) 6%, transparent);
+  color: var(--texto);
+}
+.md-typeset a.cartao-tema:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: -2px;
 }
 .md-typeset a.cartao-tema[hidden],
 .md-typeset [data-grupo][hidden] {
   display: none;
-}
-.md-typeset a.cartao-tema::before,
-.md-typeset .area::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto auto 1rem;
-  width: 2.3rem;
-  height: 0.25rem;
-  border-radius: 0 0 0.3rem 0.3rem;
-  background: var(--area);
-  transition: width 0.25s;
-}
-.md-typeset a.cartao-tema:hover {
-  border-color: color-mix(in srgb, var(--area) 55%, transparent);
-  box-shadow: var(--sombra);
-  color: var(--texto);
-}
-.md-typeset a.cartao-tema:hover::before {
-  width: calc(100% - 2rem);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .md-typeset a.cartao-tema:hover {
-    transform: translateY(-2px);
-  }
-  .md-typeset .temas > .cartao-tema,
-  .md-typeset .areas > .area {
-    animation: subir 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  }
-  .md-typeset :is(.temas, .areas) > :nth-child(2) { animation-delay: 0.05s; }
-  .md-typeset :is(.temas, .areas) > :nth-child(3) { animation-delay: 0.1s; }
-  .md-typeset :is(.temas, .areas) > :nth-child(n + 4) { animation-delay: 0.15s; }
-}
-@keyframes subir {
-  from { opacity: 0; transform: translateY(8px); }
-}
-.md-typeset .cartao-tema__corpo {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 0.25rem;
-  height: 100%;
-}
-.md-typeset .cartao-tema__linha,
-.md-typeset .curso__topo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.md-typeset .curso__topo .nivel,
-.md-typeset .cartao-tema__linha .nivel {
-  margin-left: auto;
 }
 .md-typeset .cartao-tema__icone {
   display: grid;
@@ -827,9 +782,126 @@
   color: var(--area-texto);
 }
 .md-typeset .cartao-tema__icone svg {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.15rem;
+  height: 1.15rem;
 }
+.md-typeset .cartao-tema__texto {
+  display: block;
+  min-width: 0;
+}
+.md-typeset .cartao-tema__titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem 0.5rem;
+  color: var(--tinta);
+  font-size: 0.82rem;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+}
+.md-typeset .cartao-tema__desc {
+  display: block;
+  overflow: hidden;
+  margin-top: 0.1rem;
+  color: var(--texto);
+  font-size: 0.66rem;
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.md-typeset .cartao-tema__numeros {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.2rem 0.75rem;
+  color: var(--texto-suave);
+  font-size: 0.62rem;
+}
+.md-typeset .cartao-tema__num {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+.md-typeset .cartao-tema__num svg {
+  width: 0.7rem;
+  height: 0.7rem;
+}
+/* Anel de progresso: o portal.js põe --pct; o CSS desenha. Sem progresso, mostra "–". */
+.md-typeset .anel {
+  position: relative;
+  display: grid;
+  width: 2.1rem;
+  height: 2.1rem;
+  place-items: center;
+  color: var(--area-texto);
+  font-size: 0.5rem;
+  font-weight: 800;
+}
+.md-typeset .anel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(var(--area) calc(var(--pct, 0) * 1%), color-mix(in srgb, var(--tinta) 12%, transparent) 0);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 0.19rem), #000 calc(100% - 0.18rem));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 0.19rem), #000 calc(100% - 0.18rem));
+}
+.md-typeset .anel [data-progresso-texto]:empty::before {
+  content: "–";
+  color: var(--texto-suave);
+  font-weight: 500;
+}
+.md-typeset .cartao-tema__seta {
+  color: var(--texto-suave);
+  transition: transform 0.15s, color 0.15s;
+}
+.md-typeset .cartao-tema__seta svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+.md-typeset a.cartao-tema:hover .cartao-tema__seta {
+  color: var(--area-texto);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .md-typeset a.cartao-tema:hover .cartao-tema__seta {
+    transform: translateX(2px);
+  }
+}
+/* Celular: os números descem para baixo do título; a seta sai (a linha inteira é o link). */
+@media (max-width: 44.9375em) {
+  .md-typeset a.cartao-tema {
+    grid-template-columns: 2.1rem minmax(0, 1fr) 2rem;
+    align-items: start;
+    gap: 0.35rem 0.75rem;
+    padding: 0.8rem;
+  }
+  .md-typeset .cartao-tema__icone {
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+  .md-typeset .cartao-tema__numeros {
+    grid-column: 2 / 4;
+    justify-content: flex-start;
+  }
+  .md-typeset .anel {
+    grid-column: 3;
+    grid-row: 1;
+    width: 2rem;
+    height: 2rem;
+  }
+  .md-typeset .cartao-tema__seta {
+    display: none;
+  }
+  .md-typeset .cartao-tema__desc {
+    display: -webkit-box;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}
+
+/* Usados também no cabeçalho do tema e nos blocos de área da home. */
 .md-typeset .cartao-tema__area {
   color: var(--area-texto);
   font-family: var(--mono);
@@ -838,27 +910,14 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-.md-typeset .cartao-tema__titulo {
-  overflow: hidden;
-  color: var(--tinta);
-  font-size: 0.9rem;
-  font-weight: 800;
-  letter-spacing: -0.015em;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.md-typeset .curso__topo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
-/* Sempre duas linhas de altura (mesmo com descrição curta): todos os cartões ficam iguais. */
-.md-typeset .cartao-tema__descricao {
-  display: -webkit-box;
-  min-height: 3em;
-  overflow: hidden;
-  color: var(--texto);
-  font-size: 0.64rem;
-  line-height: 1.5;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+.md-typeset .curso__topo .nivel {
+  margin-left: auto;
 }
-.md-typeset .cartao-tema__numeros,
 .md-typeset .curso__numeros {
   color: var(--texto-suave);
   font-family: var(--mono);
@@ -873,38 +932,28 @@
   font-family: var(--mono);
   font-size: 0.55rem;
 }
-/* Cada número inteiro numa linha: no celular, a quebra cai entre os itens ("4 / simulados" não). */
-.md-typeset .cartao-tema__num {
-  white-space: nowrap;
-}
-/* O separador fica no fim do item anterior, para a quebra de linha levar ele junto. */
-.md-typeset .cartao-tema__num:has(+ .cartao-tema__num)::after,
-.md-typeset .cartao-tema__num:has(+ .cartao-tema__pct:not(:empty))::after {
-  content: " · ";
-  white-space: normal;
-}
-/* Progresso do cartão: o % entra na linha dos números e a barra é uma linha fina na borda de baixo
-   (fora do fluxo: o cartão não muda de tamanho quando ela aparece). */
-.md-typeset .cartao-tema__pct:not(:empty) {
-  color: var(--area-texto);
-  font-weight: 600;
-  white-space: nowrap;
-}
-.md-typeset .cartao-tema__barra {
-  position: absolute;
-  inset: auto 0 0 0;
-  display: flex;
-}
-.md-typeset .cartao-tema__barra .barra-progresso {
-  height: 0.2rem;
-  border-radius: 0;
-  background: color-mix(in srgb, var(--area) 14%, transparent);
-}
-.md-typeset .cartao-tema:not([data-com-progresso]) .cartao-tema__barra {
-  display: none;
-}
 [data-area] .barra-progresso > span {
   background: var(--area);
+}
+.md-typeset .area::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 1rem;
+  width: 2.3rem;
+  height: 0.25rem;
+  border-radius: 0 0 0.3rem 0.3rem;
+  background: var(--area);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .md-typeset .areas > .area {
+    animation: subir 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .md-typeset .areas > :nth-child(2) { animation-delay: 0.05s; }
+  .md-typeset .areas > :nth-child(3) { animation-delay: 0.1s; }
+  .md-typeset .areas > :nth-child(n + 4) { animation-delay: 0.15s; }
+}
+@keyframes subir {
+  from { opacity: 0; transform: translateY(8px); }
 }
 
 /* Título de cada área no catálogo, com a bolinha na cor da área. */

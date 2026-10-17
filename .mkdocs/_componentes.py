@@ -117,8 +117,8 @@ def area_slug(area):
 
 
 def texto_de_busca(tema):
-    """Título, descrição e área, sem acento nem markdown: o filtro do catálogo (portal.js) procura aqui."""
-    texto = re.sub(r"[`*]", "", sem_emoji(f"{tema.titulo} {tema.descricao} {tema.area}"))
+    """Título, descrições e área, sem acento nem markdown: o filtro do catálogo (portal.js) procura aqui."""
+    texto = re.sub(r"[`*]", "", sem_emoji(f"{tema.titulo} {tema.descricao} {tema.area} {getattr(tema, 'introducao', '')}"))
     return re.sub(r"\s+", " ", _sem_acento(texto)).strip()
 
 
@@ -145,21 +145,41 @@ def _nivel(nivel):
     return f'<span class="nivel nivel--{NIVEL_SLUG.get(nivel, "facil")}">{_e(nivel)}</span>'
 
 
+# Ícones pequenos dos números do catálogo e a seta da linha.
+_PEQUENO = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+            'stroke-linejoin="round" aria-hidden="true">{}</svg>')
+ICONES_PEQUENOS = {
+    "livro": _PEQUENO.format('<path d="M3 5a1 1 0 0 1 1-1h5a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4a1 1 0 0 1-1-1z"/>'
+                             '<path d="M21 5a1 1 0 0 0-1-1h-5a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h6a1 1 0 0 0 1-1z"/>'),
+    "lapis": _PEQUENO.format('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
+    "relogio": _PEQUENO.format('<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/>'),
+    "seta": _PEQUENO.format('<path d="m9 6 6 6-6 6"/>'),
+}
+
+
+def _icone_do_numero(texto):
+    return "lapis" if "exercício" in texto else "relogio" if "simulado" in texto else "livro"
+
+
 def cartao_tema(tema, url, paginas, numeros):
-    """Cartão compacto do catálogo: ícone à esquerda; título, uma linha de descrição, números e progresso.
-    Todos com a mesma altura, para a grade continuar arrumada com muitos temas."""
+    """Uma linha do catálogo (lista editorial, como na Educative): ícone, título e nível, uma linha de
+    descrição, números com ícones, progresso num anel e a seta. As linhas ficam num painel por área."""
+    descricao = _e(tema.introducao) if getattr(tema, "introducao", "") else inline(tema.descricao)
+    itens = "".join(
+        f'<span class="cartao-tema__num">{ICONES_PEQUENOS[_icone_do_numero(n)]}{_e(n)}</span>'
+        for n in numeros.split(" · ") if n
+    )
     return (
         f'<a class="cartao-tema" href="{_e(url)}" data-area="{area_slug(tema.area)}" data-busca="{_e(texto_de_busca(tema))}" '
         f'data-progresso-tema="{_e(tema.slug)}" data-paginas="{_e(" ".join(paginas))}">'
         f'<span class="cartao-tema__icone">{ICONES.get(tema.icone, ICONES["pasta"])}</span>'
-        '<span class="cartao-tema__corpo">'
-        f'<span class="cartao-tema__linha"><span class="cartao-tema__titulo">{_e(tema.titulo)}</span>{_nivel(tema.nivel)}</span>'
-        f'<span class="cartao-tema__descricao">{inline(tema.descricao)}</span>'
-        '<span class="cartao-tema__numeros">'
-        + "".join(f'<span class="cartao-tema__num">{_e(n)}</span>' for n in numeros.split(" · "))
-        + '<span class="cartao-tema__pct" data-progresso-texto></span></span>'
-        "</span>"
-        f'<span class="cartao-tema__barra" data-so-com-progresso>{barra("Progresso em " + tema.titulo)}</span></a>'
+        '<span class="cartao-tema__texto">'
+        f'<span class="cartao-tema__titulo">{_e(tema.titulo)}{_nivel(tema.nivel)}</span>'
+        f'<span class="cartao-tema__desc">{descricao}</span></span>'
+        f'<span class="cartao-tema__numeros">{itens}</span>'
+        f'<span class="anel" role="progressbar" aria-label="Progresso em {_e(tema.titulo)}" aria-valuemin="0" '
+        'aria-valuemax="100" aria-valuenow="0"><span data-progresso-texto></span></span>'
+        f'<span class="cartao-tema__seta">{ICONES_PEQUENOS["seta"]}</span></a>'
     )
 
 
@@ -206,7 +226,7 @@ def grupo_de_temas(area, cartoes):
     return (
         f'<section class="grupo" data-grupo data-area="{slug}">'
         f'<h2 class="grupo-area" id="area-{slug}">{_e(area)}</h2>'
-        f'<div class="temas temas--agrupados">{cartoes}</div></section>'
+        f'<div class="painel-temas">{cartoes}</div></section>'
     )
 
 

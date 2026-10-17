@@ -85,6 +85,7 @@ class Tema:
     src: str
     unidades: list = field(default_factory=list)
     simulados: list = field(default_factory=list)
+    introducao: str = ""  # a primeira frase do README do tema (descrição no catálogo)
 
     @property
     def total_exercicios(self):
@@ -142,6 +143,25 @@ def contar_exercicios(markdown):
 def minutos_de_leitura(markdown):
     texto = "\n".join(linha for _, linha in fora_de_codigo(markdown.split("\n")))
     return max(1, -(-len(re.findall(r"\w+", texto)) // PALAVRAS_POR_MINUTO))
+
+
+def introducao(markdown):
+    """A primeira frase do primeiro parágrafo de texto do README, sem markdown. Pula título, citação
+    ("← voltar"), linha de nível, tabela, lista, imagem, HTML e código."""
+    paragrafo = []
+    for _, linha in fora_de_codigo(markdown.split("\n")):
+        t = linha.strip()
+        pula = (not t or NIVEL.match(t) or t.startswith(("#", ">", "|", "!", "<", "[")) or re.match(r"^([-*+]\s|\d+\.\s)", t)
+                or re.match(r"^([-*_])\1{2,}$", t))
+        if pula:
+            if paragrafo:
+                break
+            continue
+        paragrafo.append(t)
+    texto = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", " ".join(paragrafo))
+    texto = sem_emoji(re.sub(r"\*+|`", "", texto))
+    frase = re.match(r"(.+?[.!?])(\s|$)", texto)
+    return frase.group(1) if frase else texto
 
 
 def tabela_roteiro(markdown):
@@ -271,6 +291,7 @@ def montar(docs_dir):
             slug=slug, titulo=titulo, descricao=_celulas(resto)[0], area=area, icone=icone,
             nivel=nivel.group(1) if nivel else None, src=src,
             unidades=_trilha(texto, posixpath.dirname(src), docs_dir), simulados=simulados.get(slug, []),
+            introducao=introducao(texto),
         ))
     return temas
 

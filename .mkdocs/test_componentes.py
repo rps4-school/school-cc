@@ -41,7 +41,7 @@ class Componentes(unittest.TestCase):
         self.assertIn('data-progresso-tema="calculo"', html)
         self.assertIn('data-paginas="conteudo/calculo/aulas/01/ conteudo/calculo/x/"', html)
         self.assertIn('data-area="matematica"', html)
-        self.assertIn("data-so-com-progresso", html)
+        self.assertIn('role="progressbar"', html)  # o anel: sempre visível ("–" sem progresso)
         self.assertIn("<code>limites</code> &lt;b&gt;", html)
         self.assertIn('href="calculo/"', html)
 
@@ -71,6 +71,21 @@ class Componentes(unittest.TestCase):
 
 
 class Catalogo(unittest.TestCase):
+    def test_linha_de_tema_lista_editorial(self):
+        t = tema(introducao="Do zero às integrais.")
+        html = c.cartao_tema(t, "calculo/", ["a/", "b/"], "10 aulas · 90 exercícios · 4 simulados")
+        self.assertIn('class="cartao-tema"', html)
+        self.assertIn('<span class="cartao-tema__desc">Do zero às integrais.</span>', html)
+        self.assertEqual(html.count('class="cartao-tema__num"'), 3)
+        self.assertEqual(html.count("<svg"), 1 + 3 + 1)  # ícone do tema, 3 números e a seta
+        self.assertIn('class="anel" role="progressbar"', html)
+        self.assertIn('aria-valuenow="0"', html)
+        self.assertIn("data-progresso-texto", html)
+
+    def test_sem_introducao_usa_a_descricao_do_indice(self):
+        html = c.cartao_tema(tema(), "calculo/", [], "10 aulas")
+        self.assertIn('<span class="cartao-tema__desc">Funções e <code>limites</code> &lt;b&gt;</span>', html)
+
     def test_cartao_tema_tem_texto_de_busca_sem_acento(self):
         html = c.cartao_tema(tema(), "calculo/", ["a/"], "10 aulas")
         self.assertIn('data-busca="calculo funcoes e limites &lt;b&gt; matematica"', html)

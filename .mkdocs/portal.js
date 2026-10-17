@@ -26,11 +26,13 @@
     return !!(Object.prototype.hasOwnProperty.call(d.paginas, chave) && d.paginas[chave].concluida);
   }
 
+  // Barra (largura) ou anel (--pct, desenhado pelo CSS).
   function barra(el, pct) {
     var b = el.querySelector("[role=progressbar]");
     if (!b) return;
     b.setAttribute("aria-valuenow", pct);
-    b.firstChild.style.width = pct + "%";
+    if (b.classList.contains("anel")) b.style.setProperty("--pct", pct);
+    else b.firstChild.style.width = pct + "%";
   }
 
   // Guarda o texto do build para poder voltar a ele.
