@@ -36,7 +36,10 @@ class RepositorioReal(unittest.TestCase):
 
     def test_area_e_icone(self):
         self.assertEqual((self.temas["calculo"].area, self.temas["calculo"].icone), ("Matemática", "integral"))
-        self.assertEqual(self.temas["git"].area, "Engenharia de Software")
+        self.assertEqual((self.temas["python"].area, self.temas["git"].area), ("Programação", "Programação"))
+
+    def test_temas_do_indice(self):
+        self.assertEqual(c.temas_do_indice(RAIZ), INDICE_TEMA.findall(ler("conteudo/README.md")))
 
     def test_trilha_de_calculo(self):
         t = self.temas["calculo"]
@@ -150,6 +153,11 @@ class CasosDeBorda(unittest.TestCase):
         raiz = self.repo({"conteudo/README.md": self.INDICE, "conteudo/redes/README.md": "# Redes\n\n" + tabela})
         (t,) = c.montar(raiz)
         self.assertEqual([(u.numero, u.titulo) for u in t.unidades], [("1", "Introdução")])
+
+    def test_agrupar_por_area_na_ordem_em_que_a_area_aparece(self):
+        grupos = c.agrupar_por_area(["python", "sistemas-digitais", "calculo", "git", "redes"])
+        self.assertEqual(grupos, [("Programação", ["python", "git"]), ("Hardware", ["sistemas-digitais"]),
+                                  ("Matemática", ["calculo"]), ("Outros", ["redes"])])
 
     def test_perguntas_dentro_de_codigo_nao_contam(self):
         md = "```\n<details>\n**Número:** `1`\n</details>\n```\n\n<details>\n\n**Função:** `2x`\n</details>\n"

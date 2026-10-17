@@ -14,11 +14,11 @@ from typing import Optional
 
 from _componentes import NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, sem_emoji
 
-# Área e ícone (de _componentes.ICONES) de cada pasta de conteudo/. Tema novo sem entrada aqui
-# aparece mesmo assim, em "Outros".
+# Área e ícone (de _componentes.ICONES) de cada pasta de conteudo/. No site, os temas ficam agrupados
+# por área (catálogo e menu). Tema novo sem entrada aqui aparece mesmo assim, em "Outros".
 TEMAS = {
     "python": ("Programação", "codigo"),
-    "git": ("Engenharia de Software", "ferramenta"),
+    "git": ("Programação", "ferramenta"),
     "calculo": ("Matemática", "integral"),
     "sistemas-digitais": ("Hardware", "chip"),
 }
@@ -233,6 +233,24 @@ def _simulados(docs_dir):
             duracao=celulas[1] if len(celulas) > 1 else "", perguntas=contar_perguntas(texto),
         ))
     return por_tema
+
+
+def temas_do_indice(docs_dir):
+    """As pastas dos temas, na ordem da tabela de conteudo/README.md."""
+    pastas = []
+    for _, link, _ in LINHA_COM_LINK_EM_NEGRITO.findall(_ler(docs_dir, "conteudo/README.md") or ""):
+        partes = posixpath.normpath(posixpath.join("conteudo", link)).split("/")
+        if len(partes) > 1:
+            pastas.append(partes[1])
+    return pastas
+
+
+def agrupar_por_area(slugs):
+    """[(área, [slugs])]: as áreas na ordem em que o primeiro tema delas aparece; os temas, na ordem dada."""
+    grupos = {}
+    for slug in slugs:
+        grupos.setdefault(TEMAS.get(slug, AREA_PADRAO)[0], []).append(slug)
+    return list(grupos.items())
 
 
 def montar(docs_dir):

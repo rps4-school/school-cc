@@ -783,6 +783,32 @@
 [data-area] .barra-progresso > span {
   background: var(--area);
 }
+/* Título de cada área no catálogo (home e Conteúdo), com a bolinha na cor da área. */
+.md-typeset .grupo-area {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 1.6rem 0 0.2rem;
+  color: var(--tinta);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.md-typeset .grupo-area::before {
+  content: "";
+  width: 0.6rem;
+  height: 0.6rem;
+  flex: none;
+  border-radius: 999px;
+  background: var(--area);
+}
+.md-typeset .temas--agrupados {
+  margin-bottom: 1rem;
+}
+/* No catálogo agrupado o título da área já diz a área: o cartão não repete. */
+.md-typeset .temas--agrupados .cartao-tema__area {
+  display: none;
+}
 .md-typeset .temas-rodape {
   margin: -1.5rem 0 2.5rem;
   font-size: 0.7rem;

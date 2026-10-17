@@ -30,7 +30,7 @@ conteudo/<tema>/          ← python, git, sistemas-digitais, calculo...
     | Descrição | `O que você aprende` ou `Você vai aprender` | Uma frase |
     | Exercícios | `Exercícios` | Links para `facil.md`, `intermediario.md` e `dificil.md` do assunto |
 
-- **Tema novo no portal:** basta a linha do tema na tabela de [`conteudo/README.md`](conteudo/README.md). As contagens (aulas, exercícios, simulados) saem dos arquivos. Para ter área e ícone próprios no catálogo, acrescente uma linha no `TEMAS` de `.mkdocs/_catalogo.py`; sem ela, o tema aparece em "Outros".
+- **Tema novo no portal:** basta a linha do tema na tabela de [`conteudo/README.md`](conteudo/README.md). As contagens (aulas, exercícios, simulados) saem dos arquivos. No site, os temas ficam agrupados por área, no catálogo e no menu (Programação > Python, Git; Matemática > Cálculo...), sem mudar as pastas. A área e o ícone vêm do `TEMAS` de `.mkdocs/_catalogo.py`; sem uma linha lá, o tema aparece em "Outros".
 - **Numere o que tem ordem:** `01-variaveis.md`, `02-condicionais.md`, ...
 - **O material é organizado por tema, e não por matéria ou período.** Um mesmo tema (ex.: `python`) serve para qualquer disciplina que o use.
 - **Pergunta com correção automática:** coloque a resposta dentro de um bloco `<details>`, na primeira linha, num destes formatos. No GitHub o bloco vira "Ver resposta"; no site, ganha também um campo para o aluno digitar e conferir na hora:

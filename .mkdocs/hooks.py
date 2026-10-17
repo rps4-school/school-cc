@@ -19,6 +19,7 @@ from mkdocs.structure.nav import Section
 from mkdocs.utils import get_relative_url
 from pymdownx.slugs import slugify
 
+from _catalogo import agrupar_por_area, temas_do_indice
 from _componentes import COR_DO_NIVEL, NIVEL, NIVEL_DO_EXERCICIO, cartao, grade, sem_emoji
 
 # Nomes de pasta sem README e que precisam de acento ou de um nome melhor.
@@ -333,6 +334,28 @@ def on_page_markdown(markdown, page, config, files):
     return LINK.sub(trocar, markdown)
 
 
+def _agrupar_por_area(conteudo, docs_dir, pasta_da_secao):
+    """Dentro de Conteúdo, os temas ficam em seções por área (Programação > Python, Git...), na ordem da
+    tabela de conteudo/README.md. As pastas e os endereços das páginas não mudam."""
+    temas = {}
+    for item in conteudo.children:
+        pasta = pasta_da_secao(item) if isinstance(item, Section) else None
+        if pasta and pasta.count("/") >= 1:
+            temas[pasta.split("/")[1]] = item
+    indice = temas_do_indice(docs_dir)
+    ordem = [s for s in indice if s in temas] + sorted(s for s in temas if s not in indice)
+    areas = []
+    for area, slugs in agrupar_por_area(ordem):
+        secao = Section(area, [temas[s] for s in slugs])
+        secao.parent = conteudo
+        for tema in secao.children:
+            tema.parent = secao
+        areas.append(secao)
+    resto = [i for i in conteudo.children if i not in temas.values()]
+    conteudo.children = [i for i in resto if getattr(i, "file", None) is not None and i.file.src_uri == "conteudo/README.md"]
+    conteudo.children += areas + [i for i in resto if i not in conteudo.children]
+
+
 def on_nav(nav, config, files):
     docs_dir = config["docs_dir"]
 
@@ -383,6 +406,8 @@ def on_nav(nav, config, files):
             pagina.parent = secao
         nav.items = [i for i in nav.items if i not in colabore] + [secao]
     niveis, conteudo = por_nome.get("niveis.md"), por_nome.get("conteudo")
+    if conteudo is not None:
+        _agrupar_por_area(conteudo, docs_dir, pasta_da_secao)
     if niveis is not None and conteudo is not None:
         nav.items.remove(niveis)
         conteudo.children.append(niveis)

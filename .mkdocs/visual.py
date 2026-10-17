@@ -27,9 +27,9 @@ from mkdocs.structure.nav import Section
 from mkdocs.utils import get_relative_url
 from pymdownx.slugs import slugify
 
-from _catalogo import fora_de_codigo, lugares, montar, perguntas, tabela_roteiro, totais
+from _catalogo import agrupar_por_area, fora_de_codigo, lugares, montar, perguntas, tabela_roteiro, totais
 from _componentes import (
-    EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, bloco_continuar, cabecalho_tema, cartao, cartao_tema, faixa_como_estudar,
+    EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, area_slug, bloco_continuar, cabecalho_tema, cartao, cartao_tema, faixa_como_estudar,
     NOME_DO_NIVEL, fim_de_pagina, grade, heroi, informacoes, item_trilha, marcador_de_visita, plural, sem_emoji,
     simulados_do_tema, trilha, aviso_local, resumo_estudo, progresso_do_tema, revisar,
 )
@@ -279,14 +279,24 @@ def _numeros_do_tema(tema):
     return " · ".join(p for p in partes if p)
 
 
-def _temas(page, files):
-    """A grade de cartões de tema (home e Conteúdo) e o link para "Por nível"."""
-    cartoes = [
-        cartao_tema(tema, _url(files, page, tema.src), [_chave(files, src) for src in tema.paginas], _numeros_do_tema(tema))
-        for tema in _estado["temas"]
-    ]
-    return (f'<div class="temas">{"".join(cartoes)}</div>\n\n'
-            f'<p class="temas-rodape"><a href="{_url(files, page, PAGINA_NIVEIS)}">Ver todo o conteúdo por nível →</a></p>')
+def _temas_por_area():
+    """[(área, [Tema])], na ordem de conteudo/README.md (a mesma do menu)."""
+    por_slug = {t.slug: t for t in _estado["temas"]}
+    return [(area, [por_slug[s] for s in slugs]) for area, slugs in agrupar_por_area(list(por_slug))]
+
+
+def _temas(page, files, nivel_do_titulo):
+    """Os cartões de tema agrupados por área, com um título por área (home e Conteúdo), e o link "Por nível"."""
+    partes = []
+    for area, temas in _temas_por_area():
+        cartoes = "".join(
+            cartao_tema(t, _url(files, page, t.src), [_chave(files, src) for src in t.paginas], _numeros_do_tema(t))
+            for t in temas
+        )
+        partes.append(f'{"#" * nivel_do_titulo} {area} {{ .grupo-area data-area="{area_slug(area)}" }}\n\n'
+                      f'<div class="temas temas--agrupados">{cartoes}</div>')
+    partes.append(f'<p class="temas-rodape"><a href="{_url(files, page, PAGINA_NIVEIS)}">Ver todo o conteúdo por nível →</a></p>')
+    return "\n\n".join(partes)
 
 
 def _rotulo_da_unidade(unidade):
@@ -384,7 +394,7 @@ def _pagina_da_trilha(markdown, lugar, page, files):
 def _meu_progresso(page, files):
     """A página "Meu progresso": tudo aqui é preenchido pelo portal.js com o que está no navegador."""
     blocos, titulos = [], {}
-    for tema in _estado["temas"]:
+    for tema in [t for _, temas in _temas_por_area() for t in temas]:
         blocos.append(progresso_do_tema(tema, _url(files, page, tema.src), [_chave(files, s) for s in tema.paginas]))
         for src, lugar in _estado["lugares"].items():
             if lugar.tema is not tema:
@@ -413,7 +423,7 @@ def _inicio(page, files):
                (t["simulados"], "simulados")]
     continuar = bloco_continuar(_url(files, page, "conteudo/README.md"))
     return (
-        f"{heroi(numeros, continuar)}\n\n## Temas\n\n{_temas(page, files)}\n\n"
+        f"{heroi(numeros, continuar)}\n\n## Temas\n\n{_temas(page, files, 3)}\n\n"
         f"## Como estudar aqui\n\n{faixa_como_estudar(_url(files, page, 'simulados/README.md'))}\n"
     )
 
@@ -466,7 +476,7 @@ def on_page_markdown(markdown, page, config, files):
     if lugar:
         markdown = _pagina_da_trilha(markdown, lugar, page, files)
     if page.file.src_uri == "conteudo/README.md":  # a tabela de temas vira o catálogo do portal
-        markdown = TABELA_INDICE.sub(lambda m: _temas(page, files) + "\n", markdown, count=1)
+        markdown = TABELA_INDICE.sub(lambda m: _temas(page, files, 2) + "\n", markdown, count=1)
     markdown = _tabelas_indice(markdown, page, files)
     if page.file.src_uri.startswith("simulados/") and FOLHA_DE_PROVA.search(markdown):
         markdown = FOLHA_DE_PROVA.sub(_folha_de_prova, markdown)
