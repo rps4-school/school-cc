@@ -92,7 +92,7 @@ class PaginaDaResposta(unittest.TestCase):
         self.assertTrue(md.startswith(
             '---\ntitle: "Resposta: Área e perímetro"\n'
             'resposta_de: "conteudo/python/exercicios/enunciados/06-funcoes/facil.md"\nexercicio: "01"\n---\n'), md[:200])
-        self.assertIn('<p class="sobretitulo">Resposta · Exercício 01</p>\n\n# Área e perímetro\n', md)
+        self.assertIn('<p class="sobretitulo" data-area="programacao">Resposta · Exercício 01</p>\n\n# Área e perímetro\n', md)
         self.assertIn("[← Voltar ao enunciado](../../../enunciados/06-funcoes/facil.md#exercício-01-área-e-perímetro){ .md-button }", md)
         self.assertIn("[⤓ Baixar .py](ex01_area_e_perimetro.py){ .md-button .md-button--primary download }", md)
         self.assertIn('````python title="ex01_area_e_perimetro.py" linenums="1"\nprint(1)\n````', md)

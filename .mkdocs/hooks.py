@@ -20,8 +20,8 @@ from mkdocs.structure.nav import Section
 from mkdocs.utils import get_relative_url
 from pymdownx.slugs import slugify
 
-from _catalogo import agrupar_por_area, temas_do_indice
-from _componentes import COR_DO_NIVEL, NIVEL, NIVEL_DO_EXERCICIO, cartao, grade, sem_emoji
+from _catalogo import AREA_PADRAO, TEMAS, agrupar_por_area, temas_do_indice
+from _componentes import COR_DO_NIVEL, NIVEL, NIVEL_DO_EXERCICIO, cartao, grade, sem_emoji, sobretitulo
 
 # Nomes de pasta sem README e que precisam de acento ou de um nome melhor.
 TITULOS = {
@@ -264,7 +264,7 @@ def _pagina_do_py(src_py, codigo, enunciado):
             f'exercicio: "{numero}"',
             "---",
             "",
-            f'<p class="sobretitulo">Resposta · Exercício {numero}</p>',
+            sobretitulo(f"Resposta · Exercício {numero}", TEMAS.get(src_py.split("/")[1], AREA_PADRAO)[0]),
             "",
             f"# {titulo}",
             "",

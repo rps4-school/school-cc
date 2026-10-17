@@ -534,7 +534,7 @@ def _pagina_da_trilha(markdown, lugar, page, files):
         e = lugar.exercicio
         nome = NOME_DO_NIVEL[e.nivel]
         quantas = plural(e.perguntas, "pergunta", "perguntas") if e.perguntas else plural(e.exercicios, "exercício", "exercícios")
-        antes = sobretitulo(f"Exercícios · {rotulo} {unidade.numero}")
+        antes = sobretitulo(f"Exercícios · {rotulo} {unidade.numero}", tema.area)
         depois = (linha_de_informacoes(None, url_niveis, [quantas], [(rever, url(unidade.src)), ("Sugerir melhoria", edicao)])
                   + abas_de_nivel([(x.nivel, url(x.src), _chave(files, x.src), x is e) for x in unidade.exercicios]))
         novo_titulo = unidade.titulo  # o nível já está nas abas
@@ -549,7 +549,7 @@ def _pagina_da_trilha(markdown, lugar, page, files):
         visita = f"{unidade.titulo} · {nome}"
     else:
         nivel = (page.meta.get("tags") or [None])[0]
-        antes = sobretitulo(f"{rotulo} {unidade.numero} de {tema.unidades[-1].numero}")
+        antes = sobretitulo(f"{rotulo} {unidade.numero} de {tema.unidades[-1].numero}", tema.area)
         depois = (linha_de_informacoes(nivel, url_niveis, [f"~{unidade.minutos} min de leitura"], [("Sugerir melhoria", edicao)])
                   + segmentos([(_chave(files, u.src), u is unidade) for u in tema.unidades])
                   + '<div class="barra-leitura" aria-hidden="true"></div>')
@@ -561,6 +561,11 @@ def _pagina_da_trilha(markdown, lugar, page, files):
             fim = proximo_passo(chave, botao, feito, principal=proxima or fim_da_trilha)
         visita = f"{rotulo} {unidade.numero} · {unidade.titulo}"
     if not pagina_do_tema:
+        # Com o sobretítulo antes do "# Título", o MkDocs não acha mais o título da página (aba do navegador,
+        # busca, topo da página ao rolar): ele é guardado aqui e reposto em on_page_content.
+        h1 = re.search(r"^# (.*)$", markdown, re.M)
+        if h1 and "titulo_da_pagina" not in page.meta:
+            page.meta["titulo_da_pagina"] = re.sub(r"[`*]", "", ANCORA_DO_TITULO.sub("", h1.group(1))).strip()
         markdown = re.sub(r"^# (.*)$", lambda m: f"{antes}\n\n# {_titulo_visivel(m.group(1), novo_titulo)}\n\n{depois}\n",
                           markdown, count=1, flags=re.M)
         _esconder(page, "tags", "footer")  # o nível está na linha de informações; o próximo passo substitui o rodapé
@@ -688,7 +693,8 @@ def on_page_content(html, page, config, files):
     if lugar and lugar.exercicio:
         html = _cartoes_de_exercicio(html)
         _indice_de_exercicios(page.toc)
-    # Nos exercícios, o título visível é só a aula ("Funções"), mas a aba do navegador e a busca precisam do nível.
+    # Título da página guardado no _pagina_da_trilha. Nos exercícios, o título visível é só a aula ("Funções"),
+    # mas a aba do navegador e a busca precisam do nível.
     if page.meta.get("titulo_da_pagina"):
         page.title = page.meta["titulo_da_pagina"]
     return html

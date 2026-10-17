@@ -125,7 +125,10 @@ markdown_extensions:
           class: diagrama
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.highlight:
-      anchor_linenums: true
+      # Números de linha (só nas respostas) dentro do código, sem tabela nem link: a tabela punha o nome do
+      # arquivo como uma legenda falsa e os links tinham 16 px (acessibilidade no Lighthouse).
+      anchor_linenums: false
+      linenums_style: pymdownx-inline
   - pymdownx.inlinehilite
   - pymdownx.tasklist:
       custom_checkbox: true

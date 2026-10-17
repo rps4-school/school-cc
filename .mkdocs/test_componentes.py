@@ -152,6 +152,7 @@ class Catalogo(unittest.TestCase):
 class CabecalhoDaPagina(unittest.TestCase):
     def test_sobretitulo(self):
         self.assertEqual(c.sobretitulo("Aula 2 de 6"), '<p class="sobretitulo">Aula 2 de 6</p>')
+        self.assertEqual(c.sobretitulo("Aula 2 de 6", "Programação"), '<p class="sobretitulo" data-area="programacao">Aula 2 de 6</p>')
 
     def test_linha_de_informacoes(self):
         html = c.linha_de_informacoes("Intermediário", "../niveis/", ["~8 min de leitura"], [("Sugerir melhoria", "https://x/edit"), ("Nada", None)])

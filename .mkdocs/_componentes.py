@@ -417,9 +417,11 @@ def fim_de_pagina(chave, texto_botao, pratique=None, proximo=None, feito="Conclu
 
 # ---------- Cabeçalho e fim das páginas de aula, exercícios e resposta ----------
 
-def sobretitulo(texto):
-    """A linha acima do título: "Aula 2 de 6", "Exercícios · Aula 6", "Resposta · Exercício 01"."""
-    return f'<p class="sobretitulo">{_e(texto)}</p>'
+def sobretitulo(texto, area=None):
+    """A linha acima do título: "Aula 2 de 6", "Exercícios · Aula 6", "Resposta · Exercício 01". Com a área,
+    fica na cor dela."""
+    cor = f' data-area="{area_slug(area)}"' if area else ""
+    return f'<p class="sobretitulo"{cor}>{_e(texto)}</p>'
 
 
 def linha_de_informacoes(nivel, url_niveis, partes=(), links=()):

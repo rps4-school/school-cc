@@ -73,6 +73,16 @@
       el.toggleAttribute("data-com-progresso", feitas > 0);
     });
 
+    // Menu da trilha: "N de M concluídas" e a barra (as unidades vêm em data-paginas).
+    todos("[data-progresso-menu]").forEach(function (el) {
+      var paginas = (el.dataset.paginas || "").split(" ").filter(Boolean);
+      var feitas = paginas.filter(function (c) { return concluida(d, c); }).length;
+      var b = el.querySelector("[role=progressbar]");
+      b.setAttribute("aria-valuenow", feitas);
+      b.firstChild.style.width = (paginas.length ? Math.round((100 * feitas) / paginas.length) : 0) + "%";
+      el.querySelector("[data-feitas]").textContent = feitas;
+    });
+
     // Botão do curso: a primeira etapa com algo por fazer.
     todos("a[data-proxima]").forEach(function (a) {
       if (!a.closest("[data-com-progresso]")) return texto(a, null);
@@ -290,7 +300,26 @@
     if (e.key === "school-cc:progresso") desenhar();
   });
 
+  // Menu da trilha: a seta abre e fecha os níveis de uma aula sem sair da página.
+  document.addEventListener("click", function (e) {
+    var seta = e.target.closest && e.target.closest(".trilha-lateral__abrir");
+    if (!seta) return;
+    var aberta = seta.getAttribute("aria-expanded") === "true";
+    seta.setAttribute("aria-expanded", String(!aberta));
+    document.getElementById(seta.getAttribute("aria-controls")).hidden = aberta;
+  });
+
+  // No computador, o menu rola sozinho até a página atual (em temas longos, ela pode estar lá embaixo).
+  function mostrarAtual() {
+    var atual = document.querySelector('.trilha-lateral [aria-current="page"]');
+    var caixa = atual && atual.closest(".md-sidebar__scrollwrap");
+    if (!caixa || !window.matchMedia("(min-width: 76.25em)").matches) return;
+    var r = atual.getBoundingClientRect(), c = caixa.getBoundingClientRect();
+    if (r.top < c.top || r.bottom > c.bottom) caixa.scrollTop += r.top - c.top - c.height / 3;
+  }
+
   function iniciar() {
+    mostrarAtual();
     filtroDaAncora();
     filtrar();
     var visita = document.querySelector("[data-visita]:not([data-montado])");
