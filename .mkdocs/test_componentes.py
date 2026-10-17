@@ -67,7 +67,7 @@ class Componentes(unittest.TestCase):
         self.assertIn('data-pagina="conteudo/f/" data-perguntas="3"', html)
         self.assertIn('href="l/"', html)
         self.assertEqual(c.marcador_de_visita("calculo", 'Aula 4 · "x"'),
-                         '<span hidden data-visita data-tema="calculo" data-titulo="Aula 4 · &quot;x&quot;"></span>')
+                         '<div hidden data-visita data-tema="calculo" data-titulo="Aula 4 · &quot;x&quot;"></div>')
 
 
 if __name__ == "__main__":

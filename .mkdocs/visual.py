@@ -370,9 +370,8 @@ def _pagina_da_trilha(markdown, lugar, page, files):
             topo = '<div class="barra-leitura" aria-hidden="true"></div>'
     if page.file.src_uri != tema.src:  # a página do tema já tem o cabeçalho de curso
         topo = informacoes(partes, link) + topo
-    topo += marcador_de_visita(tema.slug, titulo)
-    markdown = re.sub(r"^# .*$", lambda m: f"{m.group(0)}\n\n{topo}\n", markdown, count=1, flags=re.M)
-    return f"{markdown.rstrip()}\n\n{fim}\n"
+        markdown = re.sub(r"^# .*$", lambda m: f"{m.group(0)}\n\n{topo}\n", markdown, count=1, flags=re.M)
+    return f"{markdown.rstrip()}\n\n{marcador_de_visita(tema.slug, titulo)}{fim}\n"
 
 
 def _inicio(page, files):

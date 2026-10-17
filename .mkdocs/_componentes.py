@@ -273,4 +273,4 @@ def fim_de_pagina(chave, texto_botao, pratique=None, proximo=None, feito="Conclu
 
 
 def marcador_de_visita(tema_slug, titulo):
-    return f'<span hidden data-visita data-tema="{_e(tema_slug)}" data-titulo="{_e(titulo)}"></span>'
+    return f'<div hidden data-visita data-tema="{_e(tema_slug)}" data-titulo="{_e(titulo)}"></div>'
