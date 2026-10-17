@@ -2,7 +2,7 @@
 
 > [← voltar para Conteúdo](../README.md)
 
-Lógica de programação com Python puro, sem bibliotecas externas: condicionais, listas, matrizes e strings, com resumos curtos e exercícios em três níveis.
+Lógica de programação com Python puro, sem bibliotecas externas: condicionais, listas, matrizes, strings, dicionários e funções, com resumos e exercícios em três níveis.
 
 ## 🗺️ Roteiro de estudo
 
@@ -15,6 +15,8 @@ Siga na ordem: leia o resumo e depois faça os exercícios, do fácil ao difíci
 | 2 | [Listas](resumos/02-listas.md) | 🟡 Intermediário | [🟢 Fácil](exercicios/enunciados/02-listas/facil.md) · [🟡 Intermediário](exercicios/enunciados/02-listas/intermediario.md) · [🔴 Difícil](exercicios/enunciados/02-listas/dificil.md) |
 | 3 | [Matrizes](resumos/03-matrizes.md) | 🟡 Intermediário | [🟢 Fácil](exercicios/enunciados/03-matrizes/facil.md) · [🟡 Intermediário](exercicios/enunciados/03-matrizes/intermediario.md) · [🔴 Difícil](exercicios/enunciados/03-matrizes/dificil.md) |
 | 4 | [Strings](resumos/04-strings.md) | 🟢 Iniciante | [🟢 Fácil](exercicios/enunciados/04-strings/facil.md) · [🟡 Intermediário](exercicios/enunciados/04-strings/intermediario.md) · [🔴 Difícil](exercicios/enunciados/04-strings/dificil.md) |
+| 5 | [Dicionários](resumos/05-dicionarios.md) | 🟡 Intermediário | [🟢 Fácil](exercicios/enunciados/05-dicionarios/facil.md) · [🟡 Intermediário](exercicios/enunciados/05-dicionarios/intermediario.md) · [🔴 Difícil](exercicios/enunciados/05-dicionarios/dificil.md) |
+| 6 | [Funções](resumos/06-funcoes.md) | 🟡 Intermediário | [🟢 Fácil](exercicios/enunciados/06-funcoes/facil.md) · [🟡 Intermediário](exercicios/enunciados/06-funcoes/intermediario.md) · [🔴 Difícil](exercicios/enunciados/06-funcoes/dificil.md) |
 
 Como praticar e as regras dos exercícios estão em [Exercícios](exercicios/README.md).
 

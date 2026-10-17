@@ -13,6 +13,8 @@ Leia os resumos, na ordem:
 3. [Listas](../resumos/02-listas.md)
 4. [Matrizes](../resumos/03-matrizes.md)
 5. [Strings](../resumos/04-strings.md)
+6. [Dicionários](../resumos/05-dicionarios.md)
+7. [Funções](../resumos/06-funcoes.md)
 
 ## 📝 Exercícios
 
@@ -22,6 +24,8 @@ Leia os resumos, na ordem:
 | **Listas** | [01 a 03](enunciados/02-listas/facil.md) | [04 a 06](enunciados/02-listas/intermediario.md) | [07 a 09](enunciados/02-listas/dificil.md) |
 | **Matrizes** | [01 a 03](enunciados/03-matrizes/facil.md) | [04 a 06](enunciados/03-matrizes/intermediario.md) | [07 a 09](enunciados/03-matrizes/dificil.md) |
 | **Strings** | [01 a 03](enunciados/04-strings/facil.md) | [04 a 06](enunciados/04-strings/intermediario.md) | [07 a 09](enunciados/04-strings/dificil.md) |
+| **Dicionários** | [01 a 03](enunciados/05-dicionarios/facil.md) | [04 a 06](enunciados/05-dicionarios/intermediario.md) | [07 a 09](enunciados/05-dicionarios/dificil.md) |
+| **Funções** | [01 a 03](enunciados/06-funcoes/facil.md) | [04 a 06](enunciados/06-funcoes/intermediario.md) | [07 a 09](enunciados/06-funcoes/dificil.md) |
 
 ## 🗂️ Como está organizado
 
@@ -34,7 +38,9 @@ exercicios/
 │   │   └── dificil.md
 │   ├── 02-listas/
 │   ├── 03-matrizes/
-│   └── 04-strings/
+│   ├── 04-strings/
+│   ├── 05-dicionarios/
+│   └── 06-funcoes/
 └── respostas/           ← as resoluções comentadas (.py)
     ├── 01-condicionais/
     │   ├── facil/
@@ -42,7 +48,9 @@ exercicios/
     │   └── dificil/
     ├── 02-listas/
     ├── 03-matrizes/
-    └── 04-strings/
+    ├── 04-strings/
+    ├── 05-dicionarios/
+    └── 06-funcoes/
 ```
 
 ## ✅ Como praticar
@@ -69,9 +77,10 @@ exercicios/
 
 ## 🧱 Regras
 
-- ✅ Pode usar: `input`, `print`, `int`, `float`, `str`, `len`, `sum`, `max`, `min`, `range`, `enumerate`, `sorted`, `zip`, `any`, métodos de lista e de texto, e list comprehension.
+- ✅ Pode usar: `input`, `print`, `int`, `float`, `str`, `len`, `sum`, `max`, `min`, `range`, `enumerate`, `sorted`, `zip`, `any`, métodos de lista, de texto e de dicionário, list comprehension e `def` para criar funções.
 - ⛔ Não pode: `import` de qualquer coisa.
 - ⛔ Alguns exercícios proíbem funções específicas, e o enunciado avisa quando isso acontece.
+- 🧩 Nos exercícios de Funções, crie as funções que o enunciado pede: o objetivo é treinar a divisão do problema em partes.
 
 ## 🤝 Quer adicionar exercícios?
 

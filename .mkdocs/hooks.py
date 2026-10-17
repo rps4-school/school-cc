@@ -42,6 +42,8 @@ TITULOS = {
     "circuitos": "Circuitos",
     "karnaugh": "Mapa de Karnaugh",
     "sistemas-digitais": "Sistemas Digitais",  # pasta dos simulados
+    # Assuntos dos exercícios de Python que precisam de acento.
+    "dicionarios": "Dicionários",
     # Assuntos dos exercícios de Cálculo.
     "calculo": "Cálculo",  # pasta dos simulados
     "funcoes": "Funções",

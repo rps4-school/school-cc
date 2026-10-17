@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" role="img" aria-labelledby="titulo desc">
+  <title id="titulo">Anatomia de uma função</title>
+  <desc id="desc">A função media começa com a palavra def, seguida do nome media e, entre parênteses, dos parâmetros notas e casas, este com o valor padrão 1. A primeira linha do corpo é a docstring, que explica o que a função faz. O corpo é indentado e termina com return, que devolve o resultado. Embaixo, a chamada m = media([7, 8, 9]) passa a lista como argumento e guarda o resultado, 8.0, em m.</desc>
+  <style>
+    .c { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 18px; fill: #111827; }
+    .def { fill: #6d28d9; font-weight: 700; }
+    .nome { fill: #1d4ed8; font-weight: 700; }
+    .par { fill: #b45309; font-weight: 700; }
+    .pad { fill: #047857; font-weight: 700; }
+    .doc { fill: #6b7280; font-style: italic; }
+    .ret { fill: #b91c1c; font-weight: 700; }
+    .l { font-family: Inter, system-ui, sans-serif; font-size: 15px; fill: #374151; }
+    .h { font-family: Inter, system-ui, sans-serif; font-size: 15px; font-weight: 700; fill: #1e1b4b; }
+  </style>
+  <rect width="900" height="380" fill="#ffffff"/>
+
+  <rect x="30" y="30" width="540" height="190" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="74" y="88" width="5" height="118" rx="2" fill="#c7d2fe"/>
+  <text x="50" y="70" class="c"><tspan class="def">def</tspan> <tspan class="nome">media</tspan>(<tspan class="par">notas</tspan>, <tspan class="par">casas</tspan><tspan class="pad">=1</tspan>):</text>
+  <text x="93" y="112" class="c"><tspan class="doc">"""Devolve a média da lista de notas."""</tspan></text>
+  <text x="93" y="154" class="c">total = sum(notas)</text>
+  <text x="93" y="196" class="c"><tspan class="ret">return</tspan> round(total / len(notas), casas)</text>
+
+  <rect x="30" y="250" width="520" height="56" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="50" y="285" class="c">m = <tspan class="nome">media</tspan>(<tspan class="par">[7, 8, 9]</tspan>)</text>
+  <text x="300" y="285" class="l">→ m vale 8.0</text>
+  <text x="30" y="336" class="l">Na chamada, os valores entre parênteses são os argumentos:</text>
+  <text x="30" y="358" class="l">cada um vai para um parâmetro, na ordem. casas não foi passado: vale 1.</text>
+
+  <text x="590" y="52" class="h">As partes</text>
+  <rect x="590" y="68" width="14" height="14" rx="3" fill="#6d28d9"/>
+  <text x="614" y="80" class="l"><tspan font-weight="700">def</tspan>: começa a definição</text>
+  <rect x="590" y="98" width="14" height="14" rx="3" fill="#1d4ed8"/>
+  <text x="614" y="110" class="l"><tspan font-weight="700">nome</tspan>: como a função é chamada</text>
+  <rect x="590" y="128" width="14" height="14" rx="3" fill="#b45309"/>
+  <text x="614" y="140" class="l"><tspan font-weight="700">parâmetros</tspan>: recebem os valores</text>
+  <rect x="590" y="158" width="14" height="14" rx="3" fill="#047857"/>
+  <text x="614" y="170" class="l"><tspan font-weight="700">valor padrão</tspan>: usado se faltar</text>
+  <rect x="590" y="188" width="14" height="14" rx="3" fill="#6b7280"/>
+  <text x="614" y="200" class="l"><tspan font-weight="700">docstring</tspan>: o que ela faz</text>
+  <rect x="590" y="218" width="14" height="14" rx="3" fill="#c7d2fe"/>
+  <text x="614" y="230" class="l"><tspan font-weight="700">corpo</tspan>: indentado (4 espaços)</text>
+  <rect x="590" y="248" width="14" height="14" rx="3" fill="#b91c1c"/>
+  <text x="614" y="260" class="l"><tspan font-weight="700">return</tspan>: devolve o resultado</text>
+  <text x="590" y="290" class="l">e encerra a função na hora.</text>
+</svg>
