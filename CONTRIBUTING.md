@@ -41,9 +41,11 @@ conteudo/<tema>/          ← python, git, sistemas-digitais, calculo...
     | `` **Resposta:** `valor` `` | O mesmo valor, sem ligar para espaços, maiúsculas, acentos, `0x` ou vírgula/ponto. Separe alternativas com uma barra vertical entre espaços |
     | `` **Expressão:** `A'B + C` `` | Qualquer expressão booleana **equivalente** (compara a tabela-verdade) |
     | `` **Expressão mínima:** `A'B + C` `` | Equivalente **e** sem letras a mais (para perguntas de simplificação) |
-    | `` **Número:** `1/4` `` | O mesmo valor numérico: `0,25`, `2/8`, `√2/2`, `π`, `e^2`, `ln 3`, `∞`. Decimais arredondados com 2 casas ou mais também valem. Para métodos numéricos, dê a tolerância: `` `1,414214 ± 0,0001` ``. Textos como `não existe` entram como alternativa |
+    | `` **Número:** `1/4` `` | O mesmo valor numérico: `0,25`, `2/8`, `√2/2`, `π`, `e^2`, `ln 3`, `∞`. Decimais arredondados ou truncados com 2 casas ou mais também valem (`0,33` ou `0,3333` para `1/3`), desde que tenham 2 algarismos significativos (`0,00` não vale para `1/1024`) e a certa não seja um decimal exato (para `4`, `4,01` está errado). Aceita separador de milhar (`2.000`, `2 000`). Para métodos numéricos, dê a tolerância: `` `1,414214 ± 0,0001` ``. Textos como `não existe` entram como alternativa |
     | `` **Função:** `3x^2 + 2` `` | Qualquer função **equivalente**, testada em vários pontos (qualquer letra serve de variável) |
-    | `` **Primitiva:** `x^3/3 + C` `` | Qualquer função que difere da certa só por uma **constante**, e avisa se faltar o `+ C` |
+    | `` **Primitiva:** `x^3/3 + C` `` | Qualquer função que difere da certa só por uma **constante**, e avisa se faltar o `+ C`. Recusa resposta que não existe onde a certa existe (como `ln(x)` sem o módulo) |
+
+    Para conferir se todo gabarito passa no próprio corretor, rode `node --test .mkdocs/corretor.test.js` (a CI também roda).
 
 - **Exercícios de Sistemas Digitais e de Cálculo:** um arquivo por assunto e nível em `conteudo/<tema>/exercicios/<NN-tema>/<facil|intermediario|dificil>.md`, numerados de 01 a 09 como os de Python. A resposta fica no próprio arquivo, num `<details>` com corretor (veja o item acima), seguida da resolução passo a passo. **Toda resposta deve ser calculada**, não digitada de cabeça.
 - **Fórmulas:** escreva em LaTeX, igual ao GitHub: `$x^2$` no meio do texto e `$$` numa linha sozinha antes e depois de uma fórmula em destaque. No site, o KaTeX desenha as fórmulas. Cuidados:

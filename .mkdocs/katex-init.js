@@ -40,6 +40,7 @@
     if (!formulas.length) return;
     carregarKatex().then(function () {
       formulas.forEach(function (el) {
+        if (el.hasAttribute("data-katex")) return; // já desenhada por uma chamada anterior
         // O arithmatex entrega "\(...\)" (no meio do texto) ou "\[...\]" (em bloco).
         var tex = el.textContent.trim().replace(/^\\[([]/, "").replace(/\\[)\]]$/, "");
         el.setAttribute("data-katex", "");

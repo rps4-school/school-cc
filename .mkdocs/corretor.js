@@ -14,7 +14,6 @@
 (function () {
   "use strict";
 
-  var CHAVE = "school-cc:corretor:" + location.pathname;
   var CERTO = "text-emerald-700 dark:text-emerald-300";
   var ERRADO = "text-rose-700 dark:text-rose-300";
   var AVISO = "text-amber-700 dark:text-amber-300";
@@ -27,7 +26,8 @@
 
   // Tira o que não muda o valor: espaços, maiúsculas, acentos, "0x", "#", base em subscrito.
   function limpar(texto) {
-    return semAcento(texto).toLowerCase()
+    // Antes de tirar os acentos: sem isso, "∄" (∃ + traço) viraria "∃".
+    return semAcento(texto.replace(/∄/g, "não existe")).toLowerCase()
       .replace(/[−–]/g, "-")        // sinal de menos tipográfico
       .replace(/[₀-₉]+/g, "")      // (1011)₂ → (1011)
       .replace(/^\((.*)\)$/, "$1")  // (1011) → 1011
@@ -187,6 +187,9 @@
   var FUNCOES_MAT = {
     sqrt: Math.sqrt, raiz: Math.sqrt, cbrt: Math.cbrt, ln: Math.log, exp: Math.exp, abs: Math.abs,
     sen: Math.sin, sin: Math.sin, cos: Math.cos, tg: Math.tan, tan: Math.tan,
+    sec: function (x) { return 1 / Math.cos(x); },
+    cossec: function (x) { return 1 / Math.sin(x); }, csc: function (x) { return 1 / Math.sin(x); },
+    cotg: function (x) { return 1 / Math.tan(x); }, cot: function (x) { return 1 / Math.tan(x); },
     log: function (x) { return Math.log10(x); },
   };
   var NOMES_FUNCOES = Object.keys(FUNCOES_MAT).sort(function (a, b) { return b.length - a.length; });
@@ -201,9 +204,13 @@
     while (i < texto.length) {
       var c = texto[i];
       if (/\s/.test(c)) { i++; continue; }
-      var num = /^\d+(?:[.,]\d+)?|^[.,]\d+/.exec(texto.slice(i));
+      // Separador de milhar: 2 000, 16.777.216, 2.937,5. "2.000" sozinho fica 2 (o conferirNumero testa as duas leituras).
+      var milhar = /^\d{1,3}(?:\s\d{3}(?!\d))+(?:,\d+)?/.exec(texto.slice(i)) ||
+        /^\d{1,3}(?:\.\d{3}(?!\d)){2,}(?:,\d+)?|^\d{1,3}(?:\.\d{3})+,\d+/.exec(texto.slice(i));
+      var num = milhar || /^\d+(?:[.,]\d+)?|^[.,]\d+/.exec(texto.slice(i));
       if (num) {
-        tokens.push({ tipo: "num", valor: parseFloat(num[0].replace(",", ".")) });
+        var digitos = milhar ? num[0].replace(/[.\s]/g, "") : num[0];
+        tokens.push({ tipo: "num", valor: parseFloat(digitos.replace(",", ".")) });
         i += num[0].length;
         continue;
       }
@@ -303,10 +310,20 @@
         return function (v) { return f(r(v)); };
       }
       if (t.tipo === "func") {
-        var arg = olhar() === "(" ? primario() : potencia(); // ln x, sen x, ln x^2 = ln(x^2)
+        // sen^2(x) = (sen x)^2
+        var n = null;
+        if (olhar() === "^" && tokens[pos + 1] && tokens[pos + 1].tipo === "num") { n = tokens[pos + 1].valor; pos += 2; }
+        var arg = olhar() === "(" ? primario() : argumentoSemParenteses();
+        if (n !== null) return function (v) { return Math.pow(t.f(arg(v)), n); };
         return function (v) { return t.f(arg(v)); };
       }
       throw new Error("algo faltando antes de “" + t.tipo + "”");
+    }
+    // ln x, ln x^2 = ln(x^2), ln 2x = ln(2x); mas sen x cos x = sen(x)·cos(x).
+    function argumentoSemParenteses() {
+      var a = potencia();
+      while (olhar() === "num" || olhar() === "var") a = juntar(a, potencia(), function (x, y) { return x * y; });
+      return a;
     }
     function juntar(a, b, op) { return function (v) { return op(a(v), b(v)); }; }
 
@@ -345,11 +362,37 @@
     return a.valor({});
   }
 
+  // Casas decimais digitadas: "0,333" → 3, "2.937,5" → 1, "16.777.216" e "2 000" → 0.
+  function casasDecimais(texto) {
+    var t = texto.trim();
+    var m = /,(\d+)$/.exec(t) || (/^[^.]*\.[^.]*$/.test(t) && /\.(\d+)$/.exec(t));
+    return m ? m[1].length : 0;
+  }
+
+  // Decimal arredondado ou truncado nas casas digitadas: 0,33 ou 0,3333 para 1/3; 0,67 ou 0,66 para 2/3.
+  // Só vale com 2 casas ou mais, com 2 algarismos significativos (0,00 não serve para 1/1024)
+  // e se a certa não for um decimal exato nessas casas (para 4, 4,01 está errado).
+  function arredondouCerto(aluno, certa, casas) {
+    if (casas < 2 || !isFinite(certa) || certa === 0) return false;
+    var escala = Math.pow(10, casas);
+    if (10 / escala > Math.abs(certa)) return false;
+    var sinal = certa < 0 ? -1 : 1;
+    var arredondado = sinal * Math.round(Math.abs(certa) * escala + 1e-9) / escala;
+    var truncado = sinal * Math.floor(Math.abs(certa) * escala + 1e-9) / escala;
+    if (perto(arredondado, certa)) return false;
+    var folga = 1e-6 / escala;
+    return Math.abs(aluno - arredondado) <= folga || Math.abs(aluno - truncado) <= folga;
+  }
+
   function conferirNumero(resposta, digitado) {
     var opcoes = resposta.split(" | ");
-    var aluno = null;
-    try { aluno = valorConstante(digitado.replace(/^[^=]*=(?!=)/, "")); } catch (e) { /* talvez seja texto */ }
-    var casas = (/[.,](\d+)\s*$/.exec(digitado.trim()) || [, ""])[1].length;
+    var texto = digitado.replace(/^[^=]*=(?!=)/, "");
+    var leituras = [];
+    try { leituras.push({ valor: valorConstante(texto), casas: casasDecimais(texto) }); } catch (e) { /* talvez seja texto */ }
+    // "2.000" é dois mil em pt-BR, mas 2 em inglês: vale qualquer uma das leituras.
+    if (/^\s*[-−]?\d{1,3}\.\d{3}\s*$/.test(texto)) leituras.push({ valor: valorConstante(texto.replace(".", "")), casas: 0 });
+    var entendeu = leituras.length > 0;
+    leituras = leituras.filter(function (l) { return !isNaN(l.valor); });
     var quase = false;
     for (var i = 0; i < opcoes.length; i++) {
       var op = opcoes[i].split("±");
@@ -359,14 +402,15 @@
         if (limpar(opcoes[i]) === limpar(digitado)) return { certo: true };
         continue;
       }
-      if (aluno === null || isNaN(aluno)) continue;
       var tol = op[1] ? valorConstante(op[1]) : undefined;
-      if (perto(aluno, certa, tol)) return { certo: true };
-      // Decimal arredondado ou truncado com pelo menos 2 casas: 0,33 ou 0,3333 para 1/3.
-      if (tol === undefined && casas >= 2 && isFinite(certa) && Math.abs(aluno - certa) <= Math.pow(10, -casas) + 1e-12) return { certo: true };
-      if (isFinite(certa) && Math.abs(aluno - certa) <= 0.05 * Math.max(1, Math.abs(certa))) quase = true;
+      for (var j = 0; j < leituras.length; j++) {
+        var aluno = leituras[j].valor;
+        if (perto(aluno, certa, tol)) return { certo: true };
+        if (tol === undefined && arredondouCerto(aluno, certa, leituras[j].casas)) return { certo: true };
+        if (isFinite(certa) && Math.abs(aluno - certa) <= 0.05 * Math.max(1, Math.abs(certa))) quase = true;
+      }
     }
-    if (aluno === null) {
+    if (!entendeu) {
       return { certo: false, dica: "Não entendi o número. Use vírgula ou ponto (0,25), fração (1/4), √, π, e, ln ou ∞." };
     }
     return quase ? { certo: false, dica: "Perto! Confira as contas ou use mais casas decimais (ou a fração exata)." } : { certo: false };
@@ -396,7 +440,7 @@
     } catch (e) {
       return {
         certo: false,
-        dica: "Não entendi a expressão (" + e.message + "). Exemplos: 3x^2 + 2, (x+1)/(x-2), √x, x^(1/3), e^(2x), ln(x), sen(x)" +
+        dica: "Não entendi a expressão (" + e.message + "). Exemplos: 3x^2 + 2, (x+1)/(x-2), √x, x^(1/3), e^(2x), ln(x), sen(x), sen^2(x)" +
           (primitiva ? ", e no fim + C." : "."),
       };
     }
@@ -408,14 +452,22 @@
       var v = {};
       nomes.forEach(function (n, j) { v[n] = PONTOS[(k + 3 * j) % PONTOS.length]; });
       var esperado = certa.valor(v), obtido = aluno.valor(v);
-      if (!isFinite(esperado) || !isFinite(obtido)) continue; // fora do domínio de uma das duas
+      if (!isFinite(esperado)) continue; // fora do domínio da certa
+      var ponto = nomes.map(function (n) { return n + " = " + numeroBonito(v[n]); }).join(", ");
+      // A certa existe e a do aluno não: ln(x) no lugar de ln|x|, por exemplo.
+      if (!isFinite(obtido)) {
+        return {
+          certo: false,
+          dica: "Para " + ponto + ", a certa existe e a sua não. Confira o domínio" +
+            (/ln/i.test(limpo) ? ": no ln, lembre do módulo, como em ln|x|." : "."),
+        };
+      }
       validos++;
       var d = obtido - esperado;
       if (primitiva) {
         if (diferenca === null) { diferenca = d; continue; }
         if (perto(d, diferenca, 1e-6 * Math.max(1, Math.abs(esperado)))) continue;
       } else if (perto(obtido, esperado)) continue;
-      var ponto = nomes.map(function (n) { return n + " = " + numeroBonito(v[n]); }).join(", ");
       return {
         certo: false,
         dica: primitiva
@@ -430,9 +482,14 @@
 
   // ---------- Placar da página ----------
 
+  // Calculada só na página: nos testes (Node) não há location.
+  function chave() {
+    return "school-cc:corretor:" + location.pathname;
+  }
+
   function lerAcertos() {
     try {
-      return JSON.parse(localStorage.getItem(CHAVE)) || {};
+      return JSON.parse(localStorage.getItem(chave())) || {};
     } catch (e) {
       return {};
     }
@@ -442,7 +499,7 @@
     try {
       var acertos = lerAcertos();
       acertos[id] = texto;
-      localStorage.setItem(CHAVE, JSON.stringify(acertos));
+      localStorage.setItem(chave(), JSON.stringify(acertos));
     } catch (e) { /* sem localStorage: o placar só não fica salvo */ }
   }
 
@@ -478,7 +535,7 @@
       '<label class="flex flex-wrap items-center gap-2">' +
       '<span class="w-full text-[0.62rem] font-bold uppercase tracking-wider text-indigo-700 sm:w-auto ' +
       'dark:text-indigo-300">Sua resposta</span>' +
-      '<input type="text" autocomplete="off" spellcheck="false" class="campo min-w-0 flex-1 rounded-lg border ' +
+      '<input type="text" maxlength="200" autocomplete="off" spellcheck="false" class="campo min-w-0 flex-1 rounded-lg border ' +
       "border-slate-300 bg-white px-3 py-1.5 font-mono text-[0.8rem] text-slate-900 dark:border-white/15 " +
       'dark:bg-slate-900 dark:text-slate-100">' +
       '<button type="button" class="conferir md-button md-button--primary">Conferir</button></label>' +
