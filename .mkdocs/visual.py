@@ -9,11 +9,15 @@ Roda depois do hooks.py (ordem em mkdocs.yml). Tudo aqui é só visual:
 - transforma "✅ Ver resposta" em botão;
 - nos simulados de Python, põe um editor (editor.js) antes da resposta de cada questão;
 - nas perguntas com "**Resposta:**" dentro de <details>, põe o corretor automático (corretor.js);
-- monta a página inicial (hero + cartões);
-- transforma a linha "**Nível:** ..." em tag e gera a página "Por nível".
+- transforma a linha "**Nível:** ..." em tag e gera a página "Por nível";
+- portal (dados do _catalogo.py, progresso desenhado pelo portal.js): página inicial com o catálogo de
+  temas, cabeçalho de curso e trilha na página do tema (no lugar da tabela do roteiro), linha de
+  informações e fim de página (concluir, próximos passos) nas aulas, exercícios e simulados, e a página
+  "Meu progresso".
 """
 
 import html
+import json
 import os
 import posixpath
 import re
@@ -23,7 +27,19 @@ from mkdocs.structure.nav import Section
 from mkdocs.utils import get_relative_url
 from pymdownx.slugs import slugify
 
-from _componentes import EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, cartao, grade, sem_emoji
+from _catalogo import agrupar_por_area, fora_de_codigo, lugares, montar, perguntas, tabela_roteiro, totais
+from _componentes import (
+    EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, area_slug, bloco_continuar, cabecalho_tema, cartao, cartao_area, cartao_tema,
+    TIPOS, barra_de_filtros, faixa_como_estudar, filtros_do_catalogo, grupo_de_temas, item_de_nivel, legenda_dos_niveis,
+    painel_de_nivel, NIVEL_VALOR,
+    NOME_DO_NIVEL, fim_de_pagina, grade, heroi, informacoes, item_trilha, marcador_de_visita, plural, sem_emoji,
+    simulados_do_tema, trilha, aviso_local, resumo_estudo, progresso_do_tema, revisar,
+    abas_de_nivel, linha_de_informacoes, proximo_passo, segmentos, sobretitulo,
+)
+from _trilha import (
+    Link, abas_do_site, caminho, html_das_abas, html_do_caminho, html_do_menu, html_do_menu_do_catalogo, montar_menu,
+    rotulo_da_unidade,
+)
 
 # Arquivos desta pasta publicados no site (o MkDocs ignora pastas que começam com ".").
 ARQUIVOS_DO_SITE = {
@@ -32,17 +48,34 @@ ARQUIVOS_DO_SITE = {
     "python-worker.js": "assets/javascripts/python-worker.js",
     "corretor.js": "assets/javascripts/corretor.js",
     "katex-init.js": "assets/javascripts/katex-init.js",
+    "diagramas.js": "assets/javascripts/diagramas.js",
+    "progresso.js": "assets/javascripts/progresso.js",
+    "cronometro.js": "assets/javascripts/cronometro.js",
+    "portal.js": "assets/javascripts/portal.js",
 }
+PAGINA_PROGRESSO = "progresso.md"
+MARCADOR_PROGRESSO = "<!-- meu-progresso -->"
+# Abas que são uma página só: o título delas ainda não foi lido quando o menu é montado.
+TITULOS_DAS_ABAS = {"README.md": "Início", PAGINA_PROGRESSO: "Meu progresso"}
 PAGINA_NIVEIS = "niveis.md"
-CONTEUDO_NIVEIS = """# Por nível
+# Página de cada área (conteudo/<área>/index.md, gerada): os temas da área. A home leva a ela.
+MARCADOR_AREA = "<!-- pagina-da-area -->"
+MARCADOR_NIVEIS = "<!-- por-nivel -->"
+# A lista do plugin de tags fica escondida: as etiquetas de nível das páginas apontam para as âncoras
+# dela (#tag:iniciante...), e o portal.js usa a âncora para abrir a página já filtrada.
+CONTEUDO_NIVEIS = f"""# Por nível
 
-Todo o conteúdo, do mais simples ao mais avançado. Os exercícios seguem a mesma escala:
-**fácil** é Iniciante, **intermediário** é Intermediário e **difícil** é Avançado.
+{MARCADOR_NIVEIS}
+
+<div class="lista-de-tags" hidden markdown="1">
 
 <!-- material/tags -->
+
+</div>
 """
 
 _slug = slugify(case="lower")  # o mesmo do mkdocs.yml, que imita o GitHub
+_estado = {}  # catálogo do portal (temas, trilhas, contagens), montado no on_files
 
 CERCA = re.compile(r"^(`{3,}|~{3,})")
 TITULO = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
@@ -65,42 +98,27 @@ FOLHA_DE_PROVA = re.compile(
     re.M,
 )
 QUESTAO = re.compile(r"^## Questão (\d+)")
-# Pergunta com corretor: dentro do <details>, a primeira linha "**Resposta:** `...`" (ou Expressão).
-RESPOSTA = re.compile(r"^\*\*(Resposta|Expressão|Expressão mínima|Número|Função|Primitiva):\*\* `([^`]+)`", re.M)
-TIPOS_DE_RESPOSTA = {
-    "Resposta": "valor", "Expressão": "expressao", "Expressão mínima": "minima",
-    "Número": "numero", "Função": "funcao", "Primitiva": "primitiva",
-}
 
 
-def _fora_de_codigo(linhas):
-    """Gera (índice, linha) só das linhas que não estão dentro de blocos de código."""
-    cerca = None
-    for i, linha in enumerate(linhas):
-        m = CERCA.match(linha.lstrip())
-        if m:
-            if cerca is None:
-                cerca = m.group(1)
-            elif m.group(1).startswith(cerca[0]) and len(m.group(1)) >= len(cerca):
-                cerca = None
-            continue
-        if cerca is None:
-            yield i, linha
+# Partes da linha de navegação que o site não mostra: "Voltar para Python" (com ou sem seta), qualquer link para
+# o README e o "📖 Antes, leia" (os exercícios já têm "Rever a aula" na linha de informações).
+VOLTAR = re.compile(r"voltar|\]\((?:\.\./)*README\.md\)|Antes, leia", re.I)
 
 
 def _sem_navegacao_manual(linhas):
     # Só olha o começo da página, onde ficam os "← voltar".
-    for i, linha in list(_fora_de_codigo(linhas))[:8]:
+    for i, linha in list(fora_de_codigo(linhas))[:8]:
         if not linha.startswith(">") or "←" not in linha and "Próximo:" not in linha:
             continue
         partes = [p.strip() for p in linha.lstrip("> ").split(" · ")]
-        restantes = [p for p in partes if "←" not in p and not p.startswith("Próximo:") and "→]" not in p]
+        restantes = [p for p in partes
+                     if "←" not in p and not p.startswith("Próximo:") and "→]" not in p and not VOLTAR.search(p)]
         linhas[i] = "> " + " · ".join(restantes) if restantes else ""
     return linhas
 
 
 def _titulos_sem_emoji(linhas):
-    for i, linha in _fora_de_codigo(linhas):
+    for i, linha in fora_de_codigo(linhas):
         m = TITULO.match(linha)
         if m and EMOJI.search(m.group(2)):
             texto = m.group(2)
@@ -111,7 +129,7 @@ def _titulos_sem_emoji(linhas):
 
 def _caixas(linhas):
     saida, i = [], 0
-    dentro = {j for j, _ in _fora_de_codigo(linhas)}
+    dentro = {j for j, _ in fora_de_codigo(linhas)}
     while i < len(linhas):
         linha = linhas[i]
         emoji = next((e for e in CAIXAS if linha.startswith(f"> {e}")), None) if i in dentro else None
@@ -197,18 +215,7 @@ def _folha_de_prova(m):
         'role="timer" aria-label="Tempo restante"></span>'
         '<button type="button" class="iniciar md-button md-button--primary">Iniciar</button>'
         '<button type="button" class="zerar md-button">Zerar</button></div></div>'
-        "<script>(function(){document.querySelectorAll('[data-cronometro]').forEach(function(caixa){"
-        "var total=+caixa.dataset.cronometro*60,resto=total,relogio=null;"
-        "var visor=caixa.querySelector('.visor'),iniciar=caixa.querySelector('.iniciar'),zerar=caixa.querySelector('.zerar');"
-        "function mostrar(){var h=Math.floor(resto/3600),m=Math.floor(resto%3600/60),s=resto%60;"
-        "visor.textContent=h+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');"
-        "visor.classList.toggle('text-rose-600',resto<=300);}"
-        "iniciar.onclick=function(){if(relogio){clearInterval(relogio);relogio=null;iniciar.textContent='Continuar';return;}"
-        "iniciar.textContent='Pausar';relogio=setInterval(function(){if(resto>0){resto--;mostrar();}"
-        "else{clearInterval(relogio);relogio=null;visor.textContent='Tempo esgotado!';iniciar.disabled=true;}},1000);};"
-        "zerar.onclick=function(){clearInterval(relogio);relogio=null;resto=total;iniciar.textContent='Iniciar';"
-        "iniciar.disabled=false;mostrar();};mostrar();});})();</script>"
-    )
+    )  # o cronometro.js faz o relógio andar
 
 
 def _editores(markdown):
@@ -225,18 +232,36 @@ def _editores(markdown):
     return "".join(secoes)
 
 
+MARCA_DE_PERGUNTA = re.compile(r"^\*\*([a-z]\)|\d+\.)\*\*")
+ANCORA_EXPLICITA = re.compile(r"\s*\{ #([^}]+) \}\s*$")
+
+
+def _rotulo_e_ancora(titulo, marca):
+    m = ANCORA_EXPLICITA.search(titulo)
+    texto = ANCORA_EXPLICITA.sub("", titulo)
+    ancora = m.group(1) if m else _slug(re.sub(r"[`*_]", "", texto), "-")
+    texto = sem_emoji(re.sub(r"[`*_]|\$", "", texto))
+    return (f"{texto} · {marca}" if marca else texto), ancora
+
+
 def _corretores(markdown):
-    """Põe o campo do corretor (corretor.js) antes de cada <details> que traz uma resposta conferível."""
+    """Põe o campo do corretor (corretor.js) antes de cada <details> que traz uma resposta conferível.
+    O rótulo e a âncora (título da seção + "a)") vão para a lista "Revisar" de quem errou."""
     linhas = markdown.split("\n")
-    fora = {i for i, _ in _fora_de_codigo(linhas)}
-    saida = []
+    caixas = {i: (tipo, resposta) for i, tipo, resposta in perguntas(linhas)}
+    titulos = {i: linha[3:] for i, linha in fora_de_codigo(linhas) if linha.startswith("## ")}
+    saida, titulo, marca = [], "", ""
     for i, linha in enumerate(linhas):
-        if i in fora and linha.startswith("<details"):
-            fim = next((j for j in range(i + 1, len(linhas)) if linhas[j].startswith("</details>")), len(linhas))
-            m = RESPOSTA.search("\n".join(linhas[i:fim]))
-            if m:
-                resposta = html.escape(m.group(2), quote=True)
-                saida += [f'<div class="corretor" data-tipo="{TIPOS_DE_RESPOSTA[m.group(1)]}" data-resposta="{resposta}"></div>', ""]
+        if i in titulos:
+            titulo, marca = titulos[i], ""
+        elif MARCA_DE_PERGUNTA.match(linha):
+            marca = MARCA_DE_PERGUNTA.match(linha).group(1)
+        if i in caixas:
+            tipo, resposta = caixas[i]
+            rotulo, ancora = _rotulo_e_ancora(titulo, marca)
+            atributos = " ".join(f'data-{k}="{html.escape(v, quote=True)}"' for k, v in
+                                 (("tipo", tipo), ("resposta", resposta), ("rotulo", rotulo), ("ancora", ancora)))
+            saida += [f'<div class="corretor" {atributos}></div>', ""]
         saida.append(linha)
     return "\n".join(saida)
 
@@ -259,47 +284,380 @@ def _tabelas_indice(markdown, page, files):
     return TABELA_INDICE.sub(grade_de, markdown)
 
 
-def _inicio(markdown, page, files):
-    # Tira o título, a introdução e o aviso "Leia no site" (redundante aqui).
-    markdown = re.sub(r"\A# .+?\n\n.+?\n\n", "", markdown, flags=re.S)
-    markdown = re.sub(r"^> 🌐 \*\*Leia no site:\*\*.*\n\n?", "", markdown, flags=re.M)
-    # "Primeiros passos", "Conteúdo" e "Simulados" são o que o hero e os cartões já mostram.
-    for secao in ("Primeiros passos", "Conteúdo", "Simulados"):
-        markdown = re.sub(rf"^## [^\n]*{secao}[^\n]*\n.*?(?=^## )", "", markdown, flags=re.S | re.M)
-    heroi = (
-        '<div class="clear-both mb-10 overflow-hidden rounded-2xl border border-indigo-100 bg-linear-to-br from-indigo-50 '
-        "via-white to-sky-50 px-6 py-10 sm:px-10 sm:py-14 dark:border-white/10 dark:from-indigo-500/15 "
-        'dark:via-transparent dark:to-sky-500/10">'
-        '<span class="inline-block rounded-full bg-indigo-600/10 px-3 py-1 text-[0.62rem] font-semibold uppercase '
-        'tracking-wider text-indigo-700 dark:bg-indigo-400/15 dark:text-indigo-200">Ciência da Computação · De aluno para aluno</span>'
-        '<h1 class="mt-4 mb-3 text-[1.7rem] leading-tight font-extrabold tracking-tight text-slate-900 sm:text-[2.2rem] '
-        'dark:text-white">Material de estudo, em um só lugar</h1>'
-        '<p class="m-0 max-w-2xl text-[0.85rem] leading-relaxed text-slate-600 dark:text-slate-300">Resumos curtos, '
-        "exercícios com resposta comentada e guias práticos, organizados por tema.</p>"
-        '<div class="mt-7 flex flex-wrap gap-3">'
-        f'<a class="md-button md-button--primary" href="{_url(files, page, "conteudo/README.md")}">Começar a estudar</a>'
-        f'<a class="md-button" href="{_url(files, page, "GUIA-DE-ACESSO.md")}">Primeiro acesso</a>'
-        "</div></div>"
+def _chave(files, src):
+    """Chave do progresso de uma página: o endereço dela a partir da raiz do site (o File.url)."""
+    arquivo = files.get_file_from_path(src)
+    return arquivo.url if arquivo else src
+
+
+def _numeros_do_tema(tema):
+    """'10 aulas · 90 exercícios · 4 simulados' (o que o tema não tem fica de fora)."""
+    pastas = {posixpath.basename(posixpath.dirname(u.src)) for u in tema.unidades}
+    nome = ("aula", "aulas") if "aulas" in pastas else ("resumo", "resumos") if "resumos" in pastas else ("página", "páginas")
+    partes = [plural(len(tema.unidades), *nome) if tema.unidades else ""]
+    if tema.total_exercicios:
+        partes.append(plural(tema.total_exercicios, "exercício", "exercícios"))
+    if tema.simulados:
+        partes.append(plural(len(tema.simulados), "simulado", "simulados"))
+    return " · ".join(p for p in partes if p)
+
+
+def _temas_por_area():
+    """[(área, [Tema])], na ordem de conteudo/README.md (a mesma do menu)."""
+    por_slug = {t.slug: t for t in _estado["temas"]}
+    return [(area, [por_slug[s] for s in slugs]) for area, slugs in agrupar_por_area(list(por_slug))]
+
+
+def _paginas_de_area(grupos, docs_dir):
+    """{src: área} das páginas de área a gerar (conteudo/<área>/index.md). Se já existe uma pasta de verdade com
+    esse nome (um tema chamado "hardware", por exemplo), a área fica sem página e os links vão para o catálogo."""
+    return {
+        f"conteudo/{area_slug(area)}/index.md": area
+        for area, _ in grupos
+        if not os.path.isdir(os.path.join(docs_dir, "conteudo", area_slug(area)))
+    }
+
+
+def _url_da_area(area, page, files):
+    """A página da área ou, sem ela, o catálogo filtrado pela área."""
+    src = f"conteudo/{area_slug(area)}/index.md"
+    if src in _estado["areas"]:
+        return _url(files, page, src)
+    return f"{_url(files, page, 'conteudo/README.md')}#area-{area_slug(area)}"
+
+
+def _pagina_da_area(area, page, files):
+    """Os temas da área, na mesma lista do catálogo, e o link para o catálogo inteiro."""
+    temas = next(temas for a, temas in _temas_por_area() if a == area)
+    t = totais(temas)
+    numeros = [plural(t["temas"], "tema", "temas"), plural(t["aulas"], "aula", "aulas"),
+               plural(t["exercicios"], "exercício", "exercícios")] + ([plural(t["simulados"], "simulado", "simulados")] if t["simulados"] else [])
+    linhas = "".join(
+        cartao_tema(x, _url(files, page, x.src), [_chave(files, src) for src in x.paginas], _numeros_do_tema(x)) for x in temas
     )
-    cartoes = grade([
-        cartao(_url(files, page, "conteudo/python/README.md"), "Python",
-               "Resumos e 27 exercícios com resposta", "codigo"),
-        cartao(_url(files, page, "conteudo/sistemas-digitais/README.md"), "Sistemas Digitais",
-               "Aulas completas, do binário ao Mapa de Karnaugh", "chip"),
-        cartao(_url(files, page, "conteudo/calculo/README.md"), "Cálculo",
-               "Funções, limites, derivadas, métodos numéricos e integrais", "integral"),
-        cartao(_url(files, page, "conteudo/git/README.md"), "Git",
-               "Comandos, branches e como desfazer erros", "ferramenta"),
-        cartao(_url(files, page, "GUIA-DE-ACESSO.md"), "Guia de Acesso",
-               "Conta, chave SSH, commits assinados e PR", "chave"),
-        cartao(_url(files, page, "simulados/README.md"), "Simulados",
-               "Provas de treino com tempo, pontuação e cronômetro", "relogio"),
-        cartao(_url(files, page, "niveis.md"), "Por nível",
-               "Todo o conteúdo, do iniciante ao avançado", "livro"),
-        cartao(_url(files, page, "CONTRIBUTING.md"), "Como contribuir",
-               "Onde colocar cada coisa e padrões de commit", "maos"),
-    ])
-    return f"{heroi}\n\n## Por onde começar\n\n{cartoes}\n\n{markdown}"
+    return (f"{linha_de_informacoes(None, '', numeros)}\n\n"
+            f'<div class="painel-temas" data-area="{area_slug(area)}">{linhas}</div>\n\n'
+            f'<p class="temas-rodape"><a href="{_url(files, page, "conteudo/README.md")}">Ver todo o conteúdo →</a></p>\n')
+
+
+def _menu_do_catalogo(page, files):
+    """Menu da aba Conteúdo fora dos temas (catálogo, Por nível e páginas de área)."""
+    url = lambda alvo: _url(files, page, alvo)  # noqa: E731
+    grupos = [(area, temas, _url_da_area(area, page, files)) for area, temas in _temas_por_area()]
+    page.meta["trilha"] = html_do_menu_do_catalogo(grupos, url, lambda alvo: _chave(files, alvo), url("conteudo/README.md"),
+                                                   url(PAGINA_NIVEIS), url(page.file.src_uri))
+    page.meta["trilha_rotulo"] = "Temas por área"
+    page.meta["trilha_abas"] = html_das_abas([Link(a.titulo, url(a.url)) for a in _estado["abas"]])
+
+
+def _catalogo(page, files):
+    """Página Conteúdo: filtros (busca e área) e os cartões compactos de tema, agrupados por área."""
+    grupos = _temas_por_area()
+    secoes = "".join(
+        grupo_de_temas(area, "".join(
+            cartao_tema(t, _url(files, page, t.src), [_chave(files, src) for src in t.paginas], _numeros_do_tema(t))
+            for t in temas
+        ))
+        for area, temas in grupos
+    )
+    return (f"{filtros_do_catalogo([(area, len(temas)) for area, temas in grupos])}\n\n{secoes}\n\n"
+            f'<p class="temas-rodape"><a href="{_url(files, page, PAGINA_NIVEIS)}">Ver todo o conteúdo por nível →</a></p>')
+
+
+def _por_nivel(page, files):
+    """Página "Por nível": filtros (nível, área, tipo) e os itens agrupados por área e tema, como nas
+    plataformas de curso (Codecademy, Coursera). Aulas e resumos pelo nível da tabela do roteiro, exercícios
+    pelo nome do arquivo (fácil = Iniciante...), simulados pela tabela de simulados/README.md."""
+    url = lambda src: _url(files, page, src)  # noqa: E731
+    secoes, todos = [], []
+    for area, temas in _temas_por_area():
+        paineis = []
+        for t in temas:
+            itens = []
+            for u in t.unidades:
+                itens.append(("aula", f"{rotulo_da_unidade(u)} {u.numero} · {u.titulo}", u.src, u.nivel, f"~{u.minutos} min"))
+                for e in u.exercicios:
+                    meta = plural(e.perguntas, "pergunta", "perguntas") if e.perguntas else plural(e.exercicios, "exercício", "exercícios")
+                    itens.append(("exercicio", f"{u.titulo} · {NOME_DO_NIVEL[e.nivel]}", e.src, NIVEL_DO_EXERCICIO[e.nivel], meta))
+            itens += [("simulado", s.titulo, s.src, s.nivel, s.duracao) for s in t.simulados]
+            itens = [i for i in itens if i[3]]  # sem nível não entra
+            todos += [(i[0], i[3], area) for i in itens]
+            if itens:
+                paineis.append(painel_de_nivel(t, url(t.src), [
+                    item_de_nivel(tipo, titulo, url(src), _chave(files, src), nivel, area, meta)
+                    for tipo, titulo, src, nivel, meta in itens
+                ]))
+        if paineis:
+            secoes.append(grupo_de_temas(area, "".join(paineis), painel=False))
+    conta = lambda chave: {v: sum(1 for i in todos if i[chave] == v) for v in {i[chave] for i in todos}}  # noqa: E731
+    por_tipo, por_nivel, por_area = conta(0), conta(1), conta(2)
+    filtros = barra_de_filtros([
+        ("nivel", "Nível", [(NIVEL_VALOR[n], n, por_nivel.get(n, 0)) for n in NIVEIS], len(todos)),
+        ("area", "Área", [(area_slug(a), a, por_area[a]) for a, _ in _temas_por_area() if a in por_area], len(todos)),
+        ("tipo", "Tipo", [(v, nome, por_tipo.get(v, 0)) for v, nome in TIPOS], len(todos)),
+    ], "item", "itens")
+    return (
+        "Escolha o nível e, se quiser, a área e o tipo. Tudo fica agrupado por área e por tema.\n\n"
+        f"{legenda_dos_niveis()}\n\n{filtros}\n\n{''.join(secoes)}\n"
+    )
+
+
+def _areas(page, files):
+    """Home: um bloco por área, com os temas como etiquetas. O catálogo completo fica em Conteúdo."""
+    blocos = "".join(
+        cartao_area(area, [(t, _url(files, page, t.src), [_chave(files, src) for src in t.paginas]) for t in temas],
+                    _url_da_area(area, page, files))
+        for area, temas in _temas_por_area()
+    )
+    return f'<div class="areas">{blocos}</div>'
+
+
+def _leitura(minutos):
+    return f"~{round(minutos / 60)} h de leitura" if minutos >= 90 else f"~{minutos} min de leitura"
+
+
+def _pagina_do_tema(markdown, tema, page, files):
+    """README do tema: cabeçalho de curso depois do título; a tabela do roteiro vira a trilha; "Teste-se"
+    com os simulados no fim da seção do roteiro."""
+    url = lambda src: _url(files, page, src)  # noqa: E731
+    numeros = _numeros_do_tema(tema)
+    if tema.unidades:
+        numeros += " · " + _leitura(sum(u.minutos for u in tema.unidades))
+    primeira = url(tema.unidades[0].src) if tema.unidades else None
+    cabecalho = cabecalho_tema(tema, numeros, primeira, [_chave(files, src) for src in tema.paginas])
+    markdown = re.sub(r"^# .*$", lambda m: f"{m.group(0)}\n\n{cabecalho}\n", markdown, count=1, flags=re.M)
+
+    m = tabela_roteiro(markdown)
+    if not (m and tema.unidades):
+        return markdown
+    itens = [
+        item_trilha(u.numero, u.titulo, url(u.src), _chave(files, u.src), u.descricao, u.nivel, u.minutos,
+                    [(e.nivel, url(e.src), _chave(files, e.src), e.perguntas) for e in u.exercicios],
+                    rotulo_da_unidade(u))
+        for u in tema.unidades
+    ]
+    antes, depois = markdown[: m.start()], markdown[m.end():]
+    if tema.simulados:
+        teste = "## Teste-se\n\n" + simulados_do_tema([
+            (s.titulo, url(s.src), _chave(files, s.src), s.perguntas, s.nivel, s.duracao) for s in tema.simulados
+        ]) + "\n\n"
+        proxima = re.search(r"^## ", depois, re.M)
+        depois = depois[: proxima.start()] + teste + depois[proxima.start():] if proxima else depois + "\n\n" + teste
+    return f"{antes}{trilha(itens, tema.area)}\n{depois}"
+
+
+# Por tipo de unidade: (rótulo da próxima, texto do botão, texto depois de marcado, "rever ...").
+TEXTOS_DA_UNIDADE = {
+    "Aula": ("Próxima aula", "Marcar aula como concluída", "Aula concluída", "Rever a aula"),
+    "Resumo": ("Próximo resumo", "Marcar resumo como concluído", "Resumo concluído", "Rever o resumo"),
+    "Parte": ("Próxima parte", "Marcar como concluída", "Concluída", "Rever a parte"),
+}
+
+
+def _tema_da_pagina(temas, src):
+    """O tema cuja pasta contém a página (conteudo/python/... -> Python)."""
+    return next((t for t in temas if src.startswith(posixpath.dirname(t.src) + "/")), None)
+
+
+def _mais_do_tema(tema, files):
+    """[(título, src)]: páginas do tema fora da trilha (formulário, lista de exercícios...). Ficam de fora as
+    geradas (listagens de pasta e páginas de .py) e as respostas."""
+    pasta = posixpath.dirname(tema.src) + "/"
+    da_trilha = {tema.src} | {u.src for u in tema.unidades} | {e.src for u in tema.unidades for e in u.exercicios}
+    mais = []
+    for f in files.documentation_pages():
+        src = f.src_uri
+        if not src.startswith(pasta) or src in da_trilha or f.generated_by or "/respostas/" in src:
+            continue
+        with open(f.abs_src_path, encoding="utf-8") as arquivo:
+            achou = re.search(r"^#\s+(.+)$", arquivo.read(), re.M)
+        mais.append((sem_emoji(achou.group(1)) if achou else posixpath.basename(src), src))
+    return sorted(mais, key=lambda m: m[1])
+
+
+def _menu_e_caminho(page, files, tema):
+    """Menu da trilha e caminho no topo, em page.meta (os templates de overrides/partials/ só os mostram)."""
+    src = page.file.src_uri
+    url = lambda alvo: _url(files, page, alvo)  # noqa: E731
+    chave = lambda alvo: _chave(files, alvo)  # noqa: E731
+    url_conteudo = url("conteudo/README.md")
+    enunciado = page.meta.get("resposta_de")  # nas respostas: o enunciado que aponta para elas
+    if page.meta.get("sobretitulo"):  # o da resposta vem no front matter (hooks.py)
+        page.meta["sobretitulo_html"] = sobretitulo(page.meta["sobretitulo"], tema.area)
+    lugar = _estado["lugares"].get(enunciado or src)
+    menu = montar_menu(tema, src, url, chave, url_conteudo, _estado["mais"].get(tema.slug, ()), enunciado)
+    page.meta["trilha"] = html_do_menu(menu)
+    page.meta["trilha_rotulo"] = f"Trilha de {tema.titulo}"
+    page.meta["trilha_abas"] = html_das_abas([Link(a.titulo, url(a.url)) for a in _estado["abas"]])
+    url_area = _url_da_area(tema.area, page, files)
+    if src == tema.src:
+        links = caminho(tema, url, url_conteudo, pagina_do_tema=True, url_area=url_area)
+    elif lugar and lugar.exercicio:
+        links = caminho(tema, url, url_conteudo, lugar.unidade, lugar.exercicio, resposta=bool(enunciado), url_area=url_area)
+    elif lugar and lugar.unidade:
+        links = caminho(tema, url, url_conteudo, lugar.unidade, url_area=url_area)
+    else:
+        links = caminho(tema, url, url_conteudo, url_area=url_area)
+    page.meta["caminho"] = html_do_caminho(links)
+
+
+def _proxima_unidade(tema, unidade):
+    i = tema.unidades.index(unidade)
+    return tema.unidades[i + 1] if i + 1 < len(tema.unidades) else None
+
+
+# Exercício no HTML final: o título "Exercício NN: Título" (com o ¶ do permalink) e o índice da direita.
+H2_EXERCICIO = re.compile(r'<h2 id="([^"]+)">Exercício (\d+): (.*?)(<a class="headerlink"[^>]*>.*?</a>)?</h2>', re.S)
+EXERCICIO_NO_INDICE = re.compile(r"^Exercício (\d+): (.+)$")
+FIM_DO_CARTAO = ("<hr />", "<div hidden data-visita", "<h2")
+ANCORA_DO_TITULO = re.compile(r"\s*\{ #[^}]+\}\s*$")
+
+
+def _cartoes_de_exercicio(html):
+    """Cada "## Exercício NN: Título" vira um cartão, com o número num selo. O cartão vai até o <hr /> que separa
+    os exercícios, o próximo <h2> ou o fim da página. Feito no HTML final para não mexer no Markdown."""
+    achados = list(H2_EXERCICIO.finditer(html))
+    if not achados:
+        return html
+    partes = [html[: achados[0].start()]]
+    for i, m in enumerate(achados):
+        fim = achados[i + 1].start() if i + 1 < len(achados) else len(html)
+        corpo = html[m.end(): fim]
+        corte = min((p for p in (corpo.find(marca) for marca in FIM_DO_CARTAO) if p >= 0), default=len(corpo))
+        dentro, resto = corpo[:corte], corpo[corte:]
+        if resto.startswith("<hr />"):
+            resto = resto[len("<hr />"):]  # entre cartões, o separador sobra
+        titulo = f'<h2 id="{m.group(1)}"><span class="num">{m.group(2)}</span> {m.group(3)}{m.group(4) or ""}</h2>'
+        partes.append(f'<section class="exercicio-cartao">{titulo}{dentro}</section>{resto}')
+    return "".join(partes)
+
+
+def _indice_de_exercicios(toc):
+    """No índice da direita, "Exercício 03: Saudação" vira "03 · Saudação"."""
+    for item in toc:
+        m = EXERCICIO_NO_INDICE.match(item.title)
+        if m:
+            item.title = f"{m.group(1)} · {m.group(2)}"
+        _indice_de_exercicios(item.children)
+
+
+def _com_sobretitulo(html, sobretitulo):
+    """O sobretítulo entra antes do primeiro <h1> do HTML final (ou no começo, se não houver h1)."""
+    i = html.find("<h1")
+    return html[:i] + sobretitulo + html[i:] if i >= 0 else sobretitulo + html
+
+
+def _esconder(page, *itens):
+    page.meta["hide"] = list(dict.fromkeys([*page.meta.get("hide", []), *itens]))
+
+
+def _titulo_visivel(original, novo):
+    """Troca o texto do título e mantém a âncora explícita ({ #id }), se houver."""
+    if novo is None:
+        return original
+    ancora = ANCORA_DO_TITULO.search(original)
+    return novo + (ancora.group(0) if ancora else "")
+
+
+def _pagina_da_trilha(markdown, lugar, page, files):
+    """Aula, exercícios ou simulado: cabeçalho (sobretítulo e linha de informações), marcador de visita e o fim
+    da página (concluir e o próximo passo)."""
+    tema, unidade = lugar.tema, lugar.unidade
+    url = lambda src: _url(files, page, src)  # noqa: E731
+    chave = _chave(files, page.file.src_uri)
+    if lugar.simulado:
+        s = lugar.simulado
+        topo = informacoes([tema.titulo, "Simulado", s.duracao])
+        markdown = re.sub(r"^# .*$", lambda m: f"{m.group(0)}\n\n{topo}\n", markdown, count=1, flags=re.M)
+        fim = fim_de_pagina(chave, "Marcar como feito", feito="Feito")
+        return f"{markdown.rstrip()}\n\n{marcador_de_visita(tema.slug, f'{s.titulo} · {tema.titulo}')}{fim}\n"
+
+    rotulo = rotulo_da_unidade(unidade)
+    rotulo_proxima, botao, feito, rever = TEXTOS_DA_UNIDADE[rotulo]
+    seguinte = _proxima_unidade(tema, unidade)
+    proxima = (rotulo_proxima, seguinte.titulo, url(seguinte.src)) if seguinte else None
+    fim_da_trilha = (("Fim da trilha", "Teste-se nos simulados", url(tema.src) + "#teste-se") if tema.simulados
+                     else ("Fim da trilha", f"Voltar para {tema.titulo}", url(tema.src)))
+    pagina_do_tema = page.file.src_uri == tema.src  # o README como unidade: ele já tem o cabeçalho de curso
+    edicao = page.edit_url
+    if not pagina_do_tema:
+        page.edit_url = None  # os ícones do Material saem; o link vira "Sugerir melhoria" na linha de informações
+    url_niveis = url(PAGINA_NIVEIS)
+    if lugar.exercicio:
+        e = lugar.exercicio
+        nome = NOME_DO_NIVEL[e.nivel]
+        quantas = plural(e.perguntas, "pergunta", "perguntas") if e.perguntas else plural(e.exercicios, "exercício", "exercícios")
+        antes = sobretitulo(f"Exercícios · {rotulo} {unidade.numero}", tema.area)
+        depois = (linha_de_informacoes(None, url_niveis, [quantas], [(rever, url(unidade.src)), ("Sugerir melhoria", edicao)])
+                  + abas_de_nivel([(x.nivel, url(x.src), _chave(files, x.src), x is e) for x in unidade.exercicios]))
+        novo_titulo = unidade.titulo  # o nível já está nas abas
+        page.meta["titulo_da_pagina"] = f"{unidade.titulo} · {nome}"  # aba do navegador e busca (on_page_content)
+        i = unidade.exercicios.index(e)
+        if i + 1 < len(unidade.exercicios):
+            outro = unidade.exercicios[i + 1]
+            principal = ("Próximo nível", NOME_DO_NIVEL[outro.nivel], url(outro.src))
+        else:
+            principal = proxima or fim_da_trilha
+        fim = proximo_passo(chave, "Marcar exercícios como concluídos", "Exercícios concluídos", principal=principal)
+        visita = f"{unidade.titulo} · {nome}"
+    else:
+        nivel = (page.meta.get("tags") or [None])[0]
+        antes = sobretitulo(f"{rotulo} {unidade.numero} de {tema.unidades[-1].numero}", tema.area)
+        depois = (linha_de_informacoes(nivel, url_niveis, [f"~{unidade.minutos} min de leitura"], [("Sugerir melhoria", edicao)])
+                  + segmentos([(_chave(files, u.src), u is unidade) for u in tema.unidades])
+                  + '<div class="barra-leitura" aria-hidden="true"></div>')
+        novo_titulo = None
+        pratique = [(x.nivel, url(x.src), _chave(files, x.src), x.perguntas, x.exercicios) for x in unidade.exercicios]
+        if pratique:
+            fim = proximo_passo(chave, botao, feito, pratique=pratique, secundario=proxima)
+        else:
+            fim = proximo_passo(chave, botao, feito, principal=proxima or fim_da_trilha)
+        visita = f"{rotulo} {unidade.numero} · {unidade.titulo}"
+    if not pagina_do_tema:
+        # O sobretítulo só entra no HTML final (on_page_context), depois que a busca indexou a página: antes do
+        # "# Título" no Markdown, ele tiraria o título da página e duplicaria a página na busca.
+        page.meta["sobretitulo_html"] = antes
+        markdown = re.sub(r"^# (.*)$", lambda m: f"# {_titulo_visivel(m.group(1), novo_titulo)}\n\n{depois}\n",
+                          markdown, count=1, flags=re.M)
+        _esconder(page, "tags", "footer")  # o nível está na linha de informações; o próximo passo substitui o rodapé
+    return f"{markdown.rstrip()}\n\n{marcador_de_visita(tema.slug, visita)}{fim}\n"
+
+
+def _meu_progresso(page, files):
+    """A página "Meu progresso": tudo aqui é preenchido pelo portal.js com o que está no navegador."""
+    blocos, titulos = [], {}
+    for tema in [t for _, temas in _temas_por_area() for t in temas]:
+        blocos.append(progresso_do_tema(tema, _url(files, page, tema.src), [_chave(files, s) for s in tema.paginas]))
+        for src, lugar in _estado["lugares"].items():
+            if lugar.tema is not tema:
+                continue
+            if lugar.simulado:
+                titulo = f"{lugar.simulado.titulo} · {tema.titulo}"
+            elif lugar.exercicio:
+                titulo = f"{lugar.unidade.titulo} · {NOME_DO_NIVEL[lugar.exercicio.nivel]}"
+            else:
+                titulo = f"{rotulo_da_unidade(lugar.unidade)} {lugar.unidade.numero} · {lugar.unidade.titulo}"
+            titulos[_chave(files, src)] = titulo
+    # Num atributo, e não num <script>: com navigation.instant o Material reexecuta os <script> do conteúdo.
+    dados = html.escape(json.dumps(titulos, ensure_ascii=False), quote=True)
+    return (
+        f"{aviso_local()}\n\n## Resumo\n\n{resumo_estudo()}\n\n## Por tema\n\n"
+        f'<div class="progresso-temas">{"".join(blocos)}</div>\n\n## Revisar\n\n{revisar()}\n\n'
+        f'<div hidden data-titulos="{dados}"></div>\n\n'
+        "<noscript><p>Esta página precisa de JavaScript para ler o seu progresso.</p></noscript>\n"
+    )
+
+
+def _inicio(page, files):
+    """A home do site é só o portal: o README da raiz continua igual no GitHub."""
+    t = totais(_estado["temas"])
+    numeros = [(t["temas"], "temas"), (t["aulas"], "aulas e resumos"), (t["exercicios"], "exercícios"),
+               (t["simulados"], "simulados")]
+    continuar = bloco_continuar(_url(files, page, "conteudo/README.md"))
+    return (
+        f"{heroi(numeros, continuar)}\n\n## Explore por área\n\n{_areas(page, files)}\n\n"
+        f"## Como estudar aqui\n\n{faixa_como_estudar(_url(files, page, 'simulados/README.md'))}\n"
+    )
 
 
 def on_config(config):
@@ -310,10 +668,18 @@ def on_config(config):
 
 
 def on_files(files, config):
+    _estado["temas"] = montar(config["docs_dir"])
+    _estado["lugares"] = lugares(_estado["temas"])
+    _estado["mais"] = {tema.slug: _mais_do_tema(tema, files) for tema in _estado["temas"]}
+    _estado["areas"] = _paginas_de_area(_temas_por_area(), config["docs_dir"])
+    for src, area in _estado["areas"].items():
+        files.append(File.generated(config, src, content=f"# {area}\n\n{MARCADOR_AREA}\n", inclusion=InclusionLevel.INCLUDED))
     for origem, destino in ARQUIVOS_DO_SITE.items():
         with open(os.path.join(os.path.dirname(__file__), origem), encoding="utf-8") as f:
             files.append(File.generated(config, destino, content=f.read(), inclusion=InclusionLevel.NOT_IN_NAV))
     files.append(File.generated(config, PAGINA_NIVEIS, content=CONTEUDO_NIVEIS, inclusion=InclusionLevel.INCLUDED))
+    files.append(File.generated(config, PAGINA_PROGRESSO, content=f"# Meu progresso\n\n{MARCADOR_PROGRESSO}\n",
+                                inclusion=InclusionLevel.INCLUDED))
     return files
 
 
@@ -339,6 +705,26 @@ def on_page_markdown(markdown, page, config, files):
     linhas = _caixas(linhas)
     markdown = "\n".join(linhas)
     markdown = _exemplos(markdown)
+    tema = next((t for t in _estado["temas"] if t.src == page.file.src_uri), None)
+    if tema:
+        markdown = _pagina_do_tema(markdown, tema, page, files)
+    lugar = _estado["lugares"].get(page.file.src_uri)
+    if lugar:
+        markdown = _pagina_da_trilha(markdown, lugar, page, files)
+    tema_da_pagina = _tema_da_pagina(_estado["temas"], page.file.src_uri)
+    if tema_da_pagina:
+        _menu_e_caminho(page, files, tema_da_pagina)
+    if page.file.src_uri == "conteudo/README.md":  # a tabela de temas vira o catálogo do portal
+        markdown = TABELA_INDICE.sub(lambda m: _catalogo(page, files) + "\n", markdown, count=1)
+        page.meta["hide"] = ["toc"]  # o catálogo usa a largura toda
+    area = _estado["areas"].get(page.file.src_uri)
+    if area:
+        markdown = markdown.replace(MARCADOR_AREA, _pagina_da_area(area, page, files))
+        page.meta["hide"] = ["toc"]
+        page.meta["sobretitulo_html"] = sobretitulo("Área", area)
+        page.meta["caminho"] = html_do_caminho([Link("Conteúdo", _url(files, page, "conteudo/README.md"))])
+    if page.file.src_uri in ("conteudo/README.md", PAGINA_NIVEIS) or area:
+        _menu_do_catalogo(page, files)
     markdown = _tabelas_indice(markdown, page, files)
     if page.file.src_uri.startswith("simulados/") and FOLHA_DE_PROVA.search(markdown):
         markdown = FOLHA_DE_PROVA.sub(_folha_de_prova, markdown)
@@ -346,21 +732,48 @@ def on_page_markdown(markdown, page, config, files):
             markdown = _editores(markdown)
     markdown = _corretores(markdown)
     markdown = VER_RESPOSTA.sub(r"[Ver resposta →](\1){ .md-button }", markdown)
+    if page.file.src_uri == PAGINA_NIVEIS:
+        markdown = markdown.replace(MARCADOR_NIVEIS, _por_nivel(page, files))
+        page.meta["hide"] = ["toc"]
+        page.edit_url = None
+    if page.file.src_uri == PAGINA_PROGRESSO:
+        markdown = markdown.replace(MARCADOR_PROGRESSO, _meu_progresso(page, files))
+        page.meta["hide"] = ["navigation", "toc"]
+        page.edit_url = None
     if page.file.src_uri == "README.md":
-        markdown = _inicio(markdown, page, files)
+        markdown = _inicio(page, files)
         # Página inicial sem menu lateral nem índice: mais espaço para o hero e os cartões.
         page.meta["hide"] = ["navigation", "toc"]
+        page.edit_url = None  # sem "editar"/"ver fonte": a home do site não é o README
     return markdown
 
 
 def on_page_content(html, page, config, files):
-    # O título completo ("Condicionais · Fácil") fica: ele aparece sozinho na página "Por nível".
     if page.file.src_uri == "README.md":
         page.title = "Início"
+    lugar = _estado["lugares"].get(page.file.src_uri)
+    if lugar and lugar.exercicio:
+        _indice_de_exercicios(page.toc)
+    # Nos exercícios, o título visível é só a aula ("Funções"), mas a aba do navegador e a busca precisam do nível.
+    if page.meta.get("titulo_da_pagina"):
+        page.title = page.meta["titulo_da_pagina"]
     return html
 
 
+def on_page_context(context, page, config, nav):
+    # Roda depois da busca (os hooks vêm depois dos plugins): o sobretítulo e os cartões de exercício só mudam o
+    # HTML mostrado, e o índice fica com uma entrada por página e os títulos originais ("Exercício 01: ...").
+    if page.meta.get("sobretitulo_html"):
+        page.content = _com_sobretitulo(page.content, page.meta["sobretitulo_html"])
+    lugar = _estado["lugares"].get(page.file.src_uri)
+    if lugar and lugar.exercicio:
+        page.content = _cartoes_de_exercicio(page.content)
+    return context
+
+
 def on_nav(nav, config, files):
+    _estado["abas"] = abas_do_site(nav.items, TITULOS_DAS_ABAS)
+
     def limpar(itens):
         for item in itens:
             if isinstance(item, Section):

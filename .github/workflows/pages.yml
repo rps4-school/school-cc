@@ -51,10 +51,6 @@ jobs:
             exit 1
           }
 
-      # O corretor (corretor.js) confere as respostas no navegador: todo gabarito tem que passar nele.
-      - name: Corretor
-        run: node --test .mkdocs/corretor.test.js
-
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"

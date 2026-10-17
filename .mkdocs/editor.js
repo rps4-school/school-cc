@@ -130,6 +130,20 @@
     }
   }
 
+  // Ao ir para uma página sem editor (navigation.instant), o Python, que pesa dezenas de MB, não serve mais.
+  function encerrarPython() {
+    fila.splice(0).forEach(function (t) { responder(t, { estado: "parado" }); });
+    if (atual) {
+      clearTimeout(atual.relogio);
+      responder(atual, { estado: "parado" });
+      atual = null;
+    }
+    if (python) {
+      python.worker.terminate();
+      python = null;
+    }
+  }
+
   // ---------- Monaco: carregado uma vez, do CDN ----------
 
   var monaco = null;
@@ -458,6 +472,7 @@
   }
 
   function iniciar() {
+    if (!document.querySelector(".editor-python")) encerrarPython();
     document.querySelectorAll(".editor-python[data-arquivo]:not([data-montado])").forEach(function (caixa) {
       caixa.dataset.montado = "1";
       montar(caixa);
