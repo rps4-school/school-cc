@@ -57,9 +57,10 @@ TITULOS = {
 # mas a pasta não ganha página de listagem nem aparece no menu.
 PASTAS_OCULTAS = {"img"}
 
-# Ordem das abas do topo. O que não estiver aqui fica no meio, em ordem alfabética.
-ORDEM_TOPO_INICIO = ["README.md", "GUIA-DE-ACESSO.md"]
-ORDEM_TOPO_FIM = ["niveis.md", "CONTRIBUTING.md"]  # "simulados" fica no meio, depois de "conteudo"
+# Abas do topo, nesta ordem (o que não estiver aqui vai para o fim, em ordem alfabética).
+# "Colabore" junta as páginas de quem contribui; "Por nível" (niveis.md) fica dentro de Conteúdo.
+ORDEM_TOPO = ["README.md", "conteudo", "simulados", "progresso.md", "Colabore"]
+COLABORE = ["GUIA-DE-ACESSO.md", "CONTRIBUTING.md"]
 
 ORDEM_NIVEIS = {"facil": 1, "intermediario": 2, "dificil": 3}
 
@@ -368,14 +369,38 @@ def on_nav(nav, config, files):
 
     renomear(nav.items)
 
-    def chave(item):
+    def nome(item):
         arquivo = getattr(item, "file", None)
-        nome = arquivo.src_uri if arquivo is not None else (pasta_da_secao(item) or "").split("/")[0]
-        if nome in ORDEM_TOPO_INICIO:
-            return (0, ORDEM_TOPO_INICIO.index(nome), "")
-        if nome in ORDEM_TOPO_FIM:
-            return (2, ORDEM_TOPO_FIM.index(nome), "")
-        return (1, 0, nome)
+        if arquivo is not None:
+            return arquivo.src_uri
+        return item.title if item.title == "Colabore" else (pasta_da_secao(item) or "").split("/")[0]
 
-    nav.items.sort(key=chave)
+    por_nome = {nome(i): i for i in nav.items}
+    colabore = [por_nome[s] for s in COLABORE if s in por_nome]
+    if colabore:
+        secao = Section("Colabore", colabore)
+        for pagina in colabore:
+            pagina.parent = secao
+        nav.items = [i for i in nav.items if i not in colabore] + [secao]
+    niveis, conteudo = por_nome.get("niveis.md"), por_nome.get("conteudo")
+    if niveis is not None and conteudo is not None:
+        nav.items.remove(niveis)
+        conteudo.children.append(niveis)
+        niveis.parent = conteudo
+
+    fora = len(ORDEM_TOPO)
+    nav.items.sort(key=lambda i: (ORDEM_TOPO.index(nome(i)) if nome(i) in ORDEM_TOPO else fora, nome(i)))
+
+    # Anterior/próxima (rodapé) na ordem final do menu, e não na ordem em que o MkDocs leu as pastas.
+    def paginas(itens):
+        for item in itens:
+            if isinstance(item, Section):
+                yield from paginas(item.children)
+            elif getattr(item, "file", None) is not None:
+                yield item
+
+    nav.pages = list(paginas(nav.items))
+    for i, pagina in enumerate(nav.pages):
+        pagina.previous_page = nav.pages[i - 1] if i else None
+        pagina.next_page = nav.pages[i + 1] if i + 1 < len(nav.pages) else None
     return nav

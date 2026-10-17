@@ -33,6 +33,9 @@ ARQUIVOS_DO_SITE = {
     "python-worker.js": "assets/javascripts/python-worker.js",
     "corretor.js": "assets/javascripts/corretor.js",
     "katex-init.js": "assets/javascripts/katex-init.js",
+    "progresso.js": "assets/javascripts/progresso.js",
+    "cronometro.js": "assets/javascripts/cronometro.js",
+    "portal.js": "assets/javascripts/portal.js",
 }
 PAGINA_NIVEIS = "niveis.md"
 CONTEUDO_NIVEIS = """# Por nível
@@ -177,18 +180,7 @@ def _folha_de_prova(m):
         'role="timer" aria-label="Tempo restante"></span>'
         '<button type="button" class="iniciar md-button md-button--primary">Iniciar</button>'
         '<button type="button" class="zerar md-button">Zerar</button></div></div>'
-        "<script>(function(){document.querySelectorAll('[data-cronometro]').forEach(function(caixa){"
-        "var total=+caixa.dataset.cronometro*60,resto=total,relogio=null;"
-        "var visor=caixa.querySelector('.visor'),iniciar=caixa.querySelector('.iniciar'),zerar=caixa.querySelector('.zerar');"
-        "function mostrar(){var h=Math.floor(resto/3600),m=Math.floor(resto%3600/60),s=resto%60;"
-        "visor.textContent=h+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');"
-        "visor.classList.toggle('text-rose-600',resto<=300);}"
-        "iniciar.onclick=function(){if(relogio){clearInterval(relogio);relogio=null;iniciar.textContent='Continuar';return;}"
-        "iniciar.textContent='Pausar';relogio=setInterval(function(){if(resto>0){resto--;mostrar();}"
-        "else{clearInterval(relogio);relogio=null;visor.textContent='Tempo esgotado!';iniciar.disabled=true;}},1000);};"
-        "zerar.onclick=function(){clearInterval(relogio);relogio=null;resto=total;iniciar.textContent='Iniciar';"
-        "iniciar.disabled=false;mostrar();};mostrar();});})();</script>"
-    )
+    )  # o cronometro.js faz o relógio andar
 
 
 def _editores(markdown):

@@ -582,8 +582,9 @@
   }
 
   function iniciar() {
-    var caixas = document.querySelectorAll(".corretor[data-resposta]");
+    var caixas = document.querySelectorAll(".corretor[data-resposta]:not([data-montado])");
     if (!caixas.length) return;
+    caixas.forEach(function (c) { c.dataset.montado = "1"; });
     var acertos = lerAcertos();
     caixas.forEach(function (c, i) { montar(c, i, caixas.length, acertos); });
     atualizarPlacar(caixas.length);
@@ -594,6 +595,8 @@
     module.exports = { conferirPorTipo: conferirPorTipo, analisarMat: analisarMat };
     return;
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", iniciar);
+  // Com navigation.instant, o document$ do Material avisa cada página nova (sem recarregar).
+  if (window.document$) window.document$.subscribe(iniciar);
+  else if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", iniciar);
   else iniciar();
 })();

@@ -4,13 +4,15 @@
 
 site_name: school-cc
 site_description: Material de estudo de Ciência da Computação, feito de aluno para aluno
-site_url: https://rps4-school.github.io/school-cc/
+# A navegação instantânea só segue links que estão no sitemap.xml, feito com este endereço.
+# Para testá-la num servidor local: SITE_URL=http://localhost:8000/ mkdocs build ...
+site_url: !ENV [SITE_URL, "https://rps4-school.github.io/school-cc/"]
 repo_url: https://github.com/rps4-school/school-cc
 repo_name: rps4-school/school-cc
 edit_uri: edit/main/
 
 # Rodapé: nosso texto no lugar de "Made with Material for MkDocs".
-copyright: Feito de Aluno para Aluno
+copyright: 'Feito de Aluno para Aluno · <a href="https://github.com/rps4-school/school-cc/blob/main/LICENSE">Licença Apache 2.0</a>'
 extra:
   generator: false
   # Cor da etiqueta de cada nível (classes .md-tag--<valor> no tailwind.css).
@@ -34,12 +36,16 @@ hooks:
 extra_css:
   - assets/stylesheets/site.css
 
-# Editor de Python dos simulados, corretor de respostas e fórmulas (KaTeX). Publicados pelo visual.py;
-# nas páginas sem editor ou sem pergunta, não fazem nada.
+# Publicados pelo visual.py; numa página sem o que montar, não fazem nada. A ordem importa:
+# progresso.js primeiro (corretor e portal usam a API dele). Com navigation.instant, todos
+# remontam a cada página pelo document$ do Material.
 extra_javascript:
-  - assets/javascripts/editor.js
-  - assets/javascripts/corretor.js
-  - assets/javascripts/katex-init.js
+  - assets/javascripts/progresso.js   # progresso do aluno, salvo só no navegador
+  - assets/javascripts/editor.js      # editor de Python dos simulados
+  - assets/javascripts/corretor.js    # corretor de respostas
+  - assets/javascripts/katex-init.js  # fórmulas (KaTeX)
+  - assets/javascripts/cronometro.js  # cronômetro da folha de prova
+  - assets/javascripts/portal.js      # mostra o progresso nas páginas
 
 theme:
   name: material
@@ -66,6 +72,10 @@ theme:
         icon: material/weather-sunny
         name: Modo claro
   features:
+    # Troca de página sem recarregar, baixando a próxima ao passar o mouse no link.
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
     - navigation.tabs
     - navigation.indexes
     - navigation.top
