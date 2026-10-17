@@ -110,5 +110,29 @@ class PaginaDaResposta(unittest.TestCase):
         self.assertNotIn("enunciado", md)
 
 
+class Redirecionamentos(unittest.TestCase):
+    def test_redireciona_cada_pagina_do_prefixo_novo(self):
+        urls = ["conteudo/python/aulas/", "conteudo/python/aulas/02-listas/", "conteudo/python/"]
+        self.assertEqual(hooks._redirecionamentos(urls, {"conteudo/python/resumos/": "conteudo/python/aulas/"}), [
+            ("conteudo/python/resumos/", "../aulas/"),
+            ("conteudo/python/resumos/02-listas/", "../../aulas/02-listas/"),
+        ])
+
+    def test_nao_sobrescreve_pagina_que_existe(self):
+        self.assertEqual(hooks._redirecionamentos(["a/novo/x/", "a/velho/x/"], {"a/velho/": "a/novo/"}), [])
+
+    def test_sem_pagina_no_prefixo_novo_nao_redireciona(self):
+        self.assertEqual(hooks._redirecionamentos(["a/velho/x/"], {"a/velho/": "a/novo/"}), [])
+
+    def test_pagina_de_redirecionamento(self):
+        html = hooks._pagina_de_redirecionamento("../../aulas/02-listas/")
+        for trecho in ('http-equiv="refresh" content="0; url=../../aulas/02-listas/"', 'rel="canonical" href="../../aulas/02-listas/"',
+                       'name="robots" content="noindex"', '<a href="../../aulas/02-listas/">', "location.hash", 'lang="pt-BR"'):
+            self.assertIn(trecho, html)
+
+    def test_lista_do_repositorio(self):
+        self.assertEqual(hooks.REDIRECIONAMENTOS, {"conteudo/python/resumos/": "conteudo/python/aulas/"})
+
+
 if __name__ == "__main__":
     unittest.main()

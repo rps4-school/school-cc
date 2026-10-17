@@ -106,6 +106,35 @@ def _indice(pasta, pastas_com_readme):
     return posixpath.join(pasta, arquivo) if pasta else arquivo
 
 
+# Pastas que mudaram de nome: os endereços antigos continuam funcionando (o build grava neles uma página
+# que redireciona). Antigo -> novo, como prefixo do endereço publicado.
+REDIRECIONAMENTOS = {"conteudo/python/resumos/": "conteudo/python/aulas/"}
+
+
+def _redirecionamentos(urls, mapa):
+    """[(endereço antigo, destino relativo a ele)] de cada página publicada num prefixo novo. Não redireciona
+    um endereço que ainda tem página."""
+    publicados = set(urls)
+    saida = []
+    for antigo, novo in mapa.items():
+        for url in sorted(u for u in publicados if u.startswith(novo)):
+            velho = antigo + url[len(novo):]
+            if velho not in publicados:
+                saida.append((velho, posixpath.relpath(url, velho) + "/"))
+    return saida
+
+
+def _pagina_de_redirecionamento(destino):
+    d = html.escape(destino, quote=True)
+    return (
+        '<!doctype html>\n<html lang="pt-BR">\n<head>\n<meta charset="utf-8">\n<title>Esta página mudou de endereço</title>\n'
+        f'<meta name="robots" content="noindex">\n<link rel="canonical" href="{d}">\n'
+        f'<meta http-equiv="refresh" content="0; url={d}">\n'
+        f"<script>location.replace({json.dumps(destino)} + location.hash)</script>\n</head>\n"
+        f'<body><p>Esta página mudou de endereço: <a href="{d}">abrir a página nova</a>.</p></body>\n</html>\n'
+    )
+
+
 MARCADOR_LISTAGEM = "<!-- listagem-da-pasta -->"
 
 
@@ -314,6 +343,7 @@ def on_files(files, config):
                 files.append(File.generated(config, src_md, content=pagina, inclusion=_inclusao_do_gerado(src_md)))
                 e["py_paginas"][src_py] = src_md
                 e["gerados_py"].add(src_md)
+    e["urls"] = [f.url for f in files.documentation_pages()]
     return files
 
 
@@ -491,3 +521,13 @@ def on_nav(nav, config, files):
         pagina.previous_page = nav.pages[i - 1] if i else None
         pagina.next_page = nav.pages[i + 1] if i + 1 < len(nav.pages) else None
     return nav
+
+
+def on_post_build(config):
+    for velho, destino in _redirecionamentos(_estado.get("urls", []), REDIRECIONAMENTOS):
+        caminho = os.path.join(config["site_dir"], velho, "index.html")
+        if os.path.exists(caminho):
+            continue
+        os.makedirs(os.path.dirname(caminho), exist_ok=True)
+        with open(caminho, "w", encoding="utf-8") as f:
+            f.write(_pagina_de_redirecionamento(destino))
