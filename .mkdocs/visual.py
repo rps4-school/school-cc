@@ -23,6 +23,7 @@ from mkdocs.structure.nav import Section
 from mkdocs.utils import get_relative_url
 from pymdownx.slugs import slugify
 
+from _catalogo import fora_de_codigo, perguntas
 from _componentes import EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, cartao, grade, sem_emoji
 
 # Arquivos desta pasta publicados no site (o MkDocs ignora pastas que começam com ".").
@@ -65,32 +66,11 @@ FOLHA_DE_PROVA = re.compile(
     re.M,
 )
 QUESTAO = re.compile(r"^## Questão (\d+)")
-# Pergunta com corretor: dentro do <details>, a primeira linha "**Resposta:** `...`" (ou Expressão).
-RESPOSTA = re.compile(r"^\*\*(Resposta|Expressão|Expressão mínima|Número|Função|Primitiva):\*\* `([^`]+)`", re.M)
-TIPOS_DE_RESPOSTA = {
-    "Resposta": "valor", "Expressão": "expressao", "Expressão mínima": "minima",
-    "Número": "numero", "Função": "funcao", "Primitiva": "primitiva",
-}
-
-
-def _fora_de_codigo(linhas):
-    """Gera (índice, linha) só das linhas que não estão dentro de blocos de código."""
-    cerca = None
-    for i, linha in enumerate(linhas):
-        m = CERCA.match(linha.lstrip())
-        if m:
-            if cerca is None:
-                cerca = m.group(1)
-            elif m.group(1).startswith(cerca[0]) and len(m.group(1)) >= len(cerca):
-                cerca = None
-            continue
-        if cerca is None:
-            yield i, linha
 
 
 def _sem_navegacao_manual(linhas):
     # Só olha o começo da página, onde ficam os "← voltar".
-    for i, linha in list(_fora_de_codigo(linhas))[:8]:
+    for i, linha in list(fora_de_codigo(linhas))[:8]:
         if not linha.startswith(">") or "←" not in linha and "Próximo:" not in linha:
             continue
         partes = [p.strip() for p in linha.lstrip("> ").split(" · ")]
@@ -100,7 +80,7 @@ def _sem_navegacao_manual(linhas):
 
 
 def _titulos_sem_emoji(linhas):
-    for i, linha in _fora_de_codigo(linhas):
+    for i, linha in fora_de_codigo(linhas):
         m = TITULO.match(linha)
         if m and EMOJI.search(m.group(2)):
             texto = m.group(2)
@@ -111,7 +91,7 @@ def _titulos_sem_emoji(linhas):
 
 def _caixas(linhas):
     saida, i = [], 0
-    dentro = {j for j, _ in _fora_de_codigo(linhas)}
+    dentro = {j for j, _ in fora_de_codigo(linhas)}
     while i < len(linhas):
         linha = linhas[i]
         emoji = next((e for e in CAIXAS if linha.startswith(f"> {e}")), None) if i in dentro else None
@@ -228,15 +208,12 @@ def _editores(markdown):
 def _corretores(markdown):
     """Põe o campo do corretor (corretor.js) antes de cada <details> que traz uma resposta conferível."""
     linhas = markdown.split("\n")
-    fora = {i for i, _ in _fora_de_codigo(linhas)}
+    caixas = {i: (tipo, resposta) for i, tipo, resposta in perguntas(linhas)}
     saida = []
     for i, linha in enumerate(linhas):
-        if i in fora and linha.startswith("<details"):
-            fim = next((j for j in range(i + 1, len(linhas)) if linhas[j].startswith("</details>")), len(linhas))
-            m = RESPOSTA.search("\n".join(linhas[i:fim]))
-            if m:
-                resposta = html.escape(m.group(2), quote=True)
-                saida += [f'<div class="corretor" data-tipo="{TIPOS_DE_RESPOSTA[m.group(1)]}" data-resposta="{resposta}"></div>', ""]
+        if i in caixas:
+            tipo, resposta = caixas[i]
+            saida += [f'<div class="corretor" data-tipo="{tipo}" data-resposta="{html.escape(resposta, quote=True)}"></div>', ""]
         saida.append(linha)
     return "\n".join(saida)
 
