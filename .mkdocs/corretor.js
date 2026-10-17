@@ -480,35 +480,67 @@
     return { certo: true };
   }
 
-  // ---------- Placar da página ----------
+  // ---------- Progresso da página ----------
 
-  // Calculada só na página: nos testes (Node) não há location.
-  function chave() {
-    return "school-cc:corretor:" + location.pathname;
+  // Acertos e erros vão para o progresso do aluno (progresso.js), que guarda no navegador.
+  // Sem ele, os acertos valem só enquanto a página estiver aberta.
+  var memoria = {};
+
+  function progresso() {
+    return window.SchoolCC && window.SchoolCC.progresso;
   }
 
   function lerAcertos() {
-    try {
-      return JSON.parse(localStorage.getItem(chave())) || {};
-    } catch (e) {
-      return {};
-    }
+    return progresso() ? progresso().pagina().acertos : memoria;
   }
 
-  function salvarAcerto(id, texto) {
-    try {
-      var acertos = lerAcertos();
-      acertos[id] = texto;
-      localStorage.setItem(chave(), JSON.stringify(acertos));
-    } catch (e) { /* sem localStorage: o placar só não fica salvo */ }
+  function registrar(id, certo, info) {
+    if (progresso()) progresso().conferiu(id, certo, info);
+    else if (certo) memoria[id] = info.valor;
   }
 
-  function atualizarPlacar(total) {
+  // ---------- Placar: um só por página, preso embaixo da tela ----------
+
+  function placar() {
+    var p = document.querySelector(".placar-pagina");
+    if (p) return p;
+    p = document.createElement("div");
+    p.className = "placar-pagina not-prose";
+    p.setAttribute("role", "status");
+    p.innerHTML =
+      '<span class="texto"></span>' +
+      '<span class="barra-progresso" role="progressbar" aria-label="Perguntas certas nesta página" ' +
+      'aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></span>' +
+      '<button type="button" class="recomecar">Recomeçar</button>';
+    p.querySelector(".recomecar").onclick = recomecar;
+    (document.querySelector(".md-content__inner") || document.body).appendChild(p);
+    return p;
+  }
+
+  // Devolve true quando todas as perguntas da página estão certas.
+  function atualizarPlacar() {
+    var caixas = document.querySelectorAll(".corretor[data-montado]");
     var feitos = 0;
-    document.querySelectorAll(".corretor").forEach(function (c) { if (c.dataset.acertou) feitos++; });
-    document.querySelectorAll(".corretor .placar").forEach(function (p) {
-      p.textContent = feitos + " de " + total + " certas nesta página";
+    caixas.forEach(function (c) { if (c.dataset.acertou) feitos++; });
+    var p = placar();
+    var pct = caixas.length ? Math.round((100 * feitos) / caixas.length) : 0;
+    p.querySelector(".texto").textContent = feitos + " de " + caixas.length + " certas";
+    var barra = p.querySelector("[role=progressbar]");
+    barra.setAttribute("aria-valuenow", pct);
+    barra.firstChild.style.width = pct + "%";
+    return caixas.length > 0 && feitos === caixas.length;
+  }
+
+  function recomecar() {
+    if (!window.confirm("Apagar os acertos desta página?")) return;
+    if (progresso()) progresso().recomecar();
+    else memoria = {};
+    document.querySelectorAll(".corretor[data-montado]").forEach(function (c) {
+      delete c.dataset.acertou;
+      c.querySelector(".campo").value = "";
+      c.querySelector(".retorno").textContent = "";
     });
+    atualizarPlacar();
   }
 
   // ---------- Montagem ----------
@@ -525,29 +557,26 @@
     return conferirExpressao(resposta, digitado, tipo === "minima");
   }
 
-  function montar(caixa, indice, total, acertos) {
+  function montar(caixa, indice, acertos) {
     var tipo = caixa.dataset.tipo;
     var resposta = caixa.dataset.resposta;
     var id = indice + ":" + resposta;
-    caixa.className = "corretor not-prose my-3 rounded-xl border border-indigo-200 bg-indigo-50/50 px-4 py-3 " +
+    caixa.className = "corretor not-prose my-3 rounded-xl border border-indigo-200 bg-indigo-50/50 px-3 py-2 " +
       "dark:border-indigo-400/20 dark:bg-indigo-400/5";
     caixa.innerHTML =
-      '<label class="flex flex-wrap items-center gap-2">' +
-      '<span class="w-full text-[0.62rem] font-bold uppercase tracking-wider text-indigo-700 sm:w-auto ' +
-      'dark:text-indigo-300">Sua resposta</span>' +
-      '<input type="text" maxlength="200" autocomplete="off" spellcheck="false" class="campo min-w-0 flex-1 rounded-lg border ' +
-      "border-slate-300 bg-white px-3 py-1.5 font-mono text-[0.8rem] text-slate-900 dark:border-white/15 " +
-      'dark:bg-slate-900 dark:text-slate-100">' +
-      '<button type="button" class="conferir md-button md-button--primary">Conferir</button></label>' +
-      '<div class="retorno mt-1 min-h-[1.2em] text-[0.72rem] font-semibold" aria-live="polite"></div>' +
-      '<div class="placar text-[0.6rem] text-slate-500 dark:text-slate-400"></div>';
+      '<div class="flex items-center gap-2">' +
+      '<input type="text" maxlength="200" autocomplete="off" spellcheck="false" aria-label="Sua resposta" ' +
+      'class="campo min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-[0.8rem] ' +
+      'text-slate-900 dark:border-white/15 dark:bg-slate-900 dark:text-slate-100">' +
+      '<button type="button" class="conferir md-button md-button--primary">Conferir</button></div>' +
+      '<div class="retorno text-[0.72rem] font-semibold" aria-live="polite"></div>';
     var campo = caixa.querySelector(".campo");
     var retorno = caixa.querySelector(".retorno");
     var erros = 0;
     campo.placeholder = EXEMPLOS[tipo] || EXEMPLOS.valor;
 
     function mostrar(texto, cor) {
-      retorno.className = "retorno mt-1 min-h-[1.2em] text-[0.72rem] font-semibold " + cor;
+      retorno.className = "retorno mt-1 text-[0.72rem] font-semibold " + cor;
       retorno.textContent = texto;
     }
 
@@ -558,12 +587,14 @@
       if (r.certo) {
         mostrar("✅ Certo!", CERTO);
         caixa.dataset.acertou = "1";
-        salvarAcerto(id, digitado);
-        atualizarPlacar(total);
+        registrar(id, true, { valor: digitado });
+        // Acertou todas: a página conta como concluída no progresso do tema.
+        if (atualizarPlacar() && progresso()) progresso().concluir(null, true);
         return;
       }
       if (r.aviso) return mostrar("⚠️ " + r.dica, AVISO);
       erros++;
+      registrar(id, false, { rotulo: caixa.dataset.rotulo, ancora: caixa.dataset.ancora });
       var texto = "❌ Ainda não." + (r.dica ? " " + r.dica : "");
       if (erros >= 2) texto += " Abra “Ver resposta” logo abaixo para ver o passo a passo.";
       mostrar(texto, ERRADO);
@@ -582,12 +613,15 @@
   }
 
   function iniciar() {
-    var caixas = document.querySelectorAll(".corretor[data-resposta]:not([data-montado])");
-    if (!caixas.length) return;
-    caixas.forEach(function (c) { c.dataset.montado = "1"; });
+    var todas = document.querySelectorAll(".corretor[data-resposta]");
+    var novas = document.querySelectorAll(".corretor[data-resposta]:not([data-montado])");
+    if (!novas.length) return;
     var acertos = lerAcertos();
-    caixas.forEach(function (c, i) { montar(c, i, caixas.length, acertos); });
-    atualizarPlacar(caixas.length);
+    novas.forEach(function (c) {
+      c.dataset.montado = "1";
+      montar(c, Array.prototype.indexOf.call(todas, c), acertos);
+    });
+    atualizarPlacar();
   }
 
   // Nos testes (Node) não há página: só exporta as funções de conferência.

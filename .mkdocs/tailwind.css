@@ -232,3 +232,71 @@
 .md-typeset div.arithmatex > .katex-display {
   margin: 0.6em 0;
 }
+
+/* ---------- Barra de progresso (placar do corretor, temas, trilha) ---------- */
+.barra-progresso {
+  display: block;
+  flex: 1;
+  height: 0.4rem;
+  min-width: 3rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--md-default-fg-color--lightest);
+}
+.barra-progresso > span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: #10b981;
+  transition: width 0.3s ease;
+}
+
+/* ---------- Placar do corretor: um por página, preso embaixo da tela ---------- */
+.placar-pagina {
+  position: sticky;
+  bottom: 0.75rem;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2rem 0 0 auto;
+  padding: 0.45rem 0.5rem 0.45rem 1rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.9rem;
+  background: var(--md-default-bg-color);
+  box-shadow: 0 10px 30px -12px rgb(15 23 42 / 0.35);
+  font-size: 0.7rem;
+}
+@media (min-width: 48em) {
+  .placar-pagina {
+    width: 22rem;
+  }
+}
+.placar-pagina .texto {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.placar-pagina .recomecar {
+  min-height: 2.2rem;
+  padding: 0 0.6rem;
+  border-radius: 0.5rem;
+  color: var(--md-default-fg-color--light);
+  font-weight: 600;
+  cursor: pointer;
+}
+.placar-pagina .recomecar:hover,
+.placar-pagina .recomecar:focus-visible {
+  color: var(--md-accent-fg-color);
+  background: var(--md-default-fg-color--lightest);
+}
+@media (prefers-reduced-motion: reduce) {
+  .barra-progresso > span {
+    transition: none;
+  }
+}
+@media print {
+  .placar-pagina {
+    display: none;
+  }
+}

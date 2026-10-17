@@ -197,15 +197,36 @@ def _editores(markdown):
     return "".join(secoes)
 
 
+MARCA_DE_PERGUNTA = re.compile(r"^\*\*([a-z]\)|\d+\.)\*\*")
+ANCORA_EXPLICITA = re.compile(r"\s*\{ #([^}]+) \}\s*$")
+
+
+def _rotulo_e_ancora(titulo, marca):
+    m = ANCORA_EXPLICITA.search(titulo)
+    texto = ANCORA_EXPLICITA.sub("", titulo)
+    ancora = m.group(1) if m else _slug(re.sub(r"[`*_]", "", texto), "-")
+    texto = sem_emoji(re.sub(r"[`*_]|\$", "", texto))
+    return (f"{texto} · {marca}" if marca else texto), ancora
+
+
 def _corretores(markdown):
-    """Põe o campo do corretor (corretor.js) antes de cada <details> que traz uma resposta conferível."""
+    """Põe o campo do corretor (corretor.js) antes de cada <details> que traz uma resposta conferível.
+    O rótulo e a âncora (título da seção + "a)") vão para a lista "Revisar" de quem errou."""
     linhas = markdown.split("\n")
     caixas = {i: (tipo, resposta) for i, tipo, resposta in perguntas(linhas)}
-    saida = []
+    titulos = {i: linha[3:] for i, linha in fora_de_codigo(linhas) if linha.startswith("## ")}
+    saida, titulo, marca = [], "", ""
     for i, linha in enumerate(linhas):
+        if i in titulos:
+            titulo, marca = titulos[i], ""
+        elif MARCA_DE_PERGUNTA.match(linha):
+            marca = MARCA_DE_PERGUNTA.match(linha).group(1)
         if i in caixas:
             tipo, resposta = caixas[i]
-            saida += [f'<div class="corretor" data-tipo="{tipo}" data-resposta="{html.escape(resposta, quote=True)}"></div>', ""]
+            rotulo, ancora = _rotulo_e_ancora(titulo, marca)
+            atributos = " ".join(f'data-{k}="{html.escape(v, quote=True)}"' for k, v in
+                                 (("tipo", tipo), ("resposta", resposta), ("rotulo", rotulo), ("ancora", ancora)))
+            saida += [f'<div class="corretor" {atributos}></div>', ""]
         saida.append(linha)
     return "\n".join(saida)
 
