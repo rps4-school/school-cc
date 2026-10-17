@@ -631,7 +631,8 @@
       c.dataset.montado = "1";
       montar(c, Array.prototype.indexOf.call(todas, c), acertos);
     });
-    atualizarPlacar();
+    // Tudo certo (ex.: acertos que vieram do corretor antigo) e o aluno nunca marcou nem desmarcou: conclui.
+    if (atualizarPlacar() && progresso() && progresso().pagina().concluida === null) progresso().concluir(null, true);
   }
 
   // Nos testes (Node) não há página: só exporta as funções de conferência.

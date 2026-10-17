@@ -16,20 +16,14 @@
     return "[" + atributo + '="' + CSS.escape(valor) + '"]';
   }
 
-  // Total de perguntas, se a página aparece aqui com data-perguntas.
-  function perguntas(chave) {
-    var el = document.querySelector(com("data-pagina", chave) + "[data-perguntas]");
-    return el ? +el.dataset.perguntas : 0;
-  }
-
   function acertos(d, chave) {
     var p = d.paginas[chave];
     return p ? Object.keys(p.acertos || {}).length : 0;
   }
 
-  function concluida(d, chave, n) {
-    var p = d.paginas[chave];
-    return !!p && (!!p.concluida || (n > 0 && acertos(d, chave) >= n));
+  // Uma regra só, em todo o site: concluída é a marcada (pelo aluno ou pelo corretor, ao acertar tudo).
+  function concluida(d, chave) {
+    return !!(Object.prototype.hasOwnProperty.call(d.paginas, chave) && d.paginas[chave].concluida);
   }
 
   function barra(el, pct) {
@@ -50,7 +44,7 @@
 
     // Páginas da trilha, botões de exercício e simulados.
     todos("[data-pagina]").forEach(function (el) {
-      var chave = el.dataset.pagina, n = +el.dataset.perguntas || 0, feita = concluida(d, chave, n);
+      var chave = el.dataset.pagina, n = +el.dataset.perguntas || 0, feita = concluida(d, chave);
       el.toggleAttribute("data-concluida", feita);
       var sr = el.querySelector("[data-estado-texto]");
       if (sr) sr.textContent = feita ? " (concluída)" : "";
@@ -67,7 +61,7 @@
     // Temas: % de páginas concluídas.
     todos("[data-progresso-tema]").forEach(function (el) {
       var paginas = (el.dataset.paginas || "").split(" ").filter(Boolean);
-      var feitas = paginas.filter(function (c) { return concluida(d, c, perguntas(c)); }).length;
+      var feitas = paginas.filter(function (c) { return concluida(d, c); }).length;
       var pct = paginas.length ? Math.round((100 * feitas) / paginas.length) : 0;
       barra(el, pct);
       var t = el.querySelector("[data-progresso-texto]");
@@ -134,7 +128,7 @@
     if (!dias) return;
     var titulos = JSON.parse(document.querySelector("[data-titulos]").dataset.titulos);
     var chaves = Object.keys(d.paginas), estudou = {};
-    document.querySelector("[data-sem-armazenamento]").hidden = P.disponivel;
+    document.querySelector("[data-sem-armazenamento]").hidden = P.disponivel();
     document.querySelector("[data-sequencia]").textContent = P.sequencia();
     document.querySelector("[data-total-concluidas]").textContent = chaves.filter(function (c) { return d.paginas[c].concluida; }).length;
     document.querySelector("[data-total-certas]").textContent = chaves.reduce(function (n, c) { return n + acertos(d, c); }, 0);
@@ -152,7 +146,7 @@
 
     todos("[data-proximo-passo]").forEach(function (p) {
       var bloco = p.closest("[data-paginas]");
-      var proxima = bloco.dataset.paginas.split(" ").filter(function (c) { return c && !concluida(d, c, 0); })[0];
+      var proxima = bloco.dataset.paginas.split(" ").filter(function (c) { return c && !concluida(d, c); })[0];
       p.textContent = proxima ? (bloco.hasAttribute("data-com-progresso") ? "Próximo: " : "Comece por: ") : "Trilha completa!";
       if (proxima) link(proxima, titulos[proxima] || proxima, p);
     });
@@ -204,8 +198,9 @@
     var leitor = new FileReader();
     leitor.onload = function () {
       try {
-        P.importar(leitor.result);
-        mensagem("Progresso importado e juntado ao que já estava aqui.");
+        mensagem(P.importar(leitor.result)
+          ? "Progresso importado e juntado ao que já estava aqui."
+          : "Progresso importado só nesta aba: este navegador não está salvando.");
       } catch (erro) {
         mensagem(erro.message);
       }

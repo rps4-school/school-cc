@@ -283,8 +283,9 @@ def aviso_local():
         '<div class="aviso-local">'
         "<p><strong>Seu progresso fica salvo só neste navegador.</strong> Ele não vai sozinho para outro computador "
         "ou celular e some se os dados do navegador forem apagados. Para levar, exporte aqui e importe no outro aparelho.</p>"
-        '<p class="aviso-local__bloqueado" data-sem-armazenamento hidden>Este navegador não deixa o site salvar dados. '
-        "O progresso vale só enquanto esta aba estiver aberta.</p>"
+        '<p class="aviso-local__bloqueado" data-sem-armazenamento hidden>Este navegador não está salvando o progresso '
+        "(bloqueado, sem espaço ou com dados de uma versão mais nova do site). Por enquanto, ele vale só enquanto "
+        "esta aba estiver aberta. Nada do que já estava salvo foi apagado.</p>"
         '<div class="aviso-local__botoes">'
         '<button type="button" class="md-button" data-exportar>Exportar</button>'
         '<button type="button" class="md-button" data-importar>Importar</button>'

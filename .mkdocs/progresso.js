@@ -6,11 +6,12 @@
   "use strict";
 
   var CHAVE = "school-cc:progresso";
+  var CHAVE_RECUPERAR = CHAVE + ":recuperar"; // dado salvo que não deu para ler: guardado, nunca apagado
   var CHAVE_ANTIGA = "school-cc:corretor:"; // + caminho da página: formato do corretor até out/2026
   var VERSAO = 1;
   var MAX_DIAS = 120;
-  // Só letras, números, "-", "_", "." e "/": nada de "javascript:".
-  var CAMINHO = /^[\w.\-\/]*$/;
+  // Caminho de página do site: pastas "abc-1/" (a home é ""). Nada de "//", "..", "__proto__" ou "javascript:".
+  var CAMINHO = /^(?:[A-Za-z0-9][\w-]*\/)*$/;
   var DIA = /^\d{4}-\d{2}-\d{2}$/;
 
   function vazio() {
@@ -36,18 +37,34 @@
     return !!x && typeof x === "object" && !Array.isArray(x);
   }
 
+  function texto(x) {
+    return typeof x === "string";
+  }
+
+  function todos(obj, ok) {
+    return objeto(obj) && Object.keys(obj).every(function (k) { return ok(obj[k]); });
+  }
+
+  // Confere cada campo: o dado vem do localStorage ou de um arquivo importado.
   function valido(d) {
     if (!objeto(d) || d.versao !== VERSAO || !objeto(d.paginas) || !Array.isArray(d.dias)) return false;
-    if (!d.dias.every(function (x) { return typeof x === "string" && DIA.test(x); })) return false;
-    if (d.ultima != null && !(objeto(d.ultima) && typeof d.ultima.pagina === "string" && CAMINHO.test(d.ultima.pagina))) return false;
+    if (!d.dias.every(function (x) { return texto(x) && DIA.test(x); })) return false;
+    var u = d.ultima;
+    if (u != null && !(objeto(u) && texto(u.pagina) && CAMINHO.test(u.pagina) &&
+        [u.titulo, u.tema, u.quando].every(function (x) { return x === undefined || texto(x); }))) return false;
     return Object.keys(d.paginas).every(function (k) {
       var p = d.paginas[k];
-      return CAMINHO.test(k) && objeto(p) && (p.acertos == null || objeto(p.acertos)) && (p.erros == null || objeto(p.erros));
+      return CAMINHO.test(k) && objeto(p) &&
+        (p.concluida === undefined || p.concluida === false || (texto(p.concluida) && DIA.test(p.concluida))) &&
+        (p.acertos === undefined || todos(p.acertos, texto)) &&
+        (p.erros === undefined || todos(p.erros, function (e) { return objeto(e) && texto(e.rotulo) && texto(e.ancora); }));
     });
   }
 
+  // Só caminhos válidos são gravados; outro caminho recebe um objeto descartável.
   function pagina(d, caminho) {
-    var p = d.paginas[caminho] || (d.paginas[caminho] = {});
+    if (!CAMINHO.test(caminho)) return { acertos: {}, erros: {} };
+    var p = Object.prototype.hasOwnProperty.call(d.paginas, caminho) ? d.paginas[caminho] : (d.paginas[caminho] = {});
     p.acertos = p.acertos || {};
     p.erros = p.erros || {};
     return p;
@@ -72,9 +89,10 @@
     estudou(d, hoje);
   }
 
+  // Desmarcar grava false: "não concluída" por decisão do aluno (o corretor não marca de novo sozinho).
   function concluir(d, caminho, sim, hoje) {
     var p = pagina(d, caminho);
-    if (!sim) delete p.concluida;
+    if (!sim) p.concluida = false;
     else if (!p.concluida) {
       p.concluida = hoje;
       estudou(d, hoje);
@@ -89,7 +107,7 @@
 
   // ultima: { pagina, titulo, tema, quando (ISO) }
   function visitou(d, ultima) {
-    d.ultima = ultima;
+    if (CAMINHO.test(ultima.pagina)) d.ultima = ultima;
   }
 
   function sequencia(dias, hoje) {
@@ -109,7 +127,9 @@
     var r = JSON.parse(JSON.stringify(a));
     Object.keys(b.paginas).forEach(function (k) {
       var de = b.paginas[k], para = pagina(r, k);
+      // Uma data ganha de false (recusa); entre duas datas, fica a mais antiga.
       if (de.concluida && (!para.concluida || de.concluida < para.concluida)) para.concluida = de.concluida;
+      else if (de.concluida === false && para.concluida === undefined) para.concluida = false;
       Object.keys(de.acertos || {}).forEach(function (id) {
         para.acertos[id] = de.acertos[id];
         delete para.erros[id];
@@ -154,11 +174,88 @@
     return apagar;
   }
 
+  // Endereço de uma página, só se ficar dentro do site; senão, a raiz.
+  function endereco(caminho, raiz) {
+    var u = new URL(caminho, raiz), r = new URL(raiz);
+    return u.origin === r.origin && u.pathname.indexOf(r.pathname) === 0 ? u.href : r.href;
+  }
+
+  function copia(d) {
+    return JSON.parse(JSON.stringify(d));
+  }
+
+  // O localStorage (ou nenhum). Se não der para gravar (bloqueado, cheio, ou dado de uma versão mais
+  // nova do site), o progresso fica só na memória e disponivel() avisa. Nada salvo é apagado sem cópia.
+  function armazem(storage) {
+    var memoria = vazio(), soMemoria = !storage;
+    try {
+      storage.setItem(CHAVE + ":teste", "1");
+      storage.removeItem(CHAVE + ":teste");
+    } catch (e) {
+      soMemoria = true;
+    }
+    if (!soMemoria) {
+      var bruto = storage.getItem(CHAVE), d = null;
+      try {
+        d = JSON.parse(bruto);
+      } catch (e) { /* inválido: vai para a chave de recuperação */ }
+      if (valido(d)) memoria = d;
+      else if (objeto(d) && typeof d.versao === "number" && d.versao > VERSAO) soMemoria = true;
+      else if (bruto !== null && storage.getItem(CHAVE_RECUPERAR) === null) {
+        try {
+          storage.setItem(CHAVE_RECUPERAR, bruto);
+        } catch (e) {
+          soMemoria = true;
+        }
+      }
+    }
+
+    function carregar() {
+      if (!soMemoria) {
+        try {
+          var d = JSON.parse(storage.getItem(CHAVE));
+          if (valido(d)) memoria = d; // outra aba pode ter mudado
+        } catch (e) { /* fica a memória */ }
+      }
+      return copia(memoria);
+    }
+
+    function salvar(d) {
+      memoria = copia(d);
+      if (soMemoria) return false;
+      try {
+        storage.setItem(CHAVE, JSON.stringify(d));
+        return true;
+      } catch (e) {
+        soMemoria = true; // cheio
+        return false;
+      }
+    }
+
+    return {
+      disponivel: function () { return !soMemoria; },
+      carregar: carregar,
+      salvar: salvar,
+      // Converte as chaves antigas do corretor; só apaga se conseguiu salvar.
+      migrar: function (raiz) {
+        if (soMemoria) return;
+        var pares = [];
+        for (var i = 0; i < storage.length; i++) {
+          var k = storage.key(i);
+          if (k && k.indexOf(CHAVE_ANTIGA) === 0) pares.push([k, storage.getItem(k)]);
+        }
+        if (!pares.length) return;
+        var d = carregar(), apagar = migrar(d, pares, raiz);
+        if (salvar(d)) apagar.forEach(function (k) { storage.removeItem(k); });
+      },
+    };
+  }
+
   if (typeof module !== "undefined" && module.exports) {
     module.exports = {
       vazio: vazio, dia: dia, valido: valido, conferiu: conferiu, concluir: concluir, recomecar: recomecar,
       visitou: visitou, sequencia: sequencia, juntar: juntar, lerArquivo: lerArquivo, migrar: migrar,
-      CHAVE_ANTIGA: CHAVE_ANTIGA,
+      endereco: endereco, armazem: armazem, CHAVE_ANTIGA: CHAVE_ANTIGA,
     };
     return;
   }
@@ -174,40 +271,19 @@
     }
   })();
 
-  var disponivel = (function () {
-    try {
-      localStorage.setItem(CHAVE + ":teste", "1");
-      localStorage.removeItem(CHAVE + ":teste");
-      return true;
-    } catch (e) {
-      return false;
-    }
-  })();
-  var memoria = vazio(); // sem localStorage: o progresso vale só enquanto a aba estiver aberta
+  var armazenamento = null;
+  try {
+    armazenamento = window.localStorage;
+  } catch (e) { /* bloqueado: só memória */ }
+  var A = armazem(armazenamento);
 
-  function carregar() {
-    if (!disponivel) return memoria;
-    try {
-      var d = JSON.parse(localStorage.getItem(CHAVE));
-      return valido(d) ? d : vazio();
-    } catch (e) {
-      return vazio();
-    }
-  }
-
-  function salvar(d) {
-    memoria = d;
-    if (!disponivel) return;
-    try {
-      localStorage.setItem(CHAVE, JSON.stringify(d));
-    } catch (e) { /* cheio: fica na memória */ }
-  }
-
+  // Devolve se conseguiu salvar no navegador.
   function mudar(fn) {
-    var d = carregar();
+    var d = A.carregar();
     fn(d);
-    salvar(d);
+    var salvo = A.salvar(d);
     document.dispatchEvent(new CustomEvent("school-cc:progresso"));
+    return salvo;
   }
 
   function caminho(url) {
@@ -215,31 +291,18 @@
     return p.indexOf(raiz.pathname) === 0 ? p.slice(raiz.pathname.length) : p.replace(/^\//, "");
   }
 
-  if (disponivel) {
-    try {
-      var pares = [];
-      for (var i = 0; i < localStorage.length; i++) {
-        var k = localStorage.key(i);
-        if (k.indexOf(CHAVE_ANTIGA) === 0) pares.push([k, localStorage.getItem(k)]);
-      }
-      if (pares.length) {
-        var d = carregar();
-        var apagar = migrar(d, pares, raiz.pathname);
-        salvar(d);
-        apagar.forEach(function (chave) { localStorage.removeItem(chave); });
-      }
-    } catch (e) { /* sem migração: os acertos antigos continuam onde estavam */ }
-  }
+  A.migrar(raiz.pathname);
 
   window.SchoolCC = window.SchoolCC || {};
   window.SchoolCC.progresso = {
-    disponivel: disponivel,
-    caminho: caminho,
-    url: function (c) { return new URL(c, raiz).href; },
-    ler: carregar,
+    disponivel: A.disponivel,
+    url: function (c) { return endereco(c, raiz.href); },
+    ler: A.carregar,
+    // concluida: a data, false (desmarcada pelo aluno) ou null (nunca decidido).
     pagina: function (c) {
-      var p = carregar().paginas[c || caminho()] || {};
-      return { concluida: p.concluida || null, acertos: p.acertos || {}, erros: p.erros || {} };
+      var d = A.carregar(), k = c || caminho();
+      var p = Object.prototype.hasOwnProperty.call(d.paginas, k) ? d.paginas[k] : {};
+      return { concluida: p.concluida === undefined ? null : p.concluida, acertos: p.acertos || {}, erros: p.erros || {} };
     },
     conferiu: function (id, certo, info) { mudar(function (d) { conferiu(d, caminho(), id, certo, info, dia()); }); },
     concluir: function (c, sim) { mudar(function (d) { concluir(d, c || caminho(), sim, dia()); }); },
@@ -249,11 +312,12 @@
         visitou(d, { pagina: caminho(), titulo: info.titulo, tema: info.tema, quando: new Date().toISOString() });
       });
     },
-    sequencia: function () { return sequencia(carregar().dias, dia()); },
-    exportar: function () { return JSON.stringify(carregar(), null, 2); },
+    sequencia: function () { return sequencia(A.carregar().dias, dia()); },
+    exportar: function () { return JSON.stringify(A.carregar(), null, 2); },
+    // Devolve se conseguiu salvar no navegador (senão, vale só nesta aba).
     importar: function (texto) {
       var b = lerArquivo(texto);
-      mudar(function (d) {
+      return mudar(function (d) {
         var r = juntar(d, b);
         d.paginas = r.paginas;
         d.dias = r.dias;
@@ -261,7 +325,7 @@
       });
     },
     apagar: function () {
-      mudar(function (d) {
+      return mudar(function (d) {
         d.paginas = {};
         d.dias = [];
         d.ultima = null;

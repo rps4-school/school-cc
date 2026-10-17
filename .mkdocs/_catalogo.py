@@ -149,11 +149,15 @@ def tabela_roteiro(markdown):
 
 
 def _ler(docs_dir, src):
+    """Texto de um arquivo do repositório, ou None se ele não existe ou não é texto UTF-8."""
     caminho = os.path.join(docs_dir, src)
     if not os.path.isfile(caminho):
         return None
-    with open(caminho, encoding="utf-8") as f:
-        return f.read()
+    try:
+        with open(caminho, encoding="utf-8") as f:
+            return f.read()
+    except UnicodeDecodeError:
+        return None
 
 
 def _celulas(linha):
@@ -189,17 +193,23 @@ def _trilha(markdown, pasta, docs_dir):
         link = LINK.search(celula("unidade"))
         if link:
             titulo, src = link.group(1), posixpath.normpath(posixpath.join(pasta, link.group(2)))
-        else:  # "**Este arquivo**": a unidade é o próprio README do tema
-            titulo, src = "Introdução", posixpath.join(pasta, "README.md")
+            if not src.endswith(".md"):
+                continue  # slides, PDF...: não é uma etapa da trilha
+        elif re.sub(r"[*_]", "", celula("unidade")).strip().lower() == "este arquivo":
+            titulo, src = "Introdução", posixpath.join(pasta, "README.md")  # a unidade é o próprio README
+        else:
+            continue  # "_A preencher._", "Em breve"...: ainda não é uma etapa
         texto = _ler(docs_dir, src)
         if texto is None:
             continue  # link quebrado: o mkdocs build --strict já avisa
         exercicios = []
         for _, alvo in LINK.findall(celula("exercicios")):
             src_ex = posixpath.normpath(posixpath.join(pasta, alvo))
-            nivel = posixpath.splitext(posixpath.basename(src_ex))[0]
+            nivel, extensao = posixpath.splitext(posixpath.basename(src_ex))
+            if extensao != ".md" or nivel not in NIVEL_DO_EXERCICIO:
+                continue  # só facil.md, intermediario.md e dificil.md
             md = _ler(docs_dir, src_ex)
-            if md is not None and nivel in NIVEL_DO_EXERCICIO:
+            if md is not None:
                 exercicios.append(Exercicio(nivel, src_ex, contar_exercicios(md), contar_perguntas(md)))
         unidades.append(Unidade(
             numero=celulas[0], titulo=sem_emoji(re.sub(r"[*`]", "", titulo)), src=src,

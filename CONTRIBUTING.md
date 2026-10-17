@@ -25,7 +25,7 @@ conteudo/<tema>/          ← python, git, sistemas-digitais, calculo...
     | Coluna | Nomes aceitos | O que vai nela |
     | ------ | ------------- | -------------- |
     | Número | `#` | `1`, `2`... (deve ser a primeira coluna) |
-    | Unidade | `Aula`, `Resumo` ou `Arquivo` | Link para a aula ou resumo (sem link, vira "Introdução", que é o próprio README) |
+    | Unidade | `Aula`, `Resumo` ou `Arquivo` | Link para o `.md` da aula ou resumo. `**Este arquivo**` vira "Introdução" (o próprio README); outras linhas sem link, como `_A preencher._`, ficam fora da trilha |
     | Nível | `Nível` | `🟢 Iniciante`, `🟡 Intermediário` ou `🔴 Avançado` |
     | Descrição | `O que você aprende` ou `Você vai aprender` | Uma frase |
     | Exercícios | `Exercícios` | Links para `facil.md`, `intermediario.md` e `dificil.md` do assunto |
