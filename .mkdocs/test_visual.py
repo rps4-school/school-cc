@@ -41,5 +41,25 @@ class Corretores(unittest.TestCase):
         self.assertIn('data-rotulo="Questão 3 · &quot;Limite&quot; de x^2"', caixa)
 
 
+class NavegacaoManual(unittest.TestCase):
+    def tirar(self, linha):
+        return visual._sem_navegacao_manual(["# T", "", linha, "", "Texto"])[2]
+
+    def test_ultima_aula_com_voltar_sem_seta_some(self):
+        self.assertEqual(self.tirar("> [← Dicionários](05-dicionarios.md) · [Voltar para Python](../README.md)"), "")
+
+    def test_voltar_com_seta_some(self):
+        self.assertEqual(self.tirar("> [← Primitivas](09-primitivas.md) · [Voltar para Cálculo →](../README.md)"), "")
+
+    def test_antes_leia_some(self):
+        linha = ("> [← voltar para Exercícios](../../README.md) · 📖 Antes, leia: [Listas](../../../resumos/02-listas.md)"
+                 " · Próximo: [Intermediário →](intermediario.md)")
+        self.assertEqual(self.tirar(linha), "")
+
+    def test_citacao_comum_fica(self):
+        linha = "> 💡 Dica: use [o tutor](https://pythontutor.com)."
+        self.assertEqual(self.tirar(linha), linha)
+
+
 if __name__ == "__main__":
     unittest.main()

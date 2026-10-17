@@ -91,13 +91,19 @@ FOLHA_DE_PROVA = re.compile(
 QUESTAO = re.compile(r"^## Questão (\d+)")
 
 
+# Partes da linha de navegação que o site não mostra: "Voltar para Python" (com ou sem seta), qualquer link para
+# o README e o "📖 Antes, leia" (os exercícios já têm "Rever a aula" na linha de informações).
+VOLTAR = re.compile(r"voltar|\]\((?:\.\./)*README\.md\)|Antes, leia", re.I)
+
+
 def _sem_navegacao_manual(linhas):
     # Só olha o começo da página, onde ficam os "← voltar".
     for i, linha in list(fora_de_codigo(linhas))[:8]:
         if not linha.startswith(">") or "←" not in linha and "Próximo:" not in linha:
             continue
         partes = [p.strip() for p in linha.lstrip("> ").split(" · ")]
-        restantes = [p for p in partes if "←" not in p and not p.startswith("Próximo:") and "→]" not in p]
+        restantes = [p for p in partes
+                     if "←" not in p and not p.startswith("Próximo:") and "→]" not in p and not VOLTAR.search(p)]
         linhas[i] = "> " + " · ".join(restantes) if restantes else ""
     return linhas
 
