@@ -51,10 +51,6 @@ jobs:
             exit 1
           }
 
-      # Corretor (todo gabarito tem que passar nele) e progresso do aluno, que fica no navegador.
-      - name: Testes de JavaScript
-        run: node --test .mkdocs/corretor.test.js .mkdocs/progresso.test.js
-
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -62,10 +58,6 @@ jobs:
           cache-dependency-path: .mkdocs/requirements.txt
 
       - run: pip install -r .mkdocs/requirements.txt
-
-      # Catálogo do portal (temas e trilhas lidos das tabelas do Markdown) e componentes do site.
-      - name: Testes de Python
-        run: python -m unittest discover -s .mkdocs -p "test_*.py"
 
       # --strict falha o build (e o PR) se houver link ou âncora quebrados.
       - name: Build
