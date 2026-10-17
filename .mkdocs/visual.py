@@ -29,7 +29,8 @@ from pymdownx.slugs import slugify
 
 from _catalogo import agrupar_por_area, fora_de_codigo, lugares, montar, perguntas, tabela_roteiro, totais
 from _componentes import (
-    EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, area_slug, bloco_continuar, cabecalho_tema, cartao, cartao_tema, faixa_como_estudar,
+    EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, area_slug, bloco_continuar, cabecalho_tema, cartao, cartao_area, cartao_tema,
+    faixa_como_estudar, filtros_do_catalogo, grupo_de_temas,
     NOME_DO_NIVEL, fim_de_pagina, grade, heroi, informacoes, item_trilha, marcador_de_visita, plural, sem_emoji,
     simulados_do_tema, trilha, aviso_local, resumo_estudo, progresso_do_tema, revisar,
 )
@@ -285,18 +286,29 @@ def _temas_por_area():
     return [(area, [por_slug[s] for s in slugs]) for area, slugs in agrupar_por_area(list(por_slug))]
 
 
-def _temas(page, files, nivel_do_titulo):
-    """Os cartões de tema agrupados por área, com um título por área (home e Conteúdo), e o link "Por nível"."""
-    partes = []
-    for area, temas in _temas_por_area():
-        cartoes = "".join(
+def _catalogo(page, files):
+    """Página Conteúdo: filtros (busca e área) e os cartões compactos de tema, agrupados por área."""
+    grupos = _temas_por_area()
+    secoes = "".join(
+        grupo_de_temas(area, "".join(
             cartao_tema(t, _url(files, page, t.src), [_chave(files, src) for src in t.paginas], _numeros_do_tema(t))
             for t in temas
-        )
-        partes.append(f'{"#" * nivel_do_titulo} {area} {{ .grupo-area data-area="{area_slug(area)}" }}\n\n'
-                      f'<div class="temas temas--agrupados">{cartoes}</div>')
-    partes.append(f'<p class="temas-rodape"><a href="{_url(files, page, PAGINA_NIVEIS)}">Ver todo o conteúdo por nível →</a></p>')
-    return "\n\n".join(partes)
+        ))
+        for area, temas in grupos
+    )
+    return (f"{filtros_do_catalogo([(area, len(temas)) for area, temas in grupos])}\n\n{secoes}\n\n"
+            f'<p class="temas-rodape"><a href="{_url(files, page, PAGINA_NIVEIS)}">Ver todo o conteúdo por nível →</a></p>')
+
+
+def _areas(page, files):
+    """Home: um bloco por área, com os temas como etiquetas. O catálogo completo fica em Conteúdo."""
+    catalogo = _url(files, page, "conteudo/README.md")
+    blocos = "".join(
+        cartao_area(area, [(t, _url(files, page, t.src), [_chave(files, src) for src in t.paginas]) for t in temas],
+                    f"{catalogo}#area-{area_slug(area)}")
+        for area, temas in _temas_por_area()
+    )
+    return f'<div class="areas">{blocos}</div>'
 
 
 def _rotulo_da_unidade(unidade):
@@ -423,7 +435,7 @@ def _inicio(page, files):
                (t["simulados"], "simulados")]
     continuar = bloco_continuar(_url(files, page, "conteudo/README.md"))
     return (
-        f"{heroi(numeros, continuar)}\n\n## Temas\n\n{_temas(page, files, 3)}\n\n"
+        f"{heroi(numeros, continuar)}\n\n## Explore por área\n\n{_areas(page, files)}\n\n"
         f"## Como estudar aqui\n\n{faixa_como_estudar(_url(files, page, 'simulados/README.md'))}\n"
     )
 
@@ -476,7 +488,8 @@ def on_page_markdown(markdown, page, config, files):
     if lugar:
         markdown = _pagina_da_trilha(markdown, lugar, page, files)
     if page.file.src_uri == "conteudo/README.md":  # a tabela de temas vira o catálogo do portal
-        markdown = TABELA_INDICE.sub(lambda m: _temas(page, files, 2) + "\n", markdown, count=1)
+        markdown = TABELA_INDICE.sub(lambda m: _catalogo(page, files) + "\n", markdown, count=1)
+        page.meta["hide"] = ["toc"]  # o catálogo usa a largura toda
     markdown = _tabelas_indice(markdown, page, files)
     if page.file.src_uri.startswith("simulados/") and FOLHA_DE_PROVA.search(markdown):
         markdown = FOLHA_DE_PROVA.sub(_folha_de_prova, markdown)

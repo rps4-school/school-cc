@@ -70,5 +70,45 @@ class Componentes(unittest.TestCase):
                          '<div hidden data-visita data-tema="calculo" data-titulo="Aula 4 · &quot;x&quot;"></div>')
 
 
+class Catalogo(unittest.TestCase):
+    def test_cartao_tema_tem_texto_de_busca_sem_acento(self):
+        html = c.cartao_tema(tema(), "calculo/", ["a/"], "10 aulas")
+        self.assertIn('data-busca="calculo funcoes e limites &lt;b&gt; matematica"', html)
+
+    def test_cartao_de_area_lista_os_temas_com_progresso(self):
+        html = c.cartao_area("Programação", [(tema(slug="python", titulo="Python", area="Programação"), "python/", ["p/1/", "p/2/"]),
+                                              (tema(slug="git", titulo="Git", area="Programação"), "git/", ["g/"])],
+                             "conteudo/#area-programacao")
+        self.assertNotIn("\n", html)
+        self.assertIn('data-area="programacao"', html)
+        self.assertIn("2 temas", html)
+        self.assertIn('href="conteudo/#area-programacao"', html)
+        self.assertIn('data-progresso-tema="python" data-paginas="p/1/ p/2/"', html)
+        self.assertIn('href="git/"', html)
+        self.assertIn("data-progresso-texto", html)
+
+    def test_area_com_muitos_temas_mostra_seis_e_um_mais(self):
+        temas = [(tema(slug=f"t{i}", titulo=f"Tema {i}", area="Programação"), f"t{i}/", []) for i in range(8)]
+        html = c.cartao_area("Programação", temas, "conteudo/#area-programacao")
+        self.assertEqual(html.count('class="area__tema"'), 6)
+        self.assertIn(">+2 temas</a>", html)
+        self.assertIn("8 temas", html)
+
+    def test_filtros_comecam_escondidos_e_tem_um_botao_por_area(self):
+        html = c.filtros_do_catalogo([("Programação", 2), ("Matemática", 1)])
+        self.assertIn("data-filtros", html)
+        self.assertNotIn("data-filtros hidden", html)  # sem JavaScript, o CSS esconde (.no-js do Material)
+        self.assertIn('data-filtro-area="" aria-pressed="true"', html)
+        self.assertIn('data-filtro-area="programacao" aria-pressed="false"', html)
+        self.assertIn('type="search"', html)
+        self.assertIn('role="status"', html)
+
+    def test_grupo_de_temas_tem_ancora_da_area(self):
+        html = c.grupo_de_temas("Matemática", "<a>x</a>")
+        self.assertIn('id="area-matematica"', html)
+        self.assertIn("data-grupo", html)
+        self.assertIn('data-area="matematica"', html)
+
+
 if __name__ == "__main__":
     unittest.main()

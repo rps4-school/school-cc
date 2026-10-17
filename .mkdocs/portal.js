@@ -65,7 +65,9 @@
       var pct = paginas.length ? Math.round((100 * feitas) / paginas.length) : 0;
       barra(el, pct);
       var t = el.querySelector("[data-progresso-texto]");
-      if (t) t.textContent = pct + "%" + (el.classList.contains("curso") ? " concluído" : "");
+      // Cartões e etiquetas de tema: o % só aparece quando há progresso.
+      var soComProgresso = el.classList.contains("area__tema") || el.classList.contains("cartao-tema");
+      if (t) t.textContent = soComProgresso && !feitas ? "" : pct + "%" + (el.classList.contains("curso") ? " concluído" : "");
       el.toggleAttribute("data-com-progresso", feitas > 0);
     });
 
@@ -86,9 +88,10 @@
       el.querySelector('[data-estado="vazio"]').hidden = !!u;
       el.querySelector('[data-estado="progresso"]').hidden = !u;
       if (!u) return;
-      var tema = document.querySelector(com("data-progresso-tema", u.tema || "") + " .cartao-tema__titulo");
+      // O nome do tema vem do cartão ou da etiqueta do tema que estiver na página (na home, a etiqueta).
+      var tema = document.querySelector(com("data-progresso-tema", u.tema || ""));
       el.querySelector("[data-continuar-titulo]").textContent = u.titulo || "";
-      el.querySelector("[data-continuar-tema]").textContent = tema ? tema.textContent : "";
+      el.querySelector("[data-continuar-tema]").textContent = tema ? (tema.querySelector(".cartao-tema__titulo") || tema).firstChild.textContent : "";
       el.querySelector("[data-continuar-link]").href = P.url(u.pagina);
     });
 
@@ -171,13 +174,48 @@
     document.querySelector("[data-revisar-vazio]").hidden = !!lista.firstChild;
   }
 
+  // ---------- Catálogo: filtro por área e por texto (sem acento) ----------
+
+  function semAcento(texto) {
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+
+  function filtrar() {
+    var caixa = document.querySelector("[data-filtros]");
+    if (!caixa) return;
+    var marcado = caixa.querySelector('[data-filtro-area][aria-pressed="true"]');
+    var area = marcado ? marcado.dataset.filtroArea : "";
+    var termo = semAcento(caixa.querySelector("[data-filtro-texto]").value.trim());
+    var total = 0;
+    todos("[data-grupo]").forEach(function (grupo) {
+      var n = 0;
+      todos(".cartao-tema", grupo).forEach(function (c) {
+        // O termo casa com o começo das palavras ("git" acha Git, não "digitais").
+        c.hidden = !((!area || grupo.dataset.area === area) && (" " + c.dataset.busca).indexOf(" " + termo) >= 0);
+        if (!c.hidden) n++;
+      });
+      grupo.hidden = !n;
+      total += n;
+    });
+    caixa.querySelector("[data-filtro-resultado]").textContent =
+      total ? total + (total === 1 ? " tema" : " temas") : "Nenhum tema encontrado.";
+  }
+
+  function escolherArea(slug) {
+    var botoes = todos("[data-filtro-area]");
+    if (!botoes.some(function (b) { return b.dataset.filtroArea === slug; })) return;
+    botoes.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.filtroArea === slug); });
+    filtrar();
+  }
+
   function mensagem(texto) {
     document.querySelector("[data-mensagem]").textContent = texto;
   }
 
   document.addEventListener("click", function (e) {
-    var b = e.target.closest && e.target.closest("button[data-concluir], [data-exportar], [data-importar], [data-apagar]");
+    var b = e.target.closest && e.target.closest("button[data-concluir], [data-exportar], [data-importar], [data-apagar], [data-filtro-area]");
     if (!b) return;
+    if (b.hasAttribute("data-filtro-area")) return escolherArea(b.dataset.filtroArea);
     if (b.hasAttribute("data-concluir")) return P.concluir(b.dataset.concluir, b.getAttribute("aria-pressed") !== "true");
     if (b.hasAttribute("data-importar")) return document.querySelector("[data-arquivo]").click();
     if (b.hasAttribute("data-apagar")) {
@@ -191,6 +229,17 @@
     a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); }, 5000);
     mensagem("Arquivo baixado. No outro navegador, abra esta página e clique em Importar.");
+  });
+
+  // "Ver no catálogo" de uma área: já abre (ou troca) o filtro.
+  function areaDaAncora() {
+    var area = /^#area-([\w-]+)$/.exec(location.hash);
+    if (area) escolherArea(area[1]);
+  }
+  window.addEventListener("hashchange", areaDaAncora);
+
+  document.addEventListener("input", function (e) {
+    if (e.target.matches && e.target.matches("[data-filtro-texto]")) filtrar();
   });
 
   document.addEventListener("change", function (e) {
@@ -219,6 +268,8 @@
   });
 
   function iniciar() {
+    areaDaAncora();
+    filtrar();
     var visita = document.querySelector("[data-visita]:not([data-montado])");
     if (!visita) return desenhar();
     visita.dataset.montado = "1";

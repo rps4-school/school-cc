@@ -110,7 +110,7 @@ Todo o repositório vira o site <https://rps4-school.github.io/school-cc/>, publ
 - os exemplos `**Entrada:**` / `**Saída:**` aparecem lado a lado;
 - perguntas com `**Resposta:**` dentro de `<details>` ganham um corretor automático (veja acima);
 - nos simulados de Python, cada `## Questão NN` ganha um editor de Python (o mesmo do VS Code) com terminal, que roda no navegador. Basta manter o título `## Questão NN · ...` e o link `[✅ Ver resposta]`;
-- a página inicial é um portal: catálogo de temas, "Continue de onde parou" e a página **Meu progresso**. O roteiro de cada tema vira a trilha (veja "Roteiro do tema" acima), e aulas, resumos, exercícios e simulados ganham "Marcar como concluída";
+- a página inicial é um portal: blocos por área (com os temas e o progresso de cada um), "Continue de onde parou" e a página **Meu progresso**. O catálogo completo, com busca e filtro por área, fica em **Conteúdo**. O roteiro de cada tema vira a trilha (veja "Roteiro do tema" acima), e aulas, resumos, exercícios e simulados ganham "Marcar como concluída";
 - o progresso do aluno fica **só no navegador dele** (localStorage), sem conta. Em "Meu progresso", ele pode exportar, importar e apagar.
 
 O build roda em todo PR e **falha se houver link ou âncora quebrados**. Para ver o site no seu computador antes de abrir o PR:

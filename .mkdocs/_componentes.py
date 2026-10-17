@@ -101,10 +101,25 @@ def _e(texto):
     return _html.escape(str(texto), quote=True)
 
 
+# Ícone (de ICONES) de cada área, nos blocos de área da home.
+ICONE_DA_AREA = {"programacao": "codigo", "engenharia-de-software": "ferramenta", "matematica": "integral",
+                 "hardware": "chip", "outros": "pasta"}
+MAX_TEMAS_NA_AREA = 6  # no bloco da área; o resto vira "+N temas"
+
+
+def _sem_acento(texto):
+    return unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode().lower()
+
+
 def area_slug(area):
-    sem_acento = unicodedata.normalize("NFKD", area).encode("ascii", "ignore").decode().lower()
-    slug = re.sub(r"[^a-z0-9]+", "-", sem_acento).strip("-")
+    slug = re.sub(r"[^a-z0-9]+", "-", _sem_acento(area)).strip("-")
     return slug if slug in AREAS else "outros"
+
+
+def texto_de_busca(tema):
+    """Título, descrição e área, sem acento nem markdown: o filtro do catálogo (portal.js) procura aqui."""
+    texto = re.sub(r"[`*]", "", sem_emoji(f"{tema.titulo} {tema.descricao} {tema.area}"))
+    return re.sub(r"\s+", " ", _sem_acento(texto)).strip()
 
 
 def inline(texto):
@@ -131,16 +146,67 @@ def _nivel(nivel):
 
 
 def cartao_tema(tema, url, paginas, numeros):
+    """Cartão compacto do catálogo: ícone à esquerda; título, uma linha de descrição, números e progresso.
+    Todos com a mesma altura, para a grade continuar arrumada com muitos temas."""
     return (
-        f'<a class="cartao-tema" href="{_e(url)}" data-area="{area_slug(tema.area)}" '
+        f'<a class="cartao-tema" href="{_e(url)}" data-area="{area_slug(tema.area)}" data-busca="{_e(texto_de_busca(tema))}" '
         f'data-progresso-tema="{_e(tema.slug)}" data-paginas="{_e(" ".join(paginas))}">'
-        f'<span class="cartao-tema__topo"><span class="cartao-tema__icone">{ICONES.get(tema.icone, ICONES["pasta"])}</span>'
-        f'<span class="cartao-tema__area">{_e(tema.area)}</span>{_nivel(tema.nivel)}</span>'
-        f'<span class="cartao-tema__titulo">{_e(tema.titulo)}</span>'
+        f'<span class="cartao-tema__icone">{ICONES.get(tema.icone, ICONES["pasta"])}</span>'
+        '<span class="cartao-tema__corpo">'
+        f'<span class="cartao-tema__linha"><span class="cartao-tema__titulo">{_e(tema.titulo)}</span>{_nivel(tema.nivel)}</span>'
         f'<span class="cartao-tema__descricao">{inline(tema.descricao)}</span>'
-        f'<span class="cartao-tema__numeros">{_e(numeros)}</span>'
-        f'<span class="cartao-tema__progresso" data-so-com-progresso>{barra("Progresso em " + tema.titulo)}'
-        '<span data-progresso-texto>0%</span></span></a>'
+        '<span class="cartao-tema__numeros">'
+        + "".join(f'<span class="cartao-tema__num">{_e(n)}</span>' for n in numeros.split(" · "))
+        + '<span class="cartao-tema__pct" data-progresso-texto></span></span>'
+        "</span>"
+        f'<span class="cartao-tema__barra" data-so-com-progresso>{barra("Progresso em " + tema.titulo)}</span></a>'
+    )
+
+
+def cartao_area(area, temas, url):
+    """Bloco de uma área na home (como as "escolas" da Alura): os temas viram etiquetas, com o progresso.
+    temas: [(Tema, url, chaves das páginas)]."""
+    slug = area_slug(area)
+    etiquetas = "".join(
+        f'<a class="area__tema" href="{_e(u)}" data-progresso-tema="{_e(t.slug)}" data-paginas="{_e(" ".join(p))}">'
+        f'{_e(t.titulo)}<span class="area__pct" data-progresso-texto></span></a>'
+        for t, u, p in temas[:MAX_TEMAS_NA_AREA]
+    )
+    if len(temas) > MAX_TEMAS_NA_AREA:
+        etiquetas += f'<a class="area__mais" href="{_e(url)}">+{len(temas) - MAX_TEMAS_NA_AREA} temas</a>'
+    return (
+        f'<div class="area" data-area="{slug}">'
+        f'<div class="area__topo"><span class="cartao-tema__icone">{ICONES[ICONE_DA_AREA.get(slug, "pasta")]}</span>'
+        f'<span class="area__nome">{_e(area)}</span><span class="area__qtd">{plural(len(temas), "tema", "temas")}</span></div>'
+        f'<p class="area__temas">{etiquetas}</p>'
+        f'<a class="area__ver" href="{_e(url)}">Ver no catálogo <span aria-hidden="true">→</span></a></div>'
+    )
+
+
+def filtros_do_catalogo(grupos):
+    """Busca e botões de área (como os filtros da Codecademy e da Educative). grupos: [(área, quantos temas)].
+    O portal.js filtra; sem JavaScript, o CSS esconde a barra (classe .no-js do Material)."""
+    botoes = '<button type="button" class="filtro" data-filtro-area="" aria-pressed="true">Todos</button>' + "".join(
+        f'<button type="button" class="filtro" data-filtro-area="{area_slug(area)}" aria-pressed="false">'
+        f"{_e(area)} <span>{n}</span></button>"
+        for area, n in grupos
+    )
+    return (
+        '<div class="filtros" data-filtros>'
+        f'<label class="filtros__busca">{_LUPA}'
+        '<input type="search" placeholder="Filtrar temas…" aria-label="Filtrar temas" autocomplete="off" data-filtro-texto></label>'
+        f'<div class="filtros__areas" role="group" aria-label="Áreas">{botoes}</div>'
+        '<p class="filtros__resultado" role="status" data-filtro-resultado></p></div>'
+    )
+
+
+def grupo_de_temas(area, cartoes):
+    """Uma área do catálogo: título (com âncora #area-...) e a grade de cartões."""
+    slug = area_slug(area)
+    return (
+        f'<section class="grupo" data-grupo data-area="{slug}">'
+        f'<h2 class="grupo-area" id="area-{slug}">{_e(area)}</h2>'
+        f'<div class="temas temas--agrupados">{cartoes}</div></section>'
     )
 
 
