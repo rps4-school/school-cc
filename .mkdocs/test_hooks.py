@@ -82,5 +82,33 @@ class InclusaoDosGerados(unittest.TestCase):
             self.assertEqual(hooks._inclusao_do_gerado(src), InclusionLevel.INCLUDED, src)
 
 
+class PaginaDaResposta(unittest.TestCase):
+    PY = "conteudo/python/exercicios/respostas/06-funcoes/facil/ex01_area_e_perimetro.py"
+    ENUNCIADO = ("conteudo/python/exercicios/enunciados/06-funcoes/facil.md", "exercício-01-área-e-perímetro",
+                 "Exercício 01: Área e perímetro")
+
+    def test_resposta_de_exercicio(self):
+        md = hooks._pagina_do_py(self.PY, "print(1)\n", self.ENUNCIADO)
+        self.assertTrue(md.startswith(
+            '---\ntitle: "Resposta: Área e perímetro"\n'
+            'resposta_de: "conteudo/python/exercicios/enunciados/06-funcoes/facil.md"\nexercicio: "01"\n---\n'), md[:200])
+        self.assertIn('<p class="sobretitulo">Resposta · Exercício 01</p>\n\n# Área e perímetro\n', md)
+        self.assertIn("[← Voltar ao enunciado](../../../enunciados/06-funcoes/facil.md#exercício-01-área-e-perímetro){ .md-button }", md)
+        self.assertIn("[⤓ Baixar .py](ex01_area_e_perimetro.py){ .md-button .md-button--primary download }", md)
+        self.assertIn('````python title="ex01_area_e_perimetro.py" linenums="1"\nprint(1)\n````', md)
+        self.assertIn("Para rodar no terminal: `python3 ex01_area_e_perimetro.py`", md)
+
+    def test_questao_de_simulado_fica_como_hoje(self):
+        md = hooks._pagina_do_py("simulados/python/simulado-01/respostas/q1_x.py", "x = 1\n",
+                                 ("simulados/python/simulado-01/README.md", "questão-01", "Questão 01 · Listas · 2 pontos"))
+        self.assertTrue(md.startswith("# q1_x.py\n"))
+        self.assertIn("[← Ver enunciado](../README.md#questão-01){ .md-button }", md)
+
+    def test_sem_enunciado_fica_como_hoje(self):
+        md = hooks._pagina_do_py("conteudo/x/y.py", "x\n", None)
+        self.assertTrue(md.startswith("# y.py\n"))
+        self.assertNotIn("enunciado", md)
+
+
 if __name__ == "__main__":
     unittest.main()

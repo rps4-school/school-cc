@@ -10,6 +10,7 @@
 """
 
 import html
+import json
 import os
 import posixpath
 import re
@@ -213,25 +214,40 @@ def _outros_arquivos(pasta, arquivos, docs_dir):
     return "\n".join(linhas + [""])
 
 
+EXERCICIO = re.compile(r"^Exercício (\d+): (.+)$")
+
+
 def _pagina_do_py(src_py, codigo, enunciado):
+    """Página de um .py. enunciado: (src do .md, âncora, título da seção) de quem aponta para ele, ou None.
+    Resposta de "## Exercício NN: Título": o título é o do exercício (o arquivo fica no cabeçalho do código) e o
+    front matter diz ao visual.py qual é o enunciado (menu da trilha e caminho)."""
     nome = posixpath.basename(src_py)
     pasta = posixpath.dirname(src_py)
+    codigo = [f'````python title="{nome}" linenums="1"', codigo.rstrip("\n"), "````", "", f"Para rodar no terminal: `python3 {nome}`", ""]
+    exercicio = EXERCICIO.match(enunciado[2]) if enunciado else None
+    if exercicio:
+        numero, titulo = exercicio.groups()
+        voltar = f"{posixpath.relpath(enunciado[0], pasta)}#{enunciado[1]}"
+        return "\n".join([
+            "---",
+            f"title: {json.dumps('Resposta: ' + sem_emoji(re.sub(r'[`*]', '', titulo)), ensure_ascii=False)}",
+            f"resposta_de: {json.dumps(enunciado[0], ensure_ascii=False)}",
+            f'exercicio: "{numero}"',
+            "---",
+            "",
+            f'<p class="sobretitulo">Resposta · Exercício {numero}</p>',
+            "",
+            f"# {titulo}",
+            "",
+            f"[← Voltar ao enunciado]({voltar}){{ .md-button }} [⤓ Baixar .py]({nome}){{ .md-button .md-button--primary download }}",
+            "",
+            *codigo,
+        ])
     botoes = []
     if enunciado:
         botoes.append(f"[← Ver enunciado]({posixpath.relpath(enunciado[0], pasta)}#{enunciado[1]}){{ .md-button }}")
     botoes.append(f"[Baixar {nome}]({nome}){{ .md-button .md-button--primary download }}")
-    return "\n".join([
-        f"# {nome}",
-        "",
-        " ".join(botoes),
-        "",
-        f'````python title="{nome}" linenums="1"',
-        codigo.rstrip("\n"),
-        "````",
-        "",
-        f"Para rodar no terminal: `python3 {nome}`",
-        "",
-    ])
+    return "\n".join([f"# {nome}", "", " ".join(botoes), "", *codigo])
 
 
 def on_files(files, config):
@@ -262,7 +278,7 @@ def on_files(files, config):
                 for _, alvo, _, _ in LINK.findall(secao):
                     if alvo.endswith(".py"):
                         py = posixpath.normpath(posixpath.join(posixpath.dirname(f.src_uri), alvo))
-                        enunciado_de.setdefault(py, (f.src_uri, ancora))
+                        enunciado_de.setdefault(py, (f.src_uri, ancora, titulo))
 
     e = _estado
     e.clear()
