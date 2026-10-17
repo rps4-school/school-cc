@@ -4,13 +4,15 @@
 
 site_name: school-cc
 site_description: Material de estudo de Ciência da Computação, feito de aluno para aluno
-site_url: https://rps4-school.github.io/school-cc/
+# A navegação instantânea só segue links que estão no sitemap.xml, feito com este endereço.
+# Para testá-la num servidor local: SITE_URL=http://localhost:8000/ mkdocs build ...
+site_url: !ENV [SITE_URL, "https://rps4-school.github.io/school-cc/"]
 repo_url: https://github.com/rps4-school/school-cc
 repo_name: rps4-school/school-cc
 edit_uri: edit/main/
 
 # Rodapé: nosso texto no lugar de "Made with Material for MkDocs".
-copyright: Feito de Aluno para Aluno
+copyright: 'Feito de Aluno para Aluno · <a href="https://github.com/rps4-school/school-cc/blob/main/LICENSE">Licença Apache 2.0</a>'
 extra:
   generator: false
   # Cor da etiqueta de cada nível (classes .md-tag--<valor> no tailwind.css).
@@ -34,19 +36,33 @@ hooks:
 extra_css:
   - assets/stylesheets/site.css
 
-# Editor de Python dos simulados, corretor de respostas e fórmulas (KaTeX). Publicados pelo visual.py;
-# nas páginas sem editor ou sem pergunta, não fazem nada.
+# Publicados pelo visual.py; numa página sem o que montar, não fazem nada. A ordem importa:
+# progresso.js primeiro (corretor e portal usam a API dele). Com defer, não seguram a página;
+# com navigation.instant, todos remontam a cada página pelo document$ do Material.
 extra_javascript:
-  - assets/javascripts/editor.js
-  - assets/javascripts/corretor.js
-  - assets/javascripts/katex-init.js
+  - path: assets/javascripts/progresso.js   # progresso do aluno, salvo só no navegador
+    defer: true
+  - path: assets/javascripts/editor.js      # editor de Python dos simulados
+    defer: true
+  - path: assets/javascripts/corretor.js    # corretor de respostas
+    defer: true
+  - path: assets/javascripts/katex-init.js  # fórmulas (KaTeX)
+    defer: true
+  - path: assets/javascripts/diagramas.js   # diagramas (Mermaid), só perto da tela
+    defer: true
+  - path: assets/javascripts/cronometro.js  # cronômetro da folha de prova
+    defer: true
+  - path: assets/javascripts/portal.js      # mostra o progresso nas páginas
+    defer: true
 
 theme:
   name: material
+  # Dois templates do Material sobrescritos (menu da trilha e caminho): ver overrides/partials/.
+  custom_dir: overrides
   language: pt-BR
-  font:
-    text: Inter
-    code: JetBrains Mono
+  # Fontes do sistema (San Francisco, Segoe UI, Roboto...): nada a baixar antes de mostrar o texto.
+  # Com Inter e JetBrains Mono, a página leva ~1 s a mais no celular (medido no Lighthouse).
+  font: false
   icon:
     logo: material/school
     repo: fontawesome/brands/github
@@ -66,6 +82,10 @@ theme:
         icon: material/weather-sunny
         name: Modo claro
   features:
+    # Troca de página sem recarregar, baixando a próxima ao passar o mouse no link.
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
     - navigation.tabs
     - navigation.indexes
     - navigation.top
@@ -98,13 +118,17 @@ markdown_extensions:
   - md_in_html
   - pymdownx.details
   - pymdownx.superfences:
-      # Diagramas ```mermaid (o GitHub também renderiza).
+      # Diagramas ```mermaid (o GitHub também renderiza). No site, a classe "diagrama" (e não
+      # "mermaid") tira o carregamento do Material: o diagramas.js baixa o Mermaid só perto da tela.
       custom_fences:
         - name: mermaid
-          class: mermaid
+          class: diagrama
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.highlight:
-      anchor_linenums: true
+      # Números de linha (só nas respostas) dentro do código, sem tabela nem link: a tabela punha o nome do
+      # arquivo como uma legenda falsa e os links tinham 16 px (acessibilidade no Lighthouse).
+      anchor_linenums: false
+      linenums_style: pymdownx-inline
   - pymdownx.inlinehilite
   - pymdownx.tasklist:
       custom_checkbox: true

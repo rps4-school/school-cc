@@ -10,6 +10,7 @@
 """
 
 import html
+import json
 import os
 import posixpath
 import re
@@ -19,7 +20,8 @@ from mkdocs.structure.nav import Section
 from mkdocs.utils import get_relative_url
 from pymdownx.slugs import slugify
 
-from _componentes import COR_DO_NIVEL, NIVEL, NIVEL_DO_EXERCICIO, cartao, grade, sem_emoji
+from _catalogo import agrupar_por_area, temas_do_indice
+from _componentes import COR_DO_NIVEL, NIVEL, NIVEL_DO_EXERCICIO, area_slug, cartao, grade, sem_emoji
 
 # Nomes de pasta sem README e que precisam de acento ou de um nome melhor.
 TITULOS = {
@@ -59,9 +61,10 @@ TITULOS = {
 # mas a pasta não ganha página de listagem nem aparece no menu.
 PASTAS_OCULTAS = {"img"}
 
-# Ordem das abas do topo. O que não estiver aqui fica no meio, em ordem alfabética.
-ORDEM_TOPO_INICIO = ["README.md", "GUIA-DE-ACESSO.md"]
-ORDEM_TOPO_FIM = ["niveis.md", "CONTRIBUTING.md"]  # "simulados" fica no meio, depois de "conteudo"
+# Abas do topo, nesta ordem (o que não estiver aqui vai para o fim, em ordem alfabética).
+# "Colabore" junta as páginas de quem contribui; "Por nível" (niveis.md) fica dentro de Conteúdo.
+ORDEM_TOPO = ["README.md", "conteudo", "simulados", "progresso.md", "Colabore"]
+COLABORE = ["GUIA-DE-ACESSO.md", "CONTRIBUTING.md"]
 
 ORDEM_NIVEIS = {"facil": 1, "intermediario": 2, "dificil": 3}
 
@@ -103,6 +106,35 @@ def _indice(pasta, pastas_com_readme):
     """src_uri da página que representa a pasta (README ou listagem gerada)."""
     arquivo = "README.md" if pasta in pastas_com_readme else "index.md"
     return posixpath.join(pasta, arquivo) if pasta else arquivo
+
+
+# Pastas que mudaram de nome: os endereços antigos continuam funcionando (o build grava neles uma página
+# que redireciona). Antigo -> novo, como prefixo do endereço publicado.
+REDIRECIONAMENTOS = {"conteudo/python/resumos/": "conteudo/python/aulas/"}
+
+
+def _redirecionamentos(urls, mapa):
+    """[(endereço antigo, destino relativo a ele)] de cada página publicada num prefixo novo. Não redireciona
+    um endereço que ainda tem página."""
+    publicados = set(urls)
+    saida = []
+    for antigo, novo in mapa.items():
+        for url in sorted(u for u in publicados if u.startswith(novo)):
+            velho = antigo + url[len(novo):]
+            if velho not in publicados:
+                saida.append((velho, posixpath.relpath(url, velho) + "/"))
+    return saida
+
+
+def _pagina_de_redirecionamento(destino):
+    d = html.escape(destino, quote=True)
+    return (
+        '<!doctype html>\n<html lang="pt-BR">\n<head>\n<meta charset="utf-8">\n<title>Esta página mudou de endereço</title>\n'
+        f'<meta name="robots" content="noindex">\n<link rel="canonical" href="{d}">\n'
+        f'<meta http-equiv="refresh" content="0; url={d}">\n'
+        f"<script>location.replace({json.dumps(destino)} + location.hash)</script>\n</head>\n"
+        f'<body><p>Esta página mudou de endereço: <a href="{d}">abrir a página nova</a>.</p></body>\n</html>\n'
+    )
 
 
 MARCADOR_LISTAGEM = "<!-- listagem-da-pasta -->"
@@ -213,25 +245,39 @@ def _outros_arquivos(pasta, arquivos, docs_dir):
     return "\n".join(linhas + [""])
 
 
+EXERCICIO = re.compile(r"^Exercício (\d+): (.+)$")
+
+
 def _pagina_do_py(src_py, codigo, enunciado):
+    """Página de um .py. enunciado: (src do .md, âncora, título da seção) de quem aponta para ele, ou None.
+    Resposta de "## Exercício NN: Título": o título é o do exercício (o arquivo fica no cabeçalho do código) e o
+    front matter diz ao visual.py qual é o enunciado (menu da trilha e caminho) e o sobretítulo, que ele põe no
+    HTML depois da busca indexar a página."""
     nome = posixpath.basename(src_py)
     pasta = posixpath.dirname(src_py)
+    codigo = [f'````python title="{nome}" linenums="1"', codigo.rstrip("\n"), "````", "", f"Para rodar no terminal: `python3 {nome}`", ""]
+    exercicio = EXERCICIO.match(enunciado[2]) if enunciado else None
+    if exercicio:
+        numero, titulo = exercicio.groups()
+        voltar = f"{posixpath.relpath(enunciado[0], pasta)}#{enunciado[1]}"
+        return "\n".join([
+            "---",
+            f"title: {json.dumps('Resposta: ' + sem_emoji(re.sub(r'[`*]', '', titulo)), ensure_ascii=False)}",
+            f"resposta_de: {json.dumps(enunciado[0], ensure_ascii=False)}",
+            f"sobretitulo: {json.dumps(f'Resposta · Exercício {numero}', ensure_ascii=False)}",
+            "---",
+            "",
+            f"# {titulo}",
+            "",
+            f"[← Voltar ao enunciado]({voltar}){{ .md-button }} [⤓ Baixar .py]({nome}){{ .md-button .md-button--primary download }}",
+            "",
+            *codigo,
+        ])
     botoes = []
     if enunciado:
         botoes.append(f"[← Ver enunciado]({posixpath.relpath(enunciado[0], pasta)}#{enunciado[1]}){{ .md-button }}")
     botoes.append(f"[Baixar {nome}]({nome}){{ .md-button .md-button--primary download }}")
-    return "\n".join([
-        f"# {nome}",
-        "",
-        " ".join(botoes),
-        "",
-        f'````python title="{nome}" linenums="1"',
-        codigo.rstrip("\n"),
-        "````",
-        "",
-        f"Para rodar no terminal: `python3 {nome}`",
-        "",
-    ])
+    return "\n".join([f"# {nome}", "", " ".join(botoes), "", *codigo])
 
 
 def on_files(files, config):
@@ -262,7 +308,7 @@ def on_files(files, config):
                 for _, alvo, _, _ in LINK.findall(secao):
                     if alvo.endswith(".py"):
                         py = posixpath.normpath(posixpath.join(posixpath.dirname(f.src_uri), alvo))
-                        enunciado_de.setdefault(py, (f.src_uri, ancora))
+                        enunciado_de.setdefault(py, (f.src_uri, ancora, titulo))
 
     e = _estado
     e.clear()
@@ -284,7 +330,7 @@ def on_files(files, config):
             src = _indice(pasta, readmes)
             e["listagens"][src] = (pasta, subpastas, arquivos)
             conteudo = _pagina_da_pasta(pasta, docs_dir)
-            files.append(File.generated(config, src, content=conteudo, inclusion=InclusionLevel.INCLUDED))
+            files.append(File.generated(config, src, content=conteudo, inclusion=_inclusao_do_gerado(src)))
 
         for nome in arquivos:
             if nome.endswith(".py"):
@@ -295,9 +341,10 @@ def on_files(files, config):
                 with open(os.path.join(docs_dir, src_py), encoding="utf-8") as f:
                     codigo = f.read()
                 pagina = _pagina_do_py(src_py, codigo, enunciado_de.get(src_py))
-                files.append(File.generated(config, src_md, content=pagina, inclusion=InclusionLevel.INCLUDED))
+                files.append(File.generated(config, src_md, content=pagina, inclusion=_inclusao_do_gerado(src_md)))
                 e["py_paginas"][src_py] = src_md
                 e["gerados_py"].add(src_md)
+    e["urls"] = [f.url for f in files.documentation_pages()]
     return files
 
 
@@ -334,19 +381,89 @@ def on_page_markdown(markdown, page, config, files):
     return LINK.sub(trocar, markdown)
 
 
+def _pasta_da_secao(secao):
+    """A pasta de uma seção do menu: a do primeiro arquivo dentro dela."""
+    for filho in secao.children:
+        arquivo = getattr(filho, "file", None)
+        if arquivo is not None:
+            return posixpath.dirname(arquivo.src_uri)
+        if isinstance(filho, Section):
+            sub = _pasta_da_secao(filho)
+            if sub is not None:
+                return posixpath.dirname(sub)
+    return None
+
+
+# Dentro de um tema, o conteúdo vem antes dos exercícios (o resto mantém a ordem, depois deles).
+ORDEM_NO_TEMA = {"aulas": 1, "resumos": 2, "exercicios": 3}
+
+
+def _nome_da_pasta(item):
+    return posixpath.basename(_pasta_da_secao(item) or "") if isinstance(item, Section) else None
+
+
+def _limpar_tema(tema):
+    """Menu do Material dentro de um tema: página do tema, aulas, resumos, exercícios e o resto. A seção
+    "Enunciados" sai e os assuntos dela sobem para "Exercícios" (as respostas já ficam fora do menu)."""
+    def ordem(item):
+        arquivo = getattr(item, "file", None)
+        if arquivo is not None:
+            return 0 if posixpath.basename(arquivo.src_uri) in ("README.md", "index.md") else 9
+        return ORDEM_NO_TEMA.get(_nome_da_pasta(item), 9)
+
+    tema.children.sort(key=ordem)
+    for exercicios in (f for f in tema.children if _nome_da_pasta(f) == "exercicios"):
+        filhos = []
+        for item in exercicios.children:
+            if _nome_da_pasta(item) != "enunciados":
+                filhos.append(item)
+                continue
+            for assunto in item.children:
+                if getattr(assunto, "file", None) is not None and assunto.file.src_uri.endswith("/index.md"):
+                    continue  # a listagem gerada da pasta "enunciados"
+                assunto.parent = exercicios
+                filhos.append(assunto)
+        exercicios.children = filhos
+
+
+def _inclusao_do_gerado(src):
+    """As respostas dos exercícios (e as listagens das pastas delas) ficam fora do menu: o aluno chega pelo
+    botão "Ver resposta". Continuam publicadas e na busca."""
+    if src.startswith("conteudo/") and "/respostas/" in src:
+        return InclusionLevel.NOT_IN_NAV
+    return InclusionLevel.INCLUDED
+
+
+def _agrupar_por_area(conteudo, docs_dir, pasta_da_secao):
+    """Dentro de Conteúdo, os temas ficam em seções por área (Programação > Python, Git...), na ordem da
+    tabela de conteudo/README.md. As pastas e os endereços das páginas não mudam."""
+    temas, paginas_de_area = {}, {}
+    for item in conteudo.children:
+        pasta = pasta_da_secao(item) if isinstance(item, Section) else None
+        if pasta and pasta.count("/") >= 1:
+            slug = pasta.split("/")[1]
+            if os.path.isdir(os.path.join(docs_dir, "conteudo", slug)):
+                temas[slug] = item
+            else:  # conteudo/<área>/index.md, gerada pelo visual.py: vira o índice da seção da área
+                paginas_de_area[slug] = item
+    indice = temas_do_indice(docs_dir)
+    ordem = [s for s in indice if s in temas] + sorted(s for s in temas if s not in indice)
+    areas = []
+    for area, slugs in agrupar_por_area(ordem):
+        indice = paginas_de_area.get(area_slug(area))
+        secao = Section(area, (indice.children if indice else []) + [temas[s] for s in slugs])
+        secao.parent = conteudo
+        for tema in secao.children:
+            tema.parent = secao
+        areas.append(secao)
+    resto = [i for i in conteudo.children if i not in temas.values() and i not in paginas_de_area.values()]
+    conteudo.children = [i for i in resto if getattr(i, "file", None) is not None and i.file.src_uri == "conteudo/README.md"]
+    conteudo.children += areas + [i for i in resto if i not in conteudo.children]
+
+
 def on_nav(nav, config, files):
     docs_dir = config["docs_dir"]
-
-    def pasta_da_secao(secao):
-        for filho in secao.children:
-            arquivo = getattr(filho, "file", None)
-            if arquivo is not None:
-                return posixpath.dirname(arquivo.src_uri)
-            if isinstance(filho, Section):
-                sub = pasta_da_secao(filho)
-                if sub is not None:
-                    return posixpath.dirname(sub)
-        return None
+    pasta_da_secao = _pasta_da_secao
 
     def ordem_nivel(item):
         # Níveis em ordem didática, e não alfabética. O resto mantém a ordem (sort é estável).
@@ -370,14 +487,53 @@ def on_nav(nav, config, files):
 
     renomear(nav.items)
 
-    def chave(item):
+    def nome(item):
         arquivo = getattr(item, "file", None)
-        nome = arquivo.src_uri if arquivo is not None else (pasta_da_secao(item) or "").split("/")[0]
-        if nome in ORDEM_TOPO_INICIO:
-            return (0, ORDEM_TOPO_INICIO.index(nome), "")
-        if nome in ORDEM_TOPO_FIM:
-            return (2, ORDEM_TOPO_FIM.index(nome), "")
-        return (1, 0, nome)
+        if arquivo is not None:
+            return arquivo.src_uri
+        return item.title if item.title == "Colabore" else (pasta_da_secao(item) or "").split("/")[0]
 
-    nav.items.sort(key=chave)
+    por_nome = {nome(i): i for i in nav.items}
+    colabore = [por_nome[s] for s in COLABORE if s in por_nome]
+    if colabore:
+        secao = Section("Colabore", colabore)
+        for pagina in colabore:
+            pagina.parent = secao
+        nav.items = [i for i in nav.items if i not in colabore] + [secao]
+    niveis, conteudo = por_nome.get("niveis.md"), por_nome.get("conteudo")
+    if conteudo is not None:
+        _agrupar_por_area(conteudo, docs_dir, pasta_da_secao)
+        for area in (i for i in conteudo.children if isinstance(i, Section)):
+            for tema in (i for i in area.children if isinstance(i, Section)):
+                _limpar_tema(tema)
+    if niveis is not None and conteudo is not None:
+        nav.items.remove(niveis)
+        conteudo.children.append(niveis)
+        niveis.parent = conteudo
+
+    fora = len(ORDEM_TOPO)
+    nav.items.sort(key=lambda i: (ORDEM_TOPO.index(nome(i)) if nome(i) in ORDEM_TOPO else fora, nome(i)))
+
+    # Anterior/próxima (rodapé) na ordem final do menu, e não na ordem em que o MkDocs leu as pastas.
+    def paginas(itens):
+        for item in itens:
+            if isinstance(item, Section):
+                yield from paginas(item.children)
+            elif getattr(item, "file", None) is not None:
+                yield item
+
+    nav.pages = list(paginas(nav.items))
+    for i, pagina in enumerate(nav.pages):
+        pagina.previous_page = nav.pages[i - 1] if i else None
+        pagina.next_page = nav.pages[i + 1] if i + 1 < len(nav.pages) else None
     return nav
+
+
+def on_post_build(config):
+    for velho, destino in _redirecionamentos(_estado.get("urls", []), REDIRECIONAMENTOS):
+        caminho = os.path.join(config["site_dir"], velho, "index.html")
+        if os.path.exists(caminho):
+            continue
+        os.makedirs(os.path.dirname(caminho), exist_ok=True)
+        with open(caminho, "w", encoding="utf-8") as f:
+            f.write(_pagina_de_redirecionamento(destino))
