@@ -284,7 +284,7 @@ def on_files(files, config):
             src = _indice(pasta, readmes)
             e["listagens"][src] = (pasta, subpastas, arquivos)
             conteudo = _pagina_da_pasta(pasta, docs_dir)
-            files.append(File.generated(config, src, content=conteudo, inclusion=InclusionLevel.INCLUDED))
+            files.append(File.generated(config, src, content=conteudo, inclusion=_inclusao_do_gerado(src)))
 
         for nome in arquivos:
             if nome.endswith(".py"):
@@ -295,7 +295,7 @@ def on_files(files, config):
                 with open(os.path.join(docs_dir, src_py), encoding="utf-8") as f:
                     codigo = f.read()
                 pagina = _pagina_do_py(src_py, codigo, enunciado_de.get(src_py))
-                files.append(File.generated(config, src_md, content=pagina, inclusion=InclusionLevel.INCLUDED))
+                files.append(File.generated(config, src_md, content=pagina, inclusion=_inclusao_do_gerado(src_md)))
                 e["py_paginas"][src_py] = src_md
                 e["gerados_py"].add(src_md)
     return files
@@ -334,6 +334,59 @@ def on_page_markdown(markdown, page, config, files):
     return LINK.sub(trocar, markdown)
 
 
+def _pasta_da_secao(secao):
+    """A pasta de uma seção do menu: a do primeiro arquivo dentro dela."""
+    for filho in secao.children:
+        arquivo = getattr(filho, "file", None)
+        if arquivo is not None:
+            return posixpath.dirname(arquivo.src_uri)
+        if isinstance(filho, Section):
+            sub = _pasta_da_secao(filho)
+            if sub is not None:
+                return posixpath.dirname(sub)
+    return None
+
+
+# Dentro de um tema, o conteúdo vem antes dos exercícios (o resto mantém a ordem, depois deles).
+ORDEM_NO_TEMA = {"aulas": 1, "resumos": 2, "exercicios": 3}
+
+
+def _nome_da_pasta(item):
+    return posixpath.basename(_pasta_da_secao(item) or "") if isinstance(item, Section) else None
+
+
+def _limpar_tema(tema):
+    """Menu do Material dentro de um tema: página do tema, aulas, resumos, exercícios e o resto. A seção
+    "Enunciados" sai e os assuntos dela sobem para "Exercícios" (as respostas já ficam fora do menu)."""
+    def ordem(item):
+        arquivo = getattr(item, "file", None)
+        if arquivo is not None:
+            return 0 if posixpath.basename(arquivo.src_uri) in ("README.md", "index.md") else 9
+        return ORDEM_NO_TEMA.get(_nome_da_pasta(item), 9)
+
+    tema.children.sort(key=ordem)
+    for exercicios in (f for f in tema.children if _nome_da_pasta(f) == "exercicios"):
+        filhos = []
+        for item in exercicios.children:
+            if _nome_da_pasta(item) != "enunciados":
+                filhos.append(item)
+                continue
+            for assunto in item.children:
+                if getattr(assunto, "file", None) is not None and assunto.file.src_uri.endswith("/index.md"):
+                    continue  # a listagem gerada da pasta "enunciados"
+                assunto.parent = exercicios
+                filhos.append(assunto)
+        exercicios.children = filhos
+
+
+def _inclusao_do_gerado(src):
+    """As respostas dos exercícios (e as listagens das pastas delas) ficam fora do menu: o aluno chega pelo
+    botão "Ver resposta". Continuam publicadas e na busca."""
+    if src.startswith("conteudo/") and "/respostas/" in src:
+        return InclusionLevel.NOT_IN_NAV
+    return InclusionLevel.INCLUDED
+
+
 def _agrupar_por_area(conteudo, docs_dir, pasta_da_secao):
     """Dentro de Conteúdo, os temas ficam em seções por área (Programação > Python, Git...), na ordem da
     tabela de conteudo/README.md. As pastas e os endereços das páginas não mudam."""
@@ -358,17 +411,7 @@ def _agrupar_por_area(conteudo, docs_dir, pasta_da_secao):
 
 def on_nav(nav, config, files):
     docs_dir = config["docs_dir"]
-
-    def pasta_da_secao(secao):
-        for filho in secao.children:
-            arquivo = getattr(filho, "file", None)
-            if arquivo is not None:
-                return posixpath.dirname(arquivo.src_uri)
-            if isinstance(filho, Section):
-                sub = pasta_da_secao(filho)
-                if sub is not None:
-                    return posixpath.dirname(sub)
-        return None
+    pasta_da_secao = _pasta_da_secao
 
     def ordem_nivel(item):
         # Níveis em ordem didática, e não alfabética. O resto mantém a ordem (sort é estável).
@@ -408,6 +451,9 @@ def on_nav(nav, config, files):
     niveis, conteudo = por_nome.get("niveis.md"), por_nome.get("conteudo")
     if conteudo is not None:
         _agrupar_por_area(conteudo, docs_dir, pasta_da_secao)
+        for area in (i for i in conteudo.children if isinstance(i, Section)):
+            for tema in (i for i in area.children if isinstance(i, Section)):
+                _limpar_tema(tema)
     if niveis is not None and conteudo is not None:
         nav.items.remove(niveis)
         conteudo.children.append(niveis)

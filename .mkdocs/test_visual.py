@@ -61,5 +61,18 @@ class NavegacaoManual(unittest.TestCase):
         self.assertEqual(self.tirar(linha), linha)
 
 
+class TemaDaPagina(unittest.TestCase):
+    def test_pela_pasta_do_tema_sem_confundir_prefixo(self):
+        from types import SimpleNamespace
+        python = SimpleNamespace(src="conteudo/python/README.md")
+        avancado = SimpleNamespace(src="conteudo/python-avancado/README.md")
+        temas = [python, avancado]
+        self.assertIs(visual._tema_da_pagina(temas, "conteudo/python/aulas/01.md"), python)
+        self.assertIs(visual._tema_da_pagina(temas, "conteudo/python/README.md"), python)
+        self.assertIs(visual._tema_da_pagina(temas, "conteudo/python-avancado/x.md"), avancado)
+        self.assertIsNone(visual._tema_da_pagina(temas, "conteudo/README.md"))
+        self.assertIsNone(visual._tema_da_pagina(temas, "simulados/python/README.md"))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -57,6 +57,8 @@ extra_javascript:
 
 theme:
   name: material
+  # Dois templates do Material sobrescritos (menu da trilha e caminho): ver overrides/partials/.
+  custom_dir: overrides
   language: pt-BR
   # Fontes do sistema (San Francisco, Segoe UI, Roboto...): nada a baixar antes de mostrar o texto.
   # Com Inter e JetBrains Mono, a página leva ~1 s a mais no celular (medido no Lighthouse).

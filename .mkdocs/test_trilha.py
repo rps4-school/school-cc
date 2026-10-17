@@ -163,6 +163,35 @@ class Caminho(unittest.TestCase):
         self.assertNotIn("\n", html)
 
 
+class Abas(unittest.TestCase):
+    def test_primeira_pagina_de_cada_aba_na_ordem(self):
+        from types import SimpleNamespace
+
+        def pagina(src):
+            return SimpleNamespace(file=SimpleNamespace(src_uri=src), children=None, title=None)
+
+        def secao(titulo, filhos):
+            return SimpleNamespace(title=titulo, children=filhos)
+
+        itens = [
+            pagina("README.md"),
+            secao("Conteúdo", [pagina("conteudo/README.md"), secao("Programação", [pagina("conteudo/python/README.md")])]),
+            secao("Simulados", [secao("Python", [pagina("simulados/python/README.md")]), pagina("simulados/README.md")]),
+            pagina("progresso.md"),
+            secao("Colabore", [pagina("GUIA-DE-ACESSO.md"), pagina("CONTRIBUTING.md")]),
+        ]
+        abas = t.abas_do_site(itens, {"README.md": "Início", "progresso.md": "Meu progresso"})
+        self.assertEqual([(a.titulo, a.url) for a in abas], [
+            ("Início", "README.md"), ("Conteúdo", "conteudo/README.md"), ("Simulados", "simulados/python/README.md"),
+            ("Meu progresso", "progresso.md"), ("Colabore", "GUIA-DE-ACESSO.md"),
+        ])
+
+    def test_html_das_abas(self):
+        html = t.html_das_abas([t.Link("Início", "../"), t.Link("Conteúdo", "../conteudo/")])
+        self.assertIn('class="trilha-lateral__abas"', html)
+        self.assertIn('<li><a href="../conteudo/">Conteúdo</a></li>', html)
+
+
 class Rotulos(unittest.TestCase):
     def test_rotulo_pela_pasta(self):
         self.assertEqual(t.rotulo_da_unidade(Unidade("1", "x", "conteudo/c/aulas/01.md", "", None, 1)), "Aula")

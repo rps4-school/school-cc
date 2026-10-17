@@ -144,6 +144,23 @@ def html_do_menu(menu):
     return "".join(partes)
 
 
+def abas_do_site(itens, titulos):
+    """[Link(título, src da primeira página)] das abas do topo, na ordem do menu. titulos: nomes das abas que
+    são uma página só (o título da página ainda não foi lido quando o menu é montado)."""
+    def primeira(item):
+        arquivo = getattr(item, "file", None)
+        if arquivo is not None:
+            return arquivo.src_uri
+        return next((src for src in map(primeira, item.children or []) if src), None)
+
+    abas = []
+    for item in itens:
+        src = primeira(item)
+        if src:
+            abas.append(Link(titulos.get(src) or item.title or src, src))
+    return abas
+
+
 def html_das_abas(abas):
     """Atalhos das abas do topo: no celular, as abas não aparecem e a gaveta é o único caminho até elas."""
     return f'<div class="trilha-lateral__abas">{_secao("Navegação", abas)}</div>'

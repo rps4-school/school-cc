@@ -35,7 +35,9 @@ from _componentes import (
     NOME_DO_NIVEL, fim_de_pagina, grade, heroi, informacoes, item_trilha, marcador_de_visita, plural, sem_emoji,
     simulados_do_tema, trilha, aviso_local, resumo_estudo, progresso_do_tema, revisar,
 )
-from _trilha import rotulo_da_unidade
+from _trilha import (
+    Link, abas_do_site, caminho, html_das_abas, html_do_caminho, html_do_menu, montar_menu, rotulo_da_unidade,
+)
 
 # Arquivos desta pasta publicados no site (o MkDocs ignora pastas que começam com ".").
 ARQUIVOS_DO_SITE = {
@@ -51,6 +53,8 @@ ARQUIVOS_DO_SITE = {
 }
 PAGINA_PROGRESSO = "progresso.md"
 MARCADOR_PROGRESSO = "<!-- meu-progresso -->"
+# Abas que são uma página só: o título delas ainda não foi lido quando o menu é montado.
+TITULOS_DAS_ABAS = {"README.md": "Início", PAGINA_PROGRESSO: "Meu progresso"}
 PAGINA_NIVEIS = "niveis.md"
 MARCADOR_NIVEIS = "<!-- por-nivel -->"
 # A lista do plugin de tags fica escondida: as etiquetas de nível das páginas apontam para as âncoras
@@ -405,6 +409,50 @@ TEXTOS_DA_UNIDADE = {
 }
 
 
+def _tema_da_pagina(temas, src):
+    """O tema cuja pasta contém a página (conteudo/python/... -> Python)."""
+    return next((t for t in temas if src.startswith(posixpath.dirname(t.src) + "/")), None)
+
+
+def _mais_do_tema(tema, files):
+    """[(título, src)]: páginas do tema fora da trilha (formulário, lista de exercícios...). Ficam de fora as
+    geradas (listagens de pasta e páginas de .py) e as respostas."""
+    pasta = posixpath.dirname(tema.src) + "/"
+    da_trilha = {tema.src} | {u.src for u in tema.unidades} | {e.src for u in tema.unidades for e in u.exercicios}
+    mais = []
+    for f in files.documentation_pages():
+        src = f.src_uri
+        if not src.startswith(pasta) or src in da_trilha or f.generated_by or "/respostas/" in src:
+            continue
+        with open(f.abs_src_path, encoding="utf-8") as arquivo:
+            achou = re.search(r"^#\s+(.+)$", arquivo.read(), re.M)
+        mais.append((sem_emoji(achou.group(1)) if achou else posixpath.basename(src), src))
+    return sorted(mais, key=lambda m: m[1])
+
+
+def _menu_e_caminho(page, files, tema):
+    """Menu da trilha e caminho no topo, em page.meta (os templates de overrides/partials/ só os mostram)."""
+    src = page.file.src_uri
+    url = lambda alvo: _url(files, page, alvo)  # noqa: E731
+    chave = lambda alvo: _chave(files, alvo)  # noqa: E731
+    url_conteudo = url("conteudo/README.md")
+    enunciado = page.meta.get("resposta_de")  # nas respostas: o enunciado que aponta para elas
+    lugar = _estado["lugares"].get(enunciado or src)
+    menu = montar_menu(tema, src, url, chave, url_conteudo, _estado["mais"].get(tema.slug, ()), enunciado)
+    page.meta["trilha"] = html_do_menu(menu)
+    page.meta["trilha_tema"] = tema.titulo
+    page.meta["trilha_abas"] = html_das_abas([Link(a.titulo, url(a.url)) for a in _estado["abas"]])
+    if src == tema.src:
+        links = caminho(tema, url, url_conteudo, pagina_do_tema=True)
+    elif lugar and lugar.exercicio:
+        links = caminho(tema, url, url_conteudo, lugar.unidade, lugar.exercicio, resposta=bool(enunciado))
+    elif lugar and lugar.unidade:
+        links = caminho(tema, url, url_conteudo, lugar.unidade)
+    else:
+        links = caminho(tema, url, url_conteudo)
+    page.meta["caminho"] = html_do_caminho(links)
+
+
 def _proxima_unidade(tema, unidade):
     i = tema.unidades.index(unidade)
     return tema.unidades[i + 1] if i + 1 < len(tema.unidades) else None
@@ -496,6 +544,7 @@ def on_config(config):
 def on_files(files, config):
     _estado["temas"] = montar(config["docs_dir"])
     _estado["lugares"] = lugares(_estado["temas"])
+    _estado["mais"] = {tema.slug: _mais_do_tema(tema, files) for tema in _estado["temas"]}
     for origem, destino in ARQUIVOS_DO_SITE.items():
         with open(os.path.join(os.path.dirname(__file__), origem), encoding="utf-8") as f:
             files.append(File.generated(config, destino, content=f.read(), inclusion=InclusionLevel.NOT_IN_NAV))
@@ -533,6 +582,9 @@ def on_page_markdown(markdown, page, config, files):
     lugar = _estado["lugares"].get(page.file.src_uri)
     if lugar:
         markdown = _pagina_da_trilha(markdown, lugar, page, files)
+    tema_da_pagina = _tema_da_pagina(_estado["temas"], page.file.src_uri)
+    if tema_da_pagina:
+        _menu_e_caminho(page, files, tema_da_pagina)
     if page.file.src_uri == "conteudo/README.md":  # a tabela de temas vira o catálogo do portal
         markdown = TABELA_INDICE.sub(lambda m: _catalogo(page, files) + "\n", markdown, count=1)
         page.meta["hide"] = ["toc"]  # o catálogo usa a largura toda
@@ -567,6 +619,8 @@ def on_page_content(html, page, config, files):
 
 
 def on_nav(nav, config, files):
+    _estado["abas"] = abas_do_site(nav.items, TITULOS_DAS_ABAS)
+
     def limpar(itens):
         for item in itens:
             if isinstance(item, Section):
