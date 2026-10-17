@@ -109,14 +109,38 @@ class Catalogo(unittest.TestCase):
         self.assertIn(">+2 temas</a>", html)
         self.assertIn("8 temas", html)
 
-    def test_filtros_comecam_escondidos_e_tem_um_botao_por_area(self):
+    def test_filtros_do_catalogo_tem_busca_e_faceta_de_area(self):
         html = c.filtros_do_catalogo([("Programação", 2), ("Matemática", 1)])
         self.assertIn("data-filtros", html)
         self.assertNotIn("data-filtros hidden", html)  # sem JavaScript, o CSS esconde (.no-js do Material)
-        self.assertIn('data-filtro-area="" aria-pressed="true"', html)
-        self.assertIn('data-filtro-area="programacao" aria-pressed="false"', html)
+        self.assertIn('data-faceta="area" data-valor="" aria-pressed="true">Todos <span data-contagem>3</span>', html)
+        self.assertIn('data-faceta="area" data-valor="programacao" aria-pressed="false">Programação <span data-contagem>2</span>', html)
         self.assertIn('type="search"', html)
         self.assertIn('role="status"', html)
+        self.assertIn('data-singular="tema" data-plural="temas"', html)
+
+    def test_filtros_por_nivel_tem_tres_facetas_e_limpar(self):
+        html = c.barra_de_filtros([
+            ("nivel", "Nível", [("iniciante", "Iniciante", 5), ("avancado", "Avançado", 2)], 7),
+            ("tipo", "Tipo", [("aula", "Aulas e resumos", 3), ("exercicio", "Exercícios", 4)], 7),
+        ], "item", "itens")
+        self.assertIn('role="group" aria-label="Nível"', html)
+        self.assertIn('data-faceta="nivel" data-valor="iniciante" aria-pressed="false">Iniciante <span data-contagem>5</span>', html)
+        self.assertIn('data-faceta="tipo" data-valor="" aria-pressed="true"', html)
+        self.assertIn("data-limpar hidden", html)
+        self.assertNotIn('type="search"', html)
+
+    def test_item_de_nivel(self):
+        html = c.item_de_nivel("exercicio", "Derivada · Fácil", "ex/facil/", "conteudo/calculo/ex/facil/", "Iniciante", "Matemática", "9 perguntas")
+        for trecho in ('data-item data-pagina="conteudo/calculo/ex/facil/"', 'data-nivel="iniciante"', 'data-area="matematica"',
+                       'data-tipo="exercicio"', "Derivada · Fácil", "9 perguntas", 'class="nivel nivel--facil"', "data-estado-texto"):
+            self.assertIn(trecho, html)
+
+    def test_legenda_explica_os_tres_niveis(self):
+        html = c.legenda_dos_niveis()
+        for nivel in ("Iniciante", "Intermediário", "Avançado"):
+            self.assertIn(f">{nivel}</span>", html)
+        self.assertIn("fácil", html)
 
     def test_grupo_de_temas_tem_ancora_da_area(self):
         html = c.grupo_de_temas("Matemática", "<a>x</a>")

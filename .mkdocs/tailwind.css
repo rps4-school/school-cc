@@ -767,7 +767,7 @@
   outline: 2px solid var(--md-accent-fg-color);
   outline-offset: -2px;
 }
-.md-typeset a.cartao-tema[hidden],
+.md-typeset [data-item][hidden],
 .md-typeset [data-grupo][hidden] {
   display: none;
 }
@@ -1026,10 +1026,38 @@
   font: inherit;
   font-size: 0.72rem;
 }
-.md-typeset .filtros__areas {
+.md-typeset .filtros__grupo {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.4rem;
+}
+.md-typeset .filtros__rotulo {
+  min-width: 3.4rem;
+  color: var(--texto-suave);
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.md-typeset button.filtro:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.md-typeset .filtros__limpar {
+  margin-left: 0.6rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--md-typeset-a-color);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  cursor: pointer;
+}
+.md-typeset .filtros__limpar[hidden] {
+  display: none;
 }
 .md-typeset button.filtro {
   min-height: 2.2rem;
@@ -1064,6 +1092,8 @@
   outline-offset: 2px;
 }
 .md-typeset .filtros__resultado {
+  display: flex;
+  align-items: center;
   width: 100%;
   margin: 0 0.3rem;
   color: var(--texto-suave);
@@ -1697,4 +1727,169 @@
 .md-typeset .diagrama svg {
   max-width: 100%;
   height: auto;
+}
+
+/* ---------- Nível em "barras de sinal" (como Udemy e Pluralsight): 1, 2 ou 3 barras ----------
+   Vale para os selos do portal (.nivel), para as etiquetas de nível do Material e para os botões
+   de nível de "Por nível". O texto continua: as barras só ajudam a ler de relance. */
+.md-typeset .nivel::before,
+.md-typeset .md-tag-icon:is(.md-tag--iniciante, .md-tag--intermediario, .md-tag--avancado)::before,
+.md-typeset button.filtro[data-faceta="nivel"]:not([data-valor=""])::before {
+  content: "";
+  display: inline-block;
+  width: 0.72em;
+  height: 0.68em;
+  margin-right: 0.38em;
+  flex: none;
+  background:
+    linear-gradient(var(--barra-1, currentColor) 0 0) 0 100% / 24% 42% no-repeat,
+    linear-gradient(var(--barra-2, currentColor) 0 0) 50% 100% / 24% 70% no-repeat,
+    linear-gradient(var(--barra-3, currentColor) 0 0) 100% 100% / 24% 100% no-repeat;
+  -webkit-mask: none;
+  mask: none;
+  vertical-align: baseline;
+}
+.md-typeset :is(.nivel--facil, .md-tag--iniciante, button.filtro[data-valor="iniciante"]) {
+  --barra-2: color-mix(in srgb, currentColor 28%, transparent);
+  --barra-3: color-mix(in srgb, currentColor 28%, transparent);
+}
+.md-typeset :is(.nivel--intermediario, .md-tag--intermediario, button.filtro[data-valor="intermediario"]) {
+  --barra-3: color-mix(in srgb, currentColor 28%, transparent);
+}
+
+/* ---------- "Por nível": legenda, painel por tema e linhas ---------- */
+.md-typeset .legenda-niveis {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.8rem 0 1rem;
+}
+@media (min-width: 45em) {
+  .md-typeset .legenda-niveis {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.md-typeset .legenda-niveis div {
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--borda);
+  border-radius: 0.8rem;
+  background: var(--cartao);
+}
+.md-typeset .legenda-niveis dt {
+  margin: 0 0 0.3rem;
+}
+.md-typeset .legenda-niveis dd {
+  margin: 0;
+  color: var(--texto);
+  font-size: 0.64rem;
+  line-height: 1.5;
+}
+.md-typeset .painel-nivel {
+  overflow: hidden;
+  margin: 0.5rem 0 1rem;
+  border: 1px solid var(--borda);
+  border-radius: 1rem;
+  background: var(--cartao);
+}
+.md-typeset a.painel-nivel__tema {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid var(--borda);
+  background: color-mix(in srgb, var(--area) 5%, transparent);
+  color: var(--tinta);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+.md-typeset a.painel-nivel__tema .cartao-tema__icone {
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 0.5rem;
+}
+.md-typeset a.painel-nivel__tema .cartao-tema__icone svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+.md-typeset a.item-nivel {
+  display: grid;
+  grid-template-columns: 1.4rem minmax(0, 1fr) auto auto 0.9rem;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.9rem;
+  color: var(--texto);
+  font-size: 0.68rem;
+  transition: background-color 0.15s;
+}
+.md-typeset .painel-nivel > .item-nivel:not([hidden]) ~ .item-nivel:not([hidden]) {
+  border-top: 1px solid var(--borda);
+}
+.md-typeset a.item-nivel:hover {
+  background: color-mix(in srgb, var(--area) 6%, transparent);
+  color: var(--texto);
+}
+.md-typeset a.item-nivel:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: -2px;
+}
+.md-typeset .item-nivel__tipo {
+  display: grid;
+  place-items: center;
+  color: var(--area-texto);
+}
+.md-typeset .item-nivel__tipo svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+.md-typeset .item-nivel__titulo {
+  overflow: hidden;
+  color: var(--tinta);
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.md-typeset .item-nivel__meta {
+  color: var(--texto-suave);
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  white-space: nowrap;
+}
+.md-typeset .item-nivel__feito {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+.md-typeset .item-nivel[data-concluida] .item-nivel__feito {
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #10b981;
+}
+.md-typeset .item-nivel[data-concluida] .item-nivel__feito::after {
+  content: "✓";
+  color: #fff;
+  font-size: 0.55rem;
+  font-weight: 800;
+}
+/* Celular: duas linhas (título em cima; tempo e nível lado a lado embaixo). */
+@media (max-width: 44.9375em) {
+  .md-typeset a.item-nivel {
+    grid-template-columns: 1.4rem auto minmax(0, 1fr) 0.9rem;
+    gap: 0.25rem 0.6rem;
+  }
+  .md-typeset .item-nivel__titulo {
+    grid-column: 2 / 4;
+    white-space: normal;
+  }
+  .md-typeset .item-nivel__meta {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .md-typeset .item-nivel .nivel {
+    grid-column: 3;
+    grid-row: 2;
+    justify-self: start;
+  }
+  .md-typeset .item-nivel__feito {
+    grid-column: 4;
+    grid-row: 1;
+  }
 }

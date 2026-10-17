@@ -170,7 +170,7 @@ def cartao_tema(tema, url, paginas, numeros):
         for n in numeros.split(" · ") if n
     )
     return (
-        f'<a class="cartao-tema" href="{_e(url)}" data-area="{area_slug(tema.area)}" data-busca="{_e(texto_de_busca(tema))}" '
+        f'<a class="cartao-tema" href="{_e(url)}" data-item data-area="{area_slug(tema.area)}" data-busca="{_e(texto_de_busca(tema))}" '
         f'data-progresso-tema="{_e(tema.slug)}" data-paginas="{_e(" ".join(paginas))}">'
         f'<span class="cartao-tema__icone">{ICONES.get(tema.icone, ICONES["pasta"])}</span>'
         '<span class="cartao-tema__texto">'
@@ -203,30 +203,87 @@ def cartao_area(area, temas, url):
     )
 
 
-def filtros_do_catalogo(grupos):
-    """Busca e botões de área (como os filtros da Codecademy e da Educative). grupos: [(área, quantos temas)].
-    O portal.js filtra; sem JavaScript, o CSS esconde a barra (classe .no-js do Material)."""
-    botoes = '<button type="button" class="filtro" data-filtro-area="" aria-pressed="true">Todos</button>' + "".join(
-        f'<button type="button" class="filtro" data-filtro-area="{area_slug(area)}" aria-pressed="false">'
-        f"{_e(area)} <span>{n}</span></button>"
-        for area, n in grupos
+def _faceta(faceta, rotulo, opcoes, total):
+    """Um grupo de botões de filtro. opcoes: [(valor, nome, quantos)]. "Todos" vem marcado."""
+    botoes = (f'<button type="button" class="filtro" data-faceta="{faceta}" data-valor="" aria-pressed="true">'
+              f"Todos <span data-contagem>{total}</span></button>")
+    botoes += "".join(
+        f'<button type="button" class="filtro" data-faceta="{faceta}" data-valor="{_e(valor)}" aria-pressed="false">'
+        f"{_e(nome)} <span data-contagem>{n}</span></button>"
+        for valor, nome, n in opcoes
     )
+    return (f'<div class="filtros__grupo" role="group" aria-label="{_e(rotulo)}">'
+            f'<span class="filtros__rotulo">{_e(rotulo)}</span>{botoes}</div>')
+
+
+def barra_de_filtros(facetas, singular, plural, busca=False):
+    """Filtros por faceta (como na Codecademy e na Coursera): todos visíveis, com contagem em cada opção e
+    "Limpar filtros". facetas: [(faceta, rótulo, opções, total)]. O portal.js filtra os [data-item] da página;
+    sem JavaScript, o CSS esconde a barra (classe .no-js do Material)."""
+    partes = []
+    if busca:
+        partes.append(f'<label class="filtros__busca">{_LUPA}<input type="search" placeholder="Filtrar temas…" '
+                      'aria-label="Filtrar temas" autocomplete="off" data-filtro-texto></label>')
+    partes += [_faceta(*f) for f in facetas]
     return (
-        '<div class="filtros" data-filtros>'
-        f'<label class="filtros__busca">{_LUPA}'
-        '<input type="search" placeholder="Filtrar temas…" aria-label="Filtrar temas" autocomplete="off" data-filtro-texto></label>'
-        f'<div class="filtros__areas" role="group" aria-label="Áreas">{botoes}</div>'
-        '<p class="filtros__resultado" role="status" data-filtro-resultado></p></div>'
+        f'<div class="filtros" data-filtros data-singular="{_e(singular)}" data-plural="{_e(plural)}">{"".join(partes)}'
+        '<p class="filtros__resultado"><span role="status" data-filtro-resultado></span>'
+        '<button type="button" class="filtros__limpar" data-limpar hidden>Limpar filtros</button></p></div>'
     )
 
 
-def grupo_de_temas(area, cartoes):
-    """Uma área do catálogo: título (com âncora #area-...) e a grade de cartões."""
+def filtros_do_catalogo(grupos):
+    """Busca e área no catálogo. grupos: [(área, quantos temas)]."""
+    opcoes = [(area_slug(area), area, n) for area, n in grupos]
+    return barra_de_filtros([("area", "Área", opcoes, sum(n for _, _, n in opcoes))], "tema", "temas", busca=True)
+
+
+# ---------- Página "Por nível" ----------
+
+NIVEL_VALOR = {"Iniciante": "iniciante", "Intermediário": "intermediario", "Avançado": "avancado"}
+TIPOS = (("aula", "Aulas e resumos"), ("exercicio", "Exercícios"), ("simulado", "Simulados"))
+ICONE_DO_TIPO = {"aula": "livro", "exercicio": "lapis", "simulado": "relogio"}
+
+
+def legenda_dos_niveis():
+    """O que cada nível quer dizer (como as descrições de nível da Coursera)."""
+    itens = (
+        ("Iniciante", "Para começar do zero: conceitos e prática guiada. Nos exercícios, é o fácil."),
+        ("Intermediário", "Para quem já viu o básico: aplicar e combinar ideias. Nos exercícios, é o intermediário."),
+        ("Avançado", "Para aprofundar: problemas maiores e simulados mais exigentes. Nos exercícios, é o difícil."),
+    )
+    return '<dl class="legenda-niveis">' + "".join(f"<div><dt>{_nivel(n)}</dt><dd>{t}</dd></div>" for n, t in itens) + "</dl>"
+
+
+def item_de_nivel(tipo, titulo, url, chave, nivel, area, meta):
+    """Uma linha de "Por nível": ícone do tipo, título, tempo ou perguntas, selo de nível e ✓ (portal.js)."""
+    return (
+        f'<a class="item-nivel" href="{_e(url)}" data-item data-pagina="{_e(chave)}" data-nivel="{NIVEL_VALOR.get(nivel, "")}" '
+        f'data-area="{area_slug(area)}" data-tipo="{tipo}">'
+        f'<span class="item-nivel__tipo">{ICONES_PEQUENOS[ICONE_DO_TIPO[tipo]]}</span>'
+        f'<span class="item-nivel__titulo">{_e(titulo)}<span class="sr-only" data-estado-texto></span></span>'
+        f'<span class="item-nivel__meta">{_e(meta)}</span>{_nivel(nivel)}'
+        '<span class="item-nivel__feito" aria-hidden="true"></span></a>'
+    )
+
+
+def painel_de_nivel(tema, url, itens):
+    """Os itens de um tema em "Por nível": cabeçalho com o tema e as linhas."""
+    return (
+        f'<div class="painel-nivel" data-grupo data-area="{area_slug(tema.area)}">'
+        f'<a class="painel-nivel__tema" href="{_e(url)}"><span class="cartao-tema__icone">{ICONES.get(tema.icone, ICONES["pasta"])}</span>'
+        f'{_e(tema.titulo)}</a>{"".join(itens)}</div>'
+    )
+
+
+def grupo_de_temas(area, conteudo, painel=True):
+    """Uma área (catálogo e "Por nível"): título com âncora #area-... e o conteúdo, num painel ou solto."""
     slug = area_slug(area)
     return (
         f'<section class="grupo" data-grupo data-area="{slug}">'
         f'<h2 class="grupo-area" id="area-{slug}">{_e(area)}</h2>'
-        f'<div class="painel-temas">{cartoes}</div></section>'
+        + (f'<div class="painel-temas">{conteudo}</div>' if painel else conteudo)
+        + "</section>"
     )
 
 

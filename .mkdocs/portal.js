@@ -176,7 +176,9 @@
     document.querySelector("[data-revisar-vazio]").hidden = !!lista.firstChild;
   }
 
-  // ---------- Catálogo: filtro por área e por texto (sem acento) ----------
+  // ---------- Filtros (catálogo e "Por nível"): facetas e busca ----------
+  // Cada [data-item] tem data-area, data-nivel, data-tipo...; cada botão [data-faceta][data-valor] escolhe
+  // um valor. A contagem de um botão é quantos itens ele deixaria; botão sem item fica desativado.
 
   function semAcento(texto) {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -185,28 +187,44 @@
   function filtrar() {
     var caixa = document.querySelector("[data-filtros]");
     if (!caixa) return;
-    var marcado = caixa.querySelector('[data-filtro-area][aria-pressed="true"]');
-    var area = marcado ? marcado.dataset.filtroArea : "";
-    var termo = semAcento(caixa.querySelector("[data-filtro-texto]").value.trim());
+    var escolhas = {}, campo = caixa.querySelector("[data-filtro-texto]");
+    todos('[data-faceta][aria-pressed="true"]', caixa).forEach(function (b) { escolhas[b.dataset.faceta] = b.dataset.valor; });
+    var termo = campo ? semAcento(campo.value.trim()) : "";
+    var itens = todos("[data-item]");
+    // O termo casa com o começo das palavras ("git" acha Git, não "digitais").
+    function passa(item, ignorar) {
+      return Object.keys(escolhas).every(function (f) { return f === ignorar || !escolhas[f] || item.dataset[f] === escolhas[f]; }) &&
+        (!termo || (" " + item.dataset.busca).indexOf(" " + termo) >= 0);
+    }
     var total = 0;
-    todos("[data-grupo]").forEach(function (grupo) {
-      var n = 0;
-      todos(".cartao-tema", grupo).forEach(function (c) {
-        // O termo casa com o começo das palavras ("git" acha Git, não "digitais").
-        c.hidden = !((!area || grupo.dataset.area === area) && (" " + c.dataset.busca).indexOf(" " + termo) >= 0);
-        if (!c.hidden) n++;
-      });
-      grupo.hidden = !n;
-      total += n;
+    itens.forEach(function (i) {
+      i.hidden = !passa(i);
+      if (!i.hidden) total++;
     });
-    caixa.querySelector("[data-filtro-resultado]").textContent =
-      total ? total + (total === 1 ? " tema" : " temas") : "Nenhum tema encontrado.";
+    todos("[data-grupo]").forEach(function (g) { g.hidden = !g.querySelector("[data-item]:not([hidden])"); });
+    todos("[data-faceta]", caixa).forEach(function (b) {
+      var f = b.dataset.faceta, v = b.dataset.valor;
+      var n = itens.filter(function (i) { return passa(i, f) && (!v || i.dataset[f] === v); }).length;
+      b.querySelector("[data-contagem]").textContent = n;
+      b.disabled = !n && b.getAttribute("aria-pressed") !== "true";
+    });
+    caixa.querySelector("[data-limpar]").hidden = !termo && !Object.keys(escolhas).some(function (f) { return escolhas[f]; });
+    caixa.querySelector("[data-filtro-resultado]").textContent = total
+      ? total + " " + caixa.dataset[total === 1 ? "singular" : "plural"]
+      : "Nenhum " + caixa.dataset.singular + " encontrado.";
   }
 
-  function escolherArea(slug) {
-    var botoes = todos("[data-filtro-area]");
-    if (!botoes.some(function (b) { return b.dataset.filtroArea === slug; })) return;
-    botoes.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.filtroArea === slug); });
+  function escolher(faceta, valor) {
+    var botoes = todos('[data-faceta="' + faceta + '"]');
+    if (!botoes.some(function (b) { return b.dataset.valor === valor; })) return;
+    botoes.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.valor === valor); });
+    filtrar();
+  }
+
+  function limpar() {
+    todos("[data-faceta]").forEach(function (b) { b.setAttribute("aria-pressed", !b.dataset.valor); });
+    var campo = document.querySelector("[data-filtro-texto]");
+    if (campo) campo.value = "";
     filtrar();
   }
 
@@ -215,9 +233,10 @@
   }
 
   document.addEventListener("click", function (e) {
-    var b = e.target.closest && e.target.closest("button[data-concluir], [data-exportar], [data-importar], [data-apagar], [data-filtro-area]");
+    var b = e.target.closest && e.target.closest("button[data-concluir], [data-exportar], [data-importar], [data-apagar], [data-faceta], [data-limpar]");
     if (!b) return;
-    if (b.hasAttribute("data-filtro-area")) return escolherArea(b.dataset.filtroArea);
+    if (b.hasAttribute("data-faceta")) return escolher(b.dataset.faceta, b.dataset.valor);
+    if (b.hasAttribute("data-limpar")) return limpar();
     if (b.hasAttribute("data-concluir")) return P.concluir(b.dataset.concluir, b.getAttribute("aria-pressed") !== "true");
     if (b.hasAttribute("data-importar")) return document.querySelector("[data-arquivo]").click();
     if (b.hasAttribute("data-apagar")) {
@@ -233,12 +252,14 @@
     mensagem("Arquivo baixado. No outro navegador, abra esta página e clique em Importar.");
   });
 
-  // "Ver no catálogo" de uma área: já abre (ou troca) o filtro.
-  function areaDaAncora() {
-    var area = /^#area-([\w-]+)$/.exec(location.hash);
-    if (area) escolherArea(area[1]);
+  // A âncora já abre filtrado: "Ver no catálogo" (#area-programacao) e a etiqueta de nível de uma
+  // página, que leva a "Por nível" (#tag:intermediário).
+  function filtroDaAncora() {
+    var h = decodeURIComponent(location.hash), area = /^#area-([\w-]+)$/.exec(h), nivel = /^#tag:(.+)$/.exec(h);
+    if (area) escolher("area", area[1]);
+    if (nivel) escolher("nivel", semAcento(nivel[1]));
   }
-  window.addEventListener("hashchange", areaDaAncora);
+  window.addEventListener("hashchange", filtroDaAncora);
 
   document.addEventListener("input", function (e) {
     if (e.target.matches && e.target.matches("[data-filtro-texto]")) filtrar();
@@ -270,7 +291,7 @@
   });
 
   function iniciar() {
-    areaDaAncora();
+    filtroDaAncora();
     filtrar();
     var visita = document.querySelector("[data-visita]:not([data-montado])");
     if (!visita) return desenhar();

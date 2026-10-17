@@ -30,7 +30,8 @@ from pymdownx.slugs import slugify
 from _catalogo import agrupar_por_area, fora_de_codigo, lugares, montar, perguntas, tabela_roteiro, totais
 from _componentes import (
     EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, area_slug, bloco_continuar, cabecalho_tema, cartao, cartao_area, cartao_tema,
-    faixa_como_estudar, filtros_do_catalogo, grupo_de_temas,
+    TIPOS, barra_de_filtros, faixa_como_estudar, filtros_do_catalogo, grupo_de_temas, item_de_nivel, legenda_dos_niveis,
+    painel_de_nivel, NIVEL_VALOR,
     NOME_DO_NIVEL, fim_de_pagina, grade, heroi, informacoes, item_trilha, marcador_de_visita, plural, sem_emoji,
     simulados_do_tema, trilha, aviso_local, resumo_estudo, progresso_do_tema, revisar,
 )
@@ -50,12 +51,18 @@ ARQUIVOS_DO_SITE = {
 PAGINA_PROGRESSO = "progresso.md"
 MARCADOR_PROGRESSO = "<!-- meu-progresso -->"
 PAGINA_NIVEIS = "niveis.md"
-CONTEUDO_NIVEIS = """# Por nível
+MARCADOR_NIVEIS = "<!-- por-nivel -->"
+# A lista do plugin de tags fica escondida: as etiquetas de nível das páginas apontam para as âncoras
+# dela (#tag:iniciante...), e o portal.js usa a âncora para abrir a página já filtrada.
+CONTEUDO_NIVEIS = f"""# Por nível
 
-Todo o conteúdo, do mais simples ao mais avançado. Os exercícios seguem a mesma escala:
-**fácil** é Iniciante, **intermediário** é Intermediário e **difícil** é Avançado.
+{MARCADOR_NIVEIS}
+
+<div class="lista-de-tags" hidden markdown="1">
 
 <!-- material/tags -->
+
+</div>
 """
 
 _slug = slugify(case="lower")  # o mesmo do mkdocs.yml, que imita o GitHub
@@ -300,6 +307,44 @@ def _catalogo(page, files):
             f'<p class="temas-rodape"><a href="{_url(files, page, PAGINA_NIVEIS)}">Ver todo o conteúdo por nível →</a></p>')
 
 
+def _por_nivel(page, files):
+    """Página "Por nível": filtros (nível, área, tipo) e os itens agrupados por área e tema, como nas
+    plataformas de curso (Codecademy, Coursera). Aulas e resumos pelo nível da tabela do roteiro, exercícios
+    pelo nome do arquivo (fácil = Iniciante...), simulados pela tabela de simulados/README.md."""
+    url = lambda src: _url(files, page, src)  # noqa: E731
+    secoes, todos = [], []
+    for area, temas in _temas_por_area():
+        paineis = []
+        for t in temas:
+            itens = []
+            for u in t.unidades:
+                itens.append(("aula", f"{_rotulo_da_unidade(u)} {u.numero} · {u.titulo}", u.src, u.nivel, f"~{u.minutos} min"))
+                for e in u.exercicios:
+                    meta = plural(e.perguntas, "pergunta", "perguntas") if e.perguntas else plural(e.exercicios, "exercício", "exercícios")
+                    itens.append(("exercicio", f"{u.titulo} · {NOME_DO_NIVEL[e.nivel]}", e.src, NIVEL_DO_EXERCICIO[e.nivel], meta))
+            itens += [("simulado", s.titulo, s.src, s.nivel, s.duracao) for s in t.simulados]
+            itens = [i for i in itens if i[3]]  # sem nível não entra
+            todos += [(i[0], i[3], area) for i in itens]
+            if itens:
+                paineis.append(painel_de_nivel(t, url(t.src), [
+                    item_de_nivel(tipo, titulo, url(src), _chave(files, src), nivel, area, meta)
+                    for tipo, titulo, src, nivel, meta in itens
+                ]))
+        if paineis:
+            secoes.append(grupo_de_temas(area, "".join(paineis), painel=False))
+    conta = lambda chave: {v: sum(1 for i in todos if i[chave] == v) for v in {i[chave] for i in todos}}  # noqa: E731
+    por_tipo, por_nivel, por_area = conta(0), conta(1), conta(2)
+    filtros = barra_de_filtros([
+        ("nivel", "Nível", [(NIVEL_VALOR[n], n, por_nivel.get(n, 0)) for n in NIVEIS], len(todos)),
+        ("area", "Área", [(area_slug(a), a, por_area[a]) for a, _ in _temas_por_area() if a in por_area], len(todos)),
+        ("tipo", "Tipo", [(v, nome, por_tipo.get(v, 0)) for v, nome in TIPOS], len(todos)),
+    ], "item", "itens")
+    return (
+        "Escolha o nível e, se quiser, a área e o tipo. Tudo fica agrupado por área e por tema.\n\n"
+        f"{legenda_dos_niveis()}\n\n{filtros}\n\n{''.join(secoes)}\n"
+    )
+
+
 def _areas(page, files):
     """Home: um bloco por área, com os temas como etiquetas. O catálogo completo fica em Conteúdo."""
     catalogo = _url(files, page, "conteudo/README.md")
@@ -497,6 +542,10 @@ def on_page_markdown(markdown, page, config, files):
             markdown = _editores(markdown)
     markdown = _corretores(markdown)
     markdown = VER_RESPOSTA.sub(r"[Ver resposta →](\1){ .md-button }", markdown)
+    if page.file.src_uri == PAGINA_NIVEIS:
+        markdown = markdown.replace(MARCADOR_NIVEIS, _por_nivel(page, files))
+        page.meta["hide"] = ["toc"]
+        page.edit_url = None
     if page.file.src_uri == PAGINA_PROGRESSO:
         markdown = markdown.replace(MARCADOR_PROGRESSO, _meu_progresso(page, files))
         page.meta["hide"] = ["navigation", "toc"]
