@@ -1036,11 +1036,12 @@
 }
 @media (min-width: 45em) {
   .md-typeset .fim {
-    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-    align-items: stretch;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 .md-typeset button.fim__concluir {
+  grid-column: 1 / -1;
+  justify-self: start;
   display: flex;
   align-items: center;
   gap: 0.7rem;
@@ -1118,6 +1119,33 @@
 }
 @media print {
   .md-typeset .fim {
+    display: none;
+  }
+}
+
+/* Barra de leitura das aulas: só CSS (animação ligada à rolagem). Sem suporte, não aparece. */
+.barra-leitura {
+  display: none;
+}
+@supports (animation-timeline: scroll()) {
+  .barra-leitura {
+    position: fixed;
+    inset: 2.4rem 0 auto 0;
+    z-index: 5;
+    display: block;
+    height: 3px;
+    background: var(--md-typeset-a-color);
+    transform-origin: 0 50%;
+    animation: barra-leitura linear both;
+    animation-timeline: scroll(root);
+  }
+  @keyframes barra-leitura {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+}
+@media print {
+  .barra-leitura {
     display: none;
   }
 }

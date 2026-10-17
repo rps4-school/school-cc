@@ -255,10 +255,11 @@ def informacoes(partes, link=None):
     return f'<p class="informacoes">{itens}</p>'
 
 
-def fim_de_pagina(chave, texto_botao, pratique=None, proximo=None):
-    """Concluir + próximos passos. pratique: [(nivel, url, chave, perguntas)]; proximo: (rótulo, título, url)."""
+def fim_de_pagina(chave, texto_botao, pratique=None, proximo=None, feito="Concluída"):
+    """Concluir + próximos passos. pratique: [(nivel, url, chave, perguntas)]; proximo: (rótulo, título, url).
+    feito: o texto do botão depois de marcado (o portal.js troca)."""
     partes = [
-        f'<button type="button" class="fim__concluir" data-concluir="{_e(chave)}" aria-pressed="false">'
+        f'<button type="button" class="fim__concluir" data-concluir="{_e(chave)}" aria-pressed="false" data-feito="{_e(feito)}">'
         f'<span class="fim__marca" aria-hidden="true"></span><span data-concluir-texto>{_e(texto_botao)}</span></button>'
     ]
     if pratique:

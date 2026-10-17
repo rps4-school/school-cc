@@ -26,7 +26,8 @@ from pymdownx.slugs import slugify
 from _catalogo import fora_de_codigo, lugares, montar, perguntas, tabela_roteiro, totais
 from _componentes import (
     EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, bloco_continuar, cabecalho_tema, cartao, cartao_tema, faixa_como_estudar,
-    grade, heroi, item_trilha, plural, sem_emoji, simulados_do_tema, trilha,
+    NOME_DO_NIVEL, fim_de_pagina, grade, heroi, informacoes, item_trilha, marcador_de_visita, plural, sem_emoji,
+    simulados_do_tema, trilha,
 )
 
 # Arquivos desta pasta publicados no site (o MkDocs ignora pastas que começam com ".").
@@ -321,6 +322,59 @@ def _pagina_do_tema(markdown, tema, page, files):
     return f"{antes}{trilha(itens, tema.area)}\n{depois}"
 
 
+# Por tipo de unidade: (rótulo da próxima, texto do botão, texto depois de marcado, "rever ...").
+TEXTOS_DA_UNIDADE = {
+    "Aula": ("Próxima aula", "Marcar aula como concluída", "Aula concluída", "Rever a aula"),
+    "Resumo": ("Próximo resumo", "Marcar resumo como concluído", "Resumo concluído", "Rever o resumo"),
+    "Parte": ("Próxima parte", "Marcar como concluída", "Concluída", "Rever a parte"),
+}
+
+
+def _proxima_unidade(tema, unidade):
+    i = tema.unidades.index(unidade)
+    return tema.unidades[i + 1] if i + 1 < len(tema.unidades) else None
+
+
+def _pagina_da_trilha(markdown, lugar, page, files):
+    """Aula, resumo, exercício ou simulado: linha de informações e marcador de visita depois do título
+    (barra de leitura nas aulas) e o fim da página (concluir e próximos passos)."""
+    tema, unidade = lugar.tema, lugar.unidade
+    url = lambda src: _url(files, page, src)  # noqa: E731
+    chave = _chave(files, page.file.src_uri)
+    topo = ""
+    if lugar.simulado:
+        s = lugar.simulado
+        partes, link, titulo = [tema.titulo, "Simulado", s.duracao], None, f"{s.titulo} · {tema.titulo}"
+        fim = fim_de_pagina(chave, "Marcar como feito", feito="Feito")
+    else:
+        rotulo = _rotulo_da_unidade(unidade)
+        rotulo_proxima, botao, feito, rever = TEXTOS_DA_UNIDADE[rotulo]
+        seguinte = _proxima_unidade(tema, unidade)
+        proximo = (rotulo_proxima, seguinte.titulo, url(seguinte.src)) if seguinte else None
+        if lugar.exercicio:
+            e = lugar.exercicio
+            nivel = NOME_DO_NIVEL[e.nivel]
+            quantas = plural(e.perguntas, "pergunta", "perguntas") if e.perguntas else plural(e.exercicios, "exercício", "exercícios")
+            partes, link = [tema.titulo, f"{rotulo} {unidade.numero}", nivel, quantas], (rever, url(unidade.src))
+            titulo = f"{unidade.titulo} · {nivel}"
+            i = unidade.exercicios.index(e)
+            if i + 1 < len(unidade.exercicios):
+                outro = unidade.exercicios[i + 1]
+                proximo = ("Próximo nível", f"{unidade.titulo} · {NOME_DO_NIVEL[outro.nivel]}", url(outro.src))
+            fim = fim_de_pagina(chave, "Marcar como concluída", proximo=proximo)
+        else:
+            partes = [tema.titulo, f"{rotulo} {unidade.numero} de {tema.unidades[-1].numero}", f"~{unidade.minutos} min"]
+            link, titulo = None, f"{rotulo} {unidade.numero} · {unidade.titulo}"
+            pratique = [(e.nivel, url(e.src), _chave(files, e.src), e.perguntas) for e in unidade.exercicios]
+            fim = fim_de_pagina(chave, botao, pratique=pratique, proximo=proximo, feito=feito)
+            topo = '<div class="barra-leitura" aria-hidden="true"></div>'
+    if page.file.src_uri != tema.src:  # a página do tema já tem o cabeçalho de curso
+        topo = informacoes(partes, link) + topo
+    topo += marcador_de_visita(tema.slug, titulo)
+    markdown = re.sub(r"^# .*$", lambda m: f"{m.group(0)}\n\n{topo}\n", markdown, count=1, flags=re.M)
+    return f"{markdown.rstrip()}\n\n{fim}\n"
+
+
 def _inicio(page, files):
     """A home do site é só o portal: o README da raiz continua igual no GitHub."""
     t = totais(_estado["temas"])
@@ -375,6 +429,9 @@ def on_page_markdown(markdown, page, config, files):
     tema = next((t for t in _estado["temas"] if t.src == page.file.src_uri), None)
     if tema:
         markdown = _pagina_do_tema(markdown, tema, page, files)
+    lugar = _estado["lugares"].get(page.file.src_uri)
+    if lugar:
+        markdown = _pagina_da_trilha(markdown, lugar, page, files)
     if page.file.src_uri == "conteudo/README.md":  # a tabela de temas vira o catálogo do portal
         markdown = TABELA_INDICE.sub(lambda m: _temas(page, files) + "\n", markdown, count=1)
     markdown = _tabelas_indice(markdown, page, files)
