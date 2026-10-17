@@ -9,8 +9,11 @@ Roda depois do hooks.py (ordem em mkdocs.yml). Tudo aqui é só visual:
 - transforma "✅ Ver resposta" em botão;
 - nos simulados de Python, põe um editor (editor.js) antes da resposta de cada questão;
 - nas perguntas com "**Resposta:**" dentro de <details>, põe o corretor automático (corretor.js);
-- monta a página inicial (hero + cartões);
-- transforma a linha "**Nível:** ..." em tag e gera a página "Por nível".
+- transforma a linha "**Nível:** ..." em tag e gera a página "Por nível";
+- portal (dados do _catalogo.py, progresso desenhado pelo portal.js): página inicial com o catálogo de
+  temas, cabeçalho de curso e trilha na página do tema (no lugar da tabela do roteiro), linha de
+  informações e fim de página (concluir, próximos passos) nas aulas, exercícios e simulados, e a página
+  "Meu progresso".
 """
 
 import html

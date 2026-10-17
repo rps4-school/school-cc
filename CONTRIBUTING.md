@@ -20,6 +20,17 @@ conteudo/<tema>/          ← python, git, sistemas-digitais, calculo...
 - **Arquivos Python** usam `_` no lugar do hífen (padrão da linguagem): `ex01_par_ou_impar.py`.
 - **Simulado novo:** crie `simulados/<tema>/simulado-NN/README.md` com a prova e `respostas/qN_nome.py` com uma resposta por questão. Logo abaixo do nível, coloque a linha `**Duração sugerida:** 1h40 · **Pontuação:** 100 pontos · **Assuntos:** ...`: no site, ela vira a folha de prova com cronômetro. Use questões **próprias ou adaptadas**, nunca a prova original de uma disciplina. Depois, adicione o simulado na tabela de [`simulados/README.md`](simulados/README.md). Nos simulados de **Sistemas Digitais** e de **Cálculo** não há `respostas/`: cada item de `## Questão NN · Assunto · N pontos` tem a resposta num `<details>` com corretor (veja abaixo), e itens abertos trazem uma "Resposta esperada" sem corretor.
 - **Nível de cada assunto:** logo abaixo do título, coloque uma linha `**Nível:** 🟢 Iniciante`, `**Nível:** 🟡 Intermediário` ou `**Nível:** 🔴 Avançado`. No site, ela vira uma etiqueta e entra na página "Por nível". Os exercícios não precisam dela, porque o nível vem do nome do arquivo (fácil, intermediário, difícil).
+- **Roteiro do tema (vira a trilha no site):** no `README.md` do tema, a primeira tabela cujo cabeçalho começa com `| # |` é o roteiro. No site, ela vira uma trilha, com uma etapa por linha e o progresso do aluno. As colunas são reconhecidas pelo nome; a ordem não importa e uma coluna a mais não atrapalha:
+
+    | Coluna | Nomes aceitos | O que vai nela |
+    | ------ | ------------- | -------------- |
+    | Número | `#` | `1`, `2`... (deve ser a primeira coluna) |
+    | Unidade | `Aula`, `Resumo` ou `Arquivo` | Link para a aula ou resumo (sem link, vira "Introdução", que é o próprio README) |
+    | Nível | `Nível` | `🟢 Iniciante`, `🟡 Intermediário` ou `🔴 Avançado` |
+    | Descrição | `O que você aprende` ou `Você vai aprender` | Uma frase |
+    | Exercícios | `Exercícios` | Links para `facil.md`, `intermediario.md` e `dificil.md` do assunto |
+
+- **Tema novo no portal:** basta a linha do tema na tabela de [`conteudo/README.md`](conteudo/README.md). As contagens (aulas, exercícios, simulados) saem dos arquivos. Para ter área e ícone próprios no catálogo, acrescente uma linha no `TEMAS` de `.mkdocs/_catalogo.py`; sem ela, o tema aparece em "Outros".
 - **Numere o que tem ordem:** `01-variaveis.md`, `02-condicionais.md`, ...
 - **O material é organizado por tema, e não por matéria ou período.** Um mesmo tema (ex.: `python`) serve para qualquer disciplina que o use.
 - **Pergunta com correção automática:** coloque a resposta dentro de um bloco `<details>`, na primeira linha, num destes formatos. No GitHub o bloco vira "Ver resposta"; no site, ganha também um campo para o aluno digitar e conferir na hora:
@@ -98,7 +109,9 @@ Todo o repositório vira o site <https://rps4-school.github.io/school-cc/>, publ
 - citações que começam com 💡, ⚠️ ou 📖 viram caixas de dica, atenção e leitura;
 - os exemplos `**Entrada:**` / `**Saída:**` aparecem lado a lado;
 - perguntas com `**Resposta:**` dentro de `<details>` ganham um corretor automático (veja acima);
-- nos simulados de Python, cada `## Questão NN` ganha um editor de Python (o mesmo do VS Code) com terminal, que roda no navegador. Basta manter o título `## Questão NN · ...` e o link `[✅ Ver resposta]`.
+- nos simulados de Python, cada `## Questão NN` ganha um editor de Python (o mesmo do VS Code) com terminal, que roda no navegador. Basta manter o título `## Questão NN · ...` e o link `[✅ Ver resposta]`;
+- a página inicial é um portal: catálogo de temas, "Continue de onde parou" e a página **Meu progresso**. O roteiro de cada tema vira a trilha (veja "Roteiro do tema" acima), e aulas, resumos, exercícios e simulados ganham "Marcar como concluída";
+- o progresso do aluno fica **só no navegador dele** (localStorage), sem conta. Em "Meu progresso", ele pode exportar, importar e apagar.
 
 O build roda em todo PR e **falha se houver link ou âncora quebrados**. Para ver o site no seu computador antes de abrir o PR:
 
@@ -107,6 +120,15 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -r .mkdocs/requirements.txt
 mkdocs serve -f .mkdocs/mkdocs.yml     # abra http://127.0.0.1:8000/school-cc/
 ```
+
+Testes do site (a CI também roda):
+
+```bash
+python3 -m unittest discover -s .mkdocs -p "test_*.py"             # catálogo, componentes e corretor no build
+node --test .mkdocs/corretor.test.js .mkdocs/progresso.test.js     # corretor e progresso do aluno
+```
+
+O site troca de página sem recarregar (navegação instantânea). Ela só funciona com links que estão no `sitemap.xml`, feito com o `site_url`: o `mkdocs serve` já cuida disso. Num `mkdocs build` servido por outro servidor local, use `SITE_URL=http://localhost:8000/ mkdocs build ...`.
 
 Só quem mexer no visual (`.mkdocs/visual.py`, `_componentes.py`, `hooks.py` ou `tailwind.css`) precisa de Node, para recompilar o CSS e fazer commit do `.mkdocs/site.css`:
 
