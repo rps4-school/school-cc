@@ -22,6 +22,8 @@ Comece com um chute $x_0$. No ponto $(x_0, f(x_0))$, trace a tangente. Ela é um
 
 ![Método de Newton: a tangente no chute x0 corta o eixo em x1, a tangente em x1 corta em x2, cada vez mais perto da raiz](../img/newton.svg)
 
+Na figura, $f(x) = x^2 - 2$ e $x_0 = 3$: a raiz é $\sqrt{2} \approx 1{,}4142$.
+
 A tangente em $x_{k-1}$ tem inclinação $f'(x_{k-1})$. Ligando o ponto da curva ao ponto $(x_k, 0)$:
 
 $$
@@ -50,13 +52,15 @@ $$
 
 ## 3. Critério de parada
 
-Pare quando dois chutes seguidos quase não mudam:
+Pare quando dois chutes seguidos quase não mudarem:
 
 $$
 \lvert x_k - x_{k-1} \rvert < \varepsilon
 $$
 
 e entregue $x_k$. Na prática, também se põe um **número máximo de iterações**, para o programa não rodar para sempre se o método não convergir.
+
+> ⚠️ Esse critério é prático, mas **não garante** $\lvert x_k - r \rvert < \varepsilon$: ele só diz que os chutes pararam de mudar. Por isso, confira também se $f(x_k)$ ficou perto de zero.
 
 ## 4. Exemplos resolvidos
 
@@ -70,7 +74,7 @@ e entregue $x_k$. Na prática, também se põe um **número máximo de iteraçõ
 
 Parou em $k = 3$: $\sqrt{5} \approx 2{,}236068$ (o valor exato é $2{,}2360679\dots$).
 
-**Exemplo 2:** o tamanho ideal de um bloco de dados satisfaz $x^3 - 2x - 5 = 0$. Use $x_0 = 2$ e $\varepsilon = 10^{-3}$. Aqui $f'(x) = 3x^2 - 2$.
+**Exemplo 2:** resolva a cúbica clássica $x^3 - 2x - 5 = 0$, a mesma que o próprio Newton usou para apresentar o método. Use $x_0 = 2$ e $\varepsilon = 10^{-3}$. Aqui $f'(x) = 3x^2 - 2$.
 
 | $k$ | $x_{k-1}$ | $f(x_{k-1})$ | $f'(x_{k-1})$ | $x_k$ | $\lvert x_k - x_{k-1} \rvert$ |
 | --- | --------- | ------------ | ------------- | ----- | ----------------------------- |
@@ -118,7 +122,8 @@ def newton(f, df, x, eps, max_iter=50):
 
 print(" k | x_(k-1)  |  f(x_(k-1)) | f'(x_(k-1)) |   x_k    | |x_k - x_(k-1)|")
 raiz = newton(f, df, 2, 0.001)
-print("Raiz aproximada:", round(raiz, 6))
+if raiz is not None:           # None: a função já explicou por que falhou
+    print("Raiz aproximada:", round(raiz, 6))
 ```
 
 Saída:
@@ -143,6 +148,8 @@ $$
 
 ```python
 def raiz_quadrada(A, eps=1e-10):
+    if A < 0:
+        return None             # sem raiz real: o laço nunca pararia
     x = A if A > 1 else 1.0     # chute inicial
     while True:
         novo = (x + A / x) / 2  # Newton para x**2 - A = 0

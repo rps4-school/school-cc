@@ -14,7 +14,7 @@
 > - São 10 questões de **10 pontos**. Os itens de uma questão valem partes iguais.
 > - Só confira as respostas depois que o tempo acabar.
 
-> 💡 **Corrigindo no site:** cada item tem um campo para digitar a sua resposta e conferir na hora (vale fração, decimal, `π`, `e`, `√` e funções equivalentes). Use só na correção, depois do tempo. Itens abertos (de explicar) não têm campo: compare com a resposta esperada.
+> 💡 **Corrigindo no site:** cada item tem um campo para digitar a sua resposta e conferir na hora (vale fração, decimal, `π`, `e`, `√` e funções equivalentes). Use só na correção, depois do tempo.
 
 ---
 
@@ -100,9 +100,7 @@ Com $x$ um pouco menor que 2: numerador $\approx 2 > 0$ e denominador negativo e
 $\sqrt{4x^2 + x} \sim 2\lvert x \rvert = -2x$ para $x < 0$. Então $\dfrac{-2x}{3x} = -\dfrac{2}{3}$.
 </details>
 
-Seja $f(x) = \dfrac{2x^2 - 8}{x^2 - x - 2}$.
-
-**b)** Qual é a assíntota vertical? Responda o valor de $x$.
+**b)** Seja $f(x) = \dfrac{2x^2 - 8}{x^2 - x - 2}$. Qual é a assíntota vertical? Responda o valor de $x$.
 
 <details>
 <summary>Ver resposta</summary>
@@ -112,7 +110,7 @@ Seja $f(x) = \dfrac{2x^2 - 8}{x^2 - x - 2}$.
 $f(x) = \dfrac{2(x - 2)(x + 2)}{(x - 2)(x + 1)}$. O $(x - 2)$ cancela (buraco em $x = 2$); sobra $x = -1$.
 </details>
 
-**c)** Qual é a assíntota horizontal? Responda o valor de $y$.
+**c)** Qual é a assíntota horizontal dessa $f$? Responda o valor de $y$.
 
 <details>
 <summary>Ver resposta</summary>
@@ -240,12 +238,12 @@ Pela tabela: **$-3$**, em $x = -1$ e em $x = 2$.
 $g'(x) = 4x^3 - 12x^2 = 4x^2(x - 3)$: críticos $0$ e $3$. $g''(x) = 12x^2 - 24x$; $g''(3) = 36 > 0$: mínimo, com $g(3) = 81 - 108 = -27$.
 </details>
 
-**d)** Em $x = 0$, $g''(0) = 0$. O ponto $x = 0$ é máximo ou mínimo local de $g$? Responda **sim** ou **não**.
+**d)** Em $x = 0$, $g''(0) = 0$. A função $g$ tem extremo local (máximo ou mínimo) em $x = 0$? Responda **sim** ou **não**.
 
 <details>
 <summary>Ver resposta</summary>
 
-**Resposta:** `não`
+**Resposta:** `não | não tem | nenhum | nenhum dos dois`
 
 O teste da 2ª derivada não decide. Pela 1ª derivada: $g'(x) = 4x^2(x - 3) < 0$ dos dois lados de $0$ (perto dele). A função só desce: não há extremo em $x = 0$.
 </details>
@@ -261,7 +259,7 @@ O algoritmo A faz $30\,n\ln n$ operações e o B faz $n^2$. O ponto de virada sa
 <details>
 <summary>Ver resposta</summary>
 
-**Número:** `41,05 ± 0,01`
+**Número:** `41,05 ± 0,005`
 
 $200 - 30\ln 200 \approx 200 - 158{,}95 = 41{,}05$. Há troca de sinal em $[100, 200]$.
 </details>
@@ -286,14 +284,14 @@ Menor $k$: $\frac{100}{2^{k+1}} \leq 1 \Rightarrow k = 6$.
 | 6 | 150 | 151,5625 | **150,78125** | $+0{,}31$ |
 </details>
 
-**c)** A partir de qual $n$ inteiro o algoritmo A passa a ser mais rápido?
+**c)** Para $n \geq 2$, a partir de qual $n$ inteiro o algoritmo A passa a ser mais rápido?
 
 <details>
 <summary>Ver resposta</summary>
 
 **Número:** `151`
 
-$f(150) \approx -0{,}32 < 0$ (B ainda ganha) e $f(151) \approx 0{,}48 > 0$ (A ganha).
+$f(150) \approx -0{,}32 < 0$ (B ainda ganha) e $f(151) \approx 0{,}48 > 0$ (A ganha). Em $n = 1$, A também ganha ($\ln 1 = 0$): por isso a condição $n \geq 2$.
 </details>
 
 ---

@@ -14,7 +14,7 @@
 > - São 10 questões de **10 pontos**. Os itens de uma questão valem partes iguais.
 > - Só confira as respostas depois que o tempo acabar.
 
-> 💡 **Corrigindo no site:** cada item tem um campo para digitar a sua resposta e conferir na hora (vale fração, decimal, `π`, `e`, `√` e funções equivalentes). Use só na correção, depois do tempo. Itens abertos (de explicar) não têm campo: compare com a resposta esperada.
+> 💡 **Corrigindo no site:** cada item tem um campo para digitar a sua resposta e conferir na hora (vale fração, decimal, `π`, `e`, `√` e funções equivalentes). Use só na correção, depois do tempo.
 
 ---
 
@@ -139,7 +139,7 @@ $\dfrac{1}{2x + 2h + 1} - \dfrac{1}{2x + 1} = \dfrac{-2h}{(2x + 2h + 1)(2x + 1)}
 <details>
 <summary>Ver resposta</summary>
 
-**Resposta:** `não`
+**Resposta:** `não | não tem | não existe`
 
 Inclinação $-1$ à esquerda e $1$ à direita: bico.
 </details>
@@ -149,7 +149,7 @@ Inclinação $-1$ à esquerda e $1$ à direita: bico.
 <details>
 <summary>Ver resposta</summary>
 
-**Número:** `3,033333 ± 0,0001`
+**Número:** `3,033333 ± 0,00005`
 
 $L(x) = 3 + \dfrac{1}{6}(x - 9)$, porque $f'(9) = \dfrac{1}{2 \cdot 3}$. $L(9{,}2) = 3 + \dfrac{0{,}2}{6} \approx 3{,}033333$ (o real é $3{,}033150$).
 </details>

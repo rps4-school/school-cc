@@ -21,16 +21,16 @@ Funções, limites, derivadas, métodos numéricos para achar raízes e integrai
 
 | # | Aula | Nível | O que você aprende | Exercícios |
 | - | ---- | ----- | ------------------ | ---------- |
-| 1 | [Funções reais](aulas/01-funcoes.md) | 🟢 Iniciante | Domínio, imagem, injetora, composição, inversa e modelagem | [🟢](exercicios/01-funcoes/facil.md) · [🟡](exercicios/01-funcoes/intermediario.md) · [🔴](exercicios/01-funcoes/dificil.md) |
-| 2 | [Limites](aulas/02-limites.md) | 🟢 Iniciante | Substituição, indeterminação 0/0, laterais, limites infinitos e confronto | [🟢](exercicios/02-limites/facil.md) · [🟡](exercicios/02-limites/intermediario.md) · [🔴](exercicios/02-limites/dificil.md) |
-| 3 | [Limites no infinito](aulas/03-limites-no-infinito.md) | 🟡 Intermediário | Regra dos graus, raízes, assíntotas e modelos de longo prazo | [🟢](exercicios/03-limites-no-infinito/facil.md) · [🟡](exercicios/03-limites-no-infinito/intermediario.md) · [🔴](exercicios/03-limites-no-infinito/dificil.md) |
-| 4 | [Derivada](aulas/04-derivada.md) | 🟡 Intermediário | Taxa de variação, definição pelo limite e reta tangente | [🟢](exercicios/04-derivada/facil.md) · [🟡](exercicios/04-derivada/intermediario.md) · [🔴](exercicios/04-derivada/dificil.md) |
-| 5 | [Regras de derivação](aulas/05-regras-de-derivacao.md) | 🟡 Intermediário | Produto, quociente, cadeia, exponencial, logaritmo e trigonométricas | [🟢](exercicios/05-regras-de-derivacao/facil.md) · [🟡](exercicios/05-regras-de-derivacao/intermediario.md) · [🔴](exercicios/05-regras-de-derivacao/dificil.md) |
-| 6 | [Aplicações da derivada](aulas/06-aplicacoes-da-derivada.md) | 🔴 Avançado | Crescimento, máximos e mínimos, concavidade e otimização | [🟢](exercicios/06-aplicacoes-da-derivada/facil.md) · [🟡](exercicios/06-aplicacoes-da-derivada/intermediario.md) · [🔴](exercicios/06-aplicacoes-da-derivada/dificil.md) |
-| 7 | [Método da bisseção](aulas/07-bissecao.md) | 🟡 Intermediário | Bolzano, bisseção, cota de erro e código em Python | [🟢](exercicios/07-bissecao/facil.md) · [🟡](exercicios/07-bissecao/intermediario.md) · [🔴](exercicios/07-bissecao/dificil.md) |
-| 8 | [Método de Newton](aulas/08-metodo-de-newton.md) | 🔴 Avançado | Iteração pela tangente, critério de parada e quando falha | [🟢](exercicios/08-metodo-de-newton/facil.md) · [🟡](exercicios/08-metodo-de-newton/intermediario.md) · [🔴](exercicios/08-metodo-de-newton/dificil.md) |
-| 9 | [Primitivas](aulas/09-primitivas.md) | 🟡 Intermediário | Integral indefinida, tabela, condição inicial e substituição | [🟢](exercicios/09-primitivas/facil.md) · [🟡](exercicios/09-primitivas/intermediario.md) · [🔴](exercicios/09-primitivas/dificil.md) |
-| 10 | [Integral definida e áreas](aulas/10-integral-definida.md) | 🔴 Avançado | Somas de Riemann, TFC, áreas entre curvas e integrais impróprias | [🟢](exercicios/10-integral-definida/facil.md) · [🟡](exercicios/10-integral-definida/intermediario.md) · [🔴](exercicios/10-integral-definida/dificil.md) |
+| 1 | [Funções reais](aulas/01-funcoes.md) | 🟢 Iniciante | Domínio, imagem, injetora, composição, inversa e modelagem | [🟢 Fácil](exercicios/01-funcoes/facil.md) · [🟡 Intermediário](exercicios/01-funcoes/intermediario.md) · [🔴 Difícil](exercicios/01-funcoes/dificil.md) |
+| 2 | [Limites](aulas/02-limites.md) | 🟢 Iniciante | Substituição, indeterminação 0/0, laterais, limites infinitos e confronto | [🟢 Fácil](exercicios/02-limites/facil.md) · [🟡 Intermediário](exercicios/02-limites/intermediario.md) · [🔴 Difícil](exercicios/02-limites/dificil.md) |
+| 3 | [Limites no infinito](aulas/03-limites-no-infinito.md) | 🟡 Intermediário | Regra dos graus, raízes, assíntotas e modelos de longo prazo | [🟢 Fácil](exercicios/03-limites-no-infinito/facil.md) · [🟡 Intermediário](exercicios/03-limites-no-infinito/intermediario.md) · [🔴 Difícil](exercicios/03-limites-no-infinito/dificil.md) |
+| 4 | [Derivada](aulas/04-derivada.md) | 🟡 Intermediário | Taxa de variação, definição pelo limite e reta tangente | [🟢 Fácil](exercicios/04-derivada/facil.md) · [🟡 Intermediário](exercicios/04-derivada/intermediario.md) · [🔴 Difícil](exercicios/04-derivada/dificil.md) |
+| 5 | [Regras de derivação](aulas/05-regras-de-derivacao.md) | 🟡 Intermediário | Produto, quociente, cadeia, exponencial, logaritmo e trigonométricas | [🟢 Fácil](exercicios/05-regras-de-derivacao/facil.md) · [🟡 Intermediário](exercicios/05-regras-de-derivacao/intermediario.md) · [🔴 Difícil](exercicios/05-regras-de-derivacao/dificil.md) |
+| 6 | [Aplicações da derivada](aulas/06-aplicacoes-da-derivada.md) | 🔴 Avançado | Crescimento, máximos e mínimos, concavidade e otimização | [🟢 Fácil](exercicios/06-aplicacoes-da-derivada/facil.md) · [🟡 Intermediário](exercicios/06-aplicacoes-da-derivada/intermediario.md) · [🔴 Difícil](exercicios/06-aplicacoes-da-derivada/dificil.md) |
+| 7 | [Método da bisseção](aulas/07-bissecao.md) | 🟡 Intermediário | Bolzano, bisseção, cota de erro e código em Python | [🟢 Fácil](exercicios/07-bissecao/facil.md) · [🟡 Intermediário](exercicios/07-bissecao/intermediario.md) · [🔴 Difícil](exercicios/07-bissecao/dificil.md) |
+| 8 | [Método de Newton](aulas/08-metodo-de-newton.md) | 🔴 Avançado | Iteração pela tangente, critério de parada e quando falha | [🟢 Fácil](exercicios/08-metodo-de-newton/facil.md) · [🟡 Intermediário](exercicios/08-metodo-de-newton/intermediario.md) · [🔴 Difícil](exercicios/08-metodo-de-newton/dificil.md) |
+| 9 | [Primitivas](aulas/09-primitivas.md) | 🟡 Intermediário | Integral indefinida, tabela, condição inicial e substituição | [🟢 Fácil](exercicios/09-primitivas/facil.md) · [🟡 Intermediário](exercicios/09-primitivas/intermediario.md) · [🔴 Difícil](exercicios/09-primitivas/dificil.md) |
+| 10 | [Integral definida e áreas](aulas/10-integral-definida.md) | 🔴 Avançado | Somas de Riemann, TFC, áreas entre curvas e integrais impróprias | [🟢 Fácil](exercicios/10-integral-definida/facil.md) · [🟡 Intermediário](exercicios/10-integral-definida/intermediario.md) · [🔴 Difícil](exercicios/10-integral-definida/dificil.md) |
 
 ```mermaid
 flowchart LR
@@ -85,9 +85,11 @@ O corretor do site entende vários jeitos de escrever a mesma resposta:
 | Tipo de resposta | Pode escrever assim | Também aceita |
 | ---------------- | ------------------- | ------------- |
 | Número | `0,25` | `0.25`, `1/4`, `2/8` |
+| Número grande | `2000` | `2.000`, `2 000` |
+| Decimal sem fim | `1/3` | `0,33` ou `0,3333` (arredondado ou truncado, com 2 casas ou mais) |
 | Número com raiz, $\pi$ ou $e$ | `√2/2` | `sqrt(2)/2`, `0,7071`, `1/√2` |
 | Infinito | `∞` | `infinito`, `+∞`, `-∞` |
-| Não existe | `não existe` | `nao existe` |
+| Não existe | `não existe` | `nao existe`, `∄` |
 | Função | `3x^2 + 2` | `2 + 3x²`, `3*x^2+2`, qualquer forma equivalente |
 | Primitiva | `x^3/3 + C` | `x³/3 + K`, `(x^3 + 6)/3 + C` |
 
@@ -99,11 +101,12 @@ Para escrever funções:
 | Raiz | `√` ou `sqrt()` | `√(x + 1)`, `sqrt(x)` |
 | Logaritmo natural | `ln()` | `ln(x^2 + 1)` |
 | Logaritmo em outra base | `log_2()` | `log_2(x)` |
-| Seno, cosseno, tangente | `sen()`, `cos()`, `tg()` | `sen(2x)` |
+| Seno, cosseno, tangente | `sen()`, `cos()`, `tg()` | `sen(2x)`, `sen^2(x)` |
+| Secante, cossecante, cotangente | `sec()`, `cossec()`, `cotg()` | `sec(x)^2` |
 | Módulo | `abs()` (ou duas barras verticais) | `ln(abs(x))` |
 | Multiplicação | nada ou `*` | `2x`, `x(x + 1)`, `3e^x` |
 
-> ⚠️ **Use parênteses no expoente:** `e^(2x)` é $e^{2x}$, mas `e^2x` é $e^2 \cdot x$. O corretor testa a sua função em vários pontos e, se ela errar, mostra um ponto em que as duas diferem. Nas primitivas, ele aceita qualquer resposta que difere da certa por uma constante, e avisa se faltar o `+ C`.
+> ⚠️ **Use parênteses no expoente:** `e^(2x)` é $e^{2x}$, mas `e^2x` é $e^2 \cdot x$. O corretor testa a sua função em vários pontos e, se ela errar, mostra um ponto em que as duas diferem. Nas primitivas, ele aceita qualquer resposta que difere da certa por uma constante, e avisa se faltar o `+ C`. Na primitiva de $1/x$, não esqueça o módulo: `ln|x| + C`.
 
 > ⚠️ O corretor só existe no site <https://rps4-school.github.io/school-cc/>. No GitHub, abra **Ver resposta** para conferir.
 

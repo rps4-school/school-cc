@@ -119,12 +119,12 @@ $\dfrac{1}{2^{10}} = \dfrac{1}{1024} \approx 0{,}000977 \leq 0{,}001$. ✔️
 $f(0) = 1$ e $f(3) = 4$: mesmo sinal. A raiz $x = 1$ existe, mas a função só **encosta** no eixo, sem trocar de sinal. A bisseção não consegue começar.
 </details>
 
-**b)** Aplique a bisseção a $f(x) = \operatorname{tg} x$ em $[1, 2]$ (radianos). $f(1) > 0$ e $f(2) < 0$. Para qual número os pontos médios se aproximam? (4 casas.)
+**b)** Aplique a bisseção a $f(x) = \operatorname{tg} x$ em $[1, 2]$ (radianos). $f(1) > 0$ e $f(2) < 0$. De qual número os pontos médios se aproximam? (4 casas.)
 
 <details>
 <summary>Ver resposta</summary>
 
-**Número:** `π/2 ± 0,001`
+**Número:** `π/2 ± 0,0001`
 
 Os pontos médios convergem para $\frac{\pi}{2} \approx 1{,}5708$, onde $\operatorname{tg} x$ tem uma **assíntota vertical**, não uma raiz. A troca de sinal veio de um "salto" para $\pm\infty$.
 </details>

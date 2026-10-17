@@ -24,14 +24,14 @@
 <text x="427.4" y="273.1" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">1</text>
 <text x="562.2" y="273.1" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">2</text>
 <text x="286.6" y="217.3" font-size="11" fill="#64748b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">1</text>
-<text x="286.6" y="172.4" font-size="11" fill="#64748b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">2</text>
+<text x="286.6" y="164.0" font-size="11" fill="#64748b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">2</text>
 <text x="286.6" y="127.6" font-size="11" fill="#64748b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">3</text>
 <text x="286.6" y="82.8" font-size="11" fill="#64748b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">4</text>
 <circle cx="157.8" cy="213.3" r="4" fill="#1e293b" stroke="#1e293b" stroke-width="2"/>
 <circle cx="562.2" cy="78.8" r="4" fill="#1e293b" stroke="#1e293b" stroke-width="2"/>
-<text x="149.8" y="207.3" font-size="12" fill="#1e293b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">(−1, 1)</text>
+<text x="150.0" y="240.0" font-size="12" fill="#1e293b" text-anchor="middle" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">(−1, 1)</text>
 <text x="572.2" y="90.8" font-size="12" fill="#1e293b" text-anchor="start" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">(2, 4)</text>
-<text x="656.5" y="34.0" font-size="12" fill="#e11d48" text-anchor="end" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">y = x + 2 (em cima)</text>
+<text x="548.0" y="66.0" font-size="12" fill="#e11d48" text-anchor="end" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">y = x + 2 (em cima)</text>
 <text x="63.5" y="96.7" font-size="12" fill="#4f46e5" text-anchor="start" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">y = x² (embaixo)</text>
 <text x="360.0" y="186.4" font-size="14" fill="#4f46e5" text-anchor="middle" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">A = 9/2</text>
 </svg>

@@ -87,7 +87,7 @@ $u = x^2 + 1$, $x\,dx = \frac{1}{2}du$: $\frac{1}{2}\int u^{-1/2}\,du = \frac{1}
 
 **Primitiva:** `-ln|cos(x)| + C`
 
-$\operatorname{tg} x = \dfrac{\operatorname{sen} x}{\cos x}$. Com $u = \cos x$, $du = -\operatorname{sen} x\,dx$: $\int \dfrac{-du}{u} = -\ln \lvert u \rvert = -\ln \lvert \cos x \rvert + C$.
+$\operatorname{tg} x = \dfrac{\operatorname{sen} x}{\cos x}$. Com $u = \cos x$, $du = -\operatorname{sen} x\,dx$: $\int \dfrac{-du}{u} = -\ln \lvert u \rvert = -\ln \lvert \cos x \rvert + C$, que é o mesmo que $\ln \lvert \sec x \rvert + C$.
 </details>
 
 **d)** $\displaystyle\int \cos x \cdot \operatorname{sen}^4 x\,dx$
@@ -97,7 +97,7 @@ $\operatorname{tg} x = \dfrac{\operatorname{sen} x}{\cos x}$. Com $u = \cos x$, 
 
 **Primitiva:** `sen(x)^5/5 + C`
 
-$u = \operatorname{sen} x$, $du = \cos x\,dx$: $\int u^4\,du = \dfrac{\operatorname{sen}^5 x}{5} + C$. No corretor, escreva `sen(x)^5/5 + C`.
+$u = \operatorname{sen} x$, $du = \cos x\,dx$: $\int u^4\,du = \dfrac{\operatorname{sen}^5 x}{5} + C$. No corretor, vale `sen^5(x)/5 + C` ou `sen(x)^5/5 + C`.
 </details>
 
 ---

@@ -22,12 +22,13 @@
 <text x="44.0" y="135.8" font-size="11" fill="#64748b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">4</text>
 <text x="44.0" y="76.5" font-size="11" fill="#64748b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">6</text>
 <circle cx="595.6" cy="42.8" r="4" fill="#e11d48" stroke="#e11d48" stroke-width="2"/>
-<text x="595.6" y="268.5" font-size="12" fill="#e11d48" text-anchor="middle" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">x0 = 3</text>
+<text x="595.6" y="287.0" font-size="12" fill="#e11d48" text-anchor="middle" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">x0 = 3</text>
 <circle cx="306.3" cy="210.1" r="4" fill="#d97706" stroke="#d97706" stroke-width="2"/>
-<text x="306.3" y="268.5" font-size="12" fill="#d97706" text-anchor="middle" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">x1 = 1,8333</text>
+<text x="306.3" y="287.0" font-size="12" fill="#d97706" text-anchor="middle" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">x1 = 1,8333</text>
 <circle cx="214.2" cy="250.5" r="4" fill="#059669" stroke="#059669" stroke-width="2"/>
-<text x="210.2" y="268.5" font-size="12" fill="#059669" text-anchor="end" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">x2 = 1,4621</text>
+<text x="214.2" y="287.0" font-size="12" fill="#059669" text-anchor="middle" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">x2 = 1,4621</text>
 <circle cx="202.3" cy="250.5" r="3" fill="#1e293b" stroke="#1e293b" stroke-width="2"/>
 <text x="196.3" y="242.5" font-size="12" fill="#1e293b" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">raiz √2</text>
+<text x="480.0" y="110.0" font-size="13" fill="#4f46e5" text-anchor="end" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">f(x) = x² − 2</text>
 <text x="99.6" y="42.8" font-size="12" fill="#1e293b" text-anchor="start" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">cada tangente corta o eixo x no próximo chute</text>
 </svg>

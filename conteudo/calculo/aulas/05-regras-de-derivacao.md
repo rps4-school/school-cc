@@ -241,7 +241,7 @@ Em $x = 2$: $e^0 (1 - 8) = -7$.
 | ---- | ----------- |
 | $(f\,g)' = f'\,g'$ | Produto: $f'g + fg'$ |
 | Trocar a ordem no quociente | É $f'g - fg'$, **cima derivado primeiro** |
-| Esquecer o "vezes a de dentro" na cadeia | $(\ln 3x)' = \frac{3}{3x}$, não $\frac{1}{3x}$ |
+| Esquecer o "vezes a de dentro" na cadeia | $(\ln(3x + 1))' = \frac{3}{3x + 1}$, não $\frac{1}{3x + 1}$ |
 | $(e^{x^2})' = e^{x^2}$ | Falta a cadeia: $2x\,e^{x^2}$ |
 | $(\ln x)' = \ln$ algo | É $\frac{1}{x}$ |
 | $(\cos x)' = \operatorname{sen} x$ | É $-\operatorname{sen} x$ |

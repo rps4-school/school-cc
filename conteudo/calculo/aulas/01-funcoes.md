@@ -132,7 +132,7 @@ $(f \circ g)(x) = f(g(x))$: primeiro aplica $g$, depois aplica $f$ no resultado.
 
 As duas ordens dão resultados **diferentes**: no pipeline, a ordem das etapas importa.
 
-> ⚠️ Lembre do produto notável: $(a + b)^2 = a^2 + 2ab + b^2$. Errar isso é o erro mais comum na composição.
+> ⚠️ Lembre-se do produto notável: $(a + b)^2 = a^2 + 2ab + b^2$. Errar isso é o erro mais comum na composição.
 
 ## 6. Função inversa: desfazendo a conta
 

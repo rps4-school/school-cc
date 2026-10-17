@@ -57,7 +57,7 @@ Em $x = 1\,000\,000$, o termo $x^3$ vale $10^{18}$ e $100x^2$ vale "só" $10^{14
 
 **Método:** divida o numerador e o denominador pela **maior potência do denominador**. Todo termo do tipo $\frac{k}{x^n}$ vai a zero.
 
-**Exemplo 1 (mesmo grau):** o tempo por item de um algoritmo é $T(n) = \dfrac{6n^2 + 2n + 1}{2n^2 + 5}$.
+**Exemplo 1 (mesmo grau):** o tempo por item de um algoritmo, em milissegundos (ms), é $T(n) = \dfrac{6n^2 + 2n + 1}{2n^2 + 5}$.
 
 $$
 \lim_{n \to \infty} \frac{6n^2 + 2n + 1}{2n^2 + 5} = \lim_{n \to \infty} \frac{6 + \frac{2}{n} + \frac{1}{n^2}}{2 + \frac{5}{n^2}} = \frac{6}{2} = 3

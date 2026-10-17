@@ -50,6 +50,8 @@ Agora aproxime $x$ de $a$. A secante gira e encosta na curva: vira a **reta tang
 
 ![A reta secante, que passa por dois pontos da curva, vira a reta tangente quando o segundo ponto se aproxima do primeiro](../img/secante-tangente.svg)
 
+Na figura, $f(x) = \dfrac{x^2}{2} + 1$ e $a = 1$.
+
 A inclinação da tangente é o limite das inclinações das secantes. Essa é a derivada.
 
 ## 3. A definição de derivada

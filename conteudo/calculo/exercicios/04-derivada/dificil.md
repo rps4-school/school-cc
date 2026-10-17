@@ -86,7 +86,7 @@ Os limites laterais da razão $\frac{f(3 + h) - f(3)}{h}$ são $-1$ e $1$: difer
 
 ## Exercício 09: Aproximando pela tangente
 
-Um microcontrolador sem a função `sqrt` estima raízes usando a reta tangente de $f(x) = \sqrt{x}$ em $x = 4$ (é a **linearização**).
+Um microcontrolador sem a função `sqrt` estima raízes usando a reta tangente a $f(x) = \sqrt{x}$ em $x = 4$ (é a **linearização**).
 
 **a)** Escreva essa reta tangente $L(x)$.
 
@@ -108,12 +108,12 @@ $f(4) = 2$ e $f'(x) = \dfrac{1}{2\sqrt{x}}$, então $f'(4) = \dfrac{1}{4}$. Reta
 $L(4{,}1) = 2 + \dfrac{0{,}1}{4} = 2{,}025$.
 </details>
 
-**c)** O valor real é $\sqrt{4{,}1} \approx 2{,}024846$. Qual é o erro da estimativa? (Use 4 casas ou mais.)
+**c)** O valor real é $\sqrt{4{,}1} \approx 2{,}024846$. Qual é o erro da estimativa? (Use 6 casas decimais.)
 
 <details>
 <summary>Ver resposta</summary>
 
-**Número:** `0,000154 ± 0,00001`
+**Número:** `0,000154 ± 0,000001`
 
 $2{,}025 - 2{,}024846 = 0{,}000154$. Perto do ponto de tangência, a reta quase coincide com a curva.
 </details>

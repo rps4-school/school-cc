@@ -130,7 +130,7 @@ $T'(t) = 3t^2 - 27 = 0 \Rightarrow t = \pm 3$ (os dois estão no intervalo).
 2. Escreva a função que quer **maximizar ou minimizar**.
 3. Use a **restrição** do problema para deixar só uma variável.
 4. Derive, iguale a zero e resolva.
-5. **Confirme** que é máximo ou mínimo (2ª derivada ou pontas) e responda o que foi perguntado.
+5. **Confirme** que é máximo ou mínimo (2ª derivada ou pontas) e responda ao que foi perguntado.
 
 **Exemplo 5 (área máxima):** uma sala de servidores retangular será cercada com $120$ m de grade, e um dos lados fica na parede (sem grade). Que dimensões dão a maior área?
 

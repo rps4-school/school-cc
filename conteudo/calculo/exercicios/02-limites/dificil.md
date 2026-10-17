@@ -45,7 +45,7 @@ O quadrado deixa o denominador **positivo dos dois lados**. Os dois laterais dã
 <details>
 <summary>Ver resposta</summary>
 
-**Número:** `não existe`
+**Resposta:** `não existe | ∄`
 
 Pela direita dá $+\infty$ e pela esquerda dá $-\infty$. Laterais diferentes: o limite **não existe**.
 </details>

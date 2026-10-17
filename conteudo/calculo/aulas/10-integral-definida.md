@@ -129,7 +129,7 @@ $$
 
 **Exemplo 10:** $\displaystyle\int_{-2}^{2} (x^3 + x^2)\,dx = 0 + 2\int_0^2 x^2\,dx = 2 \cdot \frac{8}{3} = \frac{16}{3}$.
 
-**Substituição com limites:** quando troca $x$ por $u$, **troque os limites também**.
+**Substituição com limites:** quando trocar $x$ por $u$, **troque os limites também**.
 
 **Exemplo 11:** $\displaystyle\int_0^1 2x\,(x^2 + 1)^3\,dx$, com $u = x^2 + 1$ e $du = 2x\,dx$. Em $x = 0$, $u = 1$; em $x = 1$, $u = 2$:
 
@@ -177,7 +177,7 @@ A velocidade nunca chega a zero, mas o total é finito.
 | Esquecer parênteses em $-F(a)$ | $-\left(\frac{1}{2} - 2\right)$ troca os dois sinais |
 | Usar integral como área com $f$ negativa | Separe nos zeros e some os módulos |
 | Na substituição, manter os limites de $x$ | Troque os limites para $u$ (ou volte para $x$ antes) |
-| Achar que área infinita é sempre "infinito" | $\int_1^{\infty} \frac{1}{x^2}$ vale 1 |
+| Achar que região infinita tem sempre área infinita | $\int_1^{\infty} \frac{1}{x^2}$ vale 1 |
 | Calculadora em graus com $\pi$ | **Radianos** |
 
 ## 💡 Macetes

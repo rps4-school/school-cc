@@ -6,9 +6,9 @@ Resolva no papel primeiro, com calculadora (em **radianos**, se houver seno ou c
 
 ---
 
-## Exercício 04: Tamanho ideal do bloco
+## Exercício 04: A cúbica clássica
 
-O tamanho ideal $x$ de um bloco de dados satisfaz $x^3 - 2x - 5 = 0$. Use a bisseção em $[2, 3]$ com $\varepsilon = 10^{-2}$.
+A equação $x^3 - 2x - 5 = 0$ não tem fórmula simples para a raiz. Use a bisseção em $[2, 3]$ com $\varepsilon = 10^{-2}$.
 
 **a)** Qual é o menor $k$ que garante a precisão?
 

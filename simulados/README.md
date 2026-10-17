@@ -8,7 +8,7 @@ Provas de treino no **formato de uma prova de verdade**: tempo marcado, pontuaç
 
 1. **Estude antes** o conteúdo do tema, por exemplo [Python](../conteudo/python/README.md).
 2. **Separe o tempo sugerido** e ligue o cronômetro. No site, cada simulado tem um.
-3. **Sem consulta:** nada de internet, anotações, calculadora ou IA.
+3. **Sem consulta:** nada de internet, anotações, calculadora ou IA. A exceção é Cálculo, que libera a calculadora científica.
 4. **Python:** crie **um arquivo por questão** (`q1.py`, `q2.py`...). No site, cada questão tem um **editor de Python** com terminal: dá para escrever, rodar e baixar o `.py` sem instalar nada. **Sistemas Digitais e Cálculo:** resolva no papel, mostrando as contas (em Cálculo, com calculadora científica).
 5. Quando o tempo acabar, confira. Em Python, rode seus programas com as entradas dos **exemplos de execução** e compare as saídas; em Sistemas Digitais e Cálculo, digite cada resposta no campo de correção do site.
 6. **Só então** abra as respostas. Confira também se você usou os **comandos exigidos**.

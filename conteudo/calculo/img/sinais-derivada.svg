@@ -32,7 +32,7 @@
 <circle cx="236.0" cy="75.8" r="5" fill="#059669" stroke="#059669" stroke-width="2"/>
 <text x="236.0" y="63.8" font-size="12" fill="#059669" text-anchor="middle" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">máx. local (1, 4)</text>
 <circle cx="484.0" cy="211.2" r="5" fill="#e11d48" stroke="#e11d48" stroke-width="2"/>
-<text x="484.0" y="199.2" font-size="12" fill="#e11d48" text-anchor="middle" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">mín. local (3, 0)</text>
+<text x="484.0" y="172.0" font-size="12" fill="#e11d48" text-anchor="middle" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">mín. local (3, 0)</text>
 <circle cx="360.0" cy="143.5" r="5" fill="#d97706" stroke="#d97706" stroke-width="2"/>
 <text x="370.0" y="137.5" font-size="12" fill="#d97706" text-anchor="start" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">inflexão (2, 2)</text>
 <text x="42" y="284" font-size="12" fill="#1e293b" text-anchor="end" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">f′</text>

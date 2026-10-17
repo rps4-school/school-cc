@@ -97,7 +97,7 @@ Logo $g^{-1}(x) = \dfrac{4x + 3}{2 - x}$.
 
 ## Exercício 06: Funções hash e colisões
 
-Uma função hash é boa quando **não tem colisões**: entradas diferentes dão saídas diferentes (é **injetora**). Considere domínio $\mathbb{R}$, salvo indicação. Responda **sim** ou **não**.
+Uma função hash é boa quando **não tem colisões**: entradas diferentes dão saídas diferentes (é **injetora**). Considere domínio $\mathbb{R}$, salvo indicação. Do item a ao d, responda **sim** ou **não**.
 
 **a)** $f(x) = 5 - 2x$ é injetora?
 
@@ -139,12 +139,12 @@ $x^3$ é sempre crescente, e somar 1 só desloca o gráfico. Toda reta horizonta
 Só sobra o lado esquerdo da parábola, que é sempre decrescente.
 </details>
 
-**e)** Qual é o **menor valor** da imagem de $h(x) = x^2 - 4x + 7$?
+**e)** $h(x) = x^2 - 4x + 7$ tem colisões em $\mathbb{R}$. Restringindo o domínio a $[a, \infty)$, qual é o **menor** $a$ que deixa $h$ injetora?
 
 <details>
 <summary>Ver resposta</summary>
 
-**Número:** `3`
+**Número:** `2`
 
-Completando o quadrado: $x^2 - 4x + 7 = (x - 2)^2 + 3 \geq 3$, com igualdade em $x = 2$. A imagem é $[3, \infty)$, então $h$ **não** é sobrejetora de $\mathbb{R}$ em $\mathbb{R}$.
+Completando o quadrado: $h(x) = (x - 2)^2 + 3$, uma parábola com vértice em $x = 2$. Para $x \geq 2$ ela só sobe, então não há colisões. Com $a < 2$, há colisão entre $a$ e $4 - a$, simétricos em torno do vértice (exemplo: $h(1) = h(3) = 4$).
 </details>

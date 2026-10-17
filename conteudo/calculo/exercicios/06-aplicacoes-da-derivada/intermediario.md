@@ -67,7 +67,7 @@ $f'(x) = 4x^3 - 36x = 4x(x^2 - 9)$, críticos em $0$ e $\pm 3$. $f''(x) = 12x^2 
 <details>
 <summary>Ver resposta</summary>
 
-**Resposta:** `máximo`
+**Resposta:** `máximo | máximo local | ponto de máximo | máximo relativo`
 
 $f''(0) < 0$: concavidade para baixo, então é **máximo** local, com $f(0) = 3$.
 </details>

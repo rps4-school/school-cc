@@ -107,7 +107,7 @@ $C'(100) = 4 + 2 = 6$ reais por usuário.
 <details>
 <summary>Ver resposta</summary>
 
-**Resposta:** `descendo`
+**Resposta:** `descendo | decrescendo | decrescente | decresce | caindo | diminuindo`
 
 Derivada negativa: a função **decresce** ali, perdendo cerca de 3 unidades de altura para cada unidade a mais de $x$.
 </details>

@@ -106,15 +106,16 @@ $$
 | | Bisseção | Newton |
 | --- | -------- | ------ |
 | Fórmula | $x_k = \dfrac{a + b}{2}$ | $x_k = x_{k-1} - \dfrac{f(x_{k-1})}{f'(x_{k-1})}$ |
-| Começa com | $[a, b]$ com $f(a)f(b) < 0$ | Chute $x_0$ |
-| Parada | Menor $k$ com $\dfrac{b - a}{2^{k+1}} \leq \varepsilon$ | $\lvert x_k - x_{k-1} \rvert < \varepsilon$ |
+| Começa com | $[a_0, b_0]$ com $f(a_0)f(b_0) < 0$ | Chute $x_0$ |
+| Contagem | $x_0$ é o **1º ponto médio** ($x_k$ é o $(k+1)$º) | $x_0$ é o chute; $x_1$, a 1ª iteração |
+| Parada | Menor $k$ com $\dfrac{b_0 - a_0}{2^{k+1}} \leq \varepsilon$ | $\lvert x_k - x_{k-1} \rvert < \varepsilon$ |
 | Erro de $x_k$ | $\leq \dfrac{b_0 - a_0}{2^{k+1}}$ | — |
 | Converge sempre? | Sim | Não |
 
 | Teorema | Enunciado |
 | ------- | --------- |
 | Bolzano | $f$ contínua e $f(a)f(b) < 0$ $\Rightarrow$ existe raiz em $(a, b)$ |
-| Unicidade | Além disso, $f'$ com sinal constante $\Rightarrow$ a raiz é única |
+| Unicidade | Além disso, $f' > 0$ em todo $[a, b]$ (ou $f' < 0$ em todo ele) $\Rightarrow$ a raiz é única |
 | Herão | $\sqrt{A}$: $x_k = \frac{1}{2}\left(x_{k-1} + \frac{A}{x_{k-1}}\right)$ |
 
 ## ↩️ Primitivas

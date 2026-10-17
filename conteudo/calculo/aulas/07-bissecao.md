@@ -22,12 +22,12 @@ Uma **raiz** (ou **zero**) de $f$ é um número $r$ com $f(r) = 0$. No gráfico,
 
 Para $ax^2 + bx + c = 0$ existe a fórmula de Bhaskara. Mas e para estas?
 
-| Equação | Onde aparece |
-| ------- | ------------ |
-| $x = \cos x$ | Animações: quando um objeto encontra a curva $y = \cos x$ |
-| $x \ln x = 2$ | Tamanho de cache que equilibra custo e benefício |
-| $x^3 + 2x - 5 = 0$ | Tamanho ideal de um bloco de dados |
-| $x^2 = 100\,x \ln x$ | Quando um algoritmo $O(n^2)$ passa a perder para um $O(n \log n)$ |
+| Equação | Por que é difícil |
+| ------- | ----------------- |
+| $x = \cos x$ | O $x$ aparece dentro e fora do cosseno: não dá para isolar (é onde $y = x$ cruza $y = \cos x$) |
+| $x \ln x = 2$ | O $x$ aparece dentro e fora do logaritmo: não dá para isolar |
+| $x^3 + 2x - 5 = 0$ | Cúbica: a fórmula de Cardano existe, mas é longa e pouco prática |
+| $x^2 = 100\,x \ln x$ | Mesma mistura; num exemplo ilustrativo, é onde um custo $n^2$ passa a superar um custo $100\,n \ln n$ |
 
 Não existe fórmula fechada para a maioria delas. Os métodos numéricos produzem uma **sequência de aproximações** $x_0, x_1, x_2, \dots$ que chega tão perto da raiz quanto quisermos. Eles têm duas etapas:
 
@@ -40,7 +40,7 @@ Não existe fórmula fechada para a maioria delas. Os métodos numéricos produz
 
 A curva começa de um lado do eixo e termina do outro; sendo contínua (sem saltos), ela **tem** que cruzar o eixo.
 
-> 💡 **Unicidade:** se, além disso, $f'$ existe e **não troca de sinal** em $[a, b]$, a raiz é **única** (a função só sobe ou só desce, então cruza o eixo uma vez só).
+> 💡 **Unicidade:** se, além disso, $f' > 0$ em **todo** $[a, b]$, ou $f' < 0$ em **todo** $[a, b]$, a raiz é **única** (a função só sobe ou só desce, então cruza o eixo uma vez só). Não basta "$f'$ não trocar de sinal": se $f' = 0$ num trecho, $f$ fica constante ali e pode ter infinitas raízes.
 
 **Exemplo 1:** $f(x) = x^3 + 2x - 5$ em $[1, 2]$.
 
@@ -143,7 +143,8 @@ def bissecao(f, a, b, eps):
 
 print(" k |    a     |    b     |   x_k    |   f(x_k)   |  erro <=")
 raiz = bissecao(f, 1, 2, 0.01)
-print("Raiz aproximada:", round(raiz, 6))
+if raiz is not None:             # None: a função já explicou por que falhou
+    print("Raiz aproximada:", round(raiz, 6))
 ```
 
 Saída:
@@ -171,7 +172,7 @@ Raiz aproximada: 1.335938
 ## 🧮 Passo a passo
 
 1. **Confira Bolzano:** $f$ contínua e $f(a) \cdot f(b) < 0$.
-2. **Unicidade (se pedida):** mostre que $f'$ tem sinal constante em $[a, b]$.
+2. **Unicidade (se pedida):** mostre que $f' > 0$ em todo o intervalo, ou $f' < 0$ em todo ele.
 3. **Quantas iterações:** menor $k$ com $\frac{b - a}{2^{k+1}} \leq \varepsilon$.
 4. **Itere** em tabela: $a$, $b$, $x_k$, sinal de $f(x_k)$, novo intervalo.
 5. **Responda** $x_k$ e, se pedido, a cota de erro.
@@ -204,7 +205,7 @@ mindmap
       f contínua
       Sinais opostos nas pontas
     Unicidade
-      f linha com sinal constante
+      f linha sempre positiva ou sempre negativa
     Isolamento
       Tabela de valores
       Procurar troca de sinal

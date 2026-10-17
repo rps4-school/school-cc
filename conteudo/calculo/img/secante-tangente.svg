@@ -36,6 +36,7 @@
 <circle cx="360.0" cy="203.3" r="4" fill="#818cf8" stroke="#818cf8" stroke-width="2"/>
 <circle cx="236.0" cy="240.5" r="5" fill="#e11d48" stroke="#e11d48" stroke-width="2"/>
 <text x="226.0" y="230.5" font-size="12" fill="#e11d48" text-anchor="end" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">(a, f(a))</text>
-<text x="130.6" y="47.3" font-size="12" fill="#6366f1" text-anchor="start" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">secantes (x = 4, 3, 2)</text>
-<text x="663.8" y="205.8" font-size="12" fill="#e11d48" text-anchor="end" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">tangente: o limite das secantes</text>
+<text x="130.6" y="62.0" font-size="12" fill="#6366f1" text-anchor="start" font-weight="normal" font-family="Inter, Segoe UI, Arial, sans-serif">secantes (x = 4, 3, 2)</text>
+<text x="130.6" y="108.0" font-size="13" fill="#1e293b" text-anchor="start" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">f(x) = x²/2 + 1, a = 1</text>
+<text x="663.8" y="222.0" font-size="12" fill="#e11d48" text-anchor="end" font-weight="bold" font-family="Inter, Segoe UI, Arial, sans-serif">tangente: o limite das secantes</text>
 </svg>

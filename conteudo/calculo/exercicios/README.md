@@ -34,4 +34,4 @@
 | ↩️ Primitivas | [Aula](../aulas/09-primitivas.md) | [🟢 Fácil](09-primitivas/facil.md) · [🟡 Intermediário](09-primitivas/intermediario.md) · [🔴 Difícil](09-primitivas/dificil.md) |
 | 📊 Integral definida | [Aula](../aulas/10-integral-definida.md) | [🟢 Fácil](10-integral-definida/facil.md) · [🟡 Intermediário](10-integral-definida/intermediario.md) · [🔴 Difícil](10-integral-definida/dificil.md) |
 
-> 💡 **Terminou tudo?** Volte nas questões que errou depois de alguns dias. Acertar de novo, sem olhar, é o que fixa o conteúdo.
+> 💡 **Terminou tudo?** Volte às questões que errou depois de alguns dias. Acertar de novo, sem olhar, é o que fixa o conteúdo.

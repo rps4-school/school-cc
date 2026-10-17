@@ -86,7 +86,7 @@ De $-$ para $+$ em $x = 4$, com $M(4) = 64 - 48 - 96 + 1 = -79$.
 <details>
 <summary>Ver resposta</summary>
 
-**Resposta:** `decrescendo`
+**Resposta:** `decrescendo | decrescente | decresce | descendo | diminuindo`
 
 $M'(0) = -24 < 0$. Pelo quadro, $x = 0$ está no trecho $(-2, 4)$, onde $M$ decresce.
 </details>
@@ -122,7 +122,7 @@ $f(-1) = -1 + 3 - 2 = 0$. Ponto de inflexão: $(-1, 0)$.
 <details>
 <summary>Ver resposta</summary>
 
-**Resposta:** `para cima`
+**Resposta:** `para cima | pra cima | cima | voltada para cima | côncava para cima | concavidade para cima`
 
 $f''(2) = 18 > 0$: concavidade para cima ($\cup$).
 </details>

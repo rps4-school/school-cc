@@ -36,7 +36,7 @@ $$
 | Símbolo | Nome | Significa |
 | ------- | ---- | --------- |
 | $\int$ | sinal de integral | "a primitiva de" |
-| $f(x)$ | integrando | a função que foi derivada |
+| $f(x)$ | integrando | a função que vamos integrar |
 | $dx$ | diferencial | a variável é $x$ |
 | $C$ | constante de integração | qualquer número real |
 
@@ -68,7 +68,7 @@ $$
 \int \bigl(a\,f(x) + b\,g(x)\bigr)\,dx = a\int f(x)\,dx + b\int g(x)\,dx
 $$
 
-Integra **termo a termo** e as constantes **saem para fora**. Use **um único $C$** no final.
+Integre **termo a termo**: as constantes **saem para fora**. Use **um único $C$** no final.
 
 **Exemplo 1:** $\displaystyle\int (4x^3 - 6x^2 + 2x - 5)\,dx = x^4 - 2x^3 + x^2 - 5x + C$.
 
