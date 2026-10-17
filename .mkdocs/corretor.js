@@ -6,12 +6,14 @@
  *   **Resposta:** `101101`          → confere o valor (número, texto, código)
  *   **Expressão:** `A'B + C`        → aceita qualquer expressão equivalente
  *   **Expressão mínima:** `B + C`   → equivalente E sem literais a mais
+ *   **Número:** `1/4`               → o mesmo valor (0,25, 2/8, √2/2...); aceita "± tolerância"
+ *   **Função:** `6x`                → função equivalente (testada em vários pontos)
+ *   **Primitiva:** `x^3/3 + C`      → igual a menos de uma constante, e com o "+ C"
  * Aqui o div vira um campo com o botão "Conferir". Nada vai para servidor nenhum.
  */
 (function () {
   "use strict";
 
-  var CHAVE = "school-cc:corretor:" + location.pathname;
   var CERTO = "text-emerald-700 dark:text-emerald-300";
   var ERRADO = "text-rose-700 dark:text-rose-300";
   var AVISO = "text-amber-700 dark:text-amber-300";
@@ -24,7 +26,8 @@
 
   // Tira o que não muda o valor: espaços, maiúsculas, acentos, "0x", "#", base em subscrito.
   function limpar(texto) {
-    return semAcento(texto).toLowerCase()
+    // Antes de tirar os acentos: sem isso, "∄" (∃ + traço) viraria "∃".
+    return semAcento(texto.replace(/∄/g, "não existe")).toLowerCase()
       .replace(/[−–]/g, "-")        // sinal de menos tipográfico
       .replace(/[₀-₉]+/g, "")      // (1011)₂ → (1011)
       .replace(/^\((.*)\)$/, "$1")  // (1011) → 1011
@@ -179,11 +182,314 @@
     return { certo: true };
   }
 
+  // ---------- Matemática: 1/4, √2/2, 3x^2 + 2, ln(x) + C... ----------
+
+  var FUNCOES_MAT = {
+    sqrt: Math.sqrt, raiz: Math.sqrt, cbrt: Math.cbrt, ln: Math.log, exp: Math.exp, abs: Math.abs,
+    sen: Math.sin, sin: Math.sin, cos: Math.cos, tg: Math.tan, tan: Math.tan,
+    sec: function (x) { return 1 / Math.cos(x); },
+    cossec: function (x) { return 1 / Math.sin(x); }, csc: function (x) { return 1 / Math.sin(x); },
+    cotg: function (x) { return 1 / Math.tan(x); }, cot: function (x) { return 1 / Math.tan(x); },
+    log: function (x) { return Math.log10(x); },
+  };
+  var NOMES_FUNCOES = Object.keys(FUNCOES_MAT).sort(function (a, b) { return b.length - a.length; });
+  var SOBRESCRITOS = { "²": "^2", "³": "^3", "⁴": "^4", "⁵": "^5", "⁻¹": "^(-1)", "½": "(1/2)" };
+
+  function lerTokensMat(texto) {
+    texto = texto.replace(/[−–]/g, "-").replace(/[×·⋅*]/g, "*").replace(/÷/g, "/")
+      .replace(/infinito|inf/gi, "∞").replace(/π/g, "pi");
+    Object.keys(SOBRESCRITOS).forEach(function (s) { texto = texto.split(s).join(SOBRESCRITOS[s]); });
+    var tokens = [];
+    var i = 0;
+    while (i < texto.length) {
+      var c = texto[i];
+      if (/\s/.test(c)) { i++; continue; }
+      // Separador de milhar: 2 000, 16.777.216, 2.937,5. "2.000" sozinho fica 2 (o conferirNumero testa as duas leituras).
+      var milhar = /^\d{1,3}(?:\s\d{3}(?!\d))+(?:,\d+)?/.exec(texto.slice(i)) ||
+        /^\d{1,3}(?:\.\d{3}(?!\d)){2,}(?:,\d+)?|^\d{1,3}(?:\.\d{3})+,\d+/.exec(texto.slice(i));
+      var num = milhar || /^\d+(?:[.,]\d+)?|^[.,]\d+/.exec(texto.slice(i));
+      if (num) {
+        var digitos = milhar ? num[0].replace(/[.\s]/g, "") : num[0];
+        tokens.push({ tipo: "num", valor: parseFloat(digitos.replace(",", ".")) });
+        i += num[0].length;
+        continue;
+      }
+      if (/[a-z]/i.test(c)) {
+        var resto = texto.slice(i).toLowerCase();
+        var nome = NOMES_FUNCOES.find(function (n) { return resto.indexOf(n) === 0; });
+        if (nome) {
+          i += nome.length;
+          // log com base: log_5(x), log5(x) ou log_{5}(x)
+          var base = nome === "log" ? /^_?\{?(\d+(?:[.,]\d+)?)\}?/.exec(texto.slice(i)) : null;
+          if (base) {
+            var b = parseFloat(base[1].replace(",", "."));
+            tokens.push({ tipo: "func", f: function (x) { return Math.log(x) / Math.log(b); } });
+            i += base[0].length;
+          } else {
+            tokens.push({ tipo: "func", f: FUNCOES_MAT[nome] });
+          }
+          continue;
+        }
+        if (resto.indexOf("pi") === 0) { tokens.push({ tipo: "num", valor: Math.PI }); i += 2; continue; }
+        if (c === "e") { tokens.push({ tipo: "num", valor: Math.E }); i++; continue; }
+        tokens.push({ tipo: "var", nome: c });
+        i++;
+        continue;
+      }
+      if ("+-*/^()|√∛∞".indexOf(c) >= 0) { tokens.push({ tipo: c }); i++; continue; }
+      if (c === "[" || c === "{") { tokens.push({ tipo: "(" }); i++; continue; }
+      if (c === "]" || c === "}") { tokens.push({ tipo: ")" }); i++; continue; }
+      throw new Error("símbolo “" + c + "”");
+    }
+    return tokens;
+  }
+
+  // Precedência: + − ; * / e multiplicação implícita ; sinal ; ^ (associa à direita).
+  function analisarMat(texto) {
+    var tokens = lerTokensMat(texto);
+    var pos = 0;
+    var dentroDeModulo = 0;
+    var variaveis = {};
+
+    function olhar() { return tokens[pos] && tokens[pos].tipo; }
+    function comecaFator(t) {
+      return t === "num" || t === "var" || t === "func" || t === "(" || t === "√" || t === "∛" || t === "∞" ||
+        (t === "|" && !dentroDeModulo);
+    }
+    function soma() {
+      var a = produto();
+      while (olhar() === "+" || olhar() === "-") {
+        var op = tokens[pos++].tipo, b = produto();
+        a = op === "+" ? juntar(a, b, function (x, y) { return x + y; }) : juntar(a, b, function (x, y) { return x - y; });
+      }
+      return a;
+    }
+    function produto() {
+      var a = sinal();
+      for (;;) {
+        var t = olhar();
+        if (t === "*") { pos++; a = juntar(a, sinal(), function (x, y) { return x * y; }); }
+        else if (t === "/") { pos++; a = juntar(a, sinal(), function (x, y) { return x / y; }); }
+        else if (comecaFator(t)) a = juntar(a, potencia(), function (x, y) { return x * y; }); // 2x, x(x+1)
+        else return a;
+      }
+    }
+    function sinal() {
+      if (olhar() === "-") { pos++; var a = sinal(); return function (v) { return -a(v); }; }
+      if (olhar() === "+") { pos++; return sinal(); }
+      return potencia();
+    }
+    function potencia() {
+      var base = primario();
+      if (olhar() === "^") { pos++; var exp = sinal(); return juntar(base, exp, potenciaReal); }
+      return base;
+    }
+    function primario() {
+      var t = tokens[pos++];
+      if (!t) throw new Error("expressão incompleta");
+      if (t.tipo === "num") return function () { return t.valor; };
+      if (t.tipo === "∞") return function () { return Infinity; };
+      if (t.tipo === "var") { variaveis[t.nome] = true; return function (v) { return v[t.nome]; }; }
+      if (t.tipo === "(") {
+        var a = soma();
+        if (olhar() !== ")") throw new Error("falta fechar um parêntese");
+        pos++;
+        return a;
+      }
+      if (t.tipo === "|") {
+        dentroDeModulo++;
+        var m = soma();
+        dentroDeModulo--;
+        if (olhar() !== "|") throw new Error("falta fechar o módulo |");
+        pos++;
+        return function (v) { return Math.abs(m(v)); };
+      }
+      if (t.tipo === "√" || t.tipo === "∛") {
+        var r = olhar() === "(" ? primario() : potencia();
+        var f = t.tipo === "√" ? Math.sqrt : Math.cbrt;
+        return function (v) { return f(r(v)); };
+      }
+      if (t.tipo === "func") {
+        // sen^2(x) = (sen x)^2
+        var n = null;
+        if (olhar() === "^" && tokens[pos + 1] && tokens[pos + 1].tipo === "num") { n = tokens[pos + 1].valor; pos += 2; }
+        var arg = olhar() === "(" ? primario() : argumentoSemParenteses();
+        if (n !== null) return function (v) { return Math.pow(t.f(arg(v)), n); };
+        return function (v) { return t.f(arg(v)); };
+      }
+      throw new Error("algo faltando antes de “" + t.tipo + "”");
+    }
+    // ln x, ln x^2 = ln(x^2), ln 2x = ln(2x); mas sen x cos x = sen(x)·cos(x).
+    function argumentoSemParenteses() {
+      var a = potencia();
+      while (olhar() === "num" || olhar() === "var") a = juntar(a, potencia(), function (x, y) { return x * y; });
+      return a;
+    }
+    function juntar(a, b, op) { return function (v) { return op(a(v), b(v)); }; }
+
+    var valor = soma();
+    if (pos < tokens.length) throw new Error("sobrou algo no fim");
+    return { valor: valor, variaveis: Object.keys(variaveis) };
+  }
+
+  // Potência que aceita base negativa com expoente fracionário de denominador ímpar: (−8)^(1/3) = −2.
+  function potenciaReal(b, e) {
+    var r = Math.pow(b, e);
+    if (isNaN(r) && b < 0) {
+      for (var q = 1; q <= 9; q += 2) {
+        var p = e * q;
+        if (Math.abs(p - Math.round(p)) < 1e-9) return Math.pow(-Math.pow(-b, 1 / q), Math.round(p));
+      }
+    }
+    return r;
+  }
+
+  function perto(a, b, tol) {
+    if (a === b) return true; // inclusive ∞ = ∞
+    if (!isFinite(a) || !isFinite(b)) return false;
+    return Math.abs(a - b) <= (tol !== undefined ? tol : 1e-7 * Math.max(1, Math.abs(a), Math.abs(b)));
+  }
+
+  function numeroBonito(x) {
+    if (!isFinite(x)) return x > 0 ? "∞" : "−∞";
+    var r = Math.round(x * 1e4) / 1e4;
+    return String(r).replace(".", ",").replace("-", "−");
+  }
+
+  function valorConstante(texto) {
+    var a = analisarMat(texto);
+    if (a.variaveis.length) throw new Error("tem variável");
+    return a.valor({});
+  }
+
+  // Casas decimais digitadas: "0,333" → 3, "2.937,5" → 1, "16.777.216" e "2 000" → 0.
+  function casasDecimais(texto) {
+    var t = texto.trim();
+    var m = /,(\d+)$/.exec(t) || (/^[^.]*\.[^.]*$/.test(t) && /\.(\d+)$/.exec(t));
+    return m ? m[1].length : 0;
+  }
+
+  // Decimal arredondado ou truncado nas casas digitadas: 0,33 ou 0,3333 para 1/3; 0,67 ou 0,66 para 2/3.
+  // Só vale com 2 casas ou mais, com 2 algarismos significativos (0,00 não serve para 1/1024)
+  // e se a certa não for um decimal exato nessas casas (para 4, 4,01 está errado).
+  function arredondouCerto(aluno, certa, casas) {
+    if (casas < 2 || !isFinite(certa) || certa === 0) return false;
+    var escala = Math.pow(10, casas);
+    if (10 / escala > Math.abs(certa)) return false;
+    var sinal = certa < 0 ? -1 : 1;
+    var arredondado = sinal * Math.round(Math.abs(certa) * escala + 1e-9) / escala;
+    var truncado = sinal * Math.floor(Math.abs(certa) * escala + 1e-9) / escala;
+    if (perto(arredondado, certa)) return false;
+    var folga = 1e-6 / escala;
+    return Math.abs(aluno - arredondado) <= folga || Math.abs(aluno - truncado) <= folga;
+  }
+
+  function conferirNumero(resposta, digitado) {
+    var opcoes = resposta.split(" | ");
+    var texto = digitado.replace(/^[^=]*=(?!=)/, "");
+    var leituras = [];
+    try { leituras.push({ valor: valorConstante(texto), casas: casasDecimais(texto) }); } catch (e) { /* talvez seja texto */ }
+    // "2.000" é dois mil em pt-BR, mas 2 em inglês: vale qualquer uma das leituras.
+    if (/^\s*[-−]?\d{1,3}\.\d{3}\s*$/.test(texto)) leituras.push({ valor: valorConstante(texto.replace(".", "")), casas: 0 });
+    var entendeu = leituras.length > 0;
+    leituras = leituras.filter(function (l) { return !isNaN(l.valor); });
+    var quase = false;
+    for (var i = 0; i < opcoes.length; i++) {
+      var op = opcoes[i].split("±");
+      var certa = null;
+      try { certa = valorConstante(op[0]); } catch (e) { /* alternativa em texto */ }
+      if (certa === null) {
+        if (limpar(opcoes[i]) === limpar(digitado)) return { certo: true };
+        continue;
+      }
+      var tol = op[1] ? valorConstante(op[1]) : undefined;
+      for (var j = 0; j < leituras.length; j++) {
+        var aluno = leituras[j].valor;
+        if (perto(aluno, certa, tol)) return { certo: true };
+        if (tol === undefined && arredondouCerto(aluno, certa, leituras[j].casas)) return { certo: true };
+        if (isFinite(certa) && Math.abs(aluno - certa) <= 0.05 * Math.max(1, Math.abs(certa))) quase = true;
+      }
+    }
+    if (!entendeu) {
+      return { certo: false, dica: "Não entendi o número. Use vírgula ou ponto (0,25), fração (1/4), √, π, e, ln ou ∞." };
+    }
+    return quase ? { certo: false, dica: "Perto! Confira as contas ou use mais casas decimais (ou a fração exata)." } : { certo: false };
+  }
+
+  // Pontos de teste: valores "quebrados" para não acertar por coincidência; os negativos testam o domínio.
+  var PONTOS = [0.37, 1.23, 2.71, 0.81, 3.17, 1.59, 4.42, 0.53, 2.06, -0.63, -1.37, -2.18, 1.91, 3.83];
+
+  function separarConstante(texto) {
+    var sem = texto.replace(/\s*\+\s*[ck]\s*$/i, "").replace(/^\s*[ck]\s*\+\s*/i, "");
+    return { texto: sem, temConstante: sem !== texto };
+  }
+
+  function conferirFuncao(resposta, digitado, primitiva) {
+    var limpo = digitado.replace(/^[^=]*=(?!=)/, "");
+    var temC = false;
+    if (primitiva) {
+      var s = separarConstante(limpo);
+      limpo = s.texto;
+      temC = s.temConstante;
+    }
+    resposta = resposta.replace(/^[^=]*=(?!=)/, "");
+    var certa = analisarMat(primitiva ? separarConstante(resposta).texto : resposta);
+    var aluno;
+    try {
+      aluno = analisarMat(limpo);
+    } catch (e) {
+      return {
+        certo: false,
+        dica: "Não entendi a expressão (" + e.message + "). Exemplos: 3x^2 + 2, (x+1)/(x-2), √x, x^(1/3), e^(2x), ln(x), sen(x), sen^2(x)" +
+          (primitiva ? ", e no fim + C." : "."),
+      };
+    }
+    var nomes = certa.variaveis.concat(aluno.variaveis).filter(function (n, i, l) { return l.indexOf(n) === i; }).sort();
+    var sobrando = aluno.variaveis.filter(function (n) { return certa.variaveis.indexOf(n) < 0; });
+    if (sobrando.length) return { certo: false, dica: "A resposta não usa a letra “" + sobrando[0] + "”. Confira a variável." };
+    var validos = 0, diferenca = null;
+    for (var k = 0; k < PONTOS.length; k++) {
+      var v = {};
+      nomes.forEach(function (n, j) { v[n] = PONTOS[(k + 3 * j) % PONTOS.length]; });
+      var esperado = certa.valor(v), obtido = aluno.valor(v);
+      if (!isFinite(esperado)) continue; // fora do domínio da certa
+      var ponto = nomes.map(function (n) { return n + " = " + numeroBonito(v[n]); }).join(", ");
+      // A certa existe e a do aluno não: ln(x) no lugar de ln|x|, por exemplo.
+      if (!isFinite(obtido)) {
+        return {
+          certo: false,
+          dica: "Para " + ponto + ", a certa existe e a sua não. Confira o domínio" +
+            (/ln/i.test(limpo) ? ": no ln, lembre do módulo, como em ln|x|." : "."),
+        };
+      }
+      validos++;
+      var d = obtido - esperado;
+      if (primitiva) {
+        if (diferenca === null) { diferenca = d; continue; }
+        if (perto(d, diferenca, 1e-6 * Math.max(1, Math.abs(esperado)))) continue;
+      } else if (perto(obtido, esperado)) continue;
+      return {
+        certo: false,
+        dica: primitiva
+          ? "Derive a sua resposta e compare com a função do enunciado: as duas não diferem só por uma constante."
+          : "Para " + ponto + ", a sua dá " + numeroBonito(obtido) + " e a certa dá " + numeroBonito(esperado) + ".",
+      };
+    }
+    if (validos < 5) return { certo: false, dica: "Não deu para testar a sua expressão (ela não existe nos pontos de teste). Confira o domínio." };
+    if (primitiva && !temC) return { certo: false, aviso: true, dica: "Quase lá: falta a constante “+ C” no final." };
+    return { certo: true };
+  }
+
   // ---------- Placar da página ----------
+
+  // Calculada só na página: nos testes (Node) não há location.
+  function chave() {
+    return "school-cc:corretor:" + location.pathname;
+  }
 
   function lerAcertos() {
     try {
-      return JSON.parse(localStorage.getItem(CHAVE)) || {};
+      return JSON.parse(localStorage.getItem(chave())) || {};
     } catch (e) {
       return {};
     }
@@ -193,7 +499,7 @@
     try {
       var acertos = lerAcertos();
       acertos[id] = texto;
-      localStorage.setItem(CHAVE, JSON.stringify(acertos));
+      localStorage.setItem(chave(), JSON.stringify(acertos));
     } catch (e) { /* sem localStorage: o placar só não fica salvo */ }
   }
 
@@ -207,7 +513,17 @@
 
   // ---------- Montagem ----------
 
-  var EXEMPLOS = { valor: "Sua resposta", expressao: "Ex.: A'B + C", minima: "Ex.: A'B + C" };
+  var EXEMPLOS = {
+    valor: "Sua resposta", expressao: "Ex.: A'B + C", minima: "Ex.: A'B + C",
+    numero: "Ex.: 1/4 ou 0,25", funcao: "Ex.: 3x^2 + 2", primitiva: "Ex.: x^3/3 + C",
+  };
+
+  function conferirPorTipo(tipo, resposta, digitado) {
+    if (tipo === "valor") return conferirValor(resposta, digitado);
+    if (tipo === "numero") return conferirNumero(resposta, digitado);
+    if (tipo === "funcao" || tipo === "primitiva") return conferirFuncao(resposta, digitado, tipo === "primitiva");
+    return conferirExpressao(resposta, digitado, tipo === "minima");
+  }
 
   function montar(caixa, indice, total, acertos) {
     var tipo = caixa.dataset.tipo;
@@ -219,7 +535,7 @@
       '<label class="flex flex-wrap items-center gap-2">' +
       '<span class="w-full text-[0.62rem] font-bold uppercase tracking-wider text-indigo-700 sm:w-auto ' +
       'dark:text-indigo-300">Sua resposta</span>' +
-      '<input type="text" autocomplete="off" spellcheck="false" class="campo min-w-0 flex-1 rounded-lg border ' +
+      '<input type="text" maxlength="200" autocomplete="off" spellcheck="false" class="campo min-w-0 flex-1 rounded-lg border ' +
       "border-slate-300 bg-white px-3 py-1.5 font-mono text-[0.8rem] text-slate-900 dark:border-white/15 " +
       'dark:bg-slate-900 dark:text-slate-100">' +
       '<button type="button" class="conferir md-button md-button--primary">Conferir</button></label>' +
@@ -238,7 +554,7 @@
     function conferir() {
       var digitado = campo.value.trim();
       if (!digitado) return mostrar("Digite a sua resposta primeiro.", AVISO);
-      var r = tipo === "valor" ? conferirValor(resposta, digitado) : conferirExpressao(resposta, digitado, tipo === "minima");
+      var r = conferirPorTipo(tipo, resposta, digitado);
       if (r.certo) {
         mostrar("✅ Certo!", CERTO);
         caixa.dataset.acertou = "1";
@@ -273,6 +589,11 @@
     atualizarPlacar(caixas.length);
   }
 
+  // Nos testes (Node) não há página: só exporta as funções de conferência.
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = { conferirPorTipo: conferirPorTipo, analisarMat: analisarMat };
+    return;
+  }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", iniciar);
   else iniciar();
 })();

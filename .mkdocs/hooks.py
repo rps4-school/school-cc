@@ -9,6 +9,7 @@
   continua funcionando igual no GitHub.
 """
 
+import html
 import os
 import posixpath
 import re
@@ -41,6 +42,15 @@ TITULOS = {
     "circuitos": "Circuitos",
     "karnaugh": "Mapa de Karnaugh",
     "sistemas-digitais": "Sistemas Digitais",  # pasta dos simulados
+    # Assuntos dos exercícios de Cálculo.
+    "calculo": "Cálculo",  # pasta dos simulados
+    "funcoes": "Funções",
+    "limites-no-infinito": "Limites no infinito",
+    "regras-de-derivacao": "Regras de derivação",
+    "aplicacoes-da-derivada": "Aplicações da derivada",
+    "bissecao": "Bisseção",
+    "metodo-de-newton": "Método de Newton",
+    "integral-definida": "Integral definida",
 }
 
 # Pastas de apoio (ex.: imagens usadas nas páginas): os arquivos são publicados,
@@ -110,14 +120,36 @@ def _resumo_do_md(caminho):
         return f"{exercicios} exercício{'s' if exercicios > 1 else ''}"
     texto = NIVEL.sub("", texto)
     texto = re.sub(r"^(`{3,}|~{3,}).*?^\1\s*$", "", texto, flags=re.S | re.M)  # ignora blocos de código
+    texto = re.sub(r"^\s*\$\$.*?\$\$\s*$", "", texto, flags=re.S | re.M)  # e fórmulas em bloco
     for linha in texto.splitlines():
         linha = linha.strip()
         if linha and not linha.startswith(("#", ">", "|", "-", "!", "<", "`", "*", "[")) and not linha[0].isdigit():
-            linha = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", linha)
-            linha = re.sub(r"\s*<https?://[^>]+>", "", linha)
-            linha = sem_emoji(re.sub(r"[*`_]", "", linha))
-            return linha if len(linha) <= 90 else linha[:87].rsplit(" ", 1)[0] + "…"
+            return _cortar_resumo(linha)
     return "Página"
+
+
+# Fórmula no meio do texto, com o "$" colado como no arithmatex: $x^2$ sim, R$ 12,00 não.
+FORMULA = re.compile(r"(?<![\\$])\$(?=\S)([^$\n]+?)(?<=\S)\$(?!\$)")
+
+
+def _cortar_resumo(linha, limite=90):
+    """Texto limpo de ~90 caracteres. As fórmulas viram spans que o katex-init.js desenha e nunca são cortadas."""
+    formulas = [f.replace("\\dfrac", "\\frac") for f in FORMULA.findall(linha)]  # fração baixa, no tamanho do texto
+    linha = FORMULA.sub("\0", linha)
+    linha = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", linha)
+    linha = re.sub(r"\s*<https?://[^>]+>", "", linha)
+    pedacos = sem_emoji(re.sub(r"[*`_]", "", linha)).split("\0")  # texto, fórmula, texto, fórmula...
+    saida, tamanho = "", 0
+    for i, texto in enumerate(pedacos):
+        if tamanho + len(texto) > limite:
+            return (saida + texto[: max(0, limite - 3 - tamanho)].rsplit(" ", 1)[0]).rstrip(" ,;:.") + "…"
+        saida, tamanho = saida + texto, tamanho + len(texto)
+        if i < len(formulas):
+            if tamanho + len(formulas[i]) > limite:
+                return saida.rstrip(" ,;:.") + "…"
+            saida += f'<span class="arithmatex">\\({html.escape(formulas[i], quote=False)}\\)</span>'
+            tamanho += len(formulas[i])
+    return saida
 
 
 def _descricao(nome, docs_dir, pasta):

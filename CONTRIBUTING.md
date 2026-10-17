@@ -7,7 +7,7 @@ Antes de começar, siga o [Guia de Acesso](GUIA-DE-ACESSO.md) para configurar o 
 ## Onde colocar cada coisa
 
 ```
-conteudo/<tema>/          ← python, git, sistemas-digitais...
+conteudo/<tema>/          ← python, git, sistemas-digitais, calculo...
 ├── README.md     ← sobre o tema, roteiro de estudo e links
 ├── resumos/      ← um .md por assunto
 ├── aulas/        ← aulas completas, quando um resumo não basta
@@ -18,7 +18,7 @@ conteudo/<tema>/          ← python, git, sistemas-digitais...
 - **Pastas e arquivos:** minúsculas, sem acento, palavras separadas por hífen.
   Exemplos: `estruturas-condicionais.md`, `lista-01.md`, `lista-01-resolucao.py`.
 - **Arquivos Python** usam `_` no lugar do hífen (padrão da linguagem): `ex01_par_ou_impar.py`.
-- **Simulado novo:** crie `simulados/<tema>/simulado-NN/README.md` com a prova e `respostas/qN_nome.py` com uma resposta por questão. Logo abaixo do nível, coloque a linha `**Duração sugerida:** 1h40 · **Pontuação:** 100 pontos · **Assuntos:** ...`: no site, ela vira a folha de prova com cronômetro. Use questões **próprias ou adaptadas**, nunca a prova original de uma disciplina. Depois, adicione o simulado na tabela de [`simulados/README.md`](simulados/README.md). Nos simulados de **Sistemas Digitais** não há `respostas/`: cada item de `## Questão NN · Assunto · N pontos` tem a resposta num `<details>` com corretor (veja abaixo), e itens abertos trazem uma "Resposta esperada" sem corretor.
+- **Simulado novo:** crie `simulados/<tema>/simulado-NN/README.md` com a prova e `respostas/qN_nome.py` com uma resposta por questão. Logo abaixo do nível, coloque a linha `**Duração sugerida:** 1h40 · **Pontuação:** 100 pontos · **Assuntos:** ...`: no site, ela vira a folha de prova com cronômetro. Use questões **próprias ou adaptadas**, nunca a prova original de uma disciplina. Depois, adicione o simulado na tabela de [`simulados/README.md`](simulados/README.md). Nos simulados de **Sistemas Digitais** e de **Cálculo** não há `respostas/`: cada item de `## Questão NN · Assunto · N pontos` tem a resposta num `<details>` com corretor (veja abaixo), e itens abertos trazem uma "Resposta esperada" sem corretor.
 - **Nível de cada assunto:** logo abaixo do título, coloque uma linha `**Nível:** 🟢 Iniciante`, `**Nível:** 🟡 Intermediário` ou `**Nível:** 🔴 Avançado`. No site, ela vira uma etiqueta e entra na página "Por nível". Os exercícios não precisam dela, porque o nível vem do nome do arquivo (fácil, intermediário, difícil).
 - **Numere o que tem ordem:** `01-variaveis.md`, `02-condicionais.md`, ...
 - **O material é organizado por tema, e não por matéria ou período.** Um mesmo tema (ex.: `python`) serve para qualquer disciplina que o use.
@@ -41,8 +41,18 @@ conteudo/<tema>/          ← python, git, sistemas-digitais...
     | `` **Resposta:** `valor` `` | O mesmo valor, sem ligar para espaços, maiúsculas, acentos, `0x` ou vírgula/ponto. Separe alternativas com uma barra vertical entre espaços |
     | `` **Expressão:** `A'B + C` `` | Qualquer expressão booleana **equivalente** (compara a tabela-verdade) |
     | `` **Expressão mínima:** `A'B + C` `` | Equivalente **e** sem letras a mais (para perguntas de simplificação) |
+    | `` **Número:** `1/4` `` | O mesmo valor numérico: `0,25`, `2/8`, `√2/2`, `π`, `e^2`, `ln 3`, `∞`. Decimais arredondados ou truncados com 2 casas ou mais também valem (`0,33` ou `0,3333` para `1/3`), desde que tenham 2 algarismos significativos (`0,00` não vale para `1/1024`) e a certa não seja um decimal exato (para `4`, `4,01` está errado). Aceita separador de milhar (`2.000`, `2 000`). Para métodos numéricos, dê a tolerância: `` `1,414214 ± 0,0001` ``. Textos como `não existe` entram como alternativa |
+    | `` **Função:** `3x^2 + 2` `` | Qualquer função **equivalente**, testada em vários pontos (qualquer letra serve de variável) |
+    | `` **Primitiva:** `x^3/3 + C` `` | Qualquer função que difere da certa só por uma **constante**, e avisa se faltar o `+ C`. Recusa resposta que não existe onde a certa existe (como `ln(x)` sem o módulo) |
 
-- **Exercícios de Sistemas Digitais:** um arquivo por assunto e nível em `conteudo/sistemas-digitais/exercicios/<NN-tema>/<facil|intermediario|dificil>.md`, numerados de 01 a 09 como os de Python. A resposta fica no próprio arquivo, num `<details>` com corretor (veja o item acima), seguida da resolução passo a passo.
+    Para conferir se todo gabarito passa no próprio corretor, rode `node --test .mkdocs/corretor.test.js` (a CI também roda).
+
+- **Exercícios de Sistemas Digitais e de Cálculo:** um arquivo por assunto e nível em `conteudo/<tema>/exercicios/<NN-tema>/<facil|intermediario|dificil>.md`, numerados de 01 a 09 como os de Python. A resposta fica no próprio arquivo, num `<details>` com corretor (veja o item acima), seguida da resolução passo a passo. **Toda resposta deve ser calculada**, não digitada de cabeça.
+- **Fórmulas:** escreva em LaTeX, igual ao GitHub: `$x^2$` no meio do texto e `$$` numa linha sozinha antes e depois de uma fórmula em destaque. No site, o KaTeX desenha as fórmulas. Cuidados:
+    - o `$` tem que ficar colado na fórmula (`$x$`, não `$ x $`); por isso "R$ 12,00" continua sendo texto;
+    - dentro de tabelas, nunca use a barra vertical: escreva o módulo como `\lvert x \rvert`;
+    - use `\operatorname{sen}` e `\operatorname{tg}` (em português) e deixe `\begin{cases}` só em fórmulas de destaque.
+- **Mapas mentais:** use um bloco ` ```mermaid ` com `mindmap` (o GitHub e o site desenham). Nos nós, evite parênteses e colchetes, que mudam o formato da caixa.
 - **Tema novo:** crie `conteudo/<tema>/README.md` e só as pastas que tiverem conteúdo. Depois adicione o tema nas tabelas de [`conteudo/README.md`](conteudo/README.md) e do [README principal](README.md).
 
 ## Branches

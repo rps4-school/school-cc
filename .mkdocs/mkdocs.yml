@@ -34,11 +34,12 @@ hooks:
 extra_css:
   - assets/stylesheets/site.css
 
-# Editor de Python dos simulados e corretor de respostas. Publicados pelo visual.py;
+# Editor de Python dos simulados, corretor de respostas e fórmulas (KaTeX). Publicados pelo visual.py;
 # nas páginas sem editor ou sem pergunta, não fazem nada.
 extra_javascript:
   - assets/javascripts/editor.js
   - assets/javascripts/corretor.js
+  - assets/javascripts/katex-init.js
 
 theme:
   name: material
@@ -107,6 +108,10 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.tasklist:
       custom_checkbox: true
+  # Fórmulas em LaTeX ($x^2$ e $$...$$, igual ao GitHub), desenhadas pelo katex-init.js.
+  # O "$" precisa estar colado na fórmula, então "R$ 12,00" continua texto.
+  - pymdownx.arithmatex:
+      generic: true
 
 validation:
   links:
