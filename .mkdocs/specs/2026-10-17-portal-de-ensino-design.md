@@ -252,7 +252,7 @@ Os mesmos cartões de tema da home, todos, com o link "Ver por nível".
   - bastante respiro;
   - a fonte Inter, que já é carregada.
 
-  O `frontend-design` define os detalhes na implementação.
+  Os detalhes ficam para a implementação.
 - **Cores:**
   - o índigo continua como cor principal;
   - cada área ganha uma cor de destaque, diferente do semáforo dos níveis (verde, amarelo e vermelho), para não confundir área com dificuldade.
@@ -329,7 +329,6 @@ No fim, o site sobe localmente para você validar. Push, PR e merge só com a su
 
 ## 12. Como vamos trabalhar
 
-- **`superpowers:writing-plans`:** escreve o plano de implementação a partir desta especificação.
-- **Execução:** `superpowers:subagent-driven-development` (ou `executing-plans`), com `verification-before-completion` antes de dar cada fase como pronta.
-- **`frontend-design`:** direção visual e componentes da fase 3.
-- **Agente `revisor-de-pr`:** revisão da branch inteira antes do PR.
+- **Plano:** um plano de implementação, escrito a partir desta especificação.
+- **Execução:** uma tarefa por vez, com o teste escrito antes do código e a verificação completa antes de dar cada fase como pronta.
+- **Revisão:** a branch inteira é revisada antes do PR.

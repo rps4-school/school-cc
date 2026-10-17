@@ -1,6 +1,6 @@
 # Portal de ensino: plano de implementação
 
-> **Para quem executa:** use `superpowers:executing-plans` (execução nativa) ou `superpowers:subagent-driven-development`. Os passos usam caixas (`- [ ]`) para acompanhar.
+> Os passos usam caixas (`- [ ]`) para acompanhar.
 
 **Objetivo:** transformar o site do school-cc num portal de ensino com catálogo de temas, trilhas, progresso no navegador e navegação instantânea, sem mudar o Markdown do conteúdo.
 
@@ -1209,11 +1209,11 @@ def _corretores(markdown):
 
 ---
 
-### Tarefa 6: Componentes e direção visual (com `frontend-design`)
+### Tarefa 6: Componentes e direção visual
 
 **Arquivos:** mudar `.mkdocs/_componentes.py` e `.mkdocs/tailwind.css`.
 
-- [ ] **Passo 1:** invocar o skill `frontend-design:frontend-design` com o contexto da seção 7 da especificação:
+- [ ] **Passo 1:** definir a direção visual a partir da seção 7 da especificação:
   - catálogo de cursos;
   - índigo como cor principal;
   - a cor das áreas diferente do semáforo dos níveis;
@@ -1417,11 +1417,11 @@ e somar, depois do `pip install`:
 
   Montar a tabela antes e depois em `<scratchpad>/redesign/resultado.md`.
 - [ ] **Passo 5: capturas finais** (claro, escuro e celular) das 6 páginas, em `<scratchpad>/redesign/depois/`.
-- [ ] **Passo 6: verificação completa,** com o `superpowers:verification-before-completion`:
+- [ ] **Passo 6: verificação completa:**
   - build `--strict`;
   - os 3 testes;
   - `git diff main --stat`, que não pode tocar `conteudo/`, `simulados/` nem `CLAUDE.md`;
   - CSS compilado igual ao do repositório.
-- [ ] **Passo 7:** revisão da branch inteira com o agente `revisor-de-pr`. Corrigir o que for confirmado.
+- [ ] **Passo 7:** revisão da branch inteira. Corrigir o que for confirmado.
 - [ ] **Passo 8: fazer o commit**, com a mensagem `docs(site): documenta a trilha do portal e roda os testes novos na CI`.
 - [ ] **Passo 9:** servir o site final localmente e mandar ao usuário o link, a tabela antes e depois e as capturas. **Sem push, PR ou merge até a aprovação.**
