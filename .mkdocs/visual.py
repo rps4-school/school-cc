@@ -23,10 +23,10 @@ from mkdocs.structure.nav import Section
 from mkdocs.utils import get_relative_url
 from pymdownx.slugs import slugify
 
-from _catalogo import fora_de_codigo, lugares, montar, perguntas, totais
+from _catalogo import fora_de_codigo, lugares, montar, perguntas, tabela_roteiro, totais
 from _componentes import (
-    EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, bloco_continuar, cartao, cartao_tema, faixa_como_estudar, grade, heroi,
-    plural, sem_emoji,
+    EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, bloco_continuar, cabecalho_tema, cartao, cartao_tema, faixa_como_estudar,
+    grade, heroi, item_trilha, plural, sem_emoji, simulados_do_tema, trilha,
 )
 
 # Arquivos desta pasta publicados no site (o MkDocs ignora pastas que começam com ".").
@@ -281,6 +281,46 @@ def _temas(page, files):
             f'<p class="temas-rodape"><a href="{_url(files, page, PAGINA_NIVEIS)}">Ver todo o conteúdo por nível →</a></p>')
 
 
+def _rotulo_da_unidade(unidade):
+    """"Aula", "Resumo" ou "Parte", pela pasta da unidade."""
+    pasta = posixpath.basename(posixpath.dirname(unidade.src))
+    return {"aulas": "Aula", "resumos": "Resumo"}.get(pasta, "Parte")
+
+
+def _leitura(minutos):
+    return f"~{round(minutos / 60)} h de leitura" if minutos >= 90 else f"~{minutos} min de leitura"
+
+
+def _pagina_do_tema(markdown, tema, page, files):
+    """README do tema: cabeçalho de curso depois do título; a tabela do roteiro vira a trilha; "Teste-se"
+    com os simulados no fim da seção do roteiro."""
+    url = lambda src: _url(files, page, src)  # noqa: E731
+    numeros = _numeros_do_tema(tema)
+    if tema.unidades:
+        numeros += " · " + _leitura(sum(u.minutos for u in tema.unidades))
+    primeira = url(tema.unidades[0].src) if tema.unidades else None
+    cabecalho = cabecalho_tema(tema, numeros, primeira, [_chave(files, src) for src in tema.paginas])
+    markdown = re.sub(r"^# .*$", lambda m: f"{m.group(0)}\n\n{cabecalho}\n", markdown, count=1, flags=re.M)
+
+    m = tabela_roteiro(markdown)
+    if not (m and tema.unidades):
+        return markdown
+    itens = [
+        item_trilha(u.numero, u.titulo, url(u.src), _chave(files, u.src), u.descricao, u.nivel, u.minutos,
+                    [(e.nivel, url(e.src), _chave(files, e.src), e.perguntas) for e in u.exercicios],
+                    _rotulo_da_unidade(u))
+        for u in tema.unidades
+    ]
+    antes, depois = markdown[: m.start()], markdown[m.end():]
+    if tema.simulados:
+        teste = "## Teste-se\n\n" + simulados_do_tema([
+            (s.titulo, url(s.src), _chave(files, s.src), s.perguntas, s.nivel, s.duracao) for s in tema.simulados
+        ]) + "\n\n"
+        proxima = re.search(r"^## ", depois, re.M)
+        depois = depois[: proxima.start()] + teste + depois[proxima.start():] if proxima else depois + "\n\n" + teste
+    return f"{antes}{trilha(itens, tema.area)}\n{depois}"
+
+
 def _inicio(page, files):
     """A home do site é só o portal: o README da raiz continua igual no GitHub."""
     t = totais(_estado["temas"])
@@ -332,6 +372,9 @@ def on_page_markdown(markdown, page, config, files):
     linhas = _caixas(linhas)
     markdown = "\n".join(linhas)
     markdown = _exemplos(markdown)
+    tema = next((t for t in _estado["temas"] if t.src == page.file.src_uri), None)
+    if tema:
+        markdown = _pagina_do_tema(markdown, tema, page, files)
     if page.file.src_uri == "conteudo/README.md":  # a tabela de temas vira o catálogo do portal
         markdown = TABELA_INDICE.sub(lambda m: _temas(page, files) + "\n", markdown, count=1)
     markdown = _tabelas_indice(markdown, page, files)

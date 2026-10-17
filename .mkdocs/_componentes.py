@@ -200,8 +200,9 @@ def cabecalho_tema(tema, numeros, primeira_url, paginas):
         f'<span class="cartao-tema__area">{_e(tema.area)}</span>{_nivel(tema.nivel)}</div>'
         f'<p class="curso__numeros">{_e(numeros)}</p>'
         f'<div class="curso__progresso"><span data-progresso-texto>0% concluído</span>{barra("Progresso em " + tema.titulo)}</div>'
-        f'<a class="md-button md-button--primary curso__acao" data-proxima href="{_e(primeira_url)}">Começar a trilha</a>'
-        "</div>"
+        + (f'<a class="md-button md-button--primary curso__acao" data-proxima href="{_e(primeira_url)}">Começar a trilha</a>'
+           if primeira_url else "")
+        + "</div>"
     )
 
 
