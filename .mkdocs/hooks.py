@@ -21,7 +21,7 @@ from mkdocs.utils import get_relative_url
 from pymdownx.slugs import slugify
 
 from _catalogo import agrupar_por_area, temas_do_indice
-from _componentes import COR_DO_NIVEL, NIVEL, NIVEL_DO_EXERCICIO, cartao, grade, sem_emoji
+from _componentes import COR_DO_NIVEL, NIVEL, NIVEL_DO_EXERCICIO, area_slug, cartao, grade, sem_emoji
 
 # Nomes de pasta sem README e que precisam de acento ou de um nome melhor.
 TITULOS = {
@@ -435,21 +435,26 @@ def _inclusao_do_gerado(src):
 def _agrupar_por_area(conteudo, docs_dir, pasta_da_secao):
     """Dentro de Conteúdo, os temas ficam em seções por área (Programação > Python, Git...), na ordem da
     tabela de conteudo/README.md. As pastas e os endereços das páginas não mudam."""
-    temas = {}
+    temas, paginas_de_area = {}, {}
     for item in conteudo.children:
         pasta = pasta_da_secao(item) if isinstance(item, Section) else None
         if pasta and pasta.count("/") >= 1:
-            temas[pasta.split("/")[1]] = item
+            slug = pasta.split("/")[1]
+            if os.path.isdir(os.path.join(docs_dir, "conteudo", slug)):
+                temas[slug] = item
+            else:  # conteudo/<área>/index.md, gerada pelo visual.py: vira o índice da seção da área
+                paginas_de_area[slug] = item
     indice = temas_do_indice(docs_dir)
     ordem = [s for s in indice if s in temas] + sorted(s for s in temas if s not in indice)
     areas = []
     for area, slugs in agrupar_por_area(ordem):
-        secao = Section(area, [temas[s] for s in slugs])
+        indice = paginas_de_area.get(area_slug(area))
+        secao = Section(area, (indice.children if indice else []) + [temas[s] for s in slugs])
         secao.parent = conteudo
         for tema in secao.children:
             tema.parent = secao
         areas.append(secao)
-    resto = [i for i in conteudo.children if i not in temas.values()]
+    resto = [i for i in conteudo.children if i not in temas.values() and i not in paginas_de_area.values()]
     conteudo.children = [i for i in resto if getattr(i, "file", None) is not None and i.file.src_uri == "conteudo/README.md"]
     conteudo.children += areas + [i for i in resto if i not in conteudo.children]
 

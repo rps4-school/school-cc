@@ -93,20 +93,23 @@ class Catalogo(unittest.TestCase):
     def test_cartao_de_area_lista_os_temas_com_progresso(self):
         html = c.cartao_area("Programação", [(tema(slug="python", titulo="Python", area="Programação"), "python/", ["p/1/", "p/2/"]),
                                               (tema(slug="git", titulo="Git", area="Programação"), "git/", ["g/"])],
-                             "conteudo/#area-programacao")
+                             "conteudo/programacao/")
         self.assertNotIn("\n", html)
         self.assertIn('data-area="programacao"', html)
         self.assertIn("2 temas", html)
-        self.assertIn('href="conteudo/#area-programacao"', html)
+        # O nome da área é o link do cartão inteiro (o CSS estica a área de clique); os temas continuam links.
+        self.assertIn('<a class="area__nome" href="conteudo/programacao/">Programação</a>', html)
+        self.assertIn('<span class="area__ver" aria-hidden="true">Ver a área', html)
+        self.assertEqual(html.count('href="conteudo/programacao/"'), 1)
         self.assertIn('data-progresso-tema="python" data-paginas="p/1/ p/2/"', html)
         self.assertIn('href="git/"', html)
         self.assertIn("data-progresso-texto", html)
 
     def test_area_com_muitos_temas_mostra_seis_e_um_mais(self):
         temas = [(tema(slug=f"t{i}", titulo=f"Tema {i}", area="Programação"), f"t{i}/", []) for i in range(8)]
-        html = c.cartao_area("Programação", temas, "conteudo/#area-programacao")
+        html = c.cartao_area("Programação", temas, "conteudo/programacao/")
         self.assertEqual(html.count('class="area__tema"'), 6)
-        self.assertIn(">+2 temas</a>", html)
+        self.assertIn('<span class="area__mais">+2 temas</span>', html)  # o bloco inteiro já leva à área
         self.assertIn("8 temas", html)
 
     def test_filtros_do_catalogo_tem_busca_e_faceta_de_area(self):

@@ -1169,15 +1169,62 @@
   font-family: var(--mono);
   font-size: 0.56rem;
 }
-.md-typeset a.area__ver {
+.md-typeset .area__ver {
   margin-top: auto;
   color: var(--area-texto);
   font-size: 0.66rem;
   font-weight: 650;
 }
-.md-typeset :is(.area__tema, .area__mais, .area__ver):focus-visible {
+.md-typeset .area__mais {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.2rem;
+  padding: 0 0.4rem;
+  color: var(--texto-suave);
+  font-size: 0.66rem;
+  font-weight: 650;
+}
+/* O bloco inteiro é clicável: o link do nome da área cobre o bloco; as etiquetas dos temas ficam por cima. */
+.md-typeset a.area__nome {
+  color: var(--tinta);
+}
+.md-typeset a.area__nome::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.md-typeset .area {
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.md-typeset .area:hover {
+  border-color: color-mix(in srgb, var(--area) 45%, transparent);
+  box-shadow: var(--sombra);
+  transform: translateY(-2px);
+}
+.md-typeset .area:hover .area__ver {
+  text-decoration: underline;
+}
+.md-typeset a.area__tema {
+  position: relative;
+  z-index: 1;
+}
+.md-typeset .area:has(a.area__nome:focus-visible) {
   outline: 2px solid var(--md-accent-fg-color);
   outline-offset: 2px;
+}
+.md-typeset a.area__nome:focus-visible {
+  outline: none;
+}
+.md-typeset a.area__tema:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset .area:hover {
+    transform: none;
+  }
 }
 
 /* ---------- Home: "Como estudar aqui" ---------- */
@@ -1976,8 +2023,8 @@
   flex: none;
   place-items: center;
   border-radius: 0.55rem;
-  background: var(--area-fundo);
-  color: var(--area-texto);
+  background: var(--area-fundo, var(--destaque-fundo));
+  color: var(--area-texto, var(--destaque-texto));
 }
 .trilha-lateral__icone svg {
   width: 1rem;
@@ -2152,8 +2199,59 @@
   color: var(--feito);
   font-weight: 800;
 }
+/* Menu da aba Conteúdo (catálogo, Por nível, páginas de área): as áreas viram títulos de seção, com link. */
+.trilha-lateral__area {
+  display: flex;
+  min-height: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0 0.15rem;
+  padding: 0 0.45rem;
+  border-radius: 0.45rem;
+  color: var(--area-texto) !important;
+  font-size: 0.52rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.trilha-lateral__area:hover {
+  background: var(--area-fundo);
+}
+.trilha-lateral__area span {
+  font-size: 0.8rem;
+  letter-spacing: 0;
+}
+.trilha-lateral__area[aria-current="page"] {
+  background: var(--area-fundo);
+}
+.trilha-lateral__mini {
+  display: grid;
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: none;
+  place-items: center;
+  border-radius: 0.35rem;
+  background: var(--area-fundo, var(--destaque-fundo));
+  color: var(--area-texto, var(--destaque-texto));
+}
+.trilha-lateral__mini svg {
+  width: 0.72rem;
+  height: 0.72rem;
+}
+.trilha-lateral__pct {
+  margin-left: auto;
+  color: var(--texto-suave);
+  font-family: var(--mono);
+  font-size: 0.55rem;
+}
+.trilha-lateral__extra {
+  margin-top: 0.9rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--borda);
+}
 /* Celular: alvos de toque de 44 px (WCAG 2.5.5). */
 @media screen and (max-width: 76.2344em) {
+  .trilha-lateral__area,
   .trilha-lateral__volta,
   .trilha-lateral__link,
   .trilha-lateral__niveis a,

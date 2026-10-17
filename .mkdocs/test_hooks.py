@@ -70,6 +70,26 @@ class LimparTema(unittest.TestCase):
         self.assertEqual(srcs(tema.children), ["conteudo/calculo/README.md", "Aulas", "Resumos", "Exercícios"])
 
 
+class AgruparPorArea(unittest.TestCase):
+    def test_pagina_da_area_vira_o_indice_da_secao(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as raiz:
+            os.makedirs(os.path.join(raiz, "conteudo", "python"))
+            os.makedirs(os.path.join(raiz, "conteudo", "git"))
+            with open(os.path.join(raiz, "conteudo", "README.md"), "w", encoding="utf-8") as f:
+                f.write("| Tema | O que tem |\n| --- | --- |\n| [**Python**](python/README.md) | x |\n| [**Git**](git/README.md) | y |\n")
+            python = secao("Python", [pagina("conteudo/python/README.md")])
+            git = secao("Git", [pagina("conteudo/git/README.md")])
+            indice = pagina("conteudo/programacao/index.md")
+            area_gerada = secao("Programacao", [indice])
+            conteudo = secao("Conteúdo", [pagina("conteudo/README.md"), git, area_gerada, python])
+            hooks._agrupar_por_area(conteudo, raiz, hooks._pasta_da_secao)
+            self.assertEqual(srcs(conteudo.children), ["conteudo/README.md", "Programação"])
+            programacao = conteudo.children[1]
+            self.assertEqual(srcs(programacao.children), ["conteudo/programacao/index.md", "Python", "Git"])
+            self.assertIs(indice.parent, programacao)
+
+
 class InclusaoDosGerados(unittest.TestCase):
     def test_respostas_de_conteudo_ficam_fora_do_menu(self):
         for src in ("conteudo/python/exercicios/respostas/index.md",

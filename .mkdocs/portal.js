@@ -68,7 +68,8 @@
       barra(el, pct);
       var t = el.querySelector("[data-progresso-texto]");
       // Cartões e etiquetas de tema: o % só aparece quando há progresso.
-      var soComProgresso = el.classList.contains("area__tema") || el.classList.contains("cartao-tema");
+      var soComProgresso = el.classList.contains("area__tema") || el.classList.contains("cartao-tema") ||
+        el.classList.contains("trilha-lateral__link");
       if (t) t.textContent = soComProgresso && !feitas ? "" : pct + "%" + (el.classList.contains("curso") ? " concluído" : "");
       el.toggleAttribute("data-com-progresso", feitas > 0);
     });

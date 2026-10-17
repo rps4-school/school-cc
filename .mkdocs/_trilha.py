@@ -167,14 +167,44 @@ def abas_do_site(itens, titulos):
     return abas
 
 
+def html_do_menu_do_catalogo(grupos, url, chave, url_conteudo, url_niveis, atual):
+    """Menu da aba Conteúdo fora dos temas (catálogo, Por nível e páginas de área), no visual da trilha: as áreas,
+    com os temas e o progresso de cada um (portal.js), e Por nível no fim. grupos: [(área, [Tema], url da área)];
+    atual: o endereço da página aberta (o mesmo formato de url_conteudo, url_niveis e das urls das áreas)."""
+    def marca(alvo, classe):
+        sim = alvo == atual
+        return f'class="{classe}{" md-nav__link--active" if sim else ""}"', ' aria-current="page"' if sim else ""
+
+    classe, aria = marca(url_conteudo, "trilha-lateral__tema")
+    partes = [f'<a {classe} href="{_e(url_conteudo)}"{aria}><span class="trilha-lateral__icone">{ICONES["livro"]}</span>'
+              '<span class="trilha-lateral__nome"><small>Conteúdo</small><b>Todos os temas</b></span></a>']
+    for area, temas, url_area in grupos:
+        itens = "".join(
+            f'<li><a class="trilha-lateral__link" href="{_e(url(t.src))}" data-area="{area_slug(t.area)}" '
+            f'data-progresso-tema="{_e(t.slug)}" data-paginas="{_e(" ".join(chave(s) for s in t.paginas))}">'
+            f'<span class="trilha-lateral__mini" aria-hidden="true">{ICONES.get(t.icone, ICONES["pasta"])}</span>'
+            f'<span class="trilha-lateral__titulo">{_e(t.titulo)}</span><span class="trilha-lateral__pct" data-progresso-texto></span></a></li>'
+            for t in temas
+        )
+        classe, aria = marca(url_area, "trilha-lateral__area")
+        partes.append(f'<a {classe} href="{_e(url_area)}" data-area="{area_slug(area)}"{aria}>{_e(area)}'
+                      f'<span aria-hidden="true">›</span></a><ul class="trilha-lateral__simples">{itens}</ul>')
+    classe, aria = marca(url_niveis, "trilha-lateral__link")
+    partes.append(f'<ul class="trilha-lateral__simples trilha-lateral__extra"><li><a {classe} href="{_e(url_niveis)}"{aria}>'
+                  f'<span class="trilha-lateral__mini" aria-hidden="true">{ICONES["livro"]}</span>'
+                  '<span class="trilha-lateral__titulo">Por nível</span></a></li></ul>')
+    return "".join(partes)
+
+
 def html_das_abas(abas):
     """Atalhos das abas do topo: no celular, as abas não aparecem e a gaveta é o único caminho até elas."""
     return f'<div class="trilha-lateral__abas">{_secao("Navegação", abas)}</div>'
 
 
-def caminho(tema, url, url_conteudo, unidade=None, exercicio=None, resposta=False, pagina_do_tema=False):
-    """O caminho no topo: só o que ajuda a se localizar (Início e Conteúdo já estão nas abas)."""
-    area = Link(tema.area, f"{url_conteudo}#area-{area_slug(tema.area)}")
+def caminho(tema, url, url_conteudo, unidade=None, exercicio=None, resposta=False, pagina_do_tema=False, url_area=None):
+    """O caminho no topo: só o que ajuda a se localizar (Início e Conteúdo já estão nas abas). A área leva à
+    página dela (url_area) ou, sem ela, ao catálogo filtrado pela área."""
+    area = Link(tema.area, url_area or f"{url_conteudo}#area-{area_slug(tema.area)}")
     do_tema = Link(tema.titulo, url(tema.src))
     if pagina_do_tema:
         return [area]

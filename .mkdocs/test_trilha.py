@@ -143,6 +143,10 @@ class Caminho(unittest.TestCase):
         links = t.caminho(self.tema, url, "/conteudo/", pagina_do_tema=True)
         self.assertEqual(self.nomes(links), [("Programação", "/conteudo/#area-programacao")])
 
+    def test_area_com_pagina_propria(self):
+        links = t.caminho(self.tema, url, "/conteudo/", unidade=self.listas, url_area="/conteudo/programacao/")
+        self.assertEqual(links[0].url, "/conteudo/programacao/")
+
     def test_aula(self):
         links = t.caminho(self.tema, url, "/conteudo/", unidade=self.listas)
         self.assertEqual(self.nomes(links), [("Programação", "/conteudo/#area-programacao"), ("Python", "/conteudo/python/README.md")])
@@ -164,6 +168,32 @@ class Caminho(unittest.TestCase):
         self.assertEqual(html.count('<li class="md-path__item">'), 2)
         self.assertIn('<a href="/conteudo/python/README.md" class="md-path__link"><span class="md-ellipsis">Python</span></a>', html)
         self.assertNotIn("\n", html)
+
+
+class MenuDoCatalogo(unittest.TestCase):
+    def html(self, atual):
+        python, git = tema(), tema(slug="git", titulo="Git", icone="ferramenta", src="conteudo/git/README.md", unidades=[])
+        calculo = tema(slug="calculo", titulo="Cálculo", area="Matemática", icone="integral", src="conteudo/calculo/README.md")
+        grupos = [("Programação", [python, git], "/conteudo/programacao/"), ("Matemática", [calculo], "/conteudo/matematica/")]
+        return t.html_do_menu_do_catalogo(grupos, url, chave, "/conteudo/", "/niveis/", atual)
+
+    def test_areas_temas_e_por_nivel(self):
+        html = self.html("/conteudo/")
+        self.assertNotIn("\n", html)
+        self.assertEqual(html.count('class="trilha-lateral__area"'), 2)
+        self.assertIn('<a class="trilha-lateral__area" href="/conteudo/programacao/" data-area="programacao">Programação', html)
+        self.assertRegex(html, r'href="/conteudo/python/README.md" data-area="programacao" data-progresso-tema="python" data-paginas="k:')
+        self.assertIn('data-progresso-tema="git" data-paginas=""', html)
+        self.assertIn(">Git<", html)
+        self.assertIn('href="/niveis/"', html)
+        self.assertIn("data-progresso-texto", html)
+
+    def test_pagina_atual(self):
+        for atual in ("/conteudo/", "/conteudo/matematica/", "/niveis/"):
+            html = self.html(atual)
+            self.assertEqual(html.count('aria-current="page"'), 1, atual)
+            self.assertEqual(html.count("md-nav__link--active"), 1, atual)
+            self.assertRegex(html, r'href="%s"[^>]*aria-current="page"' % atual.replace("/", "\\/"))
 
 
 class Abas(unittest.TestCase):

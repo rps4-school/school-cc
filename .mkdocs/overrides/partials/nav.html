@@ -1,10 +1,11 @@
 {#-
   Sobrescrito do Material 9.7.7 (a trava de versão está em .mkdocs/test_hooks.py).
-  Nas páginas de um tema, o menu é a trilha do tema: o HTML vem pronto em page.meta (visual.py e _trilha.py).
+  Nas páginas de um tema, o menu é a trilha do tema; no catálogo, em Por nível e nas páginas de área, os temas
+  por área. O HTML vem pronto em page.meta (visual.py e _trilha.py).
   Nas outras páginas, o menu original do Material, sem mudança (o bloco do else).
 -#}
 {% if page and page.meta and page.meta.trilha %}
-  <nav class="md-nav md-nav--primary trilha-lateral" aria-label="Trilha de {{ page.meta.trilha_tema | e }}" data-md-level="0">
+  <nav class="md-nav md-nav--primary trilha-lateral" aria-label="{{ page.meta.trilha_rotulo | e }}" data-md-level="0">
     <label class="md-nav__title" for="__drawer">
       <a href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}" title="{{ config.site_name | e }}" class="md-nav__button md-logo" aria-label="{{ config.site_name }}" data-md-component="logo">
         {% include "partials/logo.html" %}

@@ -293,3 +293,13 @@ O rodapé Anterior/Próximo do Material some nas aulas e nos exercícios (`hide:
   - mensagens em pt-BR, no formato `tipo(escopo): descrição`;
   - nenhuma referência a ferramentas de IA.
 - **Entrega:** a prévia fica rodando em `http://localhost:8000` para validação antes de qualquer push.
+
+## 12. Depois da revisão: páginas de área e menu da aba Conteúdo
+
+Pedido aprovado depois da primeira entrega:
+
+- **Página de cada área:** `conteudo/<área>/index.md`, gerada pelo `visual.py`. Mostra os temas da área na lista do catálogo, com o link "Ver todo o conteúdo". No menu do Material, ela vira a página da seção da área. Se existir uma pasta de verdade com esse nome, a área fica sem página e os links vão para o catálogo filtrado (`conteudo/#area-<slug>`).
+- **Bloco da área na home:** o bloco inteiro é clicável e leva à página da área. As etiquetas dos temas continuam sendo links para os temas.
+- **Menu da aba Conteúdo fora dos temas** (catálogo, Por nível e páginas de área): mesmo visual da trilha, com as áreas como seções, os temas com ícone e % de progresso e "Por nível" no fim.
+- **Caminho no topo:** a área leva à página dela.
+

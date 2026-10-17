@@ -37,7 +37,8 @@ from _componentes import (
     abas_de_nivel, linha_de_informacoes, proximo_passo, segmentos, sobretitulo,
 )
 from _trilha import (
-    Link, abas_do_site, caminho, html_das_abas, html_do_caminho, html_do_menu, montar_menu, rotulo_da_unidade,
+    Link, abas_do_site, caminho, html_das_abas, html_do_caminho, html_do_menu, html_do_menu_do_catalogo, montar_menu,
+    rotulo_da_unidade,
 )
 
 # Arquivos desta pasta publicados no site (o MkDocs ignora pastas que começam com ".").
@@ -57,6 +58,8 @@ MARCADOR_PROGRESSO = "<!-- meu-progresso -->"
 # Abas que são uma página só: o título delas ainda não foi lido quando o menu é montado.
 TITULOS_DAS_ABAS = {"README.md": "Início", PAGINA_PROGRESSO: "Meu progresso"}
 PAGINA_NIVEIS = "niveis.md"
+# Página de cada área (conteudo/<área>/index.md, gerada): os temas da área. A home leva a ela.
+MARCADOR_AREA = "<!-- pagina-da-area -->"
 MARCADOR_NIVEIS = "<!-- por-nivel -->"
 # A lista do plugin de tags fica escondida: as etiquetas de nível das páginas apontam para as âncoras
 # dela (#tag:iniciante...), e o portal.js usa a âncora para abrir a página já filtrada.
@@ -305,6 +308,48 @@ def _temas_por_area():
     return [(area, [por_slug[s] for s in slugs]) for area, slugs in agrupar_por_area(list(por_slug))]
 
 
+def _paginas_de_area(grupos, docs_dir):
+    """{src: área} das páginas de área a gerar (conteudo/<área>/index.md). Se já existe uma pasta de verdade com
+    esse nome (um tema chamado "hardware", por exemplo), a área fica sem página e os links vão para o catálogo."""
+    return {
+        f"conteudo/{area_slug(area)}/index.md": area
+        for area, _ in grupos
+        if not os.path.isdir(os.path.join(docs_dir, "conteudo", area_slug(area)))
+    }
+
+
+def _url_da_area(area, page, files):
+    """A página da área ou, sem ela, o catálogo filtrado pela área."""
+    src = f"conteudo/{area_slug(area)}/index.md"
+    if src in _estado["areas"]:
+        return _url(files, page, src)
+    return f"{_url(files, page, 'conteudo/README.md')}#area-{area_slug(area)}"
+
+
+def _pagina_da_area(area, page, files):
+    """Os temas da área, na mesma lista do catálogo, e o link para o catálogo inteiro."""
+    temas = next(temas for a, temas in _temas_por_area() if a == area)
+    t = totais(temas)
+    numeros = [plural(t["temas"], "tema", "temas"), plural(t["aulas"], "aula", "aulas"),
+               plural(t["exercicios"], "exercício", "exercícios")] + ([plural(t["simulados"], "simulado", "simulados")] if t["simulados"] else [])
+    linhas = "".join(
+        cartao_tema(x, _url(files, page, x.src), [_chave(files, src) for src in x.paginas], _numeros_do_tema(x)) for x in temas
+    )
+    return (f"{linha_de_informacoes(None, '', numeros)}\n\n"
+            f'<div class="painel-temas" data-area="{area_slug(area)}">{linhas}</div>\n\n'
+            f'<p class="temas-rodape"><a href="{_url(files, page, "conteudo/README.md")}">Ver todo o conteúdo →</a></p>\n')
+
+
+def _menu_do_catalogo(page, files):
+    """Menu da aba Conteúdo fora dos temas (catálogo, Por nível e páginas de área)."""
+    url = lambda alvo: _url(files, page, alvo)  # noqa: E731
+    grupos = [(area, temas, _url_da_area(area, page, files)) for area, temas in _temas_por_area()]
+    page.meta["trilha"] = html_do_menu_do_catalogo(grupos, url, lambda alvo: _chave(files, alvo), url("conteudo/README.md"),
+                                                   url(PAGINA_NIVEIS), url(page.file.src_uri))
+    page.meta["trilha_rotulo"] = "Temas por área"
+    page.meta["trilha_abas"] = html_das_abas([Link(a.titulo, url(a.url)) for a in _estado["abas"]])
+
+
 def _catalogo(page, files):
     """Página Conteúdo: filtros (busca e área) e os cartões compactos de tema, agrupados por área."""
     grupos = _temas_por_area()
@@ -359,10 +404,9 @@ def _por_nivel(page, files):
 
 def _areas(page, files):
     """Home: um bloco por área, com os temas como etiquetas. O catálogo completo fica em Conteúdo."""
-    catalogo = _url(files, page, "conteudo/README.md")
     blocos = "".join(
         cartao_area(area, [(t, _url(files, page, t.src), [_chave(files, src) for src in t.paginas]) for t in temas],
-                    f"{catalogo}#area-{area_slug(area)}")
+                    _url_da_area(area, page, files))
         for area, temas in _temas_por_area()
     )
     return f'<div class="areas">{blocos}</div>'
@@ -443,16 +487,17 @@ def _menu_e_caminho(page, files, tema):
     lugar = _estado["lugares"].get(enunciado or src)
     menu = montar_menu(tema, src, url, chave, url_conteudo, _estado["mais"].get(tema.slug, ()), enunciado)
     page.meta["trilha"] = html_do_menu(menu)
-    page.meta["trilha_tema"] = tema.titulo
+    page.meta["trilha_rotulo"] = f"Trilha de {tema.titulo}"
     page.meta["trilha_abas"] = html_das_abas([Link(a.titulo, url(a.url)) for a in _estado["abas"]])
+    url_area = _url_da_area(tema.area, page, files)
     if src == tema.src:
-        links = caminho(tema, url, url_conteudo, pagina_do_tema=True)
+        links = caminho(tema, url, url_conteudo, pagina_do_tema=True, url_area=url_area)
     elif lugar and lugar.exercicio:
-        links = caminho(tema, url, url_conteudo, lugar.unidade, lugar.exercicio, resposta=bool(enunciado))
+        links = caminho(tema, url, url_conteudo, lugar.unidade, lugar.exercicio, resposta=bool(enunciado), url_area=url_area)
     elif lugar and lugar.unidade:
-        links = caminho(tema, url, url_conteudo, lugar.unidade)
+        links = caminho(tema, url, url_conteudo, lugar.unidade, url_area=url_area)
     else:
-        links = caminho(tema, url, url_conteudo)
+        links = caminho(tema, url, url_conteudo, url_area=url_area)
     page.meta["caminho"] = html_do_caminho(links)
 
 
@@ -626,6 +671,9 @@ def on_files(files, config):
     _estado["temas"] = montar(config["docs_dir"])
     _estado["lugares"] = lugares(_estado["temas"])
     _estado["mais"] = {tema.slug: _mais_do_tema(tema, files) for tema in _estado["temas"]}
+    _estado["areas"] = _paginas_de_area(_temas_por_area(), config["docs_dir"])
+    for src, area in _estado["areas"].items():
+        files.append(File.generated(config, src, content=f"# {area}\n\n{MARCADOR_AREA}\n", inclusion=InclusionLevel.INCLUDED))
     for origem, destino in ARQUIVOS_DO_SITE.items():
         with open(os.path.join(os.path.dirname(__file__), origem), encoding="utf-8") as f:
             files.append(File.generated(config, destino, content=f.read(), inclusion=InclusionLevel.NOT_IN_NAV))
@@ -669,6 +717,14 @@ def on_page_markdown(markdown, page, config, files):
     if page.file.src_uri == "conteudo/README.md":  # a tabela de temas vira o catálogo do portal
         markdown = TABELA_INDICE.sub(lambda m: _catalogo(page, files) + "\n", markdown, count=1)
         page.meta["hide"] = ["toc"]  # o catálogo usa a largura toda
+    area = _estado["areas"].get(page.file.src_uri)
+    if area:
+        markdown = markdown.replace(MARCADOR_AREA, _pagina_da_area(area, page, files))
+        page.meta["hide"] = ["toc"]
+        page.meta["sobretitulo_html"] = sobretitulo("Área", area)
+        page.meta["caminho"] = html_do_caminho([Link("Conteúdo", _url(files, page, "conteudo/README.md"))])
+    if page.file.src_uri in ("conteudo/README.md", PAGINA_NIVEIS) or area:
+        _menu_do_catalogo(page, files)
     markdown = _tabelas_indice(markdown, page, files)
     if page.file.src_uri.startswith("simulados/") and FOLHA_DE_PROVA.search(markdown):
         markdown = FOLHA_DE_PROVA.sub(_folha_de_prova, markdown)

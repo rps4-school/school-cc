@@ -61,6 +61,17 @@ class NavegacaoManual(unittest.TestCase):
         self.assertEqual(self.tirar(linha), linha)
 
 
+class PaginasDeArea(unittest.TestCase):
+    def test_uma_por_area_sem_pisar_numa_pasta_de_verdade(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as raiz:
+            os.makedirs(os.path.join(raiz, "conteudo", "hardware"))  # um tema que se chamasse "hardware"
+            grupos = [("Programação", ["python"]), ("Hardware", ["sd"]), ("Matemática", ["calculo"])]
+            self.assertEqual(visual._paginas_de_area(grupos, raiz), {
+                "conteudo/programacao/index.md": "Programação", "conteudo/matematica/index.md": "Matemática",
+            })
+
+
 class TemaDaPagina(unittest.TestCase):
     def test_pela_pasta_do_tema_sem_confundir_prefixo(self):
         from types import SimpleNamespace

@@ -185,7 +185,8 @@ def cartao_tema(tema, url, paginas, numeros):
 
 def cartao_area(area, temas, url):
     """Bloco de uma área na home (como as "escolas" da Alura): os temas viram etiquetas, com o progresso.
-    temas: [(Tema, url, chaves das páginas)]."""
+    O nome da área é o link do bloco inteiro (o CSS estica a área de clique), para a página da área; as
+    etiquetas continuam links para os temas. temas: [(Tema, url, chaves das páginas)]."""
     slug = area_slug(area)
     etiquetas = "".join(
         f'<a class="area__tema" href="{_e(u)}" data-progresso-tema="{_e(t.slug)}" data-paginas="{_e(" ".join(p))}">'
@@ -193,13 +194,13 @@ def cartao_area(area, temas, url):
         for t, u, p in temas[:MAX_TEMAS_NA_AREA]
     )
     if len(temas) > MAX_TEMAS_NA_AREA:
-        etiquetas += f'<a class="area__mais" href="{_e(url)}">+{len(temas) - MAX_TEMAS_NA_AREA} temas</a>'
+        etiquetas += f'<span class="area__mais">+{len(temas) - MAX_TEMAS_NA_AREA} temas</span>'
     return (
         f'<div class="area" data-area="{slug}">'
         f'<div class="area__topo"><span class="cartao-tema__icone">{ICONES[ICONE_DA_AREA.get(slug, "pasta")]}</span>'
-        f'<span class="area__nome">{_e(area)}</span><span class="area__qtd">{plural(len(temas), "tema", "temas")}</span></div>'
+        f'<a class="area__nome" href="{_e(url)}">{_e(area)}</a><span class="area__qtd">{plural(len(temas), "tema", "temas")}</span></div>'
         f'<p class="area__temas">{etiquetas}</p>'
-        f'<a class="area__ver" href="{_e(url)}">Ver no catálogo <span aria-hidden="true">→</span></a></div>'
+        '<span class="area__ver" aria-hidden="true">Ver a área →</span></div>'
     )
 
 
