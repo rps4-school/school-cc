@@ -213,13 +213,10 @@
     leitor.readAsText(e.target.files[0]);
     e.target.value = "";
   });
-  // A busca do hero é um <label>: Enter e espaço também abrem.
-  document.addEventListener("keydown", function (e) {
-    var l = (e.key === "Enter" || e.key === " ") && e.target.closest && e.target.closest(".heroi__busca");
-    if (l) {
-      e.preventDefault();
-      l.click();
-    }
+  // Nomes acessíveis que faltam no Material (busca e barra de carregamento da navegação instantânea).
+  [[".md-search", "Busca"], [".md-progress", "Carregando a página"]].forEach(function (par) {
+    var el = document.querySelector(par[0]);
+    if (el) el.setAttribute("aria-label", par[1]);
   });
   document.addEventListener("school-cc:progresso", desenhar);
   window.addEventListener("storage", function (e) {

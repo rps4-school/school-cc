@@ -171,7 +171,7 @@ def heroi(numeros, continuar):
         '<h1 class="heroi__titulo">Estude por trilhas. <span class="heroi__marca">Pratique com correção na hora.</span></h1>'
         '<p class="heroi__sub">Aulas, exercícios e simulados organizados por tema, do básico ao avançado. '
         'Aberto, gratuito e escrito por quem está no curso.</p>'
-        f'<label class="heroi__busca" for="__search" tabindex="0" role="button">{_LUPA}'
+        f'<label class="heroi__busca" for="__search">{_LUPA}'
         '<span>Buscar aulas, exercícios, fórmulas…</span><kbd>/</kbd></label>'
         f'<dl class="heroi__numeros">{itens}</dl></div>'
         f"{continuar}</section>"

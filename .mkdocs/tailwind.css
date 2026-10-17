@@ -190,6 +190,24 @@
   flex-wrap: wrap;
   row-gap: 0.15rem;
 }
+/* Área de toque de 24 px (WCAG 2.5.8). */
+.md-path__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.2rem;
+}
+
+/* ---------- Links no meio do texto: sublinhados, não só pela cor (WCAG 1.4.1) ---------- */
+.md-typeset :is(p, li, td, dd) > a:not([class]),
+.md-typeset :is(p, li, td, dd) > :is(strong, em, span) > a:not([class]) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+}
+.md-typeset :is(p, li, td, dd) > a:not([class]):hover {
+  text-decoration-color: currentColor;
+}
 
 /* ---------- Etiquetas de nível (semáforo) ---------- */
 .md-typeset .md-tag {
@@ -231,6 +249,13 @@
 }
 .md-typeset div.arithmatex > .katex-display {
   margin: 0.6em 0;
+}
+
+/* Caixa do corretor antes do corretor.js montar (ele roda com defer): já ocupa o espaço final,
+   para o texto não pular. Mesma altura e margem da caixa montada (campo + botão numa linha). */
+.md-typeset .corretor:not([data-montado]) {
+  min-height: 3.3rem;
+  margin: 0.75rem 0;
 }
 
 /* ---------- Barra de progresso (placar do corretor, temas, trilha) ---------- */
@@ -330,6 +355,9 @@
   --sombra: 0 1px 2px rgb(30 27 75 / 0.05), 0 10px 28px -14px rgb(30 27 75 / 0.22);
   --mono: var(--md-code-font-family, ui-monospace, monospace);
   --md-default-bg-color: var(--papel);
+  /* Fontes do sistema (mkdocs.yml: font: false). O Material completa com -apple-system, Helvetica... */
+  --md-text-font: "Segoe UI Variable Text", "Segoe UI", system-ui;
+  --md-code-font: ui-monospace, "Cascadia Code", "SF Mono";
 }
 [data-md-color-scheme="slate"] {
   --papel: #0f172a;
@@ -1281,4 +1309,31 @@
 .md-typeset .revisar li span {
   color: var(--texto-suave);
   font-size: 0.64rem;
+}
+
+/* ---------- Diagramas (diagramas.js): espaço reservado enquanto o Mermaid não chega ---------- */
+.md-typeset .diagrama {
+  min-height: 6rem;
+  margin: 1em 0;
+  overflow-x: auto;
+  text-align: center;
+}
+.md-typeset .diagrama:not([data-desenhado]):not([data-falhou]) {
+  border-radius: 0.75rem;
+  background: var(--md-code-bg-color);
+  color: transparent;
+  white-space: pre;
+}
+.md-typeset .diagrama[data-falhou] {
+  padding: 0.8rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--md-code-bg-color);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-align: left;
+  white-space: pre;
+}
+.md-typeset .diagrama svg {
+  max-width: 100%;
+  height: auto;
 }

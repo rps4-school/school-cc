@@ -38,6 +38,7 @@ ARQUIVOS_DO_SITE = {
     "python-worker.js": "assets/javascripts/python-worker.js",
     "corretor.js": "assets/javascripts/corretor.js",
     "katex-init.js": "assets/javascripts/katex-init.js",
+    "diagramas.js": "assets/javascripts/diagramas.js",
     "progresso.js": "assets/javascripts/progresso.js",
     "cronometro.js": "assets/javascripts/cronometro.js",
     "portal.js": "assets/javascripts/portal.js",
