@@ -1,6 +1,6 @@
 # Menu da trilha e páginas: plano de implementação
 
-> **Para quem executa:** use superpowers:executing-plans (execução na própria sessão, tarefa por tarefa). Os passos usam caixas (`- [ ]`) para acompanhar.
+> **Para quem executa:** siga as tarefas na ordem, uma de cada vez. Os passos usam caixas (`- [ ]`) para acompanhar.
 
 **Objetivo:** o menu lateral das páginas de tema vira a trilha do tema, e aula, exercícios e resposta ganham o mesmo cabeçalho e um único próximo passo. No Python, "Resumos" vira "Aulas".
 
@@ -15,7 +15,7 @@
 
 **Especificação:** [2026-10-17-menu-e-paginas-design.md](2026-10-17-menu-e-paginas-design.md)
 
-**Referência visual:** a página de comparação aprovada (`mockups/layouts.html`, na pasta temporária da sessão). Menu: opção A. Páginas: seção 2.
+**Referência visual:** a página de comparação aprovada no desenho (fora do repositório). Menu: opção A. Páginas: seção 2.
 
 ## Restrições globais
 
@@ -407,7 +407,7 @@ def test_pagina_de_redirecionamento(self):
 ### Tarefa 10: prévia, revisão final e entrega
 
 - [ ] **Passo 1:** recriar a prévia (worktree temporária `previa/portal-com-python`, a partir do portal, com merge do conteúdo e sem assinar), fazer o build em `$S/site-validacao` com `SITE_URL=http://localhost:8000/`, e conferir que a porta 8000 serve a prévia.
-- [ ] **Passo 2:** revisão final do conjunto todo, feita por um revisor novo, no modelo mais capaz. Cobre o diff das duas branches desde a main e os pontos para a revisão deste plano.
+- [ ] **Passo 2:** revisão final do conjunto todo, por quem não escreveu o código. Cobre o diff das duas branches desde a main e os pontos para a revisão deste plano.
 - [ ] **Passo 3:** os achados Críticos e Importantes são corrigidos com TDD, numa passada só. Os Menores vão para o registro e para a mensagem final.
 - [ ] **Passo 4:** a mensagem ao usuário, com:
   - o link da prévia;

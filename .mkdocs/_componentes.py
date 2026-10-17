@@ -421,7 +421,7 @@ def sobretitulo(texto, area=None):
     """A linha acima do título: "Aula 2 de 6", "Exercícios · Aula 6", "Resposta · Exercício 01". Com a área,
     fica na cor dela."""
     cor = f' data-area="{area_slug(area)}"' if area else ""
-    return f'<p class="sobretitulo"{cor}>{_e(texto)}</p>'
+    return f'<p class="sobretitulo" data-search-exclude{cor}>{_e(texto)}</p>'
 
 
 def linha_de_informacoes(nivel, url_niveis, partes=(), links=()):
@@ -433,7 +433,7 @@ def linha_de_informacoes(nivel, url_niveis, partes=(), links=()):
                      f'{_e(nivel)}</a>')
     itens += [f"<span>{_e(p)}</span>" for p in partes if p]
     itens += [f'<a href="{_e(url)}">{_e(texto)}</a>' for texto, url in links if url]
-    return f'<p class="linha-info">{"".join(itens)}</p>'
+    return f'<p class="linha-info" data-search-exclude>{"".join(itens)}</p>'
 
 
 ATUAL_SEGMENTO = ' class="atual"'
@@ -443,7 +443,7 @@ PAGINA_ATUAL = ' aria-current="page"'
 def segmentos(itens):
     """Um segmento por unidade da trilha: [(chave, atual)]. O portal.js marca data-concluida."""
     partes = "".join(f'<i data-pagina="{_e(chave)}"{ATUAL_SEGMENTO if atual else ""}></i>' for chave, atual in itens)
-    return f'<div class="segmentos" aria-hidden="true">{partes}</div>'
+    return f'<div class="segmentos" aria-hidden="true" data-search-exclude>{partes}</div>'
 
 
 def abas_de_nivel(niveis):
@@ -455,7 +455,7 @@ def abas_de_nivel(niveis):
         f'<span class="sr-only" data-estado-texto></span></a>'
         for nivel, url, chave, atual in niveis
     )
-    return f'<nav class="abas-nivel" aria-label="Níveis">{abas}</nav>'
+    return f'<nav class="abas-nivel" aria-label="Níveis" data-search-exclude>{abas}</nav>'
 
 
 def _cartao_de_nivel(nivel, url, chave, perguntas, exercicios, principal):
@@ -486,7 +486,7 @@ def proximo_passo(chave, texto_botao, feito, pratique=(), principal=None, secund
         rotulo, titulo, url = secundario
         partes.append(f'<a class="fim__proximo proximo-passo__depois" href="{_e(url)}">Já praticou? {_e(rotulo)}: <b>{_e(titulo)}</b>'
                       ' <span aria-hidden="true">→</span></a>')
-    return '<section class="fim proximo-passo" aria-label="Próximo passo">' + "".join(partes) + "</section>"
+    return '<section class="fim proximo-passo" aria-label="Próximo passo" data-search-exclude>' + "".join(partes) + "</section>"
 
 
 def marcador_de_visita(tema_slug, titulo):

@@ -102,6 +102,9 @@ class HtmlDoMenu(unittest.TestCase):
         html = self.html(f"{PASTA}/exercicios/02/intermediario.md")
         self.assertEqual(html.count('aria-current="page"'), 1)
         self.assertRegex(html, r'href="/conteudo/python/exercicios/02/intermediario.md"[^>]*aria-current="page"')
+        # A classe do Material faz o menu rolar sozinho até a página atual.
+        self.assertEqual(html.count("md-nav__link--active"), 1)
+        self.assertRegex(html, r'class="md-nav__link--active" href="/conteudo/python/exercicios/02/intermediario.md"')
 
     def test_todo_item_e_nivel_tem_data_pagina(self):
         html = self.html(f"{PASTA}/README.md")

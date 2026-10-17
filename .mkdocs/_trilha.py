@@ -88,14 +88,20 @@ def _atual(sim):
     return ' aria-current="page"' if sim else ""
 
 
+def _ativo(sim):
+    # md-nav__link--active: o Material rola o menu até este link depois de fixar a altura da coluna.
+    return ' class="md-nav__link--active"' if sim else ""
+
+
 def _nivel(n):
-    return (f'<li><a href="{_e(n.url)}" data-pagina="{_e(n.chave)}"{_atual(n.atual)}>'
+    return (f'<li><a{_ativo(n.atual)} href="{_e(n.url)}" data-pagina="{_e(n.chave)}"{_atual(n.atual)}>'
             f'<span class="ponto nivel--{n.nivel}" aria-hidden="true"></span>{NOME_DO_NIVEL[n.nivel]}'
             f'<span class="sr-only" data-estado-texto></span></a></li>')
 
 
 def _item(item, n):
-    link = (f'<a class="trilha-lateral__link" href="{_e(item.url)}" data-pagina="{_e(item.chave)}"{_atual(item.atual)}>'
+    ativo = " md-nav__link--active" if item.atual else ""
+    link = (f'<a class="trilha-lateral__link{ativo}" href="{_e(item.url)}" data-pagina="{_e(item.chave)}"{_atual(item.atual)}>'
             f'<span class="trilha-lateral__estado" aria-hidden="true">{_e(item.numero)}</span>'
             f'<span class="trilha-lateral__titulo">{_e(item.titulo)}</span><span class="sr-only" data-estado-texto></span></a>')
     if not item.niveis:
@@ -112,7 +118,7 @@ def _item(item, n):
 
 def _simples(link):
     chave = f' data-pagina="{_e(link.chave)}"' if link.chave else ""
-    return f'<li><a href="{_e(link.url)}"{chave}{_atual(link.atual)}>{_e(link.titulo)}</a></li>'
+    return f'<li><a{_ativo(link.atual)} href="{_e(link.url)}"{chave}{_atual(link.atual)}>{_e(link.titulo)}</a></li>'
 
 
 def _secao(titulo, links):

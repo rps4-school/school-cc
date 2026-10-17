@@ -438,6 +438,8 @@ def _menu_e_caminho(page, files, tema):
     chave = lambda alvo: _chave(files, alvo)  # noqa: E731
     url_conteudo = url("conteudo/README.md")
     enunciado = page.meta.get("resposta_de")  # nas respostas: o enunciado que aponta para elas
+    if page.meta.get("sobretitulo"):  # o da resposta vem no front matter (hooks.py)
+        page.meta["sobretitulo_html"] = sobretitulo(page.meta["sobretitulo"], tema.area)
     lugar = _estado["lugares"].get(enunciado or src)
     menu = montar_menu(tema, src, url, chave, url_conteudo, _estado["mais"].get(tema.slug, ()), enunciado)
     page.meta["trilha"] = html_do_menu(menu)
@@ -492,6 +494,12 @@ def _indice_de_exercicios(toc):
         if m:
             item.title = f"{m.group(1)} · {m.group(2)}"
         _indice_de_exercicios(item.children)
+
+
+def _com_sobretitulo(html, sobretitulo):
+    """O sobretítulo entra antes do primeiro <h1> do HTML final (ou no começo, se não houver h1)."""
+    i = html.find("<h1")
+    return html[:i] + sobretitulo + html[i:] if i >= 0 else sobretitulo + html
 
 
 def _esconder(page, *itens):
@@ -561,12 +569,10 @@ def _pagina_da_trilha(markdown, lugar, page, files):
             fim = proximo_passo(chave, botao, feito, principal=proxima or fim_da_trilha)
         visita = f"{rotulo} {unidade.numero} · {unidade.titulo}"
     if not pagina_do_tema:
-        # Com o sobretítulo antes do "# Título", o MkDocs não acha mais o título da página (aba do navegador,
-        # busca, topo da página ao rolar): ele é guardado aqui e reposto em on_page_content.
-        h1 = re.search(r"^# (.*)$", markdown, re.M)
-        if h1 and "titulo_da_pagina" not in page.meta:
-            page.meta["titulo_da_pagina"] = re.sub(r"[`*]", "", ANCORA_DO_TITULO.sub("", h1.group(1))).strip()
-        markdown = re.sub(r"^# (.*)$", lambda m: f"{antes}\n\n# {_titulo_visivel(m.group(1), novo_titulo)}\n\n{depois}\n",
+        # O sobretítulo só entra no HTML final (on_page_context), depois que a busca indexou a página: antes do
+        # "# Título" no Markdown, ele tiraria o título da página e duplicaria a página na busca.
+        page.meta["sobretitulo_html"] = antes
+        markdown = re.sub(r"^# (.*)$", lambda m: f"# {_titulo_visivel(m.group(1), novo_titulo)}\n\n{depois}\n",
                           markdown, count=1, flags=re.M)
         _esconder(page, "tags", "footer")  # o nível está na linha de informações; o próximo passo substitui o rodapé
     return f"{markdown.rstrip()}\n\n{marcador_de_visita(tema.slug, visita)}{fim}\n"
@@ -691,13 +697,22 @@ def on_page_content(html, page, config, files):
         page.title = "Início"
     lugar = _estado["lugares"].get(page.file.src_uri)
     if lugar and lugar.exercicio:
-        html = _cartoes_de_exercicio(html)
         _indice_de_exercicios(page.toc)
-    # Título da página guardado no _pagina_da_trilha. Nos exercícios, o título visível é só a aula ("Funções"),
-    # mas a aba do navegador e a busca precisam do nível.
+    # Nos exercícios, o título visível é só a aula ("Funções"), mas a aba do navegador e a busca precisam do nível.
     if page.meta.get("titulo_da_pagina"):
         page.title = page.meta["titulo_da_pagina"]
     return html
+
+
+def on_page_context(context, page, config, nav):
+    # Roda depois da busca (os hooks vêm depois dos plugins): o sobretítulo e os cartões de exercício só mudam o
+    # HTML mostrado, e o índice fica com uma entrada por página e os títulos originais ("Exercício 01: ...").
+    if page.meta.get("sobretitulo_html"):
+        page.content = _com_sobretitulo(page.content, page.meta["sobretitulo_html"])
+    lugar = _estado["lugares"].get(page.file.src_uri)
+    if lugar and lugar.exercicio:
+        page.content = _cartoes_de_exercicio(page.content)
+    return context
 
 
 def on_nav(nav, config, files):

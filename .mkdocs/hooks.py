@@ -20,8 +20,8 @@ from mkdocs.structure.nav import Section
 from mkdocs.utils import get_relative_url
 from pymdownx.slugs import slugify
 
-from _catalogo import AREA_PADRAO, TEMAS, agrupar_por_area, temas_do_indice
-from _componentes import COR_DO_NIVEL, NIVEL, NIVEL_DO_EXERCICIO, cartao, grade, sem_emoji, sobretitulo
+from _catalogo import agrupar_por_area, temas_do_indice
+from _componentes import COR_DO_NIVEL, NIVEL, NIVEL_DO_EXERCICIO, cartao, grade, sem_emoji
 
 # Nomes de pasta sem README e que precisam de acento ou de um nome melhor.
 TITULOS = {
@@ -249,7 +249,8 @@ EXERCICIO = re.compile(r"^Exercício (\d+): (.+)$")
 def _pagina_do_py(src_py, codigo, enunciado):
     """Página de um .py. enunciado: (src do .md, âncora, título da seção) de quem aponta para ele, ou None.
     Resposta de "## Exercício NN: Título": o título é o do exercício (o arquivo fica no cabeçalho do código) e o
-    front matter diz ao visual.py qual é o enunciado (menu da trilha e caminho)."""
+    front matter diz ao visual.py qual é o enunciado (menu da trilha e caminho) e o sobretítulo, que ele põe no
+    HTML depois da busca indexar a página."""
     nome = posixpath.basename(src_py)
     pasta = posixpath.dirname(src_py)
     codigo = [f'````python title="{nome}" linenums="1"', codigo.rstrip("\n"), "````", "", f"Para rodar no terminal: `python3 {nome}`", ""]
@@ -261,10 +262,8 @@ def _pagina_do_py(src_py, codigo, enunciado):
             "---",
             f"title: {json.dumps('Resposta: ' + sem_emoji(re.sub(r'[`*]', '', titulo)), ensure_ascii=False)}",
             f"resposta_de: {json.dumps(enunciado[0], ensure_ascii=False)}",
-            f'exercicio: "{numero}"',
+            f"sobretitulo: {json.dumps(f'Resposta · Exercício {numero}', ensure_ascii=False)}",
             "---",
-            "",
-            sobretitulo(f"Resposta · Exercício {numero}", TEMAS.get(src_py.split("/")[1], AREA_PADRAO)[0]),
             "",
             f"# {titulo}",
             "",

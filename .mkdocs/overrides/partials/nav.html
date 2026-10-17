@@ -11,6 +11,8 @@
       </a>
       {{ config.site_name }}
     </label>
+    {#- No celular, só o corpo rola (o título da gaveta fica parado), como na lista do Material. -#}
+    <div class="trilha-lateral__corpo">
     {{ page.meta.trilha }}
     {#- No celular, a gaveta é o único lugar do índice da página e das abas do topo. -#}
     {% set toc = page.toc %}
@@ -29,6 +31,7 @@
       </div>
     {% endif %}
     {{ page.meta.trilha_abas }}
+    </div>
   </nav>
 {% else %}
 {% import "partials/nav-item.html" as item with context %}

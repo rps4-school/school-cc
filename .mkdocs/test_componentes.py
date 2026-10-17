@@ -151,8 +151,9 @@ class Catalogo(unittest.TestCase):
 
 class CabecalhoDaPagina(unittest.TestCase):
     def test_sobretitulo(self):
-        self.assertEqual(c.sobretitulo("Aula 2 de 6"), '<p class="sobretitulo">Aula 2 de 6</p>')
-        self.assertEqual(c.sobretitulo("Aula 2 de 6", "Programação"), '<p class="sobretitulo" data-area="programacao">Aula 2 de 6</p>')
+        self.assertEqual(c.sobretitulo("Aula 2 de 6"), '<p class="sobretitulo" data-search-exclude>Aula 2 de 6</p>')
+        self.assertEqual(c.sobretitulo("Aula 2 de 6", "Programação"),
+                         '<p class="sobretitulo" data-search-exclude data-area="programacao">Aula 2 de 6</p>')
 
     def test_linha_de_informacoes(self):
         html = c.linha_de_informacoes("Intermediário", "../niveis/", ["~8 min de leitura"], [("Sugerir melhoria", "https://x/edit"), ("Nada", None)])
@@ -161,6 +162,12 @@ class CabecalhoDaPagina(unittest.TestCase):
         self.assertIn('href="https://x/edit"', html)
         self.assertNotIn("Nada", html)
         self.assertNotIn("\n", html)
+
+    def test_cabecalho_e_fim_fora_da_busca(self):
+        for html in (c.linha_de_informacoes("Iniciante", "n/", ["x"]), c.segmentos([("a/", True)]),
+                     c.abas_de_nivel([("facil", "f/", "k/", True)]), c.proximo_passo("k/", "Marcar", "Feito"),
+                     c.sobretitulo("Aula 1 de 2")):
+            self.assertIn("data-search-exclude", html)
 
     def test_linha_sem_nivel(self):
         self.assertNotIn("md-tag", c.linha_de_informacoes(None, "../niveis/", ["3 exercícios"]))
@@ -173,7 +180,7 @@ class CabecalhoDaPagina(unittest.TestCase):
 
     def test_abas_de_nivel(self):
         html = c.abas_de_nivel([("facil", "../facil/", "k/f/", False), ("intermediario", "./", "k/i/", True)])
-        self.assertIn('<nav class="abas-nivel" aria-label="Níveis">', html)
+        self.assertIn('<nav class="abas-nivel" aria-label="Níveis" data-search-exclude>', html)
         self.assertEqual(html.count('aria-current="page"'), 1)
         self.assertRegex(html, r'href="\./" data-pagina="k/i/" aria-current="page"><span class="ponto nivel--intermediario"')
         self.assertIn(">Fácil<", html)
@@ -185,7 +192,7 @@ class ProximoPasso(unittest.TestCase):
     def test_aula_com_exercicios(self):
         html = c.proximo_passo("k/aula/", "Marcar aula como concluída", "Aula concluída", pratique=self.PRATIQUE,
                                secundario=("Próxima aula", "Matrizes", "../03/"))
-        self.assertIn('<section class="fim proximo-passo" aria-label="Próximo passo">', html)
+        self.assertIn('<section class="fim proximo-passo" aria-label="Próximo passo" data-search-exclude>', html)
         self.assertIn('data-concluir="k/aula/"', html)
         self.assertIn("Agora, pratique", html)
         self.assertEqual(html.count('class="exercicio nivel-cartao'), 3)

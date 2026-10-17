@@ -1931,11 +1931,23 @@
   }
 }
 @media screen and (max-width: 76.2344em) {
+  /* Na gaveta, o título fica parado e o corpo rola (o Material rola só a lista dele, que a trilha não usa). */
   .trilha-lateral {
-    padding: 0 0 1.5rem;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0;
   }
-  .trilha-lateral > :not(.md-nav__title) {
-    margin-inline: 0.8rem;
+  .trilha-lateral > .md-nav__title {
+    flex-shrink: 0;
+  }
+  .trilha-lateral__corpo {
+    min-height: 0;
+    flex: 1;
+    padding: 0 0.8rem 1.5rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background-color: var(--md-default-bg-color);
   }
 }
 .trilha-lateral__volta {

@@ -89,10 +89,12 @@ class PaginaDaResposta(unittest.TestCase):
 
     def test_resposta_de_exercicio(self):
         md = hooks._pagina_do_py(self.PY, "print(1)\n", self.ENUNCIADO)
+        # O sobretítulo vai no front matter (o visual.py o põe no HTML depois da busca indexar a página).
         self.assertTrue(md.startswith(
             '---\ntitle: "Resposta: Área e perímetro"\n'
-            'resposta_de: "conteudo/python/exercicios/enunciados/06-funcoes/facil.md"\nexercicio: "01"\n---\n'), md[:200])
-        self.assertIn('<p class="sobretitulo" data-area="programacao">Resposta · Exercício 01</p>\n\n# Área e perímetro\n', md)
+            'resposta_de: "conteudo/python/exercicios/enunciados/06-funcoes/facil.md"\n'
+            'sobretitulo: "Resposta · Exercício 01"\n---\n\n# Área e perímetro\n'), md[:300])
+        self.assertNotIn('class="sobretitulo"', md)
         self.assertIn("[← Voltar ao enunciado](../../../enunciados/06-funcoes/facil.md#exercício-01-área-e-perímetro){ .md-button }", md)
         self.assertIn("[⤓ Baixar .py](ex01_area_e_perimetro.py){ .md-button .md-button--primary download }", md)
         self.assertIn('````python title="ex01_area_e_perimetro.py" linenums="1"\nprint(1)\n````', md)

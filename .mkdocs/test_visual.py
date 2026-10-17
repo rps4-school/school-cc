@@ -74,6 +74,15 @@ class TemaDaPagina(unittest.TestCase):
         self.assertIsNone(visual._tema_da_pagina(temas, "simulados/python/README.md"))
 
 
+class SobretituloDepoisDaBusca(unittest.TestCase):
+    def test_entra_antes_do_primeiro_h1(self):
+        html = '<p>x</p><h1 id="a">A</h1><h1 id="b">B</h1>'
+        self.assertEqual(visual._com_sobretitulo(html, "<p class=s>S</p>"), '<p>x</p><p class=s>S</p><h1 id="a">A</h1><h1 id="b">B</h1>')
+
+    def test_sem_h1_vai_no_comeco(self):
+        self.assertEqual(visual._com_sobretitulo("<p>x</p>", "<p>S</p>"), "<p>S</p><p>x</p>")
+
+
 class CartoesDeExercicio(unittest.TestCase):
     H2 = '<h2 id="exercício-0{n}-x">Exercício 0{n}: Título {n}<a class="headerlink" href="#exercício-0{n}-x" title="Permanent link">&para;</a></h2>'
 

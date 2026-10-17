@@ -309,17 +309,7 @@
     document.getElementById(seta.getAttribute("aria-controls")).hidden = aberta;
   });
 
-  // No computador, o menu rola sozinho até a página atual (em temas longos, ela pode estar lá embaixo).
-  function mostrarAtual() {
-    var atual = document.querySelector('.trilha-lateral [aria-current="page"]');
-    var caixa = atual && atual.closest(".md-sidebar__scrollwrap");
-    if (!caixa || !window.matchMedia("(min-width: 76.25em)").matches) return;
-    var r = atual.getBoundingClientRect(), c = caixa.getBoundingClientRect();
-    if (r.top < c.top || r.bottom > c.bottom) caixa.scrollTop += r.top - c.top - c.height / 3;
-  }
-
   function iniciar() {
-    mostrarAtual();
     filtroDaAncora();
     filtrar();
     var visita = document.querySelector("[data-visita]:not([data-montado])");
