@@ -415,6 +415,78 @@ def fim_de_pagina(chave, texto_botao, pratique=None, proximo=None, feito="Conclu
     return '<section class="fim" aria-label="Próximos passos">' + "".join(partes) + "</section>"
 
 
+# ---------- Cabeçalho e fim das páginas de aula, exercícios e resposta ----------
+
+def sobretitulo(texto):
+    """A linha acima do título: "Aula 2 de 6", "Exercícios · Aula 6", "Resposta · Exercício 01"."""
+    return f'<p class="sobretitulo">{_e(texto)}</p>'
+
+
+def linha_de_informacoes(nivel, url_niveis, partes=(), links=()):
+    """Abaixo do título: o nível (a mesma etiqueta do Material, com link para Por nível), textos e links.
+    links: [(texto, url)]; link sem url não aparece."""
+    itens = []
+    if nivel:
+        itens.append(f'<a class="md-tag md-tag-icon md-tag--{NIVEL_VALOR[nivel]}" href="{_e(url_niveis)}#tag:{_e(nivel.lower())}">'
+                     f'{_e(nivel)}</a>')
+    itens += [f"<span>{_e(p)}</span>" for p in partes if p]
+    itens += [f'<a href="{_e(url)}">{_e(texto)}</a>' for texto, url in links if url]
+    return f'<p class="linha-info">{"".join(itens)}</p>'
+
+
+ATUAL_SEGMENTO = ' class="atual"'
+PAGINA_ATUAL = ' aria-current="page"'
+
+
+def segmentos(itens):
+    """Um segmento por unidade da trilha: [(chave, atual)]. O portal.js marca data-concluida."""
+    partes = "".join(f'<i data-pagina="{_e(chave)}"{ATUAL_SEGMENTO if atual else ""}></i>' for chave, atual in itens)
+    return f'<div class="segmentos" aria-hidden="true">{partes}</div>'
+
+
+def abas_de_nivel(niveis):
+    """Os níveis da mesma aula, no topo dos exercícios: [(nivel, url, chave, atual)]. São links (cada nível é
+    uma página), não abas ARIA."""
+    abas = "".join(
+        f'<a href="{_e(url)}" data-pagina="{_e(chave)}"{PAGINA_ATUAL if atual else ""}>'
+        f'<span class="ponto nivel--{nivel}" aria-hidden="true"></span>{NOME_DO_NIVEL[nivel]}'
+        f'<span class="sr-only" data-estado-texto></span></a>'
+        for nivel, url, chave, atual in niveis
+    )
+    return f'<nav class="abas-nivel" aria-label="Níveis">{abas}</nav>'
+
+
+def _cartao_de_nivel(nivel, url, chave, perguntas, exercicios, principal):
+    quantas = plural(perguntas, "pergunta", "perguntas") if perguntas else plural(exercicios, "exercício", "exercícios")
+    return (f'<a class="exercicio nivel-cartao nivel--{nivel}{" prim" if principal else ""}" href="{_e(url)}" '
+            f'data-pagina="{_e(chave)}" data-perguntas="{perguntas}"><b><span class="ponto" aria-hidden="true"></span>'
+            f'{NOME_DO_NIVEL[nivel]}</b><span>{quantas}{" · comece aqui" if principal else ""}</span>'
+            f'<span class="exercicio__acertos" data-acertos></span></a>')
+
+
+def proximo_passo(chave, texto_botao, feito, pratique=(), principal=None, secundario=None):
+    """O fim da aula e dos exercícios: concluir e UMA ação principal.
+    pratique: [(nivel, url, chave, perguntas, exercicios)] (o Fácil é a ação principal);
+    principal / secundario: (rótulo, título, url). feito: o texto do botão depois de marcado (portal.js)."""
+    partes = [
+        f'<button type="button" class="fim__concluir" data-concluir="{_e(chave)}" aria-pressed="false" data-feito="{_e(feito)}">'
+        f'<span class="fim__marca" aria-hidden="true"></span><span data-concluir-texto>{_e(texto_botao)}</span></button>'
+    ]
+    if pratique:
+        cartoes = "".join(_cartao_de_nivel(*n, principal=i == 0) for i, n in enumerate(pratique))
+        partes.append('<p class="proximo-passo__titulo">Agora, pratique</p><p class="proximo-passo__texto">Comece pelo Fácil '
+                      f'e suba de nível.</p><div class="proximo-passo__niveis">{cartoes}</div>')
+    if principal:
+        rotulo, titulo, url = principal
+        partes.append(f'<a class="fim__proximo proximo-passo__principal" href="{_e(url)}"><span class="fim__rotulo">{_e(rotulo)}</span>'
+                      f'<span class="fim__titulo">{_e(titulo)} <span aria-hidden="true">→</span></span></a>')
+    if secundario:
+        rotulo, titulo, url = secundario
+        partes.append(f'<a class="fim__proximo proximo-passo__depois" href="{_e(url)}">Já praticou? {_e(rotulo)}: <b>{_e(titulo)}</b>'
+                      ' <span aria-hidden="true">→</span></a>')
+    return '<section class="fim proximo-passo" aria-label="Próximo passo">' + "".join(partes) + "</section>"
+
+
 def marcador_de_visita(tema_slug, titulo):
     return f'<div hidden data-visita data-tema="{_e(tema_slug)}" data-titulo="{_e(titulo)}"></div>'
 

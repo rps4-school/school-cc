@@ -149,5 +149,62 @@ class Catalogo(unittest.TestCase):
         self.assertIn('data-area="matematica"', html)
 
 
+class CabecalhoDaPagina(unittest.TestCase):
+    def test_sobretitulo(self):
+        self.assertEqual(c.sobretitulo("Aula 2 de 6"), '<p class="sobretitulo">Aula 2 de 6</p>')
+
+    def test_linha_de_informacoes(self):
+        html = c.linha_de_informacoes("Intermediário", "../niveis/", ["~8 min de leitura"], [("Sugerir melhoria", "https://x/edit"), ("Nada", None)])
+        self.assertIn('<a class="md-tag md-tag-icon md-tag--intermediario" href="../niveis/#tag:intermediário">Intermediário</a>', html)
+        self.assertIn("~8 min de leitura</span>", html)
+        self.assertIn('href="https://x/edit"', html)
+        self.assertNotIn("Nada", html)
+        self.assertNotIn("\n", html)
+
+    def test_linha_sem_nivel(self):
+        self.assertNotIn("md-tag", c.linha_de_informacoes(None, "../niveis/", ["3 exercícios"]))
+
+    def test_segmentos(self):
+        html = c.segmentos([("a/", False), ("b/", True), ("c/", False)])
+        self.assertIn('aria-hidden="true"', html)
+        self.assertEqual(html.count("data-pagina="), 3)
+        self.assertIn('<i data-pagina="b/" class="atual"></i>', html)
+
+    def test_abas_de_nivel(self):
+        html = c.abas_de_nivel([("facil", "../facil/", "k/f/", False), ("intermediario", "./", "k/i/", True)])
+        self.assertIn('<nav class="abas-nivel" aria-label="Níveis">', html)
+        self.assertEqual(html.count('aria-current="page"'), 1)
+        self.assertRegex(html, r'href="\./" data-pagina="k/i/" aria-current="page"><span class="ponto nivel--intermediario"')
+        self.assertIn(">Fácil<", html)
+
+
+class ProximoPasso(unittest.TestCase):
+    PRATIQUE = [("facil", "f/", "k/f/", 0, 3), ("intermediario", "i/", "k/i/", 9, 2), ("dificil", "d/", "k/d/", 0, 3)]
+
+    def test_aula_com_exercicios(self):
+        html = c.proximo_passo("k/aula/", "Marcar aula como concluída", "Aula concluída", pratique=self.PRATIQUE,
+                               secundario=("Próxima aula", "Matrizes", "../03/"))
+        self.assertIn('<section class="fim proximo-passo" aria-label="Próximo passo">', html)
+        self.assertIn('data-concluir="k/aula/"', html)
+        self.assertIn("Agora, pratique", html)
+        self.assertEqual(html.count('class="exercicio nivel-cartao'), 3)
+        self.assertEqual(html.count(" prim\""), 1)  # só o Fácil é a ação principal
+        self.assertIn('data-pagina="k/i/" data-perguntas="9"', html)
+        self.assertIn("9 perguntas", html)
+        self.assertIn("3 exercícios", html)
+        self.assertRegex(html, r'<a class="fim__proximo proximo-passo__depois" href="\.\./03/">Já praticou\? Próxima aula: <b>Matrizes</b>')
+        self.assertNotIn("\n", html)
+
+    def test_sem_exercicios_o_proximo_e_a_acao_principal(self):
+        html = c.proximo_passo("k/", "Marcar", "Feito", principal=("Próxima aula", "Listas", "../02/"))
+        self.assertNotIn("Agora, pratique", html)
+        self.assertRegex(html, r'<a class="fim__proximo proximo-passo__principal" href="\.\./02/"><span class="fim__rotulo">Próxima aula</span>')
+
+    def test_fim_da_trilha(self):
+        html = c.proximo_passo("k/", "Marcar", "Feito", principal=("Fim da trilha", "Teste-se nos simulados", "../#teste-se"))
+        self.assertIn("Fim da trilha", html)
+        self.assertIn('href="../#teste-se"', html)
+
+
 if __name__ == "__main__":
     unittest.main()

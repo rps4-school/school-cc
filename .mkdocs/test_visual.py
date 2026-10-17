@@ -74,5 +74,36 @@ class TemaDaPagina(unittest.TestCase):
         self.assertIsNone(visual._tema_da_pagina(temas, "simulados/python/README.md"))
 
 
+class CartoesDeExercicio(unittest.TestCase):
+    H2 = '<h2 id="exercício-0{n}-x">Exercício 0{n}: Título {n}<a class="headerlink" href="#exercício-0{n}-x" title="Permanent link">&para;</a></h2>'
+
+    def test_cada_exercicio_vira_um_cartao(self):
+        html = ("<p>Intro</p>\n<hr />\n" + self.H2.format(n=1) + "\n<p>Um</p>\n<hr />\n" + self.H2.format(n=2)
+                + '\n<div class="corretor" data-x></div>\n<div hidden data-visita></div><section class="fim"></section>')
+        saida = visual._cartoes_de_exercicio(html)
+        self.assertEqual(saida.count('<section class="exercicio-cartao">'), 2)
+        self.assertIn('<h2 id="exercício-01-x"><span class="num">01</span> Título 1<a class="headerlink"', saida)
+        self.assertIn('<div class="corretor" data-x></div>\n</section>', saida)
+        self.assertEqual(saida.count("<hr />"), 1)  # fica só o que separa a introdução
+        self.assertTrue(saida.index("</section>") < saida.index("data-visita"))
+
+    def test_h2_que_nao_e_exercicio_fica_de_fora(self):
+        html = self.H2.format(n=1) + "<p>Um</p>" + '<h2 id="referências">Referências</h2><p>x</p>'
+        saida = visual._cartoes_de_exercicio(html)
+        self.assertIn('</section><h2 id="referências">', saida)
+
+    def test_pagina_sem_exercicio_nao_muda(self):
+        html = '<h2 id="questão-1">Questão 1</h2><p>x</p>'
+        self.assertEqual(visual._cartoes_de_exercicio(html), html)
+
+    def test_indice(self):
+        from types import SimpleNamespace as N
+        filho = N(title="Exercício 03: Saudação", children=[])
+        toc = [N(title="Funções · Fácil", children=[filho, N(title="Outra coisa", children=[])])]
+        visual._indice_de_exercicios(toc)
+        self.assertEqual(filho.title, "03 · Saudação")
+        self.assertEqual(toc[0].children[1].title, "Outra coisa")
+
+
 if __name__ == "__main__":
     unittest.main()

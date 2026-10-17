@@ -34,6 +34,7 @@ from _componentes import (
     painel_de_nivel, NIVEL_VALOR,
     NOME_DO_NIVEL, fim_de_pagina, grade, heroi, informacoes, item_trilha, marcador_de_visita, plural, sem_emoji,
     simulados_do_tema, trilha, aviso_local, resumo_estudo, progresso_do_tema, revisar,
+    abas_de_nivel, linha_de_informacoes, proximo_passo, segmentos, sobretitulo,
 )
 from _trilha import (
     Link, abas_do_site, caminho, html_das_abas, html_do_caminho, html_do_menu, montar_menu, rotulo_da_unidade,
@@ -458,43 +459,112 @@ def _proxima_unidade(tema, unidade):
     return tema.unidades[i + 1] if i + 1 < len(tema.unidades) else None
 
 
+# Exercício no HTML final: o título "Exercício NN: Título" (com o ¶ do permalink) e o índice da direita.
+H2_EXERCICIO = re.compile(r'<h2 id="([^"]+)">Exercício (\d+): (.*?)(<a class="headerlink"[^>]*>.*?</a>)?</h2>', re.S)
+EXERCICIO_NO_INDICE = re.compile(r"^Exercício (\d+): (.+)$")
+FIM_DO_CARTAO = ("<hr />", "<div hidden data-visita", "<h2")
+ANCORA_DO_TITULO = re.compile(r"\s*\{ #[^}]+\}\s*$")
+
+
+def _cartoes_de_exercicio(html):
+    """Cada "## Exercício NN: Título" vira um cartão, com o número num selo. O cartão vai até o <hr /> que separa
+    os exercícios, o próximo <h2> ou o fim da página. Feito no HTML final para não mexer no Markdown."""
+    achados = list(H2_EXERCICIO.finditer(html))
+    if not achados:
+        return html
+    partes = [html[: achados[0].start()]]
+    for i, m in enumerate(achados):
+        fim = achados[i + 1].start() if i + 1 < len(achados) else len(html)
+        corpo = html[m.end(): fim]
+        corte = min((p for p in (corpo.find(marca) for marca in FIM_DO_CARTAO) if p >= 0), default=len(corpo))
+        dentro, resto = corpo[:corte], corpo[corte:]
+        if resto.startswith("<hr />"):
+            resto = resto[len("<hr />"):]  # entre cartões, o separador sobra
+        titulo = f'<h2 id="{m.group(1)}"><span class="num">{m.group(2)}</span> {m.group(3)}{m.group(4) or ""}</h2>'
+        partes.append(f'<section class="exercicio-cartao">{titulo}{dentro}</section>{resto}')
+    return "".join(partes)
+
+
+def _indice_de_exercicios(toc):
+    """No índice da direita, "Exercício 03: Saudação" vira "03 · Saudação"."""
+    for item in toc:
+        m = EXERCICIO_NO_INDICE.match(item.title)
+        if m:
+            item.title = f"{m.group(1)} · {m.group(2)}"
+        _indice_de_exercicios(item.children)
+
+
+def _esconder(page, *itens):
+    page.meta["hide"] = list(dict.fromkeys([*page.meta.get("hide", []), *itens]))
+
+
+def _titulo_visivel(original, novo):
+    """Troca o texto do título e mantém a âncora explícita ({ #id }), se houver."""
+    if novo is None:
+        return original
+    ancora = ANCORA_DO_TITULO.search(original)
+    return novo + (ancora.group(0) if ancora else "")
+
+
 def _pagina_da_trilha(markdown, lugar, page, files):
-    """Aula, resumo, exercício ou simulado: linha de informações e marcador de visita depois do título
-    (barra de leitura nas aulas) e o fim da página (concluir e próximos passos)."""
+    """Aula, exercícios ou simulado: cabeçalho (sobretítulo e linha de informações), marcador de visita e o fim
+    da página (concluir e o próximo passo)."""
     tema, unidade = lugar.tema, lugar.unidade
     url = lambda src: _url(files, page, src)  # noqa: E731
     chave = _chave(files, page.file.src_uri)
-    topo = ""
     if lugar.simulado:
         s = lugar.simulado
-        partes, link, titulo = [tema.titulo, "Simulado", s.duracao], None, f"{s.titulo} · {tema.titulo}"
-        fim = fim_de_pagina(chave, "Marcar como feito", feito="Feito")
-    else:
-        rotulo = rotulo_da_unidade(unidade)
-        rotulo_proxima, botao, feito, rever = TEXTOS_DA_UNIDADE[rotulo]
-        seguinte = _proxima_unidade(tema, unidade)
-        proximo = (rotulo_proxima, seguinte.titulo, url(seguinte.src)) if seguinte else None
-        if lugar.exercicio:
-            e = lugar.exercicio
-            nivel = NOME_DO_NIVEL[e.nivel]
-            quantas = plural(e.perguntas, "pergunta", "perguntas") if e.perguntas else plural(e.exercicios, "exercício", "exercícios")
-            partes, link = [tema.titulo, f"{rotulo} {unidade.numero}", nivel, quantas], (rever, url(unidade.src))
-            titulo = f"{unidade.titulo} · {nivel}"
-            i = unidade.exercicios.index(e)
-            if i + 1 < len(unidade.exercicios):
-                outro = unidade.exercicios[i + 1]
-                proximo = ("Próximo nível", f"{unidade.titulo} · {NOME_DO_NIVEL[outro.nivel]}", url(outro.src))
-            fim = fim_de_pagina(chave, "Marcar como concluída", proximo=proximo)
-        else:
-            partes = [tema.titulo, f"{rotulo} {unidade.numero} de {tema.unidades[-1].numero}", f"~{unidade.minutos} min"]
-            link, titulo = None, f"{rotulo} {unidade.numero} · {unidade.titulo}"
-            pratique = [(e.nivel, url(e.src), _chave(files, e.src), e.perguntas) for e in unidade.exercicios]
-            fim = fim_de_pagina(chave, botao, pratique=pratique, proximo=proximo, feito=feito)
-            topo = '<div class="barra-leitura" aria-hidden="true"></div>'
-    if page.file.src_uri != tema.src:  # a página do tema já tem o cabeçalho de curso
-        topo = informacoes(partes, link) + topo
+        topo = informacoes([tema.titulo, "Simulado", s.duracao])
         markdown = re.sub(r"^# .*$", lambda m: f"{m.group(0)}\n\n{topo}\n", markdown, count=1, flags=re.M)
-    return f"{markdown.rstrip()}\n\n{marcador_de_visita(tema.slug, titulo)}{fim}\n"
+        fim = fim_de_pagina(chave, "Marcar como feito", feito="Feito")
+        return f"{markdown.rstrip()}\n\n{marcador_de_visita(tema.slug, f'{s.titulo} · {tema.titulo}')}{fim}\n"
+
+    rotulo = rotulo_da_unidade(unidade)
+    rotulo_proxima, botao, feito, rever = TEXTOS_DA_UNIDADE[rotulo]
+    seguinte = _proxima_unidade(tema, unidade)
+    proxima = (rotulo_proxima, seguinte.titulo, url(seguinte.src)) if seguinte else None
+    fim_da_trilha = (("Fim da trilha", "Teste-se nos simulados", url(tema.src) + "#teste-se") if tema.simulados
+                     else ("Fim da trilha", f"Voltar para {tema.titulo}", url(tema.src)))
+    pagina_do_tema = page.file.src_uri == tema.src  # o README como unidade: ele já tem o cabeçalho de curso
+    edicao = page.edit_url
+    if not pagina_do_tema:
+        page.edit_url = None  # os ícones do Material saem; o link vira "Sugerir melhoria" na linha de informações
+    url_niveis = url(PAGINA_NIVEIS)
+    if lugar.exercicio:
+        e = lugar.exercicio
+        nome = NOME_DO_NIVEL[e.nivel]
+        quantas = plural(e.perguntas, "pergunta", "perguntas") if e.perguntas else plural(e.exercicios, "exercício", "exercícios")
+        antes = sobretitulo(f"Exercícios · {rotulo} {unidade.numero}")
+        depois = (linha_de_informacoes(None, url_niveis, [quantas], [(rever, url(unidade.src)), ("Sugerir melhoria", edicao)])
+                  + abas_de_nivel([(x.nivel, url(x.src), _chave(files, x.src), x is e) for x in unidade.exercicios]))
+        novo_titulo = unidade.titulo  # o nível já está nas abas
+        page.meta["titulo_da_pagina"] = f"{unidade.titulo} · {nome}"  # aba do navegador e busca (on_page_content)
+        i = unidade.exercicios.index(e)
+        if i + 1 < len(unidade.exercicios):
+            outro = unidade.exercicios[i + 1]
+            principal = ("Próximo nível", NOME_DO_NIVEL[outro.nivel], url(outro.src))
+        else:
+            principal = proxima or fim_da_trilha
+        fim = proximo_passo(chave, "Marcar exercícios como concluídos", "Exercícios concluídos", principal=principal)
+        visita = f"{unidade.titulo} · {nome}"
+    else:
+        nivel = (page.meta.get("tags") or [None])[0]
+        antes = sobretitulo(f"{rotulo} {unidade.numero} de {tema.unidades[-1].numero}")
+        depois = (linha_de_informacoes(nivel, url_niveis, [f"~{unidade.minutos} min de leitura"], [("Sugerir melhoria", edicao)])
+                  + segmentos([(_chave(files, u.src), u is unidade) for u in tema.unidades])
+                  + '<div class="barra-leitura" aria-hidden="true"></div>')
+        novo_titulo = None
+        pratique = [(x.nivel, url(x.src), _chave(files, x.src), x.perguntas, x.exercicios) for x in unidade.exercicios]
+        if pratique:
+            fim = proximo_passo(chave, botao, feito, pratique=pratique, secundario=proxima)
+        else:
+            fim = proximo_passo(chave, botao, feito, principal=proxima or fim_da_trilha)
+        visita = f"{rotulo} {unidade.numero} · {unidade.titulo}"
+    if not pagina_do_tema:
+        markdown = re.sub(r"^# (.*)$", lambda m: f"{antes}\n\n# {_titulo_visivel(m.group(1), novo_titulo)}\n\n{depois}\n",
+                          markdown, count=1, flags=re.M)
+        _esconder(page, "tags", "footer")  # o nível está na linha de informações; o próximo passo substitui o rodapé
+    return f"{markdown.rstrip()}\n\n{marcador_de_visita(tema.slug, visita)}{fim}\n"
 
 
 def _meu_progresso(page, files):
@@ -612,9 +682,15 @@ def on_page_markdown(markdown, page, config, files):
 
 
 def on_page_content(html, page, config, files):
-    # O título completo ("Condicionais · Fácil") fica: ele aparece sozinho na página "Por nível".
     if page.file.src_uri == "README.md":
         page.title = "Início"
+    lugar = _estado["lugares"].get(page.file.src_uri)
+    if lugar and lugar.exercicio:
+        html = _cartoes_de_exercicio(html)
+        _indice_de_exercicios(page.toc)
+    # Nos exercícios, o título visível é só a aula ("Funções"), mas a aba do navegador e a busca precisam do nível.
+    if page.meta.get("titulo_da_pagina"):
+        page.title = page.meta["titulo_da_pagina"]
     return html
 
 
