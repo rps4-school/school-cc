@@ -1,8 +1,6 @@
 /*
- * Progresso do aluno: páginas concluídas, perguntas certas e erradas, dias estudados e a última página.
- * Fica só neste navegador (localStorage), numa chave só: sem conta e sem servidor.
- * As funções de dados são puras e testadas no Node (progresso.test.js). Na página, a API fica em
- * window.SchoolCC.progresso, e toda mudança dispara o evento "school-cc:progresso" no document.
+ * Progresso do aluno, salvo só neste navegador (localStorage), sem conta. Funções puras testadas no
+ * Node (progresso.test.js); na página, a API é window.SchoolCC.progresso e avisa pelo evento "school-cc:progresso".
  */
 (function () {
   "use strict";
@@ -11,7 +9,7 @@
   var CHAVE_ANTIGA = "school-cc:corretor:"; // + caminho da página: formato do corretor até out/2026
   var VERSAO = 1;
   var MAX_DIAS = 120;
-  // Caminho de página: letras, números, "-", "_", "." e "/". Nada de "javascript:" nem "https://".
+  // Só letras, números, "-", "_", "." e "/": nada de "javascript:".
   var CAMINHO = /^[\w.\-\/]*$/;
   var DIA = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -23,7 +21,7 @@
     return (n < 10 ? "0" : "") + n;
   }
 
-  // Data local, "AAAA-MM-DD": o dia em que o aluno estudou é o do relógio dele.
+  // "AAAA-MM-DD" no relógio do aluno.
   function dia(data) {
     data = data || new Date();
     return data.getFullYear() + "-" + doisDigitos(data.getMonth() + 1) + "-" + doisDigitos(data.getDate());
@@ -62,7 +60,7 @@
     if (d.dias.length > MAX_DIAS) d.dias = d.dias.slice(-MAX_DIAS);
   }
 
-  // info: { valor } no acerto; { rotulo, ancora } no erro (para a lista "Revisar").
+  // info: { valor } no acerto; { rotulo, ancora } no erro ("Revisar").
   function conferiu(d, caminho, id, certo, info, hoje) {
     var p = pagina(d, caminho);
     if (certo) {
@@ -106,7 +104,7 @@
     return n;
   }
 
-  // Importar: junta b em a sem apagar nada. Não muda a nem b.
+  // Importar: junta b em a sem apagar nada.
   function juntar(a, b) {
     var r = JSON.parse(JSON.stringify(a));
     Object.keys(b.paginas).forEach(function (k) {
@@ -136,8 +134,7 @@
     return d;
   }
 
-  // pares: [[chave do localStorage, valor]]; raiz: caminho do site ("/school-cc/").
-  // Devolve as chaves antigas que já podem ser apagadas.
+  // pares: [[chave, valor]] do localStorage; devolve as chaves antigas para apagar.
   function migrar(d, pares, raiz) {
     var apagar = [];
     pares.forEach(function (par) {
@@ -168,8 +165,7 @@
 
   // ---------- Na página ----------
 
-  // A raiz do site, calculada uma vez no carregamento completo (com navigation.instant o
-  // #__config continua o da primeira página, e o "base" dele é relativo a ela).
+  // Raiz do site, uma vez só: com navigation.instant o #__config é sempre o da 1ª página.
   var raiz = (function () {
     try {
       return new URL(JSON.parse(document.getElementById("__config").textContent).base, location.href);

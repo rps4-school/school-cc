@@ -14,6 +14,7 @@ Roda depois do hooks.py (ordem em mkdocs.yml). Tudo aqui é só visual:
 """
 
 import html
+import json
 import os
 import posixpath
 import re
@@ -27,7 +28,7 @@ from _catalogo import fora_de_codigo, lugares, montar, perguntas, tabela_roteiro
 from _componentes import (
     EMOJI, NIVEIS, NIVEL, NIVEL_DO_EXERCICIO, bloco_continuar, cabecalho_tema, cartao, cartao_tema, faixa_como_estudar,
     NOME_DO_NIVEL, fim_de_pagina, grade, heroi, informacoes, item_trilha, marcador_de_visita, plural, sem_emoji,
-    simulados_do_tema, trilha,
+    simulados_do_tema, trilha, aviso_local, resumo_estudo, progresso_do_tema, revisar,
 )
 
 # Arquivos desta pasta publicados no site (o MkDocs ignora pastas que começam com ".").
@@ -41,6 +42,8 @@ ARQUIVOS_DO_SITE = {
     "cronometro.js": "assets/javascripts/cronometro.js",
     "portal.js": "assets/javascripts/portal.js",
 }
+PAGINA_PROGRESSO = "progresso.md"
+MARCADOR_PROGRESSO = "<!-- meu-progresso -->"
 PAGINA_NIVEIS = "niveis.md"
 CONTEUDO_NIVEIS = """# Por nível
 
@@ -374,6 +377,31 @@ def _pagina_da_trilha(markdown, lugar, page, files):
     return f"{markdown.rstrip()}\n\n{marcador_de_visita(tema.slug, titulo)}{fim}\n"
 
 
+def _meu_progresso(page, files):
+    """A página "Meu progresso": tudo aqui é preenchido pelo portal.js com o que está no navegador."""
+    blocos, titulos = [], {}
+    for tema in _estado["temas"]:
+        blocos.append(progresso_do_tema(tema, _url(files, page, tema.src), [_chave(files, s) for s in tema.paginas]))
+        for src, lugar in _estado["lugares"].items():
+            if lugar.tema is not tema:
+                continue
+            if lugar.simulado:
+                titulo = f"{lugar.simulado.titulo} · {tema.titulo}"
+            elif lugar.exercicio:
+                titulo = f"{lugar.unidade.titulo} · {NOME_DO_NIVEL[lugar.exercicio.nivel]}"
+            else:
+                titulo = f"{_rotulo_da_unidade(lugar.unidade)} {lugar.unidade.numero} · {lugar.unidade.titulo}"
+            titulos[_chave(files, src)] = titulo
+    # Num atributo, e não num <script>: com navigation.instant o Material reexecuta os <script> do conteúdo.
+    dados = html.escape(json.dumps(titulos, ensure_ascii=False), quote=True)
+    return (
+        f"{aviso_local()}\n\n## Resumo\n\n{resumo_estudo()}\n\n## Por tema\n\n"
+        f'<div class="progresso-temas">{"".join(blocos)}</div>\n\n## Revisar\n\n{revisar()}\n\n'
+        f'<div hidden data-titulos="{dados}"></div>\n\n'
+        "<noscript><p>Esta página precisa de JavaScript para ler o seu progresso.</p></noscript>\n"
+    )
+
+
 def _inicio(page, files):
     """A home do site é só o portal: o README da raiz continua igual no GitHub."""
     t = totais(_estado["temas"])
@@ -400,6 +428,8 @@ def on_files(files, config):
         with open(os.path.join(os.path.dirname(__file__), origem), encoding="utf-8") as f:
             files.append(File.generated(config, destino, content=f.read(), inclusion=InclusionLevel.NOT_IN_NAV))
     files.append(File.generated(config, PAGINA_NIVEIS, content=CONTEUDO_NIVEIS, inclusion=InclusionLevel.INCLUDED))
+    files.append(File.generated(config, PAGINA_PROGRESSO, content=f"# Meu progresso\n\n{MARCADOR_PROGRESSO}\n",
+                                inclusion=InclusionLevel.INCLUDED))
     return files
 
 
@@ -440,6 +470,10 @@ def on_page_markdown(markdown, page, config, files):
             markdown = _editores(markdown)
     markdown = _corretores(markdown)
     markdown = VER_RESPOSTA.sub(r"[Ver resposta →](\1){ .md-button }", markdown)
+    if page.file.src_uri == PAGINA_PROGRESSO:
+        markdown = markdown.replace(MARCADOR_PROGRESSO, _meu_progresso(page, files))
+        page.meta["hide"] = ["navigation", "toc"]
+        page.edit_url = None
     if page.file.src_uri == "README.md":
         markdown = _inicio(page, files)
         # Página inicial sem menu lateral nem índice: mais espaço para o hero e os cartões.

@@ -1149,3 +1149,136 @@
     display: none;
   }
 }
+
+/* ---------- Página "Meu progresso" ---------- */
+.md-typeset .aviso-local {
+  margin: 0 0 1.5rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--borda);
+  border-left: 4px solid var(--md-typeset-a-color);
+  border-radius: 0.9rem;
+  background: var(--cartao);
+  font-size: 0.72rem;
+}
+.md-typeset .aviso-local p {
+  margin: 0 0 0.6rem;
+}
+.md-typeset .aviso-local__bloqueado {
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.5rem;
+  background: #fef3c7;
+  color: #92400e;
+}
+[data-md-color-scheme="slate"] .md-typeset .aviso-local__bloqueado {
+  background: rgb(251 191 36 / 0.15);
+  color: #fcd34d;
+}
+.md-typeset .aviso-local__botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.md-typeset .aviso-local__botoes .md-button {
+  margin: 0;
+}
+.md-typeset .aviso-local__mensagem:empty {
+  display: none;
+}
+.md-typeset .aviso-local__mensagem {
+  margin: 0.6rem 0 0;
+  color: var(--md-typeset-a-color);
+  font-weight: 600;
+}
+.md-typeset .resumo-estudo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 2rem;
+  margin: 0.5rem 0 1rem;
+}
+.md-typeset .resumo-estudo div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.md-typeset .resumo-estudo dd {
+  margin: 0;
+  color: var(--tinta);
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.md-typeset .resumo-estudo dt {
+  color: var(--texto-suave);
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+/* Grade das últimas 8 semanas: uma coluna por semana, como no GitHub. */
+.md-typeset .dias {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 0.8rem);
+  grid-auto-columns: 0.8rem;
+  gap: 0.2rem;
+  width: max-content;
+  margin: 0 0 1.5rem;
+}
+.md-typeset .dias span {
+  border-radius: 0.2rem;
+  background: var(--borda);
+}
+.md-typeset .dias span[data-estudou] {
+  background: #10b981;
+}
+.md-typeset .progresso-temas {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0.5rem 0 1.5rem;
+}
+@media (min-width: 45em) {
+  .md-typeset .progresso-temas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.md-typeset .progresso-tema {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--borda);
+  border-top: 3px solid var(--area);
+  border-radius: 0.9rem;
+  background: var(--cartao);
+}
+.md-typeset a.progresso-tema__titulo {
+  color: var(--tinta);
+  font-size: 0.85rem;
+  font-weight: 750;
+}
+.md-typeset .progresso-tema__barra {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--texto-suave);
+  font-family: var(--mono);
+  font-size: 0.56rem;
+}
+.md-typeset .progresso-tema__proximo {
+  margin: 0;
+  color: var(--texto);
+  font-size: 0.66rem;
+}
+.md-typeset .revisar h3 {
+  margin: 1rem 0 0.4rem;
+  font-size: 0.8rem;
+}
+.md-typeset .revisar li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.6rem;
+}
+.md-typeset .revisar li span {
+  color: var(--texto-suave);
+  font-size: 0.64rem;
+}

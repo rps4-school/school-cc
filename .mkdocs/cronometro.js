@@ -1,7 +1,6 @@
 /*
- * Cronômetro da folha de prova dos simulados (o visual.py põe <div data-cronometro="minutos">).
- * Com navigation.instant o site troca de página sem recarregar: o document$ do Material avisa
- * cada página nova, e os relógios da página anterior são parados.
+ * Cronômetro da folha de prova (<div data-cronometro="minutos"> do visual.py). A cada página
+ * nova (document$ do Material), os relógios da anterior param.
  */
 (function () {
   "use strict";

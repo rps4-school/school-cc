@@ -274,3 +274,48 @@ def fim_de_pagina(chave, texto_botao, pratique=None, proximo=None, feito="Conclu
 
 def marcador_de_visita(tema_slug, titulo):
     return f'<div hidden data-visita data-tema="{_e(tema_slug)}" data-titulo="{_e(titulo)}"></div>'
+
+
+# ---------- Página "Meu progresso" (o portal.js preenche) ----------
+
+def aviso_local():
+    return (
+        '<div class="aviso-local">'
+        "<p><strong>Seu progresso fica salvo só neste navegador.</strong> Ele não vai sozinho para outro computador "
+        "ou celular e some se os dados do navegador forem apagados. Para levar, exporte aqui e importe no outro aparelho.</p>"
+        '<p class="aviso-local__bloqueado" data-sem-armazenamento hidden>Este navegador não deixa o site salvar dados. '
+        "O progresso vale só enquanto esta aba estiver aberta.</p>"
+        '<div class="aviso-local__botoes">'
+        '<button type="button" class="md-button" data-exportar>Exportar</button>'
+        '<button type="button" class="md-button" data-importar>Importar</button>'
+        '<input type="file" accept="application/json,.json" hidden data-arquivo aria-label="Arquivo de progresso">'
+        '<button type="button" class="md-button" data-apagar>Apagar tudo</button></div>'
+        '<p class="aviso-local__mensagem" role="status" data-mensagem></p></div>'
+    )
+
+
+def resumo_estudo():
+    itens = (("data-sequencia", "dias seguidos"), ("data-total-concluidas", "páginas concluídas"),
+             ("data-total-certas", "perguntas certas"))
+    return (
+        '<dl class="resumo-estudo">'
+        + "".join(f"<div><dt>{nome}</dt><dd {atributo}>0</dd></div>" for atributo, nome in itens)
+        + '</dl><div class="dias" data-dias role="img" aria-label="Dias estudados nas últimas 8 semanas"></div>'
+    )
+
+
+def progresso_do_tema(tema, url, paginas):
+    return (
+        f'<div class="progresso-tema" data-area="{area_slug(tema.area)}" data-progresso-tema="{_e(tema.slug)}" '
+        f'data-paginas="{_e(" ".join(paginas))}">'
+        f'<a class="progresso-tema__titulo" href="{_e(url)}">{_e(tema.titulo)}</a>'
+        f'<span class="progresso-tema__barra">{barra("Progresso em " + tema.titulo)}<span data-progresso-texto>0%</span></span>'
+        '<p class="progresso-tema__proximo" data-proximo-passo></p></div>'
+    )
+
+
+def revisar():
+    return (
+        '<div class="revisar" data-revisar><p data-revisar-vazio>Nenhuma pergunta para revisar. Quando você errar uma '
+        "pergunta no corretor, ela aparece aqui até você acertar.</p><div data-revisar-lista></div></div>"
+    )
