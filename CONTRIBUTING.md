@@ -112,6 +112,9 @@ Todo o repositório vira o site <https://rps4-school.github.io/school-cc/>, publ
 - nos simulados de Python, cada `## Questão NN` ganha um editor de Python (o mesmo do VS Code) com terminal, que roda no navegador. Basta manter o título `## Questão NN · ...` e o link `[✅ Ver resposta]`;
 - a página inicial é um portal: blocos por área (com os temas e o progresso de cada um), "Continue de onde parou" e a página **Meu progresso**. O catálogo completo, com busca e filtro por área, fica em **Conteúdo**. O roteiro de cada tema vira a trilha (veja "Roteiro do tema" acima), e aulas, resumos, exercícios e simulados ganham "Marcar como concluída";
 - o progresso do aluno fica **só no navegador dele** (localStorage), sem conta. Em "Meu progresso", ele pode exportar, importar e apagar.
+- dentro de um tema, o menu da esquerda é a **trilha do tema**: cada aula com os exercícios dela (Fácil, Intermediário, Difícil) logo abaixo e o ✓ do que já foi feito. As pastas internas (`enunciados/`, `respostas/`) e as respostas não aparecem no menu: o aluno chega à resposta pelo botão **Ver resposta**;
+- aulas, exercícios e respostas têm o mesmo cabeçalho (por exemplo, "Aula 2 de 6", o nível, o tempo de leitura e "Sugerir melhoria") e terminam com um bloco só de **próximo passo**;
+- se uma pasta mudar de nome, acrescente o endereço antigo e o novo em `REDIRECIONAMENTOS` (`.mkdocs/hooks.py`): o build grava, nos endereços antigos, páginas que levam aos novos.
 
 O build roda em todo PR e **falha se houver link ou âncora quebrados**. Para ver o site no seu computador antes de abrir o PR:
 
@@ -136,6 +139,8 @@ Só quem mexer no visual (`.mkdocs/visual.py`, `_componentes.py`, `hooks.py` ou 
 npm ci --prefix .mkdocs
 npm run css --prefix .mkdocs           # ou css:watch, enquanto edita
 ```
+
+Dois templates do Material são sobrescritos em `.mkdocs/overrides/partials/`: `nav.html` (o menu da trilha) e `path.html` (o caminho no topo). Ao atualizar o `mkdocs-material` no `requirements.txt`, compare os dois com os da versão nova. O teste de `test_hooks.py` falha até a versão anotada nele ser atualizada.
 
 ## Boas práticas
 
