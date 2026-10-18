@@ -1,0 +1,31 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 300' width='560' height='300' role='img' aria-label='Divisor de tensão: dois resistores em série, R1 em cima e R2 ligado ao GND; a saída fica no ponto do meio'>
+<title>Divisor de tensão: dois resistores em série, R1 em cima e R2 ligado ao GND; a saída fica no ponto do meio</title>
+<rect width='560' height='300' rx='12' fill='#ffffff'/>
+<polyline points='60,133 60,144' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='60,156 60,167' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(60,150) rotate(90)'><line x1='-6' y1='-17' x2='-6' y2='17' stroke='#1e293b' stroke-width='2'/><line x1='6' y1='-9' x2='6' y2='9' stroke='#1e293b' stroke-width='4.5'/></g>
+<polyline points='60,133 60,40 200,40 200,66' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='200,66 200,71' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='200,119 200,124' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(200,95) rotate(90)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<polyline points='200,124 200,176' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='200,176 200,181' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='200,229 200,234' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(200,205) rotate(90)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<polyline points='200,234 200,260 60,260 60,167' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='200' cy='150' r='3.5' fill='#1e293b'/>
+<polyline points='200,150 296,150' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='300' cy='150' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='130,260 130,270' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='116,270 144,270' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='121,275 139,275' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='126,280 134,280' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='48' y='128' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>+</text>
+<text x='48' y='184' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>−</text>
+<text x='84' y='155' font-size='15' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>U</text>
+<text x='218' y='100' font-size='14' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>R1</text>
+<text x='218' y='210' font-size='14' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>R2</text>
+<text x='312' y='155' font-size='14' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>U saída</text>
+<text x='312' y='210' font-size='15' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>U saída = U · R2 / (R1 + R2)</text>
+<text x='312' y='232' font-size='13' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>R2 é o resistor ligado ao GND.</text>
+</svg>

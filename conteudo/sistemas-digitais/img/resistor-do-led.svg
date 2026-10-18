@@ -1,0 +1,28 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 250' width='600' height='250' role='img' aria-label='Esquema de uma fonte de 5 volts com resistor e LED em série: o LED fica com cerca de 2 volts e o resistor com o resto, 3 volts'>
+<title>Esquema de uma fonte de 5 volts com resistor e LED em série: o LED fica com cerca de 2 volts e o resistor com o resto, 3 volts</title>
+<rect width='600' height='250' rx='12' fill='#ffffff'/>
+<polyline points='80,116 80,127' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='80,139 80,150' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(80,133) rotate(90)'><line x1='-6' y1='-17' x2='-6' y2='17' stroke='#1e293b' stroke-width='2'/><line x1='6' y1='-9' x2='6' y2='9' stroke='#1e293b' stroke-width='4.5'/></g>
+<polyline points='80,116 80,70 186,70' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='186,70 196,70' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='244,70 254,70' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(220,70)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<polyline points='254,70 420,70 420,108' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='420,108 420,121' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='420,145 420,158' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(420,133) rotate(90)'><polygon points='-12,-11 -12,11 12,0' fill='#fee2e2' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><line x1='12' y1='-11' x2='12' y2='11' stroke='#1e293b' stroke-width='2.5'/><line x1='-2' y1='-14' x2='6' y2='-24' stroke='#1e293b' stroke-width='1.6'/><polygon points='7.5,-26 2.6,-23.6 6.2,-20.6' fill='#1e293b'/><line x1='5' y1='-12' x2='13' y2='-22' stroke='#1e293b' stroke-width='1.6'/><polygon points='14.5,-24 9.6,-21.6 13.2,-18.6' fill='#1e293b'/></g>
+<polyline points='420,158 420,196 80,196 80,150' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='67' y='111' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>+</text>
+<text x='67' y='167' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>−</text>
+<text x='104' y='138' font-size='14' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>5 V</text>
+<polyline points='186,46 186,40 254,40 254,46' fill='none' stroke='#4f46e5' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='220' y='30' font-size='13' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>U resistor = 5 − 2 = 3 V</text>
+<text x='220' y='98' font-size='14' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>R</text>
+<polyline points='450,108 456,108 456,158 450,158' fill='none' stroke='#4f46e5' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='466' y='128' font-size='13' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>U LED ≈ 2 V</text>
+<text x='466' y='145' font-size='13' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>(vermelho)</text>
+<polygon points='138,70 124.23,74.31 124.23,65.69' fill='#4f46e5'/>
+<text x='130' y='58' font-size='14' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-style='italic' font-family='Inter, Segoe UI, Arial, sans-serif'>i</text>
+<text x='300' y='232' font-size='16' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>R = (U fonte − U LED) / i</text>
+</svg>

@@ -1,6 +1,6 @@
 # 🗺️ Mapa de Karnaugh
 
-> [← Circuitos combinacionais](08-circuitos-combinacionais.md) · [Voltar para Sistemas Digitais →](../README.md)
+> [← Circuitos combinacionais](08-circuitos-combinacionais.md) · Próximo: [Introdução à eletrônica →](10-introducao-a-eletronica.md)
 
 **Nível:** 🔴 Avançado
 

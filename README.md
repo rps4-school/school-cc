@@ -17,7 +17,7 @@ Todo o material fica em [**conteudo/**](conteudo/README.md), com uma pasta por t
 | Tema | O que tem |
 | ---- | --------- |
 | [**Python**](conteudo/python/README.md) | Aulas (condicionais, listas, matrizes, strings, dicionários e funções) e 54 exercícios com resposta comentada, em 3 níveis |
-| [**Sistemas Digitais**](conteudo/sistemas-digitais/README.md) | 9 aulas completas, do binário ao Mapa de Karnaugh, e 81 exercícios com correção automática no site |
+| [**Sistemas Digitais**](conteudo/sistemas-digitais/README.md) | 12 aulas, do binário ao Mapa de Karnaugh e à eletrônica básica (Lei de Ohm, série e paralelo), 108 exercícios e 4 simulados com correção automática no site |
 | [**Cálculo**](conteudo/calculo/README.md) | 10 aulas com mapas mentais, de funções a integrais (com bisseção e Newton), 90 exercícios e 4 simulados com correção automática no site |
 | [**Git**](conteudo/git/README.md) | O que é o Git, comandos do dia a dia, branches e como desfazer erros |
 

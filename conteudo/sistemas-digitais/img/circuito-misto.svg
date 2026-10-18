@@ -1,0 +1,31 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 265' width='600' height='265' role='img' aria-label='Circuito misto: bateria de 9 volts, R1 de 100 ohms em série com o paralelo de R2 de 300 ohms e R3 de 600 ohms'>
+<title>Circuito misto: bateria de 9 volts, R1 de 100 ohms em série com o paralelo de R2 de 300 ohms e R3 de 600 ohms</title>
+<rect width='600' height='265' rx='12' fill='#ffffff'/>
+<polyline points='70,125 70,136' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='70,148 70,159' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(70,142) rotate(90)'><line x1='-6' y1='-17' x2='-6' y2='17' stroke='#1e293b' stroke-width='2'/><line x1='6' y1='-9' x2='6' y2='9' stroke='#1e293b' stroke-width='4.5'/></g>
+<polyline points='70,125 70,70 152,70' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='152,70 156,70' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='204,70 208,70' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(180,70)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<polyline points='208,70 460,70 460,114' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='70,159 70,214 460,214 460,170' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='300' cy='70' r='3.5' fill='#1e293b'/>
+<circle cx='300' cy='214' r='3.5' fill='#1e293b'/>
+<polyline points='300,70 300,114' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='300,114 300,118' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='300,166 300,170' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(300,142) rotate(90)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<polyline points='300,170 300,214' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='460,114 460,118' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='460,166 460,170' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(460,142) rotate(90)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<text x='57' y='120' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>+</text>
+<text x='57' y='176' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>−</text>
+<text x='94' y='147' font-size='14' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>9 V</text>
+<text x='180' y='102' font-size='13' fill='#1e293b' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>R1 = 100 Ω</text>
+<text x='316' y='147' font-size='13' fill='#1e293b' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>R2 = 300 Ω</text>
+<text x='476' y='147' font-size='13' fill='#1e293b' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>R3 = 600 Ω</text>
+<rect x='270' y='46' width='300' height='192' rx='10' fill='none' stroke='#4f46e5' stroke-width='1.5' stroke-dasharray='6 5'/>
+<text x='420' y='36' font-size='13' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>paralelo: R23 = 200 Ω</text>
+</svg>

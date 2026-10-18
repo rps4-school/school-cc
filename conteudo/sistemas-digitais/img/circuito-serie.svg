@@ -1,0 +1,27 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 250' width='560' height='250' role='img' aria-label='Circuito em série: bateria de 12 volts com R1 de 1 quilo-ohm e R2 de 2 quilo-ohms; U1 = 4 V, U2 = 8 V e a mesma corrente de 4 mA nos dois'>
+<title>Circuito em série: bateria de 12 volts com R1 de 1 quilo-ohm e R2 de 2 quilo-ohms; U1 = 4 V, U2 = 8 V e a mesma corrente de 4 mA nos dois</title>
+<rect width='560' height='250' rx='12' fill='#ffffff'/>
+<polyline points='80,117 80,128' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='80,140 80,151' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(80,134) rotate(90)'><line x1='-6' y1='-17' x2='-6' y2='17' stroke='#1e293b' stroke-width='2'/><line x1='6' y1='-9' x2='6' y2='9' stroke='#1e293b' stroke-width='4.5'/></g>
+<polyline points='80,117 80,74 172,74' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='172,74 176,74' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='224,74 228,74' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(200,74)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<polyline points='228,74 302,74' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='302,74 306,74' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='354,74 358,74' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(330,74)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<polyline points='358,74 440,74 440,194 80,194 80,151' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='67' y='112' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>+</text>
+<text x='67' y='168' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>−</text>
+<text x='104' y='139' font-size='14' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>12 V</text>
+<text x='200' y='106' font-size='13' fill='#1e293b' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>R1 = 1 kΩ</text>
+<text x='330' y='106' font-size='13' fill='#1e293b' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>R2 = 2 kΩ</text>
+<text x='200' y='54' font-size='14' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>U1 = 4 V</text>
+<text x='330' y='54' font-size='14' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>U2 = 8 V</text>
+<polygon points='132,74 118.23,78.31 118.23,69.69' fill='#4f46e5'/>
+<polygon points='440,142 435.69,128.23 444.31,128.23' fill='#4f46e5'/>
+<polygon points='252,194 265.77,189.69 265.77,198.31' fill='#4f46e5'/>
+<text x='260' y='224' font-size='14' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>i = 4 mA: a mesma corrente em todo o circuito</text>
+</svg>

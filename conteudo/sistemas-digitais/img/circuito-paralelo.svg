@@ -1,0 +1,31 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 265' width='560' height='265' role='img' aria-label='Circuito em paralelo: bateria de 6 volts com R1 de 30 ohms e R2 de 60 ohms entre os mesmos dois pontos; i1 = 0,2 A, i2 = 0,1 A e i = 0,3 A'>
+<title>Circuito em paralelo: bateria de 6 volts com R1 de 30 ohms e R2 de 60 ohms entre os mesmos dois pontos; i1 = 0,2 A, i2 = 0,1 A e i = 0,3 A</title>
+<rect width='560' height='265' rx='12' fill='#ffffff'/>
+<polyline points='80,120 80,131' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='80,143 80,154' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(80,137) rotate(90)'><line x1='-6' y1='-17' x2='-6' y2='17' stroke='#1e293b' stroke-width='2'/><line x1='6' y1='-9' x2='6' y2='9' stroke='#1e293b' stroke-width='4.5'/></g>
+<polyline points='80,120 80,62 420,62 420,109' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='80,154 80,212 420,212 420,165' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='260' cy='62' r='3.5' fill='#1e293b'/>
+<circle cx='260' cy='212' r='3.5' fill='#1e293b'/>
+<polyline points='260,62 260,109' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='260,109 260,113' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='260,161 260,165' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(260,137) rotate(90)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<polyline points='260,165 260,212' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='420,109 420,113' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='420,161 420,165' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(420,137) rotate(90)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<text x='67' y='115' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>+</text>
+<text x='67' y='171' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>−</text>
+<text x='104' y='142' font-size='14' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>6 V</text>
+<text x='276' y='142' font-size='13' fill='#1e293b' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>R1 = 30 Ω</text>
+<text x='436' y='142' font-size='13' fill='#1e293b' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>R2 = 60 Ω</text>
+<polygon points='178,62 164.23,66.31 164.23,57.69' fill='#4f46e5'/>
+<text x='170' y='50' font-size='13' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>i = 0,3 A</text>
+<polygon points='260,96 255.69,82.23 264.31,82.23' fill='#4f46e5'/>
+<text x='276' y='92' font-size='13' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>i1 = 0,2 A</text>
+<polygon points='420,96 415.69,82.23 424.31,82.23' fill='#4f46e5'/>
+<text x='436' y='92' font-size='13' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>i2 = 0,1 A</text>
+<text x='280' y='248' font-size='14' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>A mesma tensão (6 V) nos dois ramos; as correntes se somam.</text>
+</svg>

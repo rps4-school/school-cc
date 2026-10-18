@@ -1,0 +1,15 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 230' width='520' height='230' role='img' aria-label='Triângulo da Lei de Ohm, com U em cima e R e i embaixo, e as três fórmulas: U igual a R vezes i, R igual a U dividido por i, i igual a U dividido por R'>
+<title>Triângulo da Lei de Ohm, com U em cima e R e i embaixo, e as três fórmulas: U igual a R vezes i, R igual a U dividido por i, i igual a U dividido por R</title>
+<rect width='520' height='230' rx='12' fill='#ffffff'/>
+<polygon points='130,22 26,206 234,206' fill='#eef2ff' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polyline points='74,122 186,122' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='130,122 130,206' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='130' y='104' font-size='36' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>U</text>
+<text x='94' y='182' font-size='30' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>R</text>
+<text x='166' y='182' font-size='32' fill='#1e293b' text-anchor='middle' font-weight='bold' font-style='italic' font-family='Inter, Segoe UI, Arial, sans-serif'>i</text>
+<text x='290' y='70' font-size='24' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>U = R · i</text>
+<text x='290' y='118' font-size='24' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>R = U / i</text>
+<text x='290' y='166' font-size='24' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>i = U / R</text>
+<text x='290' y='206' font-size='13' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>Tape a grandeza que você quer:</text>
+<text x='290' y='223' font-size='13' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>o que sobra é a conta.</text>
+</svg>

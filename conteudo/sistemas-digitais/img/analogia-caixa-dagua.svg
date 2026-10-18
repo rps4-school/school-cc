@@ -1,0 +1,33 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 290' width='600' height='290' role='img' aria-label='Analogia da caixa-d&apos;água: a altura da água é a tensão, a vazão no cano é a corrente, o cano estreito é a resistência, o registro é o interruptor e a roda-d&apos;água é a carga'>
+<title>Analogia da caixa-d'água: a altura da água é a tensão, a vazão no cano é a corrente, o cano estreito é a resistência, o registro é o interruptor e a roda-d'água é a carga</title>
+<rect width='600' height='290' rx='12' fill='#ffffff'/>
+<rect x='40' y='50' width='130' height='92' rx='0' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<rect x='42' y='72' width='126' height='68' fill='#bfdbfe'/>
+<text x='105' y='40' font-size='14' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>caixa-d'água</text>
+<text x='105' y='164' font-size='13' fill='#1e293b' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>altura da água</text>
+<text x='105' y='181' font-size='13' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>= tensão</text>
+<path d='M170,118 H290 L300,122 H340 L350,118 H400 V178 H386 V132 H350 L340,128 H300 L290,132 H170 Z' fill='#bfdbfe' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/>
+<polygon points='201,125 185.51,129.85 185.51,120.15' fill='#4f46e5'/>
+<polygon points='235,125 219.51,129.85 219.51,120.15' fill='#4f46e5'/>
+<text x='210' y='152' font-size='13' fill='#1e293b' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>vazão no cano</text>
+<text x='210' y='169' font-size='13' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>= corrente</text>
+<rect x='256' y='98' width='12' height='12' rx='0' fill='#e2e8f0' stroke='#1e293b' stroke-width='2'/>
+<polyline points='262,98 262,88' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='252,88 272,88' fill='none' stroke='#1e293b' stroke-width='3' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='262' y='62' font-size='13' fill='#1e293b' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>registro</text>
+<text x='262' y='78' font-size='13' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>= interruptor</text>
+<text x='322' y='152' font-size='13' fill='#1e293b' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>cano estreito</text>
+<text x='322' y='169' font-size='13' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>= resistência</text>
+<circle cx='393' cy='222' r='38' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='393,222 431,222' fill='none' stroke='#1e293b' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='393,222 419.87,248.87' fill='none' stroke='#1e293b' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='393,222 393,260' fill='none' stroke='#1e293b' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='393,222 366.13,248.87' fill='none' stroke='#1e293b' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='393,222 355,222' fill='none' stroke='#1e293b' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='393,222 366.13,195.13' fill='none' stroke='#1e293b' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='393,222 393,184' fill='none' stroke='#1e293b' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='393,222 419.87,195.13' fill='none' stroke='#1e293b' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='393' cy='222' r='6' fill='#1e293b'/>
+<text x='445' y='216' font-size='13' fill='#1e293b' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>roda-d'água</text>
+<text x='445' y='233' font-size='13' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>= carga (lâmpada, LED)</text>
+</svg>

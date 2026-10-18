@@ -1,0 +1,56 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 255' width='640' height='255' role='img' aria-label='Circuito aberto, com o interruptor desligado e a lâmpada apagada, e circuito fechado, com a lâmpada acesa e a corrente saindo do polo positivo e voltando ao negativo'>
+<title>Circuito aberto, com o interruptor desligado e a lâmpada apagada, e circuito fechado, com a lâmpada acesa e a corrente saindo do polo positivo e voltando ao negativo</title>
+<rect width='640' height='255' rx='12' fill='#ffffff'/>
+<text x='160' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Circuito aberto</text>
+<polyline points='50,92 50,116' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='50,128 50,152' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(50,122) rotate(90)'><line x1='-6' y1='-17' x2='-6' y2='17' stroke='#1e293b' stroke-width='2'/><line x1='6' y1='-9' x2='6' y2='9' stroke='#1e293b' stroke-width='4.5'/></g>
+<polyline points='50,92 50,62 135,62' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='50,152 50,182 270,182 270,142' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='135' cy='62' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<circle cx='185' cy='62' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='138,62 175.28,36.83' fill='none' stroke='#1e293b' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='185,62 270,62 270,102' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='270,102 270,105' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='270,139 270,142' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='270' cy='122' r='17' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='257.98,109.98 282.02,134.02' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='257.98,134.02 282.02,109.98' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='37' y='112' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>+</text>
+<text x='37' y='141' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>−</text>
+<text x='74' y='127' font-size='13' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>1,5 V</text>
+<text x='160' y='218' font-size='13' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>Interruptor aberto: o caminho tem um</text>
+<text x='160' y='236' font-size='13' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>buraco, e não há corrente.</text>
+<text x='480' y='32' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Circuito fechado</text>
+<polyline points='370,92 370,116' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='370,128 370,152' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(370,122) rotate(90)'><line x1='-6' y1='-17' x2='-6' y2='17' stroke='#1e293b' stroke-width='2'/><line x1='6' y1='-9' x2='6' y2='9' stroke='#1e293b' stroke-width='4.5'/></g>
+<polyline points='370,92 370,62 455,62' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='370,152 370,182 590,182 590,142' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='455' cy='62' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<circle cx='505' cy='62' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='458,62 502,62' fill='none' stroke='#1e293b' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='505,62 590,62 590,102' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='590,102 590,105' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='590,139 590,142' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='582.48,142.67 579.74,150.19' fill='none' stroke='#f59e0b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='571.98,134.62 565.43,139.21' fill='none' stroke='#f59e0b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='571.98,109.38 565.43,104.79' fill='none' stroke='#f59e0b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='582.48,101.33 579.74,93.81' fill='none' stroke='#f59e0b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='597.52,101.33 600.26,93.81' fill='none' stroke='#f59e0b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='608.02,109.38 614.57,104.79' fill='none' stroke='#f59e0b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='608.02,134.62 614.57,139.21' fill='none' stroke='#f59e0b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='597.52,142.67 600.26,150.19' fill='none' stroke='#f59e0b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='590' cy='122' r='17' fill='#fde68a' stroke='#1e293b' stroke-width='2'/>
+<polyline points='577.98,109.98 602.02,134.02' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='577.98,134.02 602.02,109.98' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='357' y='112' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>+</text>
+<text x='357' y='141' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>−</text>
+<text x='394' y='127' font-size='13' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>1,5 V</text>
+<polygon points='423,62 409.23,66.31 409.23,57.69' fill='#4f46e5'/>
+<polygon points='590,172 585.69,158.23 594.31,158.23' fill='#4f46e5'/>
+<polygon points='472,182 485.77,177.69 485.77,186.31' fill='#4f46e5'/>
+<polygon points='370,68 374.31,81.77 365.69,81.77' fill='#4f46e5'/>
+<text x='480' y='218' font-size='13' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>Caminho completo: a corrente sai do +,</text>
+<text x='480' y='236' font-size='13' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>passa pela lâmpada e volta ao −.</text>
+</svg>

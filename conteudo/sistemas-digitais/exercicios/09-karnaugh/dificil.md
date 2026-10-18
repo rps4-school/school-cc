@@ -1,6 +1,6 @@
 # 🗺️ Mapa de Karnaugh · 🔴 Difícil
 
-> [← voltar para Exercícios](../README.md) · 📖 Antes, leia: [Mapa de Karnaugh](../../aulas/09-mapa-de-karnaugh.md)
+> [← voltar para Exercícios](../README.md) · 📖 Antes, leia: [Mapa de Karnaugh](../../aulas/09-mapa-de-karnaugh.md) · Próximo: [Introdução à eletrônica →](../10-eletronica/facil.md)
 
 Resolva no papel primeiro. No site, digite a resposta e clique em **Conferir**; no GitHub, abra **Ver resposta**.
 

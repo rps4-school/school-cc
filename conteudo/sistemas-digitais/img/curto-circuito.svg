@@ -1,0 +1,32 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 620 245' width='620' height='245' role='img' aria-label='Curto-circuito: um fio liga os dois polos da bateria sem passar pela lâmpada; a corrente vai quase toda pelo fio e a lâmpada apaga'>
+<title>Curto-circuito: um fio liga os dois polos da bateria sem passar pela lâmpada; a corrente vai quase toda pelo fio e a lâmpada apaga</title>
+<rect width='620' height='245' rx='12' fill='#ffffff'/>
+<polyline points='60,110 60,121' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='60,133 60,144' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(60,127) rotate(90)'><line x1='-6' y1='-17' x2='-6' y2='17' stroke='#1e293b' stroke-width='2'/><line x1='6' y1='-9' x2='6' y2='9' stroke='#1e293b' stroke-width='4.5'/></g>
+<polyline points='60,110 60,62 330,62 330,110' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='60,144 60,192 330,192 330,144' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='330,110 330,110' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='330,144 330,144' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='330' cy='127' r='17' fill='#ffffff' stroke='#94a3b8' stroke-width='2'/>
+<polyline points='317.98,114.98 342.02,139.02' fill='none' stroke='#94a3b8' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='317.98,139.02 342.02,114.98' fill='none' stroke='#94a3b8' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='210,62 210,192' fill='none' stroke='#dc2626' stroke-width='3' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='210' cy='62' r='3.5' fill='#1e293b'/>
+<circle cx='210' cy='192' r='3.5' fill='#1e293b'/>
+<text x='47' y='104' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>+</text>
+<text x='47' y='160' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>−</text>
+<text x='84' y='131' font-size='13' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>9 V</text>
+<text x='222' y='131' font-size='14' fill='#dc2626' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>curto</text>
+<polygon points='143,62 129.23,66.31 129.23,57.69' fill='#dc2626'/>
+<polygon points='210,108 205.69,94.23 214.31,94.23' fill='#dc2626'/>
+<polygon points='127,192 140.77,187.69 140.77,196.31' fill='#dc2626'/>
+<polygon points='60,80 64.31,93.77 55.69,93.77' fill='#dc2626'/>
+<text x='375' y='80' font-size='13' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Um fio liga o + ao − direto.</text>
+<text x='375' y='101' font-size='13' fill='#1e293b' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>• A corrente passa quase toda pelo</text>
+<text x='375' y='122' font-size='13' fill='#1e293b' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>  fio, o caminho sem resistência.</text>
+<text x='375' y='143' font-size='13' fill='#1e293b' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>• A lâmpada apaga.</text>
+<text x='375' y='164' font-size='13' fill='#1e293b' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>• A corrente fica enorme: bateria,</text>
+<text x='375' y='185' font-size='13' fill='#1e293b' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>  fios e Arduino esquentam e podem</text>
+<text x='375' y='206' font-size='13' fill='#1e293b' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>  queimar.</text>
+</svg>

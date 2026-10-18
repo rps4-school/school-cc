@@ -1,0 +1,35 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 265' width='560' height='265' role='img' aria-label='Esquema com bateria, chave S e duas lâmpadas L1 e L2; o fio de volta de L2 cruza o fio de L1 no ponto Q, sem bolinha, e chega ao negativo por outro caminho'>
+<title>Esquema com bateria, chave S e duas lâmpadas L1 e L2; o fio de volta de L2 cruza o fio de L1 no ponto Q, sem bolinha, e chega ao negativo por outro caminho</title>
+<rect width='560' height='265' rx='12' fill='#ffffff'/>
+<polyline points='60,112 60,123' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='60,135 60,146' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(60,129) rotate(90)'><line x1='-6' y1='-17' x2='-6' y2='17' stroke='#1e293b' stroke-width='2'/><line x1='6' y1='-9' x2='6' y2='9' stroke='#1e293b' stroke-width='4.5'/></g>
+<polyline points='60,112 60,42 100,42' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='100' cy='42' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<circle cx='150' cy='42' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='103,42 140.28,16.83' fill='none' stroke='#1e293b' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='150,42 420,42 420,82' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='60,146 60,214 230,214' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='230' cy='42' r='3.5' fill='#1e293b'/>
+<polyline points='230,42 230,102' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='230,102 230,102' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='230,136 230,136' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='230' cy='119' r='17' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='217.98,106.98 242.02,131.02' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='217.98,131.02 242.02,106.98' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='230,136 230,214' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='420,82 420,82' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='420,116 420,116' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='420' cy='99' r='17' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='407.98,86.98 432.02,111.02' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='407.98,111.02 432.02,86.98' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='420,116 420,164 150,164 150,214' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='150' cy='214' r='3.5' fill='#1e293b'/>
+<text x='48' y='108' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>+</text>
+<text x='48' y='160' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>−</text>
+<text x='84' y='134' font-size='13' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>6 V</text>
+<text x='125' y='20' font-size='14' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>S</text>
+<text x='256' y='124' font-size='14' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>L1</text>
+<text x='446' y='104' font-size='14' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>L2</text>
+<text x='238' y='157' font-size='14' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Q</text>
+</svg>
