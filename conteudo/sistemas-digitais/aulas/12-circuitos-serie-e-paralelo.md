@@ -153,6 +153,7 @@ Se um LED da fileira queimar (abrir), **todos apagam**. E a soma das tensões do
 1. No [Kit para Montar Circuito DC](https://phet.colorado.edu/pt_BR/simulations/circuit-construction-kit-dc), monte duas lâmpadas em **série** e depois em **paralelo** na mesma pilha. Qual montagem deixa as lâmpadas mais fortes? Tire uma lâmpada de cada vez e veja o que acontece com a outra.
 2. Use o **voltímetro** no ponto do meio de dois resistores em série (divisor de tensão) e confira a fórmula.
 3. No [Tinkercad Circuits](https://www.tinkercad.com/circuits), ligue dois LEDs em paralelo numa bateria de 9 V, cada um com o resistor que você calcular, e meça a corrente total com o multímetro em série.
+4. No laboratório do site, faça os experimentos [Série e paralelo](../laboratorio/experimentos/02-serie-e-paralelo/README.md) e [Divisor de tensão](../laboratorio/experimentos/03-divisor-de-tensao/README.md): as medidas têm que bater com as fórmulas desta aula.
 
 ## ⚠️ Erros comuns
 

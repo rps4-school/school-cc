@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "serie-e-paralelo",
+  "title": "Série e paralelo",
+  "level": "intermediario",
+  "components": [
+    { "id": "bat", "type": "bateria-9v", "x": 80, "y": 70 },
+    { "id": "pb1", "type": "protoboard-400", "x": 220, "y": 20 },
+    { "id": "mm1", "type": "multimetro", "x": 60, "y": 230, "props": { "modo": "V" } },
+    { "id": "r1", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 1000 }, "mount": { "1": "pb1:a3", "2": "pb1:a7" } },
+    { "id": "r2", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 2200 }, "mount": { "1": "pb1:b7", "2": "pb1:b11" } }
+  ],
+  "connections": [
+    { "id": "w1", "from": "bat:+", "to": "pb1:cima+1", "color": "vermelho" },
+    { "id": "w2", "from": "bat:-", "to": "pb1:cima-1", "color": "preto" },
+    { "id": "w3", "from": "pb1:cima+3", "to": "pb1:e3", "color": "vermelho" },
+    { "id": "w4", "from": "pb1:e11", "to": "pb1:cima-10", "color": "preto" },
+    { "id": "w5", "from": "mm1:vermelha", "to": "pb1:d7", "color": "vermelho" },
+    { "id": "w6", "from": "mm1:preta", "to": "pb1:d11", "color": "preto" }
+  ],
+  "metadata": {
+    "instrucoes": "R1 (1 kΩ) e R2 (2,2 kΩ) em série na bateria de 9 V. O multímetro mede a tensão em R2.\n\n1. Leia a tensão em R2. Depois mude as pontas para medir R1 (colunas 3 e 7).\n2. Some as duas tensões.\n3. Siga o roteiro da página para montar o paralelo."
+  }
+}

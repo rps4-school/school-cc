@@ -4,19 +4,33 @@
 
 **Nível:** 🟢 Iniciante
 
-Projetos guiados de Arduino, do primeiro LED ao semáforo, com a montagem, o código, os casos de teste e dicas para destravar. Faça num simulador on-line ou com a placa de verdade.
+Projetos guiados de Arduino, do primeiro LED ao semáforo, e experimentos de eletrônica num simulador de circuitos que roda aqui no site. Cada atividade traz a montagem, os casos de teste e dicas para destravar.
 
 > 📖 **Antes, leia:** [Arduino Uno](../aulas/15-arduino-uno.md) e [Saídas digitais, LED e Blink](../aulas/17-saidas-digitais.md). Para o projeto 01, também o [Monitor serial](../aulas/18-monitor-serial.md).
 
-## 🧭 Como fazer cada projeto
+## 🔋 Simulador de circuitos
 
-1. **Escolha onde montar:** no [Tinkercad Circuits](https://www.tinkercad.com/circuits) ou no [Wokwi](https://wokwi.com/) (grátis, no navegador), ou com a placa, a protoboard e os componentes.
+Monte com protoboard, fios, pilhas, bateria, resistores, LEDs, interruptor, botão, potenciômetro, LDR e multímetro. O simulador calcula as tensões e as correntes, acende os LEDs e avisa quando algo está errado: curto-circuito, LED sem resistor ou invertido, amperímetro em paralelo, pernas na mesma tira.
+
+<div class="laboratorio" data-exemplos="exemplos.json" data-titulo="Laboratório livre" data-descricao="Comece do zero ou abra um dos exemplos na aba Projeto. O que você montar fica salvo neste navegador."></div>
+
+> 💡 O simulador abre só no site. No GitHub, os circuitos dos experimentos estão nos arquivos `circuito.json` de cada pasta.
+
+| Experimento | O que você faz |
+| ----------- | -------------- |
+| [**01 · LED com resistor**](experimentos/01-led-com-resistor/README.md) | Mede a corrente do LED e vê o que acontece com o resistor errado, sem resistor e com o LED virado |
+| [**02 · Série e paralelo**](experimentos/02-serie-e-paralelo/README.md) | Mede tensões e correntes de dois resistores em série e em paralelo |
+| [**03 · Divisor de tensão**](experimentos/03-divisor-de-tensao/README.md) | Compara a fórmula com o divisor fixo, o potenciômetro e o LDR |
+
+## 🧭 Como fazer cada projeto de Arduino
+
+1. **Escolha onde montar:** o programa do Arduino ainda não roda no simulador do site. Use o [Tinkercad Circuits](https://www.tinkercad.com/circuits) ou o [Wokwi](https://wokwi.com/) (grátis, no navegador), ou a placa, a protoboard e os componentes.
 2. **Monte** pela figura e pela tabela de ligações. Confira cada fio antes de ligar.
 3. **Programe** a partir do código inicial. Travou? Abra **uma** dica de cada vez.
 4. **Rode os casos de teste** do projeto: eles mostram o que acontece com a montagem certa e com cada defeito comum.
 5. **Confira os critérios** de conclusão e só então compare com a solução.
 
-## 🧪 Projetos
+## 🤖 Projetos de Arduino
 
 | Projeto | O que você faz |
 | ------- | -------------- |
@@ -31,7 +45,9 @@ Projetos guiados de Arduino, do primeiro LED ao semáforo, com a montagem, o có
 | Montagem (figura e tabela de ligações), código inicial, dicas e solução | ✅ Em todos os projetos |
 | Casos de teste e critérios de conclusão | ✅ Em todos os projetos, para conferir no simulador ou na placa |
 | Código das soluções | ✅ Compila para o Arduino Uno (o arquivo `.ino` de cada pasta) |
-| Montar e simular dentro deste site | ❌ Ainda não: use o Tinkercad ou o Wokwi |
+| Montar e medir circuitos de eletrônica no site | ✅ Em corrente contínua: pilhas, bateria, 5V e 3.3V do Arduino, resistor, LED, interruptor, botão, potenciômetro, LDR e multímetro (V e A) |
+| Rodar o programa do Arduino no site | ❌ Ainda não: os pinos digitais e analógicos da placa ficam soltos. Use o Tinkercad ou o Wokwi |
+| Capacitor, transistor, motor e outros | ❌ Fora do simulador: ele não calcula transitórios nem componentes além do LED que não sejam lineares |
 
 > ⚠️ **Segurança:** monte e mude as ligações com a placa **desligada** do USB. LED sempre com resistor, e nunca ligue um pino direto no GND ou no 5V.
 

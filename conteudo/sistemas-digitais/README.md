@@ -99,6 +99,7 @@ Nas grandezas (V, A, Ω, W...), a unidade é opcional e qualquer prefixo vale: `
 - [CircuitVerse](https://circuitverse.org/simulator): monte e teste circuitos com portas lógicas no navegador, de graça.
 - [Tabela ASCII completa](https://www.asciitable.com/): códigos de todas as letras e símbolos.
 - [Kit para Montar Circuito DC (PhET)](https://phet.colorado.edu/pt_BR/simulations/circuit-construction-kit-dc): pilhas, lâmpadas, resistores, voltímetro e amperímetro no navegador, de graça e sem conta.
+- [Laboratório Arduino](laboratorio/README.md): simulador de circuitos deste site, com protoboard, LEDs e multímetro (sem conta).
 - [Tinkercad Circuits](https://www.tinkercad.com/circuits): protoboard, multímetro, LEDs e Arduino no navegador (grátis, precisa de conta).
 - [Wokwi](https://wokwi.com/): simulador de Arduino no navegador, com monitor serial (grátis; salvar pede conta).
 
@@ -108,7 +109,7 @@ Nas grandezas (V, A, Ω, W...), a unidade é opcional e qualquer prefixo vale: `
 | ----- | -------------- |
 | [`aulas/`](aulas/) | Uma aula completa por assunto, com exemplos e teste rápido |
 | [`exercicios/`](exercicios/README.md) | 162 exercícios (9 por assunto) com resolução passo a passo |
-| [`laboratorio/`](laboratorio/README.md) | Projetos guiados de Arduino: montagem, código, casos de teste e solução |
+| [`laboratorio/`](laboratorio/README.md) | Simulador de circuitos no site, experimentos de eletrônica e projetos guiados de Arduino |
 | `img/` | Figuras das aulas (portas, circuitos, mapas, esquemas elétricos e a placa Uno) |
 
 ## 📚 Referências

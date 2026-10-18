@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "divisor-de-tensao",
+  "title": "Divisor de tensão",
+  "level": "intermediario",
+  "components": [
+    { "id": "bat", "type": "bateria-9v", "x": 80, "y": 70 },
+    { "id": "pb1", "type": "protoboard-400", "x": 220, "y": 20 },
+    { "id": "mm1", "type": "multimetro", "x": 60, "y": 230, "props": { "modo": "V" } },
+    { "id": "r1", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 10000 }, "mount": { "1": "pb1:a3", "2": "pb1:a7" } },
+    { "id": "r2", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 10000 }, "mount": { "1": "pb1:b7", "2": "pb1:b11" } },
+    { "id": "pot1", "type": "potenciometro", "x": 0, "y": 0, "props": { "ohms": 10000, "posicao": 50 }, "mount": { "1": "pb1:h18", "cursor": "pb1:h19", "3": "pb1:h20" } },
+    { "id": "ldr1", "type": "ldr", "x": 0, "y": 0, "props": { "luz": 50 }, "mount": { "1": "pb1:c24", "2": "pb1:c26" } },
+    { "id": "r3", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 10000 }, "mount": { "1": "pb1:d26", "2": "pb1:d30" } }
+  ],
+  "connections": [
+    { "id": "w1", "from": "bat:+", "to": "pb1:cima+1", "color": "vermelho" },
+    { "id": "w2", "from": "bat:-", "to": "pb1:cima-1", "color": "preto" },
+    { "id": "w3", "from": "pb1:cima+3", "to": "pb1:e3", "color": "vermelho" },
+    { "id": "w4", "from": "pb1:e11", "to": "pb1:cima-10", "color": "preto" },
+    { "id": "w5", "from": "mm1:vermelha", "to": "pb1:d7", "color": "amarelo" },
+    { "id": "w6", "from": "mm1:preta", "to": "pb1:cima-6", "color": "preto" },
+    { "id": "w7", "from": "pb1:cima-16", "to": "pb1:j18", "color": "preto" },
+    { "id": "w8", "from": "pb1:cima+19", "to": "pb1:j20", "color": "vermelho" },
+    { "id": "w9", "from": "pb1:cima+20", "to": "pb1:a24", "color": "vermelho" },
+    { "id": "w10", "from": "pb1:e30", "to": "pb1:cima-23", "color": "preto" }
+  ],
+  "metadata": {
+    "instrucoes": "Três divisores na mesma bateria de 9 V:\n• R1 e R2 (10 kΩ cada), à esquerda: o multímetro mede o ponto do meio (coluna 7).\n• O potenciômetro, embaixo (colunas 18 a 20): o meio dele é a coluna 19.\n• O LDR com um resistor de 10 kΩ, à direita: o ponto do meio é a coluna 26.\n\nMude a ponta vermelha de lugar para medir cada ponto do meio. Mexa no cursor do potenciômetro e na luz do LDR na aba Selecionado."
+  }
+}

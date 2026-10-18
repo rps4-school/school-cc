@@ -130,6 +130,8 @@ No [Tinkercad Circuits](https://www.tinkercad.com/circuits) (grátis, precisa de
 3. Meça com o multímetro: a tensão no LED e no resistor (em paralelo) e a corrente (em série). As tensões somam 9 V?
 4. Inverta o LED e meça de novo, como no Exemplo 3.
 
+No [laboratório do site](../laboratorio/README.md) dá para fazer o mesmo sem conta: passe o mouse num furo e os furos ligados a ele acendem em verde. O [experimento 01](../laboratorio/experimentos/01-led-com-resistor/README.md) mostra também o erro clássico do amperímetro em paralelo.
+
 ## ⚠️ Erros comuns
 
 | Erro | Como evitar |

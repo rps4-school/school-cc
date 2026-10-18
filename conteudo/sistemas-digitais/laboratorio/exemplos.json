@@ -1,0 +1,19 @@
+{
+  "exemplos": [
+    {
+      "titulo": "LED com resistor",
+      "descricao": "Bateria de 9 V, resistor de 390 Ω, LED vermelho e amperímetro em série",
+      "arquivo": "experimentos/01-led-com-resistor/circuito.json"
+    },
+    {
+      "titulo": "Série e paralelo",
+      "descricao": "Dois resistores em série e o voltímetro em cada um",
+      "arquivo": "experimentos/02-serie-e-paralelo/circuito.json"
+    },
+    {
+      "titulo": "Divisor de tensão",
+      "descricao": "Dois resistores, um potenciômetro e um LDR na mesma bateria",
+      "arquivo": "experimentos/03-divisor-de-tensao/circuito.json"
+    }
+  ]
+}

@@ -170,6 +170,7 @@ Os resistores dos kits são de **1/4 W (0,25 W)**. Passou disso, eles esquentam 
 1. No [Kit para Montar Circuito DC](https://phet.colorado.edu/pt_BR/simulations/circuit-construction-kit-dc), monte pilha, resistor e lâmpada. Ligue o **voltímetro** nas pontas do resistor e o **amperímetro** no caminho. Coloque uma segunda pilha em série: a corrente dobra?
 2. Troque a pilha pela **bateria de 9 V** sem resistor e veja o que acontece com a lâmpada. Depois coloque um resistor e aumente o valor dele aos poucos.
 3. No [Tinkercad Circuits](https://www.tinkercad.com/circuits) (grátis, precisa de conta), ponha 4 pilhas AA num suporte e meça a tensão com o multímetro. Depois acenda um LED vermelho com o resistor que você calcular para 20 mA.
+4. No [laboratório do site](../laboratorio/experimentos/01-led-com-resistor/README.md), sem conta: meça a corrente do LED do Exemplo 4 e veja o que acontece com um resistor menor e sem resistor.
 
 ## ⚠️ Erros comuns
 
