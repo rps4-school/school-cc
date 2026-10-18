@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "description": "Módulos ES do Laboratório Arduino. Este arquivo só diz ao Node (testes) que os .js são módulos; ele não vai para o site.",
+  "type": "module"
+}

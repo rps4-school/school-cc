@@ -17,6 +17,10 @@
 @source "./corretor.js";
 @source "./cronometro.js";
 @source "./portal.js";
+/* O laboratório tem CSS próprio (classes lab-*, no fim deste arquivo): o Tailwind não lê os módulos dele.
+   Sem isso, a detecção automática acharia palavras como "relative" no código e criaria classes à toa. */
+@source not "./laboratorio";
+@source not "./laboratorio.js";
 
 /* O modo escuro segue o seletor de tema do Material. */
 @custom-variant dark (&:where([data-md-color-scheme="slate"], [data-md-color-scheme="slate"] *));
@@ -2513,4 +2517,465 @@
 }
 .md-typeset a.proximo-passo__depois > span {
   margin-left: auto;
+}
+
+/* ---------- Laboratório Arduino (laboratorio.js e laboratorio/) ---------- */
+
+/* Cartão "Abrir no laboratório" dentro da página */
+.md-typeset .lab-cartao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border: 1px solid #c7d2fe;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+}
+[data-md-color-scheme="slate"] .md-typeset .lab-cartao {
+  border-color: rgb(165 180 252 / 0.25);
+  background: rgb(99 102 241 / 0.08);
+}
+.md-typeset .lab-cartao-texto {
+  flex: 1 1 16rem;
+}
+.md-typeset .lab-cartao-rotulo {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--md-primary-fg-color);
+}
+[data-md-color-scheme="slate"] .md-typeset .lab-cartao-rotulo {
+  color: #a5b4fc;
+}
+.md-typeset .lab-cartao-titulo {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.md-typeset .lab-cartao-texto p {
+  margin: 0.2rem 0 0;
+  font-size: 0.72rem;
+  color: var(--md-default-fg-color--light);
+}
+.md-typeset .lab-cartao .md-button {
+  margin: 0;
+}
+.md-typeset .lab-cartao-falha {
+  width: 100%;
+  margin: 0;
+  font-size: 0.7rem;
+  color: #e11d48;
+}
+
+/* A sobreposição de tela cheia */
+html.lab-aberto,
+html.lab-aberto body {
+  overflow: hidden;
+}
+.lab {
+  --lab-fundo: #f1f5f9;
+  --lab-painel: #ffffff;
+  --lab-borda: #e2e8f0;
+  --lab-texto: #0f172a;
+  --lab-suave: #64748b;
+  --lab-grade: #cbd5e1;
+  --lab-destaque: #4f46e5;
+  --lab-ruim: #dc2626;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  background: var(--lab-fundo);
+  color: var(--lab-texto);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+}
+[data-md-color-scheme="slate"] .lab {
+  --lab-fundo: #0b1220;
+  --lab-painel: #111827;
+  --lab-borda: #1f2937;
+  --lab-texto: #e5e7eb;
+  --lab-suave: #94a3b8;
+  --lab-grade: #1e293b;
+  --lab-destaque: #a5b4fc;
+  --lab-ruim: #f87171;
+}
+.lab-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--lab-borda);
+  background: var(--lab-painel);
+}
+.lab-titulo small {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lab-destaque);
+}
+.lab-titulo b {
+  font-size: 0.95rem;
+}
+.lab-barra-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.lab-corpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  min-height: 0;
+}
+.lab-area {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  outline: none;
+  background-color: var(--lab-fundo);
+  background-image: radial-gradient(var(--lab-grade) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+.lab-area:focus-visible {
+  box-shadow: inset 0 0 0 3px var(--lab-destaque);
+}
+.lab-tela {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.lab-faixa {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  left: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #fecaca;
+  border-radius: 0.6rem;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 0.8rem;
+  font-weight: 600;
+  pointer-events: none;
+}
+[data-md-color-scheme="slate"] .lab-faixa {
+  border-color: rgb(248 113 113 / 0.4);
+  background: #2a1215;
+  color: #fecaca;
+}
+.lab-status {
+  min-height: 1.9rem;
+  padding: 0.35rem 0.75rem;
+  border-top: 1px solid var(--lab-borda);
+  background: var(--lab-painel);
+  font-size: 0.78rem;
+}
+
+/* Painel */
+.lab-painel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-left: 1px solid var(--lab-borda);
+  background: var(--lab-painel);
+}
+.lab-abas {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--lab-borda);
+}
+.lab-abas button {
+  flex: 0 0 auto;
+  padding: 0.55rem 0.6rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--lab-suave);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.lab-abas button[aria-selected="true"] {
+  border-bottom-color: var(--lab-destaque);
+  color: var(--lab-destaque);
+  font-weight: 700;
+}
+.lab-conteudo {
+  flex: 1;
+  overflow: auto;
+  padding: 0.75rem 1rem 1.5rem;
+}
+.lab-conteudo h3 {
+  margin: 1rem 0 0.4rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lab-suave);
+}
+.lab-conteudo h3:first-child {
+  margin-top: 0.25rem;
+}
+.lab-btn {
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--lab-borda);
+  border-radius: 0.5rem;
+  background: var(--lab-painel);
+  color: var(--lab-texto);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.lab-btn:hover {
+  border-color: var(--lab-destaque);
+}
+.lab-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.lab-fechar {
+  border-color: #4f46e5;
+  background: #4f46e5;
+  color: #ffffff;
+  font-weight: 600;
+}
+.lab-btn:focus-visible,
+.lab-abas button:focus-visible,
+.lab-peca:focus-visible,
+.lab-campo :focus-visible {
+  outline: 3px solid var(--lab-destaque);
+  outline-offset: 2px;
+}
+.lab-pecas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.4rem;
+}
+.lab-peca {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--lab-borda);
+  border-radius: 0.6rem;
+  background: var(--lab-fundo);
+  color: var(--lab-texto);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.lab-peca:hover {
+  border-color: var(--lab-destaque);
+}
+.lab-peca b {
+  display: block;
+  font-size: 0.8rem;
+}
+.lab-peca small {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--lab-suave);
+}
+.lab-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0.5rem 0;
+  font-size: 0.8rem;
+}
+.lab-campo select,
+.lab-campo input[type="number"],
+.lab-campo input[type="text"] {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--lab-borda);
+  border-radius: 0.4rem;
+  background: var(--lab-fundo);
+  color: var(--lab-texto);
+  font: inherit;
+}
+.lab-campo input[type="range"] {
+  width: 100%;
+  accent-color: var(--lab-destaque);
+}
+fieldset.lab-campo {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--lab-borda);
+  border-radius: 0.5rem;
+}
+.lab-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.15rem 0;
+}
+.lab-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.6rem 0;
+}
+.lab-nota {
+  margin: 0.4rem 0;
+  font-size: 0.76rem;
+  color: var(--lab-suave);
+}
+.lab-leitura {
+  margin: 0.25rem 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.lab-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lab-lista li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--lab-borda);
+  border-radius: 0.5rem;
+  font-size: 0.78rem;
+}
+.lab-lista li > span:not(.lab-cor):not([aria-hidden]) {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.lab-lista small {
+  display: block;
+  color: var(--lab-suave);
+}
+.lab-leituras li > span:last-child {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+}
+.lab-cor {
+  flex: 0 0 auto;
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 1px solid var(--lab-borda);
+  border-radius: 999px;
+}
+.lab-diag-erro {
+  border-color: rgb(220 38 38 / 0.45) !important;
+}
+.lab-diag-aviso {
+  border-color: rgb(217 119 6 / 0.45) !important;
+}
+.lab-instrucoes {
+  white-space: normal;
+}
+.lab-ajuda {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.78rem;
+}
+
+/* Dentro do SVG */
+.lab-comp {
+  cursor: grab;
+  outline: none;
+}
+.lab-comp:focus-visible {
+  outline: 2px solid var(--lab-destaque);
+}
+.lab-fio {
+  cursor: pointer;
+  outline: none;
+}
+.lab-fio-alvo {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 12;
+}
+.lab-terminal {
+  fill: transparent;
+  stroke: transparent;
+  cursor: crosshair;
+}
+.lab-terminal:hover {
+  fill: rgb(79 70 229 / 0.25);
+  stroke: #4f46e5;
+  stroke-width: 1.5;
+}
+.lab-ligado {
+  fill: none;
+  stroke: #16a34a;
+  stroke-width: 2.4;
+}
+.lab-previa {
+  fill: rgb(34 197 94 / 0.35);
+  stroke: #16a34a;
+  stroke-width: 2;
+}
+.lab-previa-ruim {
+  fill: rgb(239 68 68 / 0.3);
+  stroke: #dc2626;
+}
+.lab-selecao {
+  fill: none;
+  stroke: var(--lab-destaque);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+}
+.lab-selecao-ponta {
+  fill: none;
+  stroke: var(--lab-destaque);
+  stroke-width: 2.5;
+}
+.lab-fio-em-curso {
+  fill: none;
+  stroke: var(--lab-destaque);
+  stroke-width: 3;
+  stroke-dasharray: 5 4;
+}
+.lab-selo text {
+  fill: #ffffff;
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+}
+.lab-dica-furo rect {
+  fill: #0f172a;
+  opacity: 0.9;
+}
+.lab-dica-furo text {
+  fill: #ffffff;
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+}
+.lab-legenda {
+  fill: var(--lab-suave);
+}
+
+/* Celular: o circuito em cima, o painel embaixo */
+@media (max-width: 860px) {
+  .lab-corpo {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(240px, 55%) minmax(0, 1fr);
+  }
+  .lab-painel {
+    border-top: 1px solid var(--lab-borda);
+    border-left: 0;
+  }
+  .lab-barra {
+    padding: 0.4rem 0.5rem;
+  }
+  .lab-btn {
+    padding: 0.45rem 0.6rem;
+  }
 }

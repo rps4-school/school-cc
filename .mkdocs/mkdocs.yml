@@ -54,6 +54,8 @@ extra_javascript:
     defer: true
   - path: assets/javascripts/portal.js      # mostra o progresso nas páginas
     defer: true
+  - path: assets/javascripts/laboratorio.js # cartão do laboratório; os módulos só vêm no clique
+    defer: true
 
 theme:
   name: material

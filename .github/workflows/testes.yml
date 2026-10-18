@@ -25,6 +25,10 @@ jobs:
       - name: Corretor e progresso
         run: node --test .mkdocs/corretor.test.js .mkdocs/progresso.test.js
 
+      # Protoboard, redes, solucionador, diagnósticos e os circuitos publicados do laboratório.
+      - name: Laboratório
+        run: node --test ".mkdocs/laboratorio/testes/*.test.js"
+
   python:
     name: Testes de Python
     runs-on: ubuntu-latest

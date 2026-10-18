@@ -131,6 +131,7 @@ Testes do site (a CI também roda):
 ```bash
 python3 -m unittest discover -s .mkdocs -p "test_*.py"             # catálogo, componentes e corretor no build
 node --test .mkdocs/corretor.test.js .mkdocs/progresso.test.js     # corretor e progresso do aluno
+node --test ".mkdocs/laboratorio/testes/*.test.js"                 # laboratório: elétrica e circuitos publicados
 ```
 
 O site troca de página sem recarregar (navegação instantânea). Ela só funciona com links que estão no `sitemap.xml`, feito com o `site_url`: o `mkdocs serve` já cuida disso. Num `mkdocs build` servido por outro servidor local, use `SITE_URL=http://localhost:8000/ mkdocs build ...`.
@@ -143,6 +144,20 @@ npm run css --prefix .mkdocs           # ou css:watch, enquanto edita
 ```
 
 Dois templates do Material são sobrescritos em `.mkdocs/overrides/partials/`: `nav.html` (o menu da trilha) e `path.html` (o caminho no topo). Ao atualizar o `mkdocs-material` no `requirements.txt`, compare os dois com os da versão nova. O teste de `test_hooks.py` falha até a versão anotada nele ser atualizada.
+
+## Laboratório Arduino
+
+O laboratório (`conteudo/sistemas-digitais/laboratorio/`) tem um simulador de circuitos que roda no navegador. O código fica em `.mkdocs/laboratorio/` e a explicação dele, para quem desenvolve, em `.mkdocs/laboratorio/README.md` (a pasta `.mkdocs` não vai para o site).
+
+Para criar um **experimento** com circuito pronto:
+
+1. Monte o circuito no laboratório do site e baixe o arquivo em **Projeto → Baixar arquivo (.json)**.
+2. Salve como `circuito.json` numa pasta nova em `laboratorio/experimentos/NN-nome/`, com um `README.md` no formato dos outros experimentos.
+3. No README, ponha `<div class="laboratorio" data-projeto="circuito.json" data-titulo="..."></div>`: no site, ele vira o botão **Abrir no laboratório**. No GitHub, ele não aparece, então escreva também onde está o `circuito.json`.
+4. Para aparecer na lista de exemplos, acrescente o circuito em `laboratorio/exemplos.json`.
+5. **Toda leitura citada no roteiro tem que sair do simulador.** Acrescente as principais em `.mkdocs/laboratorio/testes/exemplos.test.js` e rode os testes do laboratório.
+
+O simulador é de **corrente contínua**: pilhas, bateria, 5V e 3.3V do Arduino, resistor, LED, interruptor, botão, potenciômetro, LDR e multímetro. Ele não simula capacitor, transistor, motor nem o programa do Arduino. Não escreva atividade que dependa disso como se funcionasse.
 
 ## Boas práticas
 

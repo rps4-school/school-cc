@@ -107,10 +107,10 @@ conteudo/sistemas-digitais/laboratorio/         páginas (GitHub e site)
           ▼  CI: compilar.py + arduino-cli  →  FIRMWARE_DIR/<mesmo caminho>.hex  →  visual.py publica
 .mkdocs/laboratorio.js     bootstrap (~2 KB, defer, todas as páginas): cartão "Abrir laboratório"
 .mkdocs/laboratorio/       módulos ES, carregados com import() ao abrir
-  catalogo.js · protoboard.js · projeto.js · netlist.js · solucionador.js · diagnostico.js
+  catalogo.js · protoboard.js · projeto.js · netlist.js · solucionador.js · circuito.js · diagnostico.js · geometria.js
   uno.js · intelhex.js · emulador.js · simulacao.js · simulacao-worker.js
-  vista.js · edicao.js · painel-conexoes.js · armazenamento.js · desafios.js · app.js
-  vendor/avr8js/ · compilar.py · testes/
+  desenhos.js · vista.js · edicao.js · painel.js · armazenamento.js · desafios.js · app.js
+  README.md (para quem desenvolve) · vendor/avr8js/ · compilar.py · testes/
 ```
 
 O que é lógica pura (protoboard, projeto, netlist, solucionador, diagnóstico, uno, intelhex, emulador, simulação, desafios) não toca o DOM e tem testes no Node. A interface (vista, edição, painel, app) só desenha e chama a lógica.
@@ -158,7 +158,7 @@ O que é lógica pura (protoboard, projeto, netlist, solucionador, diagnóstico,
 - **Solucionador:** análise nodal modificada, em corrente contínua.
   - Resistor linear; chave aberta ou fechada; fonte ideal com resistência interna (pilhas, 9 V, 5 V e 3,3 V do Uno).
   - Pino de saída como fonte de 5 V ou 0 V atrás de ~25 Ω. Pino de entrada em alta impedância, ou com pull-up de ~35 kΩ (`INPUT_PULLUP`).
-  - LED linear por partes: aberto abaixo de Vf; acima, Vf + resistência série. Os estados dos LEDs são iterados até ficarem consistentes.
+  - LED linear por partes: aberto abaixo de Vf; até 30 mA, Vf + 0,05 Ω (as leituras batem com as contas das aulas); acima de 30 mA, uma reta de 10 Ω, para um LED sem resistor dar centenas de mA, e não um curto de dezenas de ampères. Os estados dos LEDs são iterados até ficarem consistentes.
   - Voltímetro lê a diferença entre redes; amperímetro é um ramo de 0 Ω com a corrente.
 - **Diagnósticos:** pino usado e desconectado; LED invertido; LED sem resistor (corrente acima do máximo); sem retorno ao GND; pino errado (pelo `metadata.esperado`); curto entre alimentação e GND; corrente acima de 20 mA (recomendado) ou 40 mA (máximo) num pino; tensão acima de 5,5 V num pino.
 - **O que não faz:** capacitor, indutor, transitórios, transistor e não linearidade além do LED. A página do laboratório diz isso na tabela de capacidades.
@@ -209,7 +209,7 @@ Sketch do enunciado: LED no **D8**, `Serial` a 9600, 1 s ligado e 1 s desligado.
 - **Publicação:** o `visual.py` publica `.mkdocs/laboratorio/` (sem `testes/` nem `package.json`) em `assets/javascripts/laboratorio/`. Os `.hex` de `FIRMWARE_DIR` vão ao lado dos `.ino`.
 - **Página com laboratório:** um `<div class="laboratorio" data-projeto="circuito.json">` no Markdown. No GitHub ele não aparece, e a página diz que o laboratório roda só no site.
 - **Menu:** `_mais_do_tema` deixa de listar páginas dentro de subpastas que têm README próprio, e só "Laboratório Arduino" entra em "Mais".
-- **CSS:** os estilos do laboratório entram no `tailwind.css`, com `@source "./laboratorio/*.js"`.
+- **CSS:** os estilos do laboratório entram no `tailwind.css` como CSS próprio (classes `lab-*`), sem utilitários do Tailwind nos módulos; por isso não precisam de `@source`.
 
 ## 8. Compilador futuro (serviço, não implementado)
 

@@ -105,6 +105,17 @@ class MaisDoTema(unittest.TestCase):
         self.assertFalse(self.dentro("conteudo/sd/cola.md"))
 
 
+class PublicacaoDoLaboratorio(unittest.TestCase):
+    def test_modulos_vao_para_o_site_sem_os_testes(self):
+        destinos = {d for _, d in visual.arquivos_do_laboratorio()}
+        for modulo in ("app.js", "circuito.js", "solucionador.js", "protoboard.js"):
+            self.assertIn(f"assets/javascripts/laboratorio/{modulo}", destinos)
+        self.assertFalse(any("/testes/" in d or d.endswith("package.json") for d in destinos))
+
+    def test_bootstrap_publicado(self):
+        self.assertEqual(visual.ARQUIVOS_DO_SITE["laboratorio.js"], "assets/javascripts/laboratorio.js")
+
+
 class SobretituloDepoisDaBusca(unittest.TestCase):
     def test_entra_antes_do_primeiro_h1(self):
         html = '<p>x</p><h1 id="a">A</h1><h1 id="b">B</h1>'

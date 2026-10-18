@@ -52,7 +52,12 @@ ARQUIVOS_DO_SITE = {
     "progresso.js": "assets/javascripts/progresso.js",
     "cronometro.js": "assets/javascripts/cronometro.js",
     "portal.js": "assets/javascripts/portal.js",
+    "laboratorio.js": "assets/javascripts/laboratorio.js",
 }
+# Módulos do Laboratório Arduino (.mkdocs/laboratorio/), publicados ao lado do laboratorio.js. Os testes e o
+# package.json (que só diz ao Node que os .js são módulos) ficam fora do site.
+PASTA_DO_LABORATORIO = os.path.join(os.path.dirname(__file__), "laboratorio")
+FORA_DO_SITE = {"testes", "package.json", "node_modules"}
 PAGINA_PROGRESSO = "progresso.md"
 MARCADOR_PROGRESSO = "<!-- meu-progresso -->"
 # Abas que são uma página só: o título delas ainda não foi lido quando o menu é montado.
@@ -682,6 +687,19 @@ def on_config(config):
     return config
 
 
+def arquivos_do_laboratorio(raiz=PASTA_DO_LABORATORIO):
+    """[(arquivo no disco, destino no site)] dos módulos do laboratório: .js, .json e LICENSE."""
+    saida = []
+    for pasta, subpastas, arquivos in os.walk(raiz):
+        subpastas[:] = sorted(s for s in subpastas if s not in FORA_DO_SITE and not s.startswith("."))
+        for nome in sorted(arquivos):
+            if nome in FORA_DO_SITE or not (nome.endswith((".js", ".json")) or nome == "LICENSE"):
+                continue
+            relativo = os.path.relpath(os.path.join(pasta, nome), raiz).replace(os.sep, "/")
+            saida.append((os.path.join(pasta, nome), f"assets/javascripts/laboratorio/{relativo}"))
+    return saida
+
+
 def on_files(files, config):
     _estado["temas"] = montar(config["docs_dir"])
     _estado["lugares"] = lugares(_estado["temas"])
@@ -689,8 +707,9 @@ def on_files(files, config):
     _estado["areas"] = _paginas_de_area(_temas_por_area(), config["docs_dir"])
     for src, area in _estado["areas"].items():
         files.append(File.generated(config, src, content=f"# {area}\n\n{MARCADOR_AREA}\n", inclusion=InclusionLevel.INCLUDED))
-    for origem, destino in ARQUIVOS_DO_SITE.items():
-        with open(os.path.join(os.path.dirname(__file__), origem), encoding="utf-8") as f:
+    publicados = [(os.path.join(os.path.dirname(__file__), o), d) for o, d in ARQUIVOS_DO_SITE.items()]
+    for origem, destino in publicados + arquivos_do_laboratorio():
+        with open(origem, encoding="utf-8") as f:
             files.append(File.generated(config, destino, content=f.read(), inclusion=InclusionLevel.NOT_IN_NAV))
     files.append(File.generated(config, PAGINA_NIVEIS, content=CONTEUDO_NIVEIS, inclusion=InclusionLevel.INCLUDED))
     files.append(File.generated(config, PAGINA_PROGRESSO, content=f"# Meu progresso\n\n{MARCADOR_PROGRESSO}\n",
