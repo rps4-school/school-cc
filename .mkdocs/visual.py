@@ -459,15 +459,30 @@ def _tema_da_pagina(temas, src):
     return next((t for t in temas if src.startswith(posixpath.dirname(t.src) + "/")), None)
 
 
+def _dentro_de_secao(src, pasta_do_tema, com_readme):
+    """A página está dentro de uma subpasta do tema que tem README próprio (os projetos do laboratório, por
+    exemplo)? Aí só o README da subpasta entra em "Mais", e ele lista o resto."""
+    pasta = posixpath.dirname(src)
+    while len(pasta) > len(pasta_do_tema.rstrip("/")):
+        if pasta in com_readme and src != f"{pasta}/README.md":
+            return True
+        pasta = posixpath.dirname(pasta)
+    return False
+
+
 def _mais_do_tema(tema, files):
     """[(título, src)]: páginas do tema fora da trilha (formulário, lista de exercícios...). Ficam de fora as
-    geradas (listagens de pasta e páginas de .py) e as respostas."""
+    geradas (listagens de pasta e páginas de .py), as respostas e o que está dentro de uma subpasta com README."""
     pasta = posixpath.dirname(tema.src) + "/"
     da_trilha = {tema.src} | {u.src for u in tema.unidades} | {e.src for u in tema.unidades for e in u.exercicios}
+    paginas = list(files.documentation_pages())
+    com_readme = {posixpath.dirname(f.src_uri) for f in paginas if posixpath.basename(f.src_uri) == "README.md"}
     mais = []
-    for f in files.documentation_pages():
+    for f in paginas:
         src = f.src_uri
         if not src.startswith(pasta) or src in da_trilha or f.generated_by or "/respostas/" in src:
+            continue
+        if _dentro_de_secao(src, pasta, com_readme):
             continue
         with open(f.abs_src_path, encoding="utf-8") as arquivo:
             achou = re.search(r"^#\s+(.+)$", arquivo.read(), re.M)

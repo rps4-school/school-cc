@@ -85,6 +85,26 @@ class TemaDaPagina(unittest.TestCase):
         self.assertIsNone(visual._tema_da_pagina(temas, "simulados/python/README.md"))
 
 
+class MaisDoTema(unittest.TestCase):
+    PASTA = "conteudo/sd/"
+    COM_README = {"conteudo/sd", "conteudo/sd/exercicios", "conteudo/sd/laboratorio", "conteudo/sd/laboratorio/projetos/01-blink"}
+
+    def dentro(self, src):
+        return visual._dentro_de_secao(src, self.PASTA, self.COM_README)
+
+    def test_readme_de_subpasta_entra_no_mais(self):
+        self.assertFalse(self.dentro("conteudo/sd/laboratorio/README.md"))
+        self.assertFalse(self.dentro("conteudo/sd/exercicios/README.md"))
+
+    def test_paginas_dentro_de_subpasta_com_readme_ficam_de_fora(self):
+        self.assertTrue(self.dentro("conteudo/sd/laboratorio/projetos/01-blink/README.md"))
+        self.assertTrue(self.dentro("conteudo/sd/laboratorio/experimentos.md"))
+
+    def test_pasta_sem_readme_e_raiz_do_tema_continuam(self):
+        self.assertFalse(self.dentro("conteudo/sd/resumos/formulario.md"))  # resumos/ não tem README
+        self.assertFalse(self.dentro("conteudo/sd/cola.md"))
+
+
 class SobretituloDepoisDaBusca(unittest.TestCase):
     def test_entra_antes_do_primeiro_h1(self):
         html = '<p>x</p><h1 id="a">A</h1><h1 id="b">B</h1>'
