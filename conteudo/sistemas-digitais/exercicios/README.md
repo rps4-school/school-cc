@@ -4,7 +4,7 @@
 
 **Nível:** 🟢 Iniciante
 
-126 exercícios, 9 por assunto, com contexto de computação e de eletrônica e **resolução passo a passo**. Eles seguem a ordem das [aulas](../aulas/): leia a aula, depois faça os exercícios do fácil ao difícil.
+162 exercícios, 9 por assunto, com contexto de computação, de eletrônica e de Arduino e **resolução passo a passo**. Eles seguem a ordem das [aulas](../aulas/): leia a aula, depois faça os exercícios do fácil ao difícil.
 
 ## 🧭 Como praticar
 
@@ -37,5 +37,9 @@
 | 🔗 Série e paralelo | [Aula](../aulas/12-circuitos-serie-e-paralelo.md) | [🟢 Fácil](12-serie-e-paralelo/facil.md) · [🟡 Intermediário](12-serie-e-paralelo/intermediario.md) · [🔴 Difícil](12-serie-e-paralelo/dificil.md) |
 | 🧪 Protoboard e medição | [Aula](../aulas/13-protoboard-e-medicao.md) | [🟢 Fácil](13-protoboard/facil.md) · [🟡 Intermediário](13-protoboard/intermediario.md) · [🔴 Difícil](13-protoboard/dificil.md) |
 | 🧩 Componentes | [Aula](../aulas/14-componentes-eletronicos.md) | [🟢 Fácil](14-componentes/facil.md) · [🟡 Intermediário](14-componentes/intermediario.md) · [🔴 Difícil](14-componentes/dificil.md) |
+| 🤖 Arduino Uno | [Aula](../aulas/15-arduino-uno.md) | [🟢 Fácil](15-arduino-uno/facil.md) · [🟡 Intermediário](15-arduino-uno/intermediario.md) · [🔴 Difícil](15-arduino-uno/dificil.md) |
+| 💻 Programação Arduino | [Aula](../aulas/16-programacao-arduino.md) | [🟢 Fácil](16-programacao-arduino/facil.md) · [🟡 Intermediário](16-programacao-arduino/intermediario.md) · [🔴 Difícil](16-programacao-arduino/dificil.md) |
+| 💡 Saídas digitais | [Aula](../aulas/17-saidas-digitais.md) | [🟢 Fácil](17-saidas-digitais/facil.md) · [🟡 Intermediário](17-saidas-digitais/intermediario.md) · [🔴 Difícil](17-saidas-digitais/dificil.md) |
+| 📟 Monitor serial | [Aula](../aulas/18-monitor-serial.md) | [🟢 Fácil](18-monitor-serial/facil.md) · [🟡 Intermediário](18-monitor-serial/intermediario.md) · [🔴 Difícil](18-monitor-serial/dificil.md) |
 
 > 💡 **Terminou tudo?** Volte nas questões que errou depois de alguns dias. Acertar de novo, sem olhar, é o que fixa o conteúdo.

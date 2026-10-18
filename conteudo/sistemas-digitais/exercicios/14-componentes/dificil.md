@@ -1,6 +1,6 @@
 # 🧩 Componentes eletrônicos · 🔴 Difícil
 
-> [← voltar para Exercícios](../README.md) · 📖 Antes, leia: [Componentes eletrônicos](../../aulas/14-componentes-eletronicos.md)
+> [← voltar para Exercícios](../README.md) · 📖 Antes, leia: [Componentes eletrônicos](../../aulas/14-componentes-eletronicos.md) · Próximo: [Arduino Uno →](../15-arduino-uno/facil.md)
 
 Resolva no papel primeiro. No site, digite a resposta (com a unidade, se quiser) e clique em **Conferir**; no GitHub, abra **Ver resposta**.
 

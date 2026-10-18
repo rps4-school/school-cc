@@ -1,6 +1,6 @@
 # 🧩 Componentes eletrônicos
 
-> [← Protoboard, polaridade e medição](13-protoboard-e-medicao.md) · [Voltar para Sistemas Digitais →](../README.md)
+> [← Protoboard, polaridade e medição](13-protoboard-e-medicao.md) · Próximo: [Arduino Uno →](15-arduino-uno.md)
 
 **Nível:** 🟡 Intermediário
 

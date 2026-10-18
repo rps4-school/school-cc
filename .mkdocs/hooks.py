@@ -48,6 +48,9 @@ TITULOS = {
     "serie-e-paralelo": "Série e paralelo",
     "protoboard": "Protoboard e medição",
     "componentes": "Componentes eletrônicos",
+    "arduino-uno": "Arduino Uno",
+    "programacao-arduino": "Programação Arduino",
+    "saidas-digitais": "Saídas digitais",
     "sistemas-digitais": "Sistemas Digitais",  # pasta dos simulados
     # Assuntos dos exercícios de Python que precisam de acento.
     "dicionarios": "Dicionários",

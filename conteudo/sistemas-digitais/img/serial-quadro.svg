@@ -1,0 +1,40 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 660 250' width='660' height='250' role='img' aria-label='Como a letra A, código 65, sai pelo fio da serial: um bit de início em 0, os 8 bits do menos para o mais significativo, 1 0 0 0 0 0 1 0, e um bit de fim em 1'>
+<title>Como a letra A, código 65, sai pelo fio da serial: um bit de início em 0, os 8 bits do menos para o mais significativo, 1 0 0 0 0 0 1 0, e um bit de fim em 1</title>
+<rect width='660' height='250' rx='12' fill='#ffffff'/>
+<rect x='40' y='60' width='50' height='80' fill='#fef3c7' stroke='#e2e8f0'/>
+<text x='65' y='52' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>0</text>
+<text x='65' y='158' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>início</text>
+<rect x='90' y='60' width='50' height='80' fill='#eef2ff' stroke='#e2e8f0'/>
+<text x='115' y='52' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>1</text>
+<text x='115' y='158' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>b0</text>
+<rect x='140' y='60' width='50' height='80' fill='#eef2ff' stroke='#e2e8f0'/>
+<text x='165' y='52' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>0</text>
+<text x='165' y='158' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>b1</text>
+<rect x='190' y='60' width='50' height='80' fill='#eef2ff' stroke='#e2e8f0'/>
+<text x='215' y='52' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>0</text>
+<text x='215' y='158' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>b2</text>
+<rect x='240' y='60' width='50' height='80' fill='#eef2ff' stroke='#e2e8f0'/>
+<text x='265' y='52' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>0</text>
+<text x='265' y='158' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>b3</text>
+<rect x='290' y='60' width='50' height='80' fill='#eef2ff' stroke='#e2e8f0'/>
+<text x='315' y='52' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>0</text>
+<text x='315' y='158' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>b4</text>
+<rect x='340' y='60' width='50' height='80' fill='#eef2ff' stroke='#e2e8f0'/>
+<text x='365' y='52' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>0</text>
+<text x='365' y='158' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>b5</text>
+<rect x='390' y='60' width='50' height='80' fill='#eef2ff' stroke='#e2e8f0'/>
+<text x='415' y='52' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>1</text>
+<text x='415' y='158' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>b6</text>
+<rect x='440' y='60' width='50' height='80' fill='#eef2ff' stroke='#e2e8f0'/>
+<text x='465' y='52' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>0</text>
+<text x='465' y='158' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>b7</text>
+<rect x='490' y='60' width='50' height='80' fill='#fef3c7' stroke='#e2e8f0'/>
+<text x='515' y='52' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>1</text>
+<text x='515' y='158' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>fim</text>
+<polyline points='10,70 40,70 40,70 40,130 90,130 90,130 90,70 140,70 140,70 140,130 190,130 240,130 290,130 340,130 390,130 390,130 390,70 440,70 440,70 440,130 490,130 490,130 490,70 540,70 570,70' fill='none' stroke='#4f46e5' stroke-width='3' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='34' y='74' font-size='12' fill='#475569' text-anchor='end' font-family='Inter, Segoe UI, Arial, sans-serif'>1</text>
+<text x='34' y='134' font-size='12' fill='#475569' text-anchor='end' font-family='Inter, Segoe UI, Arial, sans-serif'>0</text>
+<text x='330' y='26' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>A letra 'A' = 65 = 0x41 = 0100 0001 no fio da serial</text>
+<text x='330' y='198' font-size='13' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>Os 8 bits saem do menos significativo (b0) para o mais significativo (b7).</text>
+<text x='330' y='220' font-size='13' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>A 9600 baud, cada bit dura cerca de 104 µs: 10 bits por letra, ~960 letras por segundo.</text>
+</svg>

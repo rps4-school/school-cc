@@ -1,0 +1,30 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 250' width='640' height='250' role='img' aria-label='LED ligado a um pino do Arduino: pino 8, resistor de 220 ohms, LED e GND; com o pino em HIGH o LED acende e em LOW apaga'>
+<title>LED ligado a um pino do Arduino: pino 8, resistor de 220 ohms, LED e GND; com o pino em HIGH o LED acende e em LOW apaga</title>
+<rect width='640' height='250' rx='12' fill='#ffffff'/>
+<circle cx='70' cy='96' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<text x='62' y='101' font-size='14' fill='#4f46e5' text-anchor='end' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>pino 8</text>
+<polyline points='74,96 130,96' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='130,96 146,96' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='194,96 210,96' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(170,96)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<text x='170' y='76' font-size='13' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>220 Ω</text>
+<polyline points='210,96 250,96' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='250,96 268,96' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='292,96 310,96' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(280,96)'><polygon points='-12,-11 -12,11 12,0' fill='#fee2e2' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/><line x1='12' y1='-11' x2='12' y2='11' stroke='#1e293b' stroke-width='2.5'/><line x1='-2' y1='-14' x2='6' y2='-24' stroke='#b45309' stroke-width='1.6'/><polygon points='7.5,-26 2.6,-23.6 6.2,-20.6' fill='#b45309'/><line x1='5' y1='-12' x2='13' y2='-22' stroke='#b45309' stroke-width='1.6'/><polygon points='14.5,-24 9.6,-21.6 13.2,-18.6' fill='#b45309'/></g>
+<text x='250' y='126' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>ânodo</text>
+<text x='310' y='126' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>cátodo</text>
+<polyline points='310,96 360,96 360,116' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='360,116 360,126' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='346,126 374,126' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='351,131 369,131' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='356,136 364,136' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='382' y='132' font-size='13' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>GND</text>
+<rect x='420' y='54' width='196' height='44' rx='8' fill='#dcfce7' stroke='#059669' stroke-width='2'/>
+<text x='518' y='72' font-size='13' fill='#059669' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>HIGH: 5 V no pino</text>
+<text x='518' y='89' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>o LED acende</text>
+<rect x='420' y='112' width='196' height='44' rx='8' fill='#f1f5f9' stroke='#475569' stroke-width='2'/>
+<text x='518' y='130' font-size='13' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>LOW: 0 V no pino</text>
+<text x='518' y='147' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>o LED apaga</text>
+<text x='320' y='218' font-size='14' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Corrente: (5 − 2) / 220 ≈ 13,6 mA, abaixo dos 20 mA do pino.</text>
+</svg>

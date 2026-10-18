@@ -4,12 +4,13 @@
 
 **Nível:** 🟢 Iniciante
 
-Como o computador guarda números, letras e cores usando **só 0 e 1**, e como ele faz contas e toma decisões com **portas lógicas**. Depois, a partir da aula 10, vem a **eletrônica**: tensão, corrente, Lei de Ohm e circuitos, o caminho até o Arduino. Este tema começa do zero: não precisa saber nada de eletrônica, só de matemática do ensino fundamental.
+Como o computador guarda números, letras e cores usando **só 0 e 1**, e como ele faz contas e toma decisões com **portas lógicas**. Depois, a partir da aula 10, vem a **eletrônica**: tensão, corrente, Lei de Ohm e circuitos, o caminho até o **Arduino**, que começa na aula 15. Este tema começa do zero: não precisa saber nada de eletrônica, só de matemática do ensino fundamental.
 
 | Parte | Aulas | O que tem |
 | ----- | ----- | --------- |
 | Lógica digital | 1 a 9 | Binário, hexadecimal, codificação, portas lógicas e Mapa de Karnaugh |
 | Eletrônica | 10 a 14 | Circuito elétrico, Lei de Ohm, série e paralelo, protoboard, multímetro e componentes (começa do zero, não depende da parte 1) |
+| Arduino | 15 a 18 | A placa Uno, programação em C/C++, saídas digitais (LED, Blink e semáforo) e monitor serial, com os projetos guiados do [Laboratório Arduino](laboratorio/README.md) |
 
 ## 🧭 Como estudar
 
@@ -19,6 +20,7 @@ Como o computador guarda números, letras e cores usando **só 0 e 1**, e como e
 4. **Pratique com os [exercícios](exercicios/README.md)** do assunto: 9 por aula, do fácil ao difícil.
 5. Só passe para a próxima aula quando acertar a maioria. As aulas dependem umas das outras.
 6. **Terminou uma parte?** Faça os [simulados de Sistemas Digitais](../../simulados/README.md#-sistemas-digitais), com tempo marcado e pontuação: os simulados 01 a 04 cobrem a lógica digital (aulas 1 a 9) e o 05 cobre a eletrônica (aulas 10 a 14).
+7. **Na parte de Arduino, monte e programe:** faça os projetos do [Laboratório Arduino](laboratorio/README.md) que as aulas indicam, num simulador on-line ou com a placa.
 
 > 💡 **Estude com papel e lápis.** Nesta disciplina a prova é feita à mão e sem calculadora. Ler o exemplo não basta: copie a conta e refaça sozinho.
 
@@ -42,6 +44,10 @@ Como o computador guarda números, letras e cores usando **só 0 e 1**, e como e
 | 12 | [Circuitos em série e paralelo](aulas/12-circuitos-serie-e-paralelo.md) | 🟡 Intermediário | Resistência equivalente, divisor de tensão, circuito misto e LEDs em série e em paralelo | [🟢](exercicios/12-serie-e-paralelo/facil.md) · [🟡](exercicios/12-serie-e-paralelo/intermediario.md) · [🔴](exercicios/12-serie-e-paralelo/dificil.md) |
 | 13 | [Protoboard, polaridade e medição](aulas/13-protoboard-e-medicao.md) | 🟢 Iniciante | Como a protoboard é ligada por dentro, o lado certo do LED, o multímetro e como achar defeitos | [🟢](exercicios/13-protoboard/facil.md) · [🟡](exercicios/13-protoboard/intermediario.md) · [🔴](exercicios/13-protoboard/dificil.md) |
 | 14 | [Componentes eletrônicos](aulas/14-componentes-eletronicos.md) | 🟡 Intermediário | Código de cores, potenciômetro, LDR, botão, LED RGB, buzzer, transistor como chave e ponte H | [🟢](exercicios/14-componentes/facil.md) · [🟡](exercicios/14-componentes/intermediario.md) · [🔴](exercicios/14-componentes/dificil.md) |
+| 15 | [Arduino Uno](aulas/15-arduino-uno.md) | 🟢 Iniciante | Microcontrolador, as placas, a anatomia do Uno, os limites de corrente e o caminho do código até a placa | [🟢](exercicios/15-arduino-uno/facil.md) · [🟡](exercicios/15-arduino-uno/intermediario.md) · [🔴](exercicios/15-arduino-uno/dificil.md) |
+| 16 | [Programação Arduino em C/C++](aulas/16-programacao-arduino.md) | 🟢 Iniciante | `setup()` e `loop()`, tipos de 8, 16 e 32 bits, estouro, divisão inteira e funções, comparando com Python | [🟢](exercicios/16-programacao-arduino/facil.md) · [🟡](exercicios/16-programacao-arduino/intermediario.md) · [🔴](exercicios/16-programacao-arduino/dificil.md) |
+| 17 | [Saídas digitais, LED e Blink](aulas/17-saidas-digitais.md) | 🟢 Iniciante | `pinMode`, `digitalWrite` e `delay`, o LED no pino, o Blink, dois LEDs e o semáforo | [🟢](exercicios/17-saidas-digitais/facil.md) · [🟡](exercicios/17-saidas-digitais/intermediario.md) · [🔴](exercicios/17-saidas-digitais/dificil.md) |
+| 18 | [Monitor serial](aulas/18-monitor-serial.md) | 🟢 Iniciante | `Serial.begin`, `print` e `println`, números em binário e hexadecimal e depuração | [🟢](exercicios/18-monitor-serial/facil.md) · [🟡](exercicios/18-monitor-serial/intermediario.md) · [🔴](exercicios/18-monitor-serial/dificil.md) |
 
 ```mermaid
 flowchart LR
@@ -55,7 +61,7 @@ flowchart LR
     H --> I[9 · Mapa de Karnaugh]
 ```
 
-A parte de eletrônica começa do zero e segue esta ordem:
+A parte de eletrônica começa do zero e leva ao Arduino, nesta ordem:
 
 ```mermaid
 flowchart LR
@@ -63,6 +69,10 @@ flowchart LR
     K --> L[12 · Série e paralelo]
     L --> M[13 · Protoboard e medição]
     M --> N[14 · Componentes]
+    N --> O[15 · Arduino Uno]
+    O --> P[16 · Programação Arduino]
+    P --> Q[17 · Saídas digitais]
+    Q --> R[18 · Monitor serial]
 ```
 
 ## ✍️ Como responder no corretor
@@ -89,19 +99,23 @@ Nas grandezas (V, A, Ω, W...), a unidade é opcional e qualquer prefixo vale: `
 - [CircuitVerse](https://circuitverse.org/simulator): monte e teste circuitos com portas lógicas no navegador, de graça.
 - [Tabela ASCII completa](https://www.asciitable.com/): códigos de todas as letras e símbolos.
 - [Kit para Montar Circuito DC (PhET)](https://phet.colorado.edu/pt_BR/simulations/circuit-construction-kit-dc): pilhas, lâmpadas, resistores, voltímetro e amperímetro no navegador, de graça e sem conta.
-- [Tinkercad Circuits](https://www.tinkercad.com/circuits): protoboard, multímetro e LEDs no navegador (grátis, precisa de conta).
+- [Tinkercad Circuits](https://www.tinkercad.com/circuits): protoboard, multímetro, LEDs e Arduino no navegador (grátis, precisa de conta).
+- [Wokwi](https://wokwi.com/): simulador de Arduino no navegador, com monitor serial (grátis; salvar pede conta).
 
 ## 📁 Conteúdo desta pasta
 
 | Pasta | O que vai aqui |
 | ----- | -------------- |
 | [`aulas/`](aulas/) | Uma aula completa por assunto, com exemplos e teste rápido |
-| [`exercicios/`](exercicios/README.md) | 126 exercícios (9 por assunto) com resolução passo a passo |
-| `img/` | Figuras das aulas (portas, circuitos, mapas e esquemas elétricos) |
+| [`exercicios/`](exercicios/README.md) | 162 exercícios (9 por assunto) com resolução passo a passo |
+| [`laboratorio/`](laboratorio/README.md) | Projetos guiados de Arduino: montagem, código, casos de teste e solução |
+| `img/` | Figuras das aulas (portas, circuitos, mapas, esquemas elétricos e a placa Uno) |
 
 ## 📚 Referências
 
 - TOCCI, Ronald J.; WIDMER, Neal S.; MOSS, Gregory L. *Sistemas digitais: princípios e aplicações*. 11. ed. São Paulo: Pearson, 2011. Capítulos 1 a 4 e 6.
 - IDOETA, Ivan V.; CAPUANO, Francisco G. *Elementos de eletrônica digital*. 42. ed. São Paulo: Érica, 2019.
 - BOYLESTAD, Robert L. *Introdução à análise de circuitos*. 12. ed. São Paulo: Pearson Prentice Hall, 2012. Capítulos 1 a 7 (eletrônica).
+- MCROBERTS, Michael. *Arduino básico*. 2. ed. São Paulo: Novatec, 2015 (Arduino).
+- MONK, Simon. *Programação com Arduino: começando com sketches*. 2. ed. Porto Alegre: Bookman, 2017.
 - [Khan Academy: sistema binário (em português)](https://pt.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:digital-information)
