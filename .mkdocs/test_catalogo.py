@@ -178,6 +178,11 @@ class CasosDeBorda(unittest.TestCase):
         md = "```\n<details>\n**Número:** `1`\n</details>\n```\n\n<details>\n\n**Função:** `2x`\n</details>\n"
         self.assertEqual(c.contar_perguntas(md), 1)
 
+    def test_grandeza_com_unidade_vira_pergunta(self):
+        md = "<details>\n\n**Grandeza:** `20 mA`\n</details>\n\n<details>\n\n**Grandeza:** `215 Ω ± 5 Ω`\n</details>\n"
+        self.assertEqual([(t, r) for _, t, r in c.perguntas(md.split("\n"))],
+                         [("grandeza", "20 mA"), ("grandeza", "215 Ω ± 5 Ω")])
+
     def test_minutos_de_leitura(self):
         self.assertEqual(c.minutos_de_leitura("palavra " * 401), 3)
         self.assertEqual(c.minutos_de_leitura(""), 1)

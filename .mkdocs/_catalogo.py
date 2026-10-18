@@ -25,10 +25,10 @@ TEMAS = {
 AREA_PADRAO = ("Outros", "pasta")
 
 # Pergunta com corretor: dentro do <details>, a primeira linha "**Resposta:** `...`" (ou Número...).
-RESPOSTA = re.compile(r"^\*\*(Resposta|Expressão|Expressão mínima|Número|Função|Primitiva):\*\* `([^`]+)`", re.M)
+RESPOSTA = re.compile(r"^\*\*(Resposta|Expressão|Expressão mínima|Número|Grandeza|Função|Primitiva):\*\* `([^`]+)`", re.M)
 TIPOS_DE_RESPOSTA = {
     "Resposta": "valor", "Expressão": "expressao", "Expressão mínima": "minima",
-    "Número": "numero", "Função": "funcao", "Primitiva": "primitiva",
+    "Número": "numero", "Grandeza": "grandeza", "Função": "funcao", "Primitiva": "primitiva",
 }
 
 CERCA = re.compile(r"^(`{3,}|~{3,})")

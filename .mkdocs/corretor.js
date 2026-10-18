@@ -7,6 +7,7 @@
  *   **Expressão:** `A'B + C`        → aceita qualquer expressão equivalente
  *   **Expressão mínima:** `B + C`   → equivalente E sem literais a mais
  *   **Número:** `1/4`               → o mesmo valor (0,25, 2/8, √2/2...); aceita "± tolerância"
+ *   **Grandeza:** `20 mA`           → o mesmo valor com qualquer prefixo (0,02 A, 20mA, 20); aceita "± tolerância"
  *   **Função:** `6x`                → função equivalente (testada em vários pontos)
  *   **Primitiva:** `x^3/3 + C`      → igual a menos de uma constante, e com o "+ C"
  * Aqui o div vira um campo com o botão "Conferir". Nada vai para servidor nenhum.
@@ -416,6 +417,153 @@
     return quase ? { certo: false, dica: "Perto! Confira as contas ou use mais casas decimais (ou a fração exata)." } : { certo: false };
   }
 
+  // ---------- Grandezas com unidade: 220 Ω, 4,7 kΩ, 20 mA, 2,5 V, 500 ms... ----------
+
+  // Unidade → nome da grandeza (para as dicas) e exemplo do campo (o mesmo para toda pergunta da grandeza).
+  var GRANDEZAS = {
+    "V": { nome: "tensão", exemplo: "Ex.: 2,5 V" },
+    "A": { nome: "corrente", exemplo: "Ex.: 15 mA ou 0,015 A" },
+    "Ω": { nome: "resistência", exemplo: "Ex.: 330 Ω, 330 ohm ou 4,7k" },
+    "W": { nome: "potência", exemplo: "Ex.: 0,25 W" },
+    "Hz": { nome: "frequência", exemplo: "Ex.: 490 Hz" },
+    "s": { nome: "tempo", exemplo: "Ex.: 500 ms ou 0,5 s" },
+    "F": { nome: "capacitância", exemplo: "Ex.: 100 µF" },
+  };
+  // Prefixos do SI. Maiúscula importa: m é mili e M é mega (k e K valem quilo).
+  var PREFIXOS = { p: 1e-12, n: 1e-9, u: 1e-6, m: 1e-3, "": 1, k: 1e3, K: 1e3, M: 1e6, G: 1e9 };
+  var PREFIXOS_POR_EXTENSO = { pico: "p", nano: "n", micro: "u", mili: "m", quilo: "k", kilo: "k", mega: "M" };
+  var UNIDADES_POR_EXTENSO = [
+    [/^volts?$/i, "V"], [/^amp[eè]res?$/i, "A"], [/^ohms?$/i, "Ω"], [/^watts?$/i, "W"],
+    [/^hertz$/i, "Hz"], [/^segundos?$/i, "s"], [/^farads?$/i, "F"],
+  ];
+  // Número, prefixo e unidade no fim: "4,7 kΩ", "20mA", "0,5 s", "220R" (o R é o ohm do código de resistores).
+  var FIM_COM_UNIDADE = /^(.*?)\s*([pnumkKMG]?)\s*(Ω|[oO][hH][mM][sS]?|R|V|v|A|a|W|w|Hz|hz|HZ|s|F)?\s*$/;
+  var POR_EXTENSO = /\s*\b(pico|nano|micro|mili|quilo|kilo|mega)?-?(volts?|amp[eè]res?|ohms?|watts?|hertz|segundos?|farads?)$/i;
+  // Código de resistor (RKM): 4k7 = 4,7 kΩ; 2R2 = 2,2 Ω; 1M5 = 1,5 MΩ.
+  var CODIGO_RKM = /^(\d+)([RkKM])(\d+)$/;
+  var CIENTIFICA = /^[-+]?\d+(?:[.,]\d+)?[eE][-+]?\d+$/;
+
+  function simboloDaUnidade(texto) {
+    if (!texto) return "";
+    if (texto === "R" || /^ohms?$/i.test(texto)) return "Ω";
+    if (/^hz$/i.test(texto)) return "Hz";
+    return texto.length === 1 && "vawVAW".indexOf(texto) >= 0 ? texto.toUpperCase() : texto;
+  }
+
+  // Leituras do número (como no Número): "2.000" vale dois mil ou 2; "2e-3" é notação científica.
+  function leiturasDoNumero(texto) {
+    var t = texto.trim();
+    if (CIENTIFICA.test(t)) return [{ valor: parseFloat(t.replace(",", ".")), digitos: t.split(/[eE]/)[0] }];
+    var leituras = [];
+    try { leituras.push({ valor: valorConstante(t), digitos: t }); } catch (e) { /* não é número */ }
+    if (/^[-−]?\d{1,3}\.\d{3}$/.test(t)) leituras.push({ valor: valorConstante(t.replace(".", "")), digitos: t });
+    return leituras.filter(function (l) { return isFinite(l.valor); });
+  }
+
+  // "4,7 kΩ" → { leituras: [{ valor: 4.7, digitos }], escala: 1000, temEscala: true, unidade: "Ω" }.
+  // Sem unidade nem prefixo, temEscala é false: quem confere decide em que escala ler o número.
+  function lerGrandeza(texto) {
+    // Ω do sinal de ohm (U+2126) vira o ômega grego (U+03A9); µ do teclado ou grego vira u.
+    var t = texto.replace(/Ω/g, "Ω").replace(/[µμ]/g, "u").replace(/[−–]/g, "-")
+      .replace(/^[^=]*=(?!=)/, "").replace(/[.;]+\s*$/, "").trim();
+    var rkm = CODIGO_RKM.exec(t.replace(/\s+/g, ""));
+    if (rkm) {
+      var mult = rkm[2] === "R" ? 1 : PREFIXOS[rkm[2]];
+      return { leituras: [{ valor: parseFloat(rkm[1] + "." + rkm[3]) * mult, digitos: rkm[1] + rkm[3] }],
+        escala: 1, temEscala: true, unidade: "Ω" };
+    }
+    // "20 miliamperes" → "20 mA"; "5 volts" → "5 V".
+    t = t.replace(POR_EXTENSO, function (_, prefixo, unidade) {
+      var simbolo = UNIDADES_POR_EXTENSO.filter(function (u) { return u[0].test(unidade); })[0][1];
+      return " " + (prefixo ? PREFIXOS_POR_EXTENSO[prefixo.toLowerCase()] : "") + simbolo;
+    });
+    var m = FIM_COM_UNIDADE.exec(t);
+    var prefixo = m[2], unidade = simboloDaUnidade(m[3]);
+    return {
+      leituras: leiturasDoNumero(m[1]), escala: PREFIXOS[prefixo], temEscala: !!(prefixo || unidade), unidade: unidade,
+    };
+  }
+
+  // Algarismos significativos digitados: "0,0215" → 3, "330" → 3, "4,70" → 3.
+  function algarismos(texto) {
+    return (texto.match(/\d/g) || []).join("").replace(/^0+/, "").length;
+  }
+
+  // Arredondado ou truncado com 3 algarismos significativos ou mais (333 mA para 1/3 A). Se a certa cabe
+  // exata nesses algarismos (215 Ω), tem que acertar em cheio: 220 Ω é outro valor.
+  function arredondouSignificativos(aluno, certa, n) {
+    if (n < 3 || !isFinite(certa) || certa === 0) return false;
+    var escala = Math.pow(10, n - 1 - Math.floor(Math.log10(Math.abs(certa))));
+    var sinal = certa < 0 ? -1 : 1;
+    var arredondado = sinal * Math.round(Math.abs(certa) * escala + 1e-9) / escala;
+    var truncado = sinal * Math.floor(Math.abs(certa) * escala + 1e-9) / escala;
+    var folga = 1e-9 * Math.abs(certa);
+    if (Math.abs(arredondado - certa) <= folga) return false;
+    return Math.abs(aluno - arredondado) <= folga || Math.abs(aluno - truncado) <= folga;
+  }
+
+  // Igualdade relativa: 100 nF e 200 nF são diferentes, mesmo sendo números pequenos.
+  function igual(a, b, tol) {
+    if (tol !== undefined) return Math.abs(a - b) <= tol + 1e-12 * Math.abs(b);
+    return a === b || Math.abs(a - b) <= 1e-9 * Math.max(Math.abs(a), Math.abs(b));
+  }
+
+  function exemploDaGrandeza(resposta) {
+    var g = GRANDEZAS[lerGrandeza(resposta.split(" | ")[0].split("±")[0]).unidade];
+    return g ? g.exemplo : "Ex.: 220 Ω ou 20 mA";
+  }
+
+  function conferirGrandeza(resposta, digitado) {
+    var aluno = lerGrandeza(digitado);
+    if (!aluno.leituras.length) {
+      return { certo: false, dica: "Não entendi. Escreva o número e, se quiser, a unidade: 220 Ω (ou 220 ohm), 4,7 kΩ, 20 mA, 2,5 V." };
+    }
+    var dica = null, quase = false, outraEscala = false;
+    var opcoes = resposta.split(" | ");
+    for (var i = 0; i < opcoes.length; i++) {
+      var partes = opcoes[i].split("±");
+      var certa = lerGrandeza(partes[0]);
+      var base = certa.leituras[0].valor * certa.escala;
+      var tol;
+      if (partes[1]) {
+        var t = lerGrandeza(partes[1]);
+        tol = Math.abs(t.leituras[0].valor * (t.temEscala ? t.escala : certa.escala));
+      }
+      if (aluno.unidade && aluno.unidade !== certa.unidade) {
+        var g = GRANDEZAS[certa.unidade];
+        dica = "A resposta é uma " + g.nome + " (" + certa.unidade + "): confira a unidade.";
+        continue;
+      }
+      // Número sem unidade: vale na unidade do gabarito (20 para 20 mA) ou na do SI (0,02 para 20 mA).
+      var escalas = aluno.temEscala ? [aluno.escala] : [certa.escala, 1].filter(function (e, k, l) { return l.indexOf(e) === k; });
+      for (var j = 0; j < aluno.leituras.length; j++) {
+        var lido = aluno.leituras[j];
+        for (var k = 0; k < escalas.length; k++) {
+          var valor = lido.valor * escalas[k];
+          if (igual(valor, base, tol)) return { certo: true };
+          if (tol === undefined && arredondouSignificativos(lido.valor, base / escalas[k], algarismos(lido.digitos))) {
+            return { certo: true };
+          }
+          if (base !== 0 && Math.abs(valor - base) <= 0.05 * Math.abs(base)) quase = true;
+        }
+        // O número bate com a resposta em outra escala (mili, quilo...): faltou ou sobrou um prefixo.
+        for (var p = -12; p <= 9; p += 3) {
+          if (base !== 0 && igual(lido.valor * Math.pow(10, p), base)) outraEscala = true;
+        }
+      }
+    }
+    if (dica) return { certo: false, dica: dica };
+    if (outraEscala) {
+      return {
+        certo: false,
+        dica: aluno.temEscala
+          ? "O número está certo, mas o prefixo não: m = mili (÷ 1000), k = quilo (× 1000), M = mega (× 1 000 000)."
+          : "O número bate com a resposta em outra unidade: escreva a unidade junto (" + exemploDaGrandeza(resposta).replace(/^Ex\.: /, "ex.: ") + ").",
+      };
+    }
+    return quase ? { certo: false, dica: "Perto! Confira as contas ou escreva com 3 algarismos significativos." } : { certo: false };
+  }
+
   // Pontos de teste: valores "quebrados" para não acertar por coincidência; os negativos testam o domínio.
   var PONTOS = [0.37, 1.23, 2.71, 0.81, 3.17, 1.59, 4.42, 0.53, 2.06, -0.63, -1.37, -2.18, 1.91, 3.83];
 
@@ -563,6 +711,7 @@
   function conferirPorTipo(tipo, resposta, digitado) {
     if (tipo === "valor") return conferirValor(resposta, digitado);
     if (tipo === "numero") return conferirNumero(resposta, digitado);
+    if (tipo === "grandeza") return conferirGrandeza(resposta, digitado);
     if (tipo === "funcao" || tipo === "primitiva") return conferirFuncao(resposta, digitado, tipo === "primitiva");
     return conferirExpressao(resposta, digitado, tipo === "minima");
   }
@@ -583,7 +732,8 @@
     var campo = caixa.querySelector(".campo");
     var retorno = caixa.querySelector(".retorno");
     var erros = 0;
-    campo.placeholder = EXEMPLOS[tipo] || EXEMPLOS.valor;
+    // Na grandeza, o exemplo é o da grandeza (corrente, tensão...), nunca o valor da resposta.
+    campo.placeholder = tipo === "grandeza" ? exemploDaGrandeza(resposta) : EXEMPLOS[tipo] || EXEMPLOS.valor;
 
     function mostrar(texto, cor) {
       retorno.className = "retorno mt-1 text-[0.72rem] font-semibold " + cor;
