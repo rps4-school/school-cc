@@ -1,12 +1,14 @@
 {
   "private": true,
-  "description": "Compila o CSS do site (Tailwind). O resultado, site.css, vai para o repositório.",
+  "description": "Compila o CSS do site (Tailwind) e copia o avr8js para o laboratório. Os resultados (site.css e laboratorio/vendor/) vão para o repositório.",
   "scripts": {
     "css": "tailwindcss -i tailwind.css -o site.css --minify",
-    "css:watch": "tailwindcss -i tailwind.css -o site.css --watch"
+    "css:watch": "tailwindcss -i tailwind.css -o site.css --watch",
+    "vendor": "node vendor-avr8js.mjs"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.3.3",
+    "avr8js": "0.21.1",
     "tailwindcss": "4.3.3"
   }
 }

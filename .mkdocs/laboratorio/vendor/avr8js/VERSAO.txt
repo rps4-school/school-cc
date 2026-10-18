@@ -1,0 +1,1 @@
+avr8js 0.21.1 (licença MIT, em LICENSE), copiado de node_modules por vendor-avr8js.mjs.
