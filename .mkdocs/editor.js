@@ -479,6 +479,10 @@
     });
   }
 
+  // O laboratório (laboratorio/app.js) usa o mesmo Monaco, na mesma versão e com o mesmo SRI.
+  window.SchoolCC = window.SchoolCC || {};
+  window.SchoolCC.carregarMonaco = carregarMonaco;
+
   // O Material avisa por document$ a cada página mostrada, inclusive com navigation.instant,
   // em que o site troca de página sem recarregar. Sem ele, basta o carregamento normal.
   if (window.document$) window.document$.subscribe(iniciar);

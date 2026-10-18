@@ -700,6 +700,23 @@ def arquivos_do_laboratorio(raiz=PASTA_DO_LABORATORIO):
     return saida
 
 
+def arquivos_de_firmware(pasta=None):
+    """[(arquivo no disco, destino no site)] do firmware que o laboratorio/compilar.py gravou em FIRMWARE_DIR: o
+    .hex e o .compilacao.json de cada sketch, publicados ao lado do .ino. Sem FIRMWARE_DIR (build local sem
+    arduino-cli), nada: o laboratório avisa que o firmware não foi compilado neste build."""
+    pasta = pasta if pasta is not None else os.environ.get("FIRMWARE_DIR", "")
+    if not pasta or not os.path.isdir(pasta):
+        return []
+    saida = []
+    for raiz, subpastas, arquivos in os.walk(pasta):
+        subpastas.sort()
+        for nome in sorted(arquivos):
+            if nome.endswith((".hex", ".compilacao.json")):
+                caminho = os.path.join(raiz, nome)
+                saida.append((caminho, os.path.relpath(caminho, pasta).replace(os.sep, "/")))
+    return saida
+
+
 def on_files(files, config):
     _estado["temas"] = montar(config["docs_dir"])
     _estado["lugares"] = lugares(_estado["temas"])
@@ -708,7 +725,7 @@ def on_files(files, config):
     for src, area in _estado["areas"].items():
         files.append(File.generated(config, src, content=f"# {area}\n\n{MARCADOR_AREA}\n", inclusion=InclusionLevel.INCLUDED))
     publicados = [(os.path.join(os.path.dirname(__file__), o), d) for o, d in ARQUIVOS_DO_SITE.items()]
-    for origem, destino in publicados + arquivos_do_laboratorio():
+    for origem, destino in publicados + arquivos_do_laboratorio() + arquivos_de_firmware():
         with open(origem, encoding="utf-8") as f:
             files.append(File.generated(config, destino, content=f.read(), inclusion=InclusionLevel.NOT_IN_NAV))
     files.append(File.generated(config, PAGINA_NIVEIS, content=CONTEUDO_NIVEIS, inclusion=InclusionLevel.INCLUDED))

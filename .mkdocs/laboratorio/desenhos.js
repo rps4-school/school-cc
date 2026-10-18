@@ -53,7 +53,8 @@ export function desenharProtoboard(tipo) {
 
 // ---------- Arduino Uno (USB à esquerda) ----------
 
-export function desenharUno() {
+// placa: { L: pino 13 em HIGH, TX: a serial mandou algo agora } quando um programa está rodando.
+export function desenharUno(placa = {}) {
   const p = [];
   p.push('<rect x="0" y="0" width="300" height="200" rx="12" fill="#0f766e" stroke="#115e59" stroke-width="2"/>');
   p.push('<rect x="-16" y="26" width="52" height="44" rx="3" fill="#cbd5e1" stroke="#64748b" stroke-width="1.5"/>');
@@ -67,8 +68,10 @@ export function desenharUno() {
   }
   p.push(texto(188, 133, "ATmega328P", 10, 'fill="#e5e7eb" text-anchor="middle"'));
   p.push(texto(96, 96, "UNO", 22, 'fill="#ffffff" font-weight="700" text-anchor="middle"'));
+  const aceso = { L: placa.L, TX: placa.TX, RX: placa.RX, ON: true };
   for (const [x, y, nome, cor] of [[84, 44, "L", "#fbbf24"], [84, 56, "TX", "#fbbf24"], [84, 68, "RX", "#fbbf24"], [262, 70, "ON", "#4ade80"]]) {
-    p.push(`<rect x="${x}" y="${y}" width="9" height="5" rx="1" fill="${cor}" data-led-da-placa="${nome}"/>`);
+    if (aceso[nome]) p.push(`<circle cx="${x + 4.5}" cy="${y + 2.5}" r="7" fill="${cor}" opacity="0.45" pointer-events="none"/>`);
+    p.push(`<rect x="${x}" y="${y}" width="9" height="5" rx="1" fill="${cor}" fill-opacity="${aceso[nome] ? 1 : 0.35}" data-led-da-placa="${nome}"/>`);
     p.push(texto(x + 13, y + 5, nome, 7, 'fill="#ffffff"'));
   }
   for (const [lado, x0, y] of [["cima", 98, 8], ["baixo", 110, 178]]) {

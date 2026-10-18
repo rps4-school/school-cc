@@ -112,6 +112,18 @@ class PublicacaoDoLaboratorio(unittest.TestCase):
             self.assertIn(f"assets/javascripts/laboratorio/{modulo}", destinos)
         self.assertFalse(any("/testes/" in d or d.endswith("package.json") for d in destinos))
 
+    def test_firmware_vai_ao_lado_do_ino(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as pasta:
+            alvo = os.path.join(pasta, "conteudo", "lab", "projetos", "01-blink")
+            os.makedirs(alvo)
+            for nome in ("blink.hex", "blink.compilacao.json", "lixo.txt"):
+                with open(os.path.join(alvo, nome), "w", encoding="utf-8") as f:
+                    f.write(":00000001FF")
+            destinos = [d for _, d in visual.arquivos_de_firmware(pasta)]
+        self.assertEqual(destinos, ["conteudo/lab/projetos/01-blink/blink.compilacao.json", "conteudo/lab/projetos/01-blink/blink.hex"])
+        self.assertEqual(visual.arquivos_de_firmware(""), [])
+
     def test_bootstrap_publicado(self):
         self.assertEqual(visual.ARQUIVOS_DO_SITE["laboratorio.js"], "assets/javascripts/laboratorio.js")
 

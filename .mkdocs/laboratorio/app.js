@@ -9,6 +9,7 @@ import { diagnosticar } from "./diagnostico.js";
 import { ligarEdicao } from "./edicao.js";
 import { caixa, encaixarPelaPegada, porId, posicaoDoTerminal, primeiroEncaixeLivre } from "./geometria.js";
 import { montarPainel } from "./painel.js";
+import { criarPrograma } from "./programa.js";
 import { copiar, novoId, projetoVazio, separarTerminal, serializar, validar } from "./projeto.js";
 import { ehProtoboard } from "./protoboard.js";
 import { desenharMarcas, desenharMundo, nomeDoTerminal } from "./vista.js";
@@ -41,6 +42,12 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
   raiz.innerHTML = `
     <header class="lab-barra">
       <div class="lab-titulo"><small>Laboratório Arduino</small><b data-titulo>Carregando…</b></div>
+      <div class="lab-execucao" data-execucao hidden>
+        <button type="button" class="lab-btn lab-executar" data-barra="executar">▶ Executar</button>
+        <button type="button" class="lab-btn" data-barra="parar">■ Parar</button>
+        <button type="button" class="lab-btn" data-barra="reiniciar">↺ Reiniciar</button>
+        <span class="lab-tempo" data-tempo></span>
+      </div>
       <div class="lab-barra-acoes">
         <button type="button" class="lab-btn" data-barra="desfazer" title="Desfazer (Ctrl+Z)" aria-label="Desfazer">↶</button>
         <button type="button" class="lab-btn" data-barra="refazer" title="Refazer (Ctrl+Y)" aria-label="Refazer">↷</button>
@@ -84,7 +91,13 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
     zoom: 1,
     pan: { x: 24, y: 24 },
     corDoFio: "vermelho",
+    pinos: null, // estado dos pinos do Uno enquanto um programa está carregado
+    placa: {}, // LEDs da placa (L, TX)
+    base: projetoUrl, // de onde vêm o sketch e o firmware do projeto
   };
+  let execucao = { tempo: 0, velocidade: null };
+  let chaveDosPinos = "";
+  let ultimoDesenho = "";
   const historico = { passado: [], futuro: [] };
   let inicial = null;
   let exemplos = [];
@@ -126,10 +139,17 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
     });
   }
 
+  // Só os pinos que o programa configurou (saída ou pull-up): entrada solta é o padrão do circuito.
+  function pinosUsados(pinos) {
+    return Object.fromEntries(Object.entries(pinos || {}).filter(([, p]) => p.modo !== "entrada"));
+  }
+
   function reanalisar(mensagem, opcoes = {}) {
-    estado.analise = analisar(estado.projeto);
+    estado.analise = analisar(estado.projeto, { pinos: pinosUsados(estado.pinos) });
+    chaveDosPinos = JSON.stringify(pinosUsados(estado.pinos));
     const antes = new Set(estado.diagnosticos.map((d) => d.mensagem));
-    estado.diagnosticos = diagnosticar(estado.projeto, estado.analise);
+    estado.diagnosticos = diagnosticar(estado.projeto, estado.analise, { pinos: estado.pinos || undefined });
+    programa.projetoMudou(estado.projeto);
     const novoErro = estado.diagnosticos.find((d) => d.nivel !== "dica" && !antes.has(d.mensagem));
     raiz.querySelector("[data-titulo]").textContent = estado.projeto.title;
     redesenhar();
@@ -170,7 +190,7 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
     return sel.tipo === "fio" ? estado.projeto.connections.some((f) => f.id === sel.id) : Boolean(porId(estado.projeto, sel.id));
   }
 
-  function carregar(projeto, mensagem, { comHistorico = true } = {}) {
+  function carregar(projeto, mensagem, { comHistorico = true, base = estado.base } = {}) {
     const r = validar(projeto);
     if (!r.ok) {
       avisar(`Este projeto tem problemas: ${r.erros.slice(0, 3).join(" ")}`);
@@ -183,10 +203,64 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
     estado.projeto = r.projeto;
     estado.selecao = null;
     estado.fioEmCurso = null;
+    estado.base = base;
     guardarRascunho();
+    programa.carregar(estado.projeto, estado.base);
     reanalisar(mensagem);
     ajustar();
     return true;
+  }
+
+  // ---------- Programa do Arduino ----------
+
+  const execucaoEl = raiz.querySelector("[data-execucao]");
+  const botao = (nome) => execucaoEl.querySelector(`[data-barra="${nome}"]`);
+
+  function atualizarBarra() {
+    const temUno = estado.projeto.components.some((c) => c.type === "arduino-uno-r3");
+    execucaoEl.hidden = !temUno;
+    const st = programa.estado;
+    botao("executar").disabled = st === "rodando";
+    botao("executar").textContent = st === "parado" ? "▶ Continuar" : "▶ Executar";
+    botao("parar").disabled = st !== "rodando";
+    botao("reiniciar").disabled = st === "vazio";
+    const tempo = execucaoEl.querySelector("[data-tempo]");
+    tempo.textContent = st === "vazio" ? "" : `t = ${execucao.tempo.toFixed(1).replace(".", ",")} s${execucao.velocidade ? ` · ${execucao.velocidade} %` : ""}`;
+    tempo.title = "Tempo simulado e velocidade em relação ao tempo real";
+  }
+
+  // Um quadro do worker (uns 30 por segundo): pinos, brilho médio dos LEDs e texto novo da serial.
+  function aoQuadro(q) {
+    execucao = { tempo: q.tempo, velocidade: q.velocidade };
+    estado.pinos = q.pinos;
+    const chave = JSON.stringify(pinosUsados(q.pinos));
+    if (chave !== chaveDosPinos) {
+      chaveDosPinos = chave;
+      estado.analise = analisar(estado.projeto, { pinos: pinosUsados(q.pinos) });
+      estado.diagnosticos = diagnosticar(estado.projeto, estado.analise, { pinos: q.pinos });
+      mostrarFaixa();
+    }
+    for (const [id, led] of Object.entries(q.leds)) {
+      if (estado.analise.componentes[id]) Object.assign(estado.analise.componentes[id], led);
+    }
+    const d13 = q.pinos.D13;
+    estado.placa = { L: Boolean(d13 && d13.modo === "saida" && d13.nivel), TX: Boolean(q.serial) };
+    const visual = JSON.stringify([estado.placa, Object.values(q.leds).map((l) => Math.round(l.brilho * 20)), chave]);
+    if (visual !== ultimoDesenho && !estado.rascunho) {
+      ultimoDesenho = visual;
+      redesenhar();
+    }
+    atualizarBarra();
+  }
+
+  function aoMudarExecucao() {
+    if (programa.estado === "vazio") {
+      estado.pinos = null;
+      estado.placa = {};
+      execucao = { tempo: 0, velocidade: null };
+      if (painel) reanalisar(null);
+    }
+    atualizarBarra();
   }
 
   // ---------- Vista: zoom e enquadramento ----------
@@ -438,8 +512,20 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
     reanalisar("Refeito.");
   }
 
+  const programa = criarPrograma({
+    avisar,
+    temUno: () => estado.projeto.components.some((c) => c.type === "arduino-uno-r3"),
+    projeto: () => estado.projeto,
+    aoQuadro,
+    aoMudarExecucao: () => aoMudarExecucao(),
+    mostrarAba: (aba) => painel.mostrarAba(aba),
+    baixar: (nome, texto, tipo) => armazenamento.baixar(nome, texto, tipo),
+  });
+
   const ctx = {
     svg, raiz, area, estado,
+    abaExterna: (id) => (id === "codigo" ? programa.elementoCodigo : id === "serial" ? programa.elementoSerial : null),
+    aoMostrarAba: (id) => programa.aoMostrarAba(id),
     mudar, reanalisar, avisar, selecionar, aplicarVista, zoomEm, ajustar, redesenharMarcas,
     previsualizar(p) {
       estado.rascunho = p;
@@ -474,7 +560,7 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
     exemplos: () => exemplos,
     async abrirExemplo(url) {
       try {
-        carregar(await buscarJson(url), "Exemplo aberto.");
+        carregar(await buscarJson(url), "Exemplo aberto.", { base: url });
       } catch (e) {
         avisar("Não deu para abrir o exemplo. Confira a internet e tente de novo.");
       }
@@ -482,7 +568,7 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
     temInicial: () => Boolean(inicial),
     voltarAoInicial() {
       if (inicial && confirm("Trocar o seu circuito pelo inicial desta página? Dá para desfazer depois (Ctrl+Z).")) {
-        carregar(inicial, "Circuito inicial de volta.");
+        carregar(inicial, "Circuito inicial de volta.", { base: projetoUrl });
       }
     },
     comecarDoZero() {
@@ -497,7 +583,10 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
   raiz.querySelector(".lab-barra").addEventListener("click", (e) => {
     const b = e.target.closest("[data-barra]");
     if (!b) return;
-    ({ desfazer, refazer, menos: () => zoomEm(1 / 1.2), mais: () => zoomEm(1.2), ajustar, fechar: () => instancia.fechar() })[b.dataset.barra]();
+    ({
+      desfazer, refazer, menos: () => zoomEm(1 / 1.2), mais: () => zoomEm(1.2), ajustar, fechar: () => instancia.fechar(),
+      executar: () => programa.executar(), parar: () => programa.parar(), reiniciar: () => programa.reiniciar(),
+    })[b.dataset.barra]();
   });
 
   // ---------- Abrir e fechar ----------
@@ -520,6 +609,7 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
       if (!raiz.isConnected) return;
       clearTimeout(espera);
       armazenamento.salvarRascunho(origem, estado.projeto);
+      programa.encerrar();
       edicao.destruir();
       observador.disconnect();
       if (inscricao && inscricao.unsubscribe) inscricao.unsubscribe();
@@ -557,7 +647,8 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
     } else if (inicial) {
       estado.projeto = copiar(inicial);
     }
-    reanalisar(mensagem || `${estado.projeto.title}: pronto para montar.`);
+    const programas = await programa.carregar(estado.projeto, estado.base);
+    reanalisar(mensagem || `${estado.projeto.title}: pronto para ${programas ? "montar e executar" : "montar"}.`);
     ajustar();
     painel.mostrarAba(estado.projeto.metadata && estado.projeto.metadata.instrucoes ? "instrucoes" : "adicionar");
     area.focus({ preventScroll: true });

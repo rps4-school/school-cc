@@ -109,8 +109,8 @@ conteudo/sistemas-digitais/laboratorio/         páginas (GitHub e site)
 .mkdocs/laboratorio/       módulos ES, carregados com import() ao abrir
   catalogo.js · protoboard.js · projeto.js · netlist.js · solucionador.js · circuito.js · diagnostico.js · geometria.js
   uno.js · intelhex.js · emulador.js · simulacao.js · simulacao-worker.js
-  desenhos.js · vista.js · edicao.js · painel.js · armazenamento.js · desafios.js · app.js
-  README.md (para quem desenvolve) · vendor/avr8js/ · compilar.py · testes/
+  desenhos.js · vista.js · edicao.js · painel.js · programa.js · armazenamento.js · desafios.js · app.js
+  README.md (para quem desenvolve) · vendor/avr8js/ · compilar.py · instalar-arduino-cli.sh · testes/
 ```
 
 O que é lógica pura (protoboard, projeto, netlist, solucionador, diagnóstico, uno, intelhex, emulador, simulação, desafios) não toca o DOM e tem testes no Node. A interface (vista, edição, painel, app) só desenha e chama a lógica.
@@ -174,7 +174,8 @@ O que é lógica pura (protoboard, projeto, netlist, solucionador, diagnóstico,
 ### 7.5 Compilação
 
 - `compilar.py` acha os `.ino` em `conteudo/**/laboratorio/` e copia cada um para uma pasta temporária com o nome do sketch (o arduino-cli exige). Depois compila com `--fqbn arduino:avr:uno` e grava em `FIRMWARE_DIR`, no mesmo caminho relativo, o `.hex` e o relatório de tamanho.
-- **CI:** `pages.yml` instala o arduino-cli e o core `arduino:avr` em versões fixas, com cache, compila e passa `FIRMWARE_DIR` ao build. `testes.yml` compila e roda os testes do laboratório com `EXIGIR_FIRMWARE=1`.
+- **CI:** `pages.yml` instala o arduino-cli e o core `arduino:avr` em versões fixas (por `instalar-arduino-cli.sh`, que confere o SHA-256), com cache, compila e passa `FIRMWARE_DIR` ao build; ele também confere se a cópia do avr8js está em dia. `testes.yml` ganha o job "Laboratório com firmware", que compila e roda os testes do laboratório com `EXIGIR_FIRMWARE=1`.
+- **Serial:** o avr8js dá a taxa real do hardware (9 615 baud para `Serial.begin(9600)` a 16 MHz); o monitor mostra a taxa padrão mais perto.
 - **Build local sem arduino-cli:** o laboratório avisa "firmware não compilado neste build", e os testes que precisam de firmware ficam *skip* com mensagem.
 - **Editor:** ▶ Executar roda o `.hex` do sketch cujo texto (normalizado) é igual ao do editor. Com texto diferente, aparece: "Este site não compila código editado". O aluno pode restaurar, escolher uma variante ou baixar o `.ino` para a IDE do Arduino.
 - **Ponto de extensão:** `compilar(texto)` em `app.js` hoje só procura entre os sketches compilados; um serviço (seção 8) entra aí.

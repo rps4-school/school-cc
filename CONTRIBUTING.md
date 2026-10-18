@@ -157,7 +157,9 @@ Para criar um **experimento** com circuito pronto:
 4. Para aparecer na lista de exemplos, acrescente o circuito em `laboratorio/exemplos.json`.
 5. **Toda leitura citada no roteiro tem que sair do simulador.** Acrescente as principais em `.mkdocs/laboratorio/testes/exemplos.test.js` e rode os testes do laboratório.
 
-O simulador é de **corrente contínua**: pilhas, bateria, 5V e 3.3V do Arduino, resistor, LED, interruptor, botão, potenciômetro, LDR e multímetro. Ele não simula capacitor, transistor, motor nem o programa do Arduino. Não escreva atividade que dependa disso como se funcionasse.
+Para um **projeto de Arduino** que roda no laboratório, ponha o sketch (`nome.ino`) na pasta do projeto e, no `circuito.json`, `"sketch": "nome.ino"` (e, se quiser, `"variantes"` com outros `.ino`). O site não compila C++: a CI compila os `.ino` com o arduino-cli e publica o firmware ao lado deles. Para testar no seu computador, veja "Rodar os testes com firmware" em `.mkdocs/laboratorio/README.md`.
+
+O simulador é de **corrente contínua**: pilhas, bateria, 5V e 3.3V do Arduino, resistor, LED, interruptor, botão, potenciômetro, LDR e multímetro, e o programa roda num ATmega328P emulado. Ele não simula capacitor, transistor nem motor. Não escreva atividade que dependa disso como se funcionasse.
 
 ## Boas práticas
 

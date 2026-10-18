@@ -29,6 +29,37 @@ jobs:
       - name: Laboratório
         run: node --test ".mkdocs/laboratorio/testes/*.test.js"
 
+  laboratorio:
+    name: Laboratório com firmware
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - uses: actions/cache@v6
+        with:
+          path: ${{ runner.temp }}/arduino
+          key: arduino-cli-1.5.1-avr-1.8.8-${{ runner.os }}
+
+      - name: Compilar os sketches
+        run: |
+          source .mkdocs/laboratorio/instalar-arduino-cli.sh "$RUNNER_TEMP/arduino"
+          python .mkdocs/laboratorio/compilar.py --arduino-cli "$ARDUINO_CLI" --saida "$RUNNER_TEMP/firmware"
+
+      # Os 9 casos do Blink e o emulador, no ATmega328P emulado. Sem o firmware, esses testes falham.
+      - name: Testes do laboratório com o firmware
+        run: node --test ".mkdocs/laboratorio/testes/*.test.js"
+        env:
+          FIRMWARE_DIR: ${{ runner.temp }}/firmware
+          EXIGIR_FIRMWARE: "1"
+
   python:
     name: Testes de Python
     runs-on: ubuntu-latest

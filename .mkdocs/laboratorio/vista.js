@@ -38,7 +38,7 @@ function rotuloAcessivel(projeto, comp, analise) {
   return texto;
 }
 
-function desenhoDoComponente(projeto, comp, analise) {
+function desenhoDoComponente(projeto, comp, analise, estado = {}) {
   const p = comp.props || {};
   const r = (analise && analise.componentes[comp.id]) || {};
   const pts = posicoesDoComponente(projeto, comp);
@@ -47,7 +47,7 @@ function desenhoDoComponente(projeto, comp, analise) {
     case "protoboard-830":
       return `<g transform="translate(${n(comp.x)} ${n(comp.y)})">${desenharProtoboard(comp.type)}</g>`;
     case "arduino-uno-r3":
-      return `<g transform="${transformDoLivre(comp)}">${desenharUno()}</g>`;
+      return `<g transform="${transformDoLivre(comp)}">${desenharUno(estado.placa)}</g>`;
     case "pilhas":
       return `<g transform="${transformDoLivre(comp)}">${desenharPilhas(p)}</g>`;
     case "bateria-9v":
@@ -89,7 +89,7 @@ export function desenharMundo(estado) {
   const ordem = (c) => (ehProtoboard(c.type) ? 0 : TIPOS[c.type].livre ? 1 : 2);
   const comps = [...projeto.components].sort((a, b) => ordem(a) - ordem(b));
   const partes = comps.map((c) => {
-    const corpo = desenhoDoComponente(projeto, c, analise);
+    const corpo = desenhoDoComponente(projeto, c, analise, estado);
     const nome = esc(ehProtoboard(c.type) ? `${rotulo(c)} (${TIPOS[c.type].nome})` : rotuloAcessivel(projeto, c, analise));
     return `<g class="lab-comp" data-comp="${esc(c.id)}" tabindex="0" role="button" aria-label="${nome}">${corpo}${alvosDosTerminais(projeto, c)}</g>`;
   });

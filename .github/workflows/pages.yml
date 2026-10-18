@@ -51,6 +51,16 @@ jobs:
             exit 1
           }
 
+      # O laboratório usa uma cópia do avr8js (sem bundler, os imports precisam de ".js").
+      - name: Cópia do avr8js atualizada?
+        run: |
+          npm run vendor --prefix .mkdocs
+          test -z "$(git status --porcelain .mkdocs/laboratorio/vendor)" || {
+            git status --short .mkdocs/laboratorio/vendor
+            echo "::error::A cópia do avr8js está desatualizada. Rode 'npm run vendor --prefix .mkdocs' e faça commit."
+            exit 1
+          }
+
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -59,11 +69,23 @@ jobs:
 
       - run: pip install -r .mkdocs/requirements.txt
 
+      # Firmware do laboratório: os sketches (.ino) compilados com o arduino-cli, em versões fixas.
+      - uses: actions/cache@v6
+        with:
+          path: ${{ runner.temp }}/arduino
+          key: arduino-cli-1.5.1-avr-1.8.8-${{ runner.os }}
+
+      - name: Firmware do laboratório
+        run: |
+          source .mkdocs/laboratorio/instalar-arduino-cli.sh "$RUNNER_TEMP/arduino"
+          python .mkdocs/laboratorio/compilar.py --arduino-cli "$ARDUINO_CLI" --saida "$RUNNER_TEMP/firmware"
+
       # --strict falha o build (e o PR) se houver link ou âncora quebrados.
       - name: Build
         run: mkdocs build --strict -f .mkdocs/mkdocs.yml
         env:
           SITE_DIR: ${{ runner.temp }}/site
+          FIRMWARE_DIR: ${{ runner.temp }}/firmware
           NO_MKDOCS_2_WARNING: "1"
 
       - if: github.event_name != 'pull_request'

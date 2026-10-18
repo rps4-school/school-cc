@@ -18,7 +18,8 @@ function nomeDoTerminal(comp, id) {
   return t ? t.nome : id;
 }
 
-export function diagnosticar(projeto, analise) {
+// contexto.pinos: estado dos pinos do Uno quando um programa está rodando (o emulador preenche).
+export function diagnosticar(projeto, analise, contexto = {}) {
   const itens = [];
   const add = (nivel, codigo, mensagem, ids) => itens.push({ nivel, codigo, mensagem, ids });
   const porId = new Map(projeto.components.map((c) => [c.id, c]));
@@ -121,6 +122,25 @@ export function diagnosticar(projeto, analise) {
     }
   }
 
+  // O LED que o projeto espera (metadata.esperado) está fora do circuito, ou o programa usa outro pino.
+  const esperado = (projeto.metadata && projeto.metadata.esperado) || {};
+  const ledEsperado = esperado.led && porId.get(esperado.led);
+  if (ledEsperado) {
+    const soltos = TIPOS[ledEsperado.type].terminais.every((t) =>
+      redes.redes[redes.rede(`${ledEsperado.id}:${t.id}`)].every((ref) => ref.split(":")[0] === ledEsperado.id || !ehTerminalDeParte(porId, ref)));
+    if (soltos) {
+      add("aviso", "fora-do-circuito", `${rotulo(ledEsperado)} está fora do circuito: encaixe as pernas dele na protoboard.`, [ledEsperado.id]);
+    }
+  }
+  const saidas = Object.entries(contexto.pinos || {}).filter(([, p]) => p.modo === "saida").map(([nome]) => nome);
+  if (esperado.pino && saidas.length && !saidas.includes(esperado.pino)) {
+    const nomes = saidas.map((p) => p.replace(/^D/, "")).join(", ");
+    const uno = projeto.components.find((c) => c.type === "arduino-uno-r3");
+    add("aviso", "pino-errado",
+      `O programa liga e desliga o pino ${nomes}, mas o ${ledEsperado ? rotulo(ledEsperado) : "LED"} está ligado ao pino ${esperado.pino.replace(/^D/, "")}. Confira o número do pino no código.`,
+      [uno ? uno.id : null, ledEsperado ? ledEsperado.id : null].filter(Boolean));
+  }
+
   // Perna solta: o componente está ligado ao circuito, mas uma das pernas não encosta em nada.
   for (const c of projeto.components) {
     const t = TIPOS[c.type];
@@ -135,7 +155,8 @@ export function diagnosticar(projeto, analise) {
     if (soltos.length && soltos.length < lados.length) {
       for (const id of soltos) {
         const nome = nomeDoTerminal(c, id);
-        add("dica", "perna-solta", `${capitalizar(nome)} de ${rotulo(c)} não chega a nenhum componente.`, [c.id]);
+        const volta = c.type === "led" && id === "catodo" ? ": falta o caminho de volta até o − (ou o GND)" : "";
+        add("dica", "perna-solta", `${capitalizar(nome)} de ${rotulo(c)} não chega a nenhum componente${volta}.`, [c.id]);
       }
     }
   }

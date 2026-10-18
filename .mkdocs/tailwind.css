@@ -2979,3 +2979,87 @@ fieldset.lab-campo {
     padding: 0.45rem 0.6rem;
   }
 }
+
+/* Programa do Arduino: barra de execução, aba Código e aba Serial (laboratorio/programa.js) */
+.lab-execucao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+.lab-executar {
+  border-color: #15803d;
+  background: #15803d;
+  color: #ffffff;
+  font-weight: 600;
+}
+.lab-tempo {
+  min-width: 7rem;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--lab-suave);
+}
+.lab-corpo:has(> .lab-painel[data-aba-ativa="codigo"]),
+.lab-corpo:has(> .lab-painel[data-aba-ativa="serial"]) {
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 44%);
+}
+.lab-editor {
+  height: 340px;
+  margin: 0.5rem 0;
+  overflow: hidden;
+  border: 1px solid var(--lab-borda);
+  border-radius: 0.5rem;
+}
+.lab-codigo-texto,
+.lab-compilacao pre {
+  max-height: 340px;
+  margin: 0;
+  padding: 0.6rem 0.75rem;
+  overflow: auto;
+  border-radius: 0.5rem;
+  background: var(--lab-fundo);
+  font: 12px/1.5 ui-monospace, "Cascadia Code", Consolas, monospace;
+  white-space: pre;
+}
+.lab-compilacao summary {
+  font-size: 0.78rem;
+  color: var(--lab-suave);
+  cursor: pointer;
+}
+.lab-compilacao pre {
+  margin-top: 0.4rem;
+  white-space: pre-wrap;
+}
+.lab-nota-aviso {
+  color: #b45309;
+}
+[data-md-color-scheme="slate"] .lab-nota-aviso {
+  color: #fbbf24;
+}
+.lab-serial {
+  height: 240px;
+  margin: 0.5rem 0;
+  padding: 0.6rem 0.75rem;
+  overflow: auto;
+  border-radius: 0.5rem;
+  background: #0f172a;
+  color: #e2e8f0;
+  font: 12.5px/1.5 ui-monospace, "Cascadia Code", Consolas, monospace;
+  white-space: pre-wrap;
+}
+.lab-serial:focus-visible {
+  outline: 3px solid var(--lab-destaque);
+  outline-offset: 2px;
+}
+@media (max-width: 860px) {
+  .lab-corpo:has(> .lab-painel[data-aba-ativa="codigo"]),
+  .lab-corpo:has(> .lab-painel[data-aba-ativa="serial"]) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .lab-editor {
+    height: 260px;
+  }
+  .lab-serial {
+    height: 180px;
+  }
+}

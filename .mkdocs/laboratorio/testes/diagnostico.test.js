@@ -57,7 +57,7 @@ test("perna solta: o cátodo não volta para o −, e o − da bateria não cheg
   assert.deepEqual(d.map((x) => x.codigo), ["perna-solta", "perna-solta"]);
   const textos = d.map((x) => x.mensagem).sort();
   assert.deepEqual(textos, [
-    "Cátodo (−, perna curta) de LED1 não chega a nenhum componente.",
+    "Cátodo (−, perna curta) de LED1 não chega a nenhum componente: falta o caminho de volta até o − (ou o GND).",
     "Polo − de Bateria não chega a nenhum componente.",
   ]);
 });

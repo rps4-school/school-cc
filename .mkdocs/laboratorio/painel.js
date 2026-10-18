@@ -17,6 +17,8 @@ const ABAS = [
   ["selecionado", "Selecionado"],
   ["conexoes", "Conexões"],
   ["medidas", "Medidas"],
+  ["codigo", "Código"],
+  ["serial", "Serial"],
   ["projeto", "Projeto"],
   ["instrucoes", "Instruções"],
 ];
@@ -64,6 +66,7 @@ export function montarPainel(ctx) {
 
   function mostrarAba(nova, foco = false) {
     aba = nova;
+    raiz.dataset.abaAtiva = nova; // o CSS alarga o painel nas abas Código e Serial
     for (const b of raiz.querySelectorAll("[data-aba]")) {
       const ativa = b.dataset.aba === nova;
       b.setAttribute("aria-selected", String(ativa));
@@ -140,7 +143,7 @@ export function montarPainel(ctx) {
       campos.push('<p class="lab-nota">Ligue com fios: arraste de um terminal (pino, polo) até um furo, ou use a aba <b>Conexões</b>.</p>');
     }
     if (comp.type === "arduino-uno-r3") {
-      campos.push('<p class="lab-nota">Por enquanto, a placa só alimenta o circuito: <b>5V</b>, <b>3.3V</b> e <b>GND</b>. Os pinos digitais e analógicos ficam soltos, porque ainda não rodam programas aqui.</p>');
+      campos.push('<p class="lab-nota">A placa alimenta o circuito pelo <b>5V</b>, pelo <b>3.3V</b> e pelo <b>GND</b>. Os pinos digitais e analógicos seguem o programa: sem programa rodando, eles ficam soltos. Veja as abas <b>Código</b> e <b>Serial</b>.</p>');
     }
     const leitura = r.texto ? `<p class="lab-leitura" data-leitura="${esc(comp.id)}">${esc(r.texto)}</p>` : `<div data-leitura="${esc(comp.id)}">${htmlResumo(comp, r)}</div>`;
     const inverte = ["led", "resistor", "ldr", "interruptor", "potenciometro"].includes(comp.type) && comp.mount;
@@ -197,7 +200,7 @@ export function montarPainel(ctx) {
       `<div class="lab-acoes">${ctx.temInicial() ? botao("inicial", "Voltar ao circuito inicial") : ""}${botao("vazio", "Começar do zero")}</div>` +
       `<h3>Salvos neste navegador</h3>${salvos ? `<ul class="lab-lista">${salvos}</ul>` : '<p class="lab-nota">Nada salvo ainda. O circuito desta página também fica guardado sozinho enquanto você mexe.</p>'}` +
       (exemplos ? `<h3>Exemplos</h3><ul class="lab-lista">${exemplos}</ul>` : "") +
-      '<h3>O que este simulador faz</h3><p class="lab-nota">Corrente contínua: pilhas, bateria, 5V do Arduino, resistores, LEDs, interruptor, botão, potenciômetro, LDR e multímetro, com fontes e LEDs quase ideais (como nas contas das aulas). Não simula capacitores, motores, transistores nem o programa do Arduino.</p>';
+      '<h3>O que este simulador faz</h3><p class="lab-nota">Corrente contínua: pilhas, bateria, 5V do Arduino, resistores, LEDs, interruptor, botão, potenciômetro, LDR e multímetro, com fontes e LEDs quase ideais (como nas contas das aulas). O programa do Arduino roda num ATmega328P emulado, a partir do firmware compilado no build do site: código editado aqui não compila. Não simula capacitores, motores nem transistores.</p>';
   }
 
   function htmlInstrucoes() {
@@ -220,6 +223,13 @@ export function montarPainel(ctx) {
 
   function desenharAba(id) {
     const caixa = raiz.querySelector(`[data-conteudo="${id}"]`);
+    // Código e Serial são do programa.js: o editor e o texto da serial ficam vivos entre as trocas de aba.
+    const externo = ctx.abaExterna(id);
+    if (externo) {
+      if (externo.parentNode !== caixa) caixa.appendChild(externo);
+      if (!caixa.hidden) ctx.aoMostrarAba(id);
+      return;
+    }
     const ativo = document.activeElement;
     const chave = ativo && caixa.contains(ativo) ? seletorDe(ativo) : null;
     caixa.innerHTML = HTML[id]();
