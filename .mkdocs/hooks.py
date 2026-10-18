@@ -46,6 +46,8 @@ TITULOS = {
     "eletronica": "Introdução à eletrônica",
     "lei-de-ohm": "Lei de Ohm",
     "serie-e-paralelo": "Série e paralelo",
+    "protoboard": "Protoboard e medição",
+    "componentes": "Componentes eletrônicos",
     "sistemas-digitais": "Sistemas Digitais",  # pasta dos simulados
     # Assuntos dos exercícios de Python que precisam de acento.
     "dicionarios": "Dicionários",

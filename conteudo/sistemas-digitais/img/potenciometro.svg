@@ -1,0 +1,32 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 620 260' width='620' height='260' role='img' aria-label='Potenciômetro como divisor de tensão: as pontas vão no 5 V e no GND, e o cursor do meio dá de 0 a 5 volts conforme o giro, de 0 a 270 graus'>
+<title>Potenciômetro como divisor de tensão: as pontas vão no 5 V e no GND, e o cursor do meio dá de 0 a 5 volts conforme o giro, de 0 a 270 graus</title>
+<rect width='620' height='260' rx='12' fill='#ffffff'/>
+<polyline points='110,40 110,82' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='110' y='30' font-size='14' fill='#dc2626' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>5 V</text>
+<polyline points='110,82 110,106' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='110,154 110,178' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(110,130) rotate(90)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<polyline points='110,178 110,214' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='110,214 110,224' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='96,224 124,224' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='101,229 119,229' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='106,234 114,234' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='160,130 122,130' fill='none' stroke='#4f46e5' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polygon points='113,130 128.49,125.15 128.49,134.85' fill='#4f46e5'/>
+<polyline points='160,130 200,130' fill='none' stroke='#4f46e5' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='204' cy='130' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<text x='214' y='135' font-size='13' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>cursor: de 0 a 5 V</text>
+<text x='90' y='100' font-size='12' fill='#475569' text-anchor='end' font-family='Inter, Segoe UI, Arial, sans-serif'>10 kΩ</text>
+<circle cx='470' cy='128' r='62' fill='#f1f5f9' stroke='#1e293b' stroke-width='2'/>
+<polyline points='423.33,174.67 416.26,181.74' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='402.12' y='197.05' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>0°</text>
+<text x='402.12' y='213.05' font-size='12' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>0 V</text>
+<polyline points='470,62 470,52' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='470' y='40' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>135°</text>
+<text x='470' y='56' font-size='12' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>2,5 V</text>
+<polyline points='516.67,174.67 523.74,181.74' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='537.88' y='197.05' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>270°</text>
+<text x='537.88' y='213.05' font-size='12' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>5 V</text>
+<polyline points='470,128 470,76' fill='none' stroke='#dc2626' stroke-width='5' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='470' cy='128' r='8' fill='#1e293b'/>
+</svg>

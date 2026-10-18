@@ -1,6 +1,6 @@
 # 🔗 Circuitos em série e paralelo
 
-> [← Tensão, corrente, resistência e Lei de Ohm](11-lei-de-ohm.md) · [Voltar para Sistemas Digitais →](../README.md)
+> [← Tensão, corrente, resistência e Lei de Ohm](11-lei-de-ohm.md) · Próximo: [Protoboard, polaridade e medição →](13-protoboard-e-medicao.md)
 
 **Nível:** 🟡 Intermediário
 

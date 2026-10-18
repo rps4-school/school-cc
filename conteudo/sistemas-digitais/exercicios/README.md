@@ -4,7 +4,7 @@
 
 **Nível:** 🟢 Iniciante
 
-108 exercícios, 9 por assunto, com contexto de computação e de eletrônica e **resolução passo a passo**. Eles seguem a ordem das [aulas](../aulas/): leia a aula, depois faça os exercícios do fácil ao difícil.
+126 exercícios, 9 por assunto, com contexto de computação e de eletrônica e **resolução passo a passo**. Eles seguem a ordem das [aulas](../aulas/): leia a aula, depois faça os exercícios do fácil ao difícil.
 
 ## 🧭 Como praticar
 
@@ -35,5 +35,7 @@
 | ⚡ Introdução à eletrônica | [Aula](../aulas/10-introducao-a-eletronica.md) | [🟢 Fácil](10-eletronica/facil.md) · [🟡 Intermediário](10-eletronica/intermediario.md) · [🔴 Difícil](10-eletronica/dificil.md) |
 | 🔋 Lei de Ohm | [Aula](../aulas/11-lei-de-ohm.md) | [🟢 Fácil](11-lei-de-ohm/facil.md) · [🟡 Intermediário](11-lei-de-ohm/intermediario.md) · [🔴 Difícil](11-lei-de-ohm/dificil.md) |
 | 🔗 Série e paralelo | [Aula](../aulas/12-circuitos-serie-e-paralelo.md) | [🟢 Fácil](12-serie-e-paralelo/facil.md) · [🟡 Intermediário](12-serie-e-paralelo/intermediario.md) · [🔴 Difícil](12-serie-e-paralelo/dificil.md) |
+| 🧪 Protoboard e medição | [Aula](../aulas/13-protoboard-e-medicao.md) | [🟢 Fácil](13-protoboard/facil.md) · [🟡 Intermediário](13-protoboard/intermediario.md) · [🔴 Difícil](13-protoboard/dificil.md) |
+| 🧩 Componentes | [Aula](../aulas/14-componentes-eletronicos.md) | [🟢 Fácil](14-componentes/facil.md) · [🟡 Intermediário](14-componentes/intermediario.md) · [🔴 Difícil](14-componentes/dificil.md) |
 
 > 💡 **Terminou tudo?** Volte nas questões que errou depois de alguns dias. Acertar de novo, sem olhar, é o que fixa o conteúdo.

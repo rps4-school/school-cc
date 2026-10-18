@@ -1,6 +1,6 @@
 # 🔗 Circuitos em série e paralelo · 🔴 Difícil
 
-> [← voltar para Exercícios](../README.md) · 📖 Antes, leia: [Circuitos em série e paralelo](../../aulas/12-circuitos-serie-e-paralelo.md)
+> [← voltar para Exercícios](../README.md) · 📖 Antes, leia: [Circuitos em série e paralelo](../../aulas/12-circuitos-serie-e-paralelo.md) · Próximo: [Protoboard →](../13-protoboard/facil.md)
 
 Resolva no papel primeiro. No site, digite a resposta (com a unidade, se quiser) e clique em **Conferir**; no GitHub, abra **Ver resposta**.
 

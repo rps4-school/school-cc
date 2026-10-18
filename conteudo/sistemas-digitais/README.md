@@ -9,7 +9,7 @@ Como o computador guarda números, letras e cores usando **só 0 e 1**, e como e
 | Parte | Aulas | O que tem |
 | ----- | ----- | --------- |
 | Lógica digital | 1 a 9 | Binário, hexadecimal, codificação, portas lógicas e Mapa de Karnaugh |
-| Eletrônica | 10 a 12 | Circuito elétrico, Lei de Ohm, série e paralelo (começa do zero, não depende da parte 1) |
+| Eletrônica | 10 a 14 | Circuito elétrico, Lei de Ohm, série e paralelo, protoboard, multímetro e componentes (começa do zero, não depende da parte 1) |
 
 ## 🧭 Como estudar
 
@@ -18,7 +18,7 @@ Como o computador guarda números, letras e cores usando **só 0 e 1**, e como e
 3. **Errou?** Abra **Ver resposta** para ver a resolução comentada, refaça a conta e confira de novo.
 4. **Pratique com os [exercícios](exercicios/README.md)** do assunto: 9 por aula, do fácil ao difícil.
 5. Só passe para a próxima aula quando acertar a maioria. As aulas dependem umas das outras.
-6. **Terminou a lógica digital (aulas 1 a 9)?** Faça os [simulados de Sistemas Digitais](../../simulados/README.md#-sistemas-digitais), com tempo marcado e pontuação.
+6. **Terminou uma parte?** Faça os [simulados de Sistemas Digitais](../../simulados/README.md#-sistemas-digitais), com tempo marcado e pontuação: os simulados 01 a 04 cobrem a lógica digital (aulas 1 a 9) e o 05 cobre a eletrônica (aulas 10 a 14).
 
 > 💡 **Estude com papel e lápis.** Nesta disciplina a prova é feita à mão e sem calculadora. Ler o exemplo não basta: copie a conta e refaça sozinho.
 
@@ -40,6 +40,8 @@ Como o computador guarda números, letras e cores usando **só 0 e 1**, e como e
 | 10 | [Introdução à eletrônica](aulas/10-introducao-a-eletronica.md) | 🟢 Iniciante | Carga e corrente, condutor e isolante, circuito aberto e fechado, CC e CA, curto-circuito e símbolos | [🟢](exercicios/10-eletronica/facil.md) · [🟡](exercicios/10-eletronica/intermediario.md) · [🔴](exercicios/10-eletronica/dificil.md) |
 | 11 | [Tensão, corrente, resistência e Lei de Ohm](aulas/11-lei-de-ohm.md) | 🟢 Iniciante | U = R · i, o resistor do LED e os valores comerciais | [🟢](exercicios/11-lei-de-ohm/facil.md) · [🟡](exercicios/11-lei-de-ohm/intermediario.md) · [🔴](exercicios/11-lei-de-ohm/dificil.md) |
 | 12 | [Circuitos em série e paralelo](aulas/12-circuitos-serie-e-paralelo.md) | 🟡 Intermediário | Resistência equivalente, divisor de tensão, circuito misto e LEDs em série e em paralelo | [🟢](exercicios/12-serie-e-paralelo/facil.md) · [🟡](exercicios/12-serie-e-paralelo/intermediario.md) · [🔴](exercicios/12-serie-e-paralelo/dificil.md) |
+| 13 | [Protoboard, polaridade e medição](aulas/13-protoboard-e-medicao.md) | 🟢 Iniciante | Como a protoboard é ligada por dentro, o lado certo do LED, o multímetro e como achar defeitos | [🟢](exercicios/13-protoboard/facil.md) · [🟡](exercicios/13-protoboard/intermediario.md) · [🔴](exercicios/13-protoboard/dificil.md) |
+| 14 | [Componentes eletrônicos](aulas/14-componentes-eletronicos.md) | 🟡 Intermediário | Código de cores, potenciômetro, LDR, botão, LED RGB, buzzer, transistor como chave e ponte H | [🟢](exercicios/14-componentes/facil.md) · [🟡](exercicios/14-componentes/intermediario.md) · [🔴](exercicios/14-componentes/dificil.md) |
 
 ```mermaid
 flowchart LR
@@ -59,6 +61,8 @@ A parte de eletrônica começa do zero e segue esta ordem:
 flowchart LR
     J[10 · Introdução à eletrônica] --> K[11 · Lei de Ohm]
     K --> L[12 · Série e paralelo]
+    L --> M[13 · Protoboard e medição]
+    M --> N[14 · Componentes]
 ```
 
 ## ✍️ Como responder no corretor
@@ -92,7 +96,7 @@ Nas grandezas (V, A, Ω, W...), a unidade é opcional e qualquer prefixo vale: `
 | Pasta | O que vai aqui |
 | ----- | -------------- |
 | [`aulas/`](aulas/) | Uma aula completa por assunto, com exemplos e teste rápido |
-| [`exercicios/`](exercicios/README.md) | 108 exercícios (9 por assunto) com resolução passo a passo |
+| [`exercicios/`](exercicios/README.md) | 126 exercícios (9 por assunto) com resolução passo a passo |
 | `img/` | Figuras das aulas (portas, circuitos, mapas e esquemas elétricos) |
 
 ## 📚 Referências

@@ -1,0 +1,30 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' width='560' height='280' role='img' aria-label='Botão de 4 pinos visto de cima: os pinos A e C estão sempre ligados, assim como B e D; apertar o botão liga o lado A–C ao lado B–D'>
+<title>Botão de 4 pinos visto de cima: os pinos A e C estão sempre ligados, assim como B e D; apertar o botão liga o lado A–C ao lado B–D</title>
+<rect width='560' height='280' rx='12' fill='#ffffff'/>
+<rect x='70' y='60' width='120' height='120' rx='8' fill='#e2e8f0' stroke='#1e293b' stroke-width='2'/>
+<circle cx='130' cy='120' r='32' fill='#1e293b'/>
+<polyline points='94,60 94,44' fill='none' stroke='#94a3b8' stroke-width='5' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='94' y='30' font-size='14' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>A</text>
+<polyline points='166,60 166,44' fill='none' stroke='#94a3b8' stroke-width='5' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='166' y='30' font-size='14' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>B</text>
+<polyline points='94,180 94,196' fill='none' stroke='#94a3b8' stroke-width='5' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='94' y='222' font-size='14' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>C</text>
+<polyline points='166,180 166,196' fill='none' stroke='#94a3b8' stroke-width='5' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='166' y='222' font-size='14' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>D</text>
+<rect x='79' y='38' width='30' height='164' rx='15' fill='none' stroke='#dc2626' stroke-width='2' stroke-dasharray='5 4'/>
+<rect x='151' y='38' width='30' height='164' rx='15' fill='none' stroke='#dc2626' stroke-width='2' stroke-dasharray='5 4'/>
+<text x='130' y='266' font-size='12' fill='#dc2626' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>sempre ligados: A–C e B–D</text>
+<text x='400' y='50' font-size='14' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Por dentro</text>
+<polyline points='300,90 330,90 330,150 300,150' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='290' y='95' font-size='13' fill='#1e293b' text-anchor='end' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>A</text>
+<text x='290' y='155' font-size='13' fill='#1e293b' text-anchor='end' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>C</text>
+<polyline points='330,120 372,120' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='372' cy='120' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<circle cx='428' cy='120' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='375,120 417.12,91.81' fill='none' stroke='#1e293b' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='428,120 470,120' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='500,90 470,90 470,150 500,150' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='510' y='95' font-size='13' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>B</text>
+<text x='510' y='155' font-size='13' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>D</text>
+<text x='400' y='196' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>apertar fecha a chave do meio</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 660 270' width='660' height='270' role='img' aria-label='Como ligar o multímetro: o voltímetro fica em paralelo, nas duas pontas do resistor; o amperímetro fica em série, no caminho da corrente'>
+<title>Como ligar o multímetro: o voltímetro fica em paralelo, nas duas pontas do resistor; o amperímetro fica em série, no caminho da corrente</title>
+<rect width='660' height='270' rx='12' fill='#ffffff'/>
+<text x='165' y='36' font-size='15' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Voltímetro: em paralelo</text>
+<polyline points='60,118 60,129' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='60,141 60,152' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(60,135) rotate(90)'><line x1='-6' y1='-17' x2='-6' y2='17' stroke='#1e293b' stroke-width='2'/><line x1='6' y1='-9' x2='6' y2='9' stroke='#1e293b' stroke-width='4.5'/></g>
+<text x='47' y='113' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>+</text>
+<text x='47' y='169' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>−</text>
+<text x='82' y='140' font-size='13' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>9 V</text>
+<polyline points='60,118 60,70 260,70 260,107' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='260,107 260,111' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='260,159 260,163' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(260,135) rotate(90)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<polyline points='260,163 260,200 60,200 60,152' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='244' y='139' font-size='14' fill='#1e293b' text-anchor='end' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>R</text>
+<circle cx='260' cy='88' r='3.5' fill='#1e293b'/>
+<circle cx='260' cy='182' r='3.5' fill='#1e293b'/>
+<polyline points='260,88 306,88 306,117' fill='none' stroke='#4f46e5' stroke-width='2' stroke-linejoin='round' stroke-linecap='round' stroke-dasharray='5 4'/>
+<polyline points='260,182 306,182 306,153' fill='none' stroke='#4f46e5' stroke-width='2' stroke-linejoin='round' stroke-linecap='round' stroke-dasharray='5 4'/>
+<circle cx='306' cy='135' r='18' fill='#eef2ff' stroke='#4f46e5' stroke-width='2.5'/>
+<text x='306' y='141' font-size='17' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>V</text>
+<text x='165' y='232' font-size='13' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>As pontas tocam os dois lados do R:</text>
+<text x='165' y='250' font-size='13' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>nada é desligado.</text>
+<text x='495' y='36' font-size='15' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Amperímetro: em série</text>
+<polyline points='390,118 390,129' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='390,141 390,152' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(390,135) rotate(90)'><line x1='-6' y1='-17' x2='-6' y2='17' stroke='#1e293b' stroke-width='2'/><line x1='6' y1='-9' x2='6' y2='9' stroke='#1e293b' stroke-width='4.5'/></g>
+<text x='377' y='113' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>+</text>
+<text x='377' y='169' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>−</text>
+<text x='412' y='140' font-size='13' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>9 V</text>
+<polyline points='390,118 390,70 472,70' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='490' cy='70' r='18' fill='#eef2ff' stroke='#4f46e5' stroke-width='2.5'/>
+<text x='490' y='76' font-size='17' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>A</text>
+<polyline points='508,70 590,70 590,107' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='590,107 590,111' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='590,159 590,163' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(590,135) rotate(90)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<polyline points='590,163 590,200 390,200 390,152' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='574' y='139' font-size='14' fill='#1e293b' text-anchor='end' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>R</text>
+<polygon points='448,70 434.23,74.31 434.23,65.69' fill='#4f46e5'/>
+<text x='495' y='232' font-size='13' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>Abra o circuito e ponha o medidor</text>
+<text x='495' y='250' font-size='13' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>no caminho: a corrente passa por ele.</text>
+</svg>
