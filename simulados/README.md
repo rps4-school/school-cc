@@ -24,7 +24,7 @@ Provas de treino no **formato de uma prova de verdade**: tempo marcado, pontuaç
 
 ## 🔌 Sistemas Digitais
 
-Doze questões por prova, uma de cada assunto, da [aula 1 à 9](../conteudo/sistemas-digitais/README.md). Cada item tem resolução comentada e, no site, um campo para conferir a resposta.
+Os simulados 01 a 04 têm doze questões por prova, uma de cada assunto de lógica digital, da [aula 1 à 9](../conteudo/sistemas-digitais/README.md). O 05 tem dez questões de eletrônica básica, das aulas 10 a 14, e o corretor aceita a unidade junto (`3 mA` ou `0,003 A`). Cada item tem resolução comentada e, no site, um campo para conferir a resposta.
 
 | Simulado | Nível | Duração | Assuntos |
 | -------- | ----- | ------- | -------- |
@@ -32,6 +32,7 @@ Doze questões por prova, uma de cada assunto, da [aula 1 à 9](../conteudo/sist
 | [**Simulado 02**](sistemas-digitais/simulado-02/README.md) | 🟡 Intermediário | 1h | Todos: binário, hexa, codificação, C2, portas, circuitos e Karnaugh |
 | [**Simulado 03**](sistemas-digitais/simulado-03/README.md) | 🔴 Avançado | 1h30 | Todos, com ponto fixo, overflow e projeto de circuitos |
 | [**Simulado 04**](sistemas-digitais/simulado-04/README.md) | 🔴 Avançado | 1h30 | Todos, com ponto fixo, overflow e projeto de circuitos |
+| [**Simulado 05**](sistemas-digitais/simulado-05/README.md) | 🟡 Intermediário | 1h | Eletrônica básica: circuito, Lei de Ohm, LED, série e paralelo, divisor, protoboard, multímetro e componentes |
 
 ## 📈 Cálculo
 
