@@ -8,6 +8,10 @@ O primeiro projeto de todo mundo: um LED no pino 8 que fica 1 s aceso e 1 s apag
 
 > 📖 **Antes, leia:** [Saídas digitais, LED e Blink](../../../aulas/17-saidas-digitais.md) e [Monitor serial](../../../aulas/18-monitor-serial.md).
 
+<div class="laboratorio" data-projeto="circuito.json" data-titulo="Blink no laboratório" data-descricao="O circuito já montado e o programa compilado: clique em Executar e acompanhe o LED e o monitor serial. Os casos de teste dá para fazer lá mesmo."></div>
+
+> 💡 No site, o laboratório roda o programa num Arduino Uno simulado. No GitHub, a montagem está em [`circuito.json`](circuito.json).
+
 ## 🎯 Objetivo
 
 - Ligar um LED com resistor num pino digital.
@@ -90,18 +94,18 @@ Confira, nesta ordem: o fio está no pino 8? A perna longa está do lado do resi
 
 ## 🧪 Casos de teste
 
-Comece pela montagem e pelo código certos (caso 1). Em cada caso seguinte, faça **só** a mudança indicada, confira e desfaça antes do próximo.
+Comece pela montagem e pelo código certos (caso 1). Em cada caso seguinte, faça **só** a mudança indicada, confira e desfaça antes do próximo. No laboratório do site, todos os casos funcionam: os que mudam o código usam os programas prontos da aba **Código**.
 
 | # | O que mudar | O que tem que acontecer |
 | - | ----------- | ----------------------- |
 | 1 | Nada | O LED pisca, 1 s aceso e 1 s apagado. O monitor mostra `Ligado` e `Desligado`, alternados, uma linha por segundo |
-| 2 | No código, `const int LED = 7;` | O LED não acende: o programa mexe no pino 7, onde não há nada |
+| 2 | No código, `const int LED = 7;` (no laboratório: o programa "Com defeito: pino 7") | O LED não acende: o programa mexe no pino 7, onde não há nada |
 | 3 | Tire o fio verde do pino 8 | O LED não acende |
 | 4 | Tire o fio do GND da placa | O LED não acende: falta o caminho de volta |
-| 5 | Vire o LED (perna longa na coluna 6) | O LED não acende: invertido, ele bloqueia a corrente |
-| 6 | Troque os dois `delay(1000)` por `delay(500)` | Pisca no dobro da frequência: período de 1 s |
-| 7 | Aperte o reset da placa (ou reinicie a simulação) | O programa recomeça do zero: a próxima linha é `Ligado` |
-| 8 | Pare a simulação (ou tire o USB) | O LED para de piscar e o monitor não recebe mais linhas |
+| 5 | Vire o LED, com a perna longa na coluna 6 (no laboratório: tecla **I**) | O LED não acende: invertido, ele bloqueia a corrente |
+| 6 | Troque os dois `delay(1000)` por `delay(500)` (no laboratório: o programa "Intervalo de 500 ms") | Pisca no dobro da frequência: período de 1 s |
+| 7 | Aperte o reset da placa (no laboratório: **↺ Reiniciar**) | O programa recomeça do zero: a próxima linha é `Ligado` |
+| 8 | Pare a simulação ou tire o USB (no laboratório: **■ Parar**) | O LED para de piscar e o monitor não recebe mais linhas |
 | 9 | Com o LED fora da protoboard, olhe o monitor | Continua aparecendo `Ligado` e `Desligado`: a serial mostra o **programa**, não o circuito |
 
 ## ✅ Critérios de conclusão

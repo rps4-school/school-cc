@@ -116,7 +116,7 @@ Ao **verificar**, a IDE traduz o seu C++ para **código de máquina** do ATmega3
 | [Tinkercad Circuits](https://www.tinkercad.com/circuits) | Uno, protoboard, LEDs, sensores e multímetro; código em blocos ou em texto (grátis, precisa de conta) |
 | [Wokwi](https://wokwi.com/) | Simulador on-line de Arduino com muitos componentes (grátis; salvar pede conta) |
 
-Os projetos guiados do **[Laboratório Arduino](../laboratorio/README.md)** deste tema trazem a montagem, o código e os testes para fazer num desses simuladores.
+Os projetos guiados do **[Laboratório Arduino](../laboratorio/README.md)** deste tema trazem a montagem, o código e os testes. No laboratório do site, o circuito já vem montado e o programa roda num Uno simulado; para escrever o seu próprio código, use um desses simuladores.
 
 ## 🔬 Mão na massa
 

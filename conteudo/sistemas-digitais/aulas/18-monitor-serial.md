@@ -158,7 +158,7 @@ Digite `1` e Enter no monitor: o LED acende. Com a opção **Nova linha** do mon
 
 ## 🔬 Mão na massa
 
-1. No Tinkercad (ou no Wokwi), monte o Blink com a serial da seção 4 e abra o **Monitor serial**. Uma linha aparece a cada segundo?
+1. Abra o [projeto 01](../laboratorio/projetos/01-blink/README.md) no laboratório do site, clique em **Executar** e veja a aba **Serial** (ou monte o Blink da seção 4 no Tinkercad ou no Wokwi). Uma linha aparece a cada segundo?
 2. Tire o LED da montagem e rode de novo: o monitor muda?
 3. Imprima `Serial.println(200, BIN);` e `Serial.println(200, HEX);` e confira com as contas das aulas 2 e 3.
 4. (ampliação) Monte o código da seção 6 e controle o LED pelo teclado.

@@ -8,6 +8,10 @@ Dois LEDs, nos pinos 8 e 9, que se revezam a cada 500 ms: quando um acende, o ou
 
 > 📖 **Antes, leia:** [Saídas digitais, LED e Blink](../../../aulas/17-saidas-digitais.md) e faça o [projeto 01](../01-blink/README.md).
 
+<div class="laboratorio" data-projeto="circuito.json" data-titulo="Dois LEDs no laboratório" data-descricao="Os dois LEDs montados e o programa compilado: clique em Executar e faça os casos de teste mudando o circuito."></div>
+
+> 💡 No site, o laboratório roda o programa num Arduino Uno simulado. No GitHub, a montagem está em [`circuito.json`](circuito.json).
+
 ## 🎯 Objetivo
 
 - Controlar **dois pinos** de saída no mesmo programa.
@@ -86,12 +90,12 @@ Compare as duas montagens, peça por peça: o LED que não acende está invertid
 
 ## 🧪 Casos de teste
 
-Comece pela montagem e pelo código certos (caso 1). Em cada caso seguinte, faça **só** a mudança indicada, confira e desfaça antes do próximo.
+Comece pela montagem e pelo código certos (caso 1). Em cada caso seguinte, faça **só** a mudança indicada, confira e desfaça antes do próximo. No laboratório do site, o caso 3 usa o programa pronto "Com defeito: sem o pinMode do LED B"; o caso 5, que pede outro código, fica para a IDE do Arduino ou o Wokwi.
 
 | # | O que mudar | O que tem que acontecer |
 | - | ----------- | ----------------------- |
 | 1 | Nada | Os LEDs se revezam a cada 500 ms, e nunca ficam os dois acesos juntos |
-| 2 | Vire o LED B | Só o LED A pisca |
+| 2 | Vire o LED B (no laboratório: tecla **I**) | Só o LED A pisca |
 | 3 | Apague o `pinMode(LED_B, OUTPUT);` | O LED B fica bem fraquinho, quase apagado: o pino 9 continua como entrada |
 | 4 | Tire o fio do GND da placa | Nenhum dos dois acende: os dois voltam ao GND pelo mesmo barramento |
 | 5 | Troque os números: `LED_A = 9` e `LED_B = 8` | Parece igual: com tempos iguais, não dá para saber quem começa |

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "blink-led-d8",
+  "title": "Projeto 01 · Blink",
+  "level": "iniciante",
+  "board": "arduino-uno-r3",
+  "components": [
+    { "id": "uno", "type": "arduino-uno-r3", "x": 40, "y": 110 },
+    { "id": "pb1", "type": "protoboard-400", "x": 400, "y": 60 },
+    { "id": "r1", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 220 }, "mount": { "1": "pb1:b1", "2": "pb1:b5" } },
+    { "id": "led1", "type": "led", "x": 0, "y": 0, "props": { "cor": "vermelho" }, "mount": { "anodo": "pb1:e5", "catodo": "pb1:e6" } }
+  ],
+  "connections": [
+    { "id": "w1", "from": "uno:D8", "to": "pb1:a1", "color": "verde" },
+    { "id": "w2", "from": "pb1:a6", "to": "pb1:cima-6", "color": "preto" },
+    { "id": "w3", "from": "uno:GND.1", "to": "pb1:cima-1", "color": "preto" }
+  ],
+  "sketch": "blink.ino",
+  "variantes": [
+    { "arquivo": "blink-pino-7.ino", "rotulo": "Com defeito: pino 7" },
+    { "arquivo": "blink-500ms.ino", "rotulo": "Intervalo de 500 ms" }
+  ],
+  "capabilities": ["gpio", "serial"],
+  "metadata": {
+    "instrucoes": "Pino 8 → resistor de 220 Ω → LED → barramento − → GND.\n\n1. Clique em Executar: o LED pisca 1 s aceso e 1 s apagado, e a aba Serial mostra Ligado e Desligado.\n2. Na aba Código, escolha a variante \"Com defeito: pino 7\" e execute: o LED não pisca, mas a serial continua.\n3. Volte ao código do projeto e teste os defeitos da página: LED fora da protoboard, sem o fio do GND e LED invertido (tecla I).",
+    "esperado": { "led": "led1", "pino": "D8" }
+  }
+}

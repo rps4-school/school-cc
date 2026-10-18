@@ -8,6 +8,10 @@ Um semáforo com três LEDs: verde por 5 s, amarelo por 2 s e vermelho por 5 s, 
 
 > 📖 **Antes, leia:** a seção de semáforo da aula [Saídas digitais, LED e Blink](../../../aulas/17-saidas-digitais.md#6-semáforo) e faça o [projeto 02](../02-dois-leds-alternados/README.md).
 
+<div class="laboratorio" data-projeto="circuito.json" data-titulo="Semáforo no laboratório" data-descricao="Os três LEDs montados e o programa compilado: clique em Executar e confira o tempo de cada fase pelo relógio do simulador."></div>
+
+> 💡 No site, o laboratório roda o programa num Arduino Uno simulado. No GitHub, a montagem está em [`circuito.json`](circuito.json).
+
 ## 🎯 Objetivo
 
 - Controlar três saídas em sequência, com tempos diferentes.
@@ -94,7 +98,7 @@ Confira a tabela de montagem: cada cor tem o seu pino. Se o amarelo e o vermelho
 
 ## 🧪 Casos de teste
 
-Comece pela montagem e pelo código certos (caso 1). Em cada caso seguinte, faça **só** a mudança indicada, confira e desfaça antes do próximo.
+Comece pela montagem e pelo código certos (caso 1). Em cada caso seguinte, faça **só** a mudança indicada, confira e desfaça antes do próximo. No laboratório do site, o caso 3 usa o programa pronto "Com defeito: o vermelho não apaga", e o caso 4 dá para fazer trocando a cor dos dois LEDs na aba **Selecionado**.
 
 | # | O que mudar | O que tem que acontecer |
 | - | ----------- | ----------------------- |

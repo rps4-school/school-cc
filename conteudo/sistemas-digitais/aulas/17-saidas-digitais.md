@@ -140,7 +140,7 @@ Dentro do ATmega328P, os pinos 8 a 13 são os bits 0 a 5 do registrador **PORTB*
 
 ## 🔬 Mão na massa
 
-1. Faça o [projeto 01 · Blink](../laboratorio/projetos/01-blink/README.md) no Tinkercad ou no Wokwi, com o LED no pino 8.
+1. Faça o [projeto 01 · Blink](../laboratorio/projetos/01-blink/README.md) no laboratório do site (ou no Tinkercad, ou no Wokwi), com o LED no pino 8.
 2. Troque os dois `delay(1000)` por `delay(250)`. O que acontece com o período?
 3. **Desafio dos LEDs:** com dois LEDs, faça os três comportamentos da seção 5 (síncronos, alternados e ritmados). Depois, compare com o [projeto 02](../laboratorio/projetos/02-dois-leds-alternados/README.md).
 

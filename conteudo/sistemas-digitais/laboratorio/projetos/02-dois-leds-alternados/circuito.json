@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "dois-leds-alternados",
+  "title": "Projeto 02 · Dois LEDs alternados",
+  "level": "iniciante",
+  "board": "arduino-uno-r3",
+  "components": [
+    { "id": "uno", "type": "arduino-uno-r3", "x": 40, "y": 110 },
+    { "id": "pb1", "type": "protoboard-400", "x": 400, "y": 60 },
+    { "id": "r1", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 220 }, "mount": { "1": "pb1:b1", "2": "pb1:b5" } },
+    { "id": "led1", "type": "led", "x": 0, "y": 0, "props": { "cor": "vermelho" }, "mount": { "anodo": "pb1:e5", "catodo": "pb1:e6" } },
+    { "id": "r2", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 220 }, "mount": { "1": "pb1:b8", "2": "pb1:b12" } },
+    { "id": "led2", "type": "led", "x": 0, "y": 0, "props": { "cor": "vermelho" }, "mount": { "anodo": "pb1:e12", "catodo": "pb1:e13" } }
+  ],
+  "connections": [
+    { "id": "w1", "from": "uno:D8", "to": "pb1:a1", "color": "verde" },
+    { "id": "w2", "from": "uno:D9", "to": "pb1:a8", "color": "amarelo" },
+    { "id": "w3", "from": "pb1:a6", "to": "pb1:cima-6", "color": "preto" },
+    { "id": "w4", "from": "pb1:a13", "to": "pb1:cima-11", "color": "preto" },
+    { "id": "w5", "from": "uno:GND.1", "to": "pb1:cima-1", "color": "preto" }
+  ],
+  "sketch": "dois-leds.ino",
+  "variantes": [
+    { "arquivo": "dois-leds-sem-pinmode.ino", "rotulo": "Com defeito: sem o pinMode do LED B" }
+  ],
+  "capabilities": ["gpio"],
+  "metadata": {
+    "instrucoes": "LED A no pino 8 e LED B no pino 9, cada um com o seu resistor de 220 Ω, voltando ao GND pelo barramento −.\n\nClique em Executar: os LEDs se revezam a cada 500 ms. Depois, faça os casos de teste da página mudando o circuito (inverter o LED B, tirar o fio do GND)."
+  }
+}

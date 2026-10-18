@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "semaforo",
+  "title": "Projeto 03 · Semáforo",
+  "level": "intermediario",
+  "board": "arduino-uno-r3",
+  "components": [
+    { "id": "uno", "type": "arduino-uno-r3", "x": 40, "y": 110 },
+    { "id": "pb1", "type": "protoboard-400", "x": 400, "y": 60 },
+    { "id": "r1", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 220 }, "mount": { "1": "pb1:b1", "2": "pb1:b5" } },
+    { "id": "led1", "type": "led", "x": 0, "y": 0, "props": { "cor": "verde" }, "mount": { "anodo": "pb1:e5", "catodo": "pb1:e6" } },
+    { "id": "r2", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 220 }, "mount": { "1": "pb1:b8", "2": "pb1:b12" } },
+    { "id": "led2", "type": "led", "x": 0, "y": 0, "props": { "cor": "amarelo" }, "mount": { "anodo": "pb1:e12", "catodo": "pb1:e13" } },
+    { "id": "r3", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 220 }, "mount": { "1": "pb1:b15", "2": "pb1:b19" } },
+    { "id": "led3", "type": "led", "x": 0, "y": 0, "props": { "cor": "vermelho" }, "mount": { "anodo": "pb1:e19", "catodo": "pb1:e20" } }
+  ],
+  "connections": [
+    { "id": "w1", "from": "uno:D8", "to": "pb1:a1", "color": "verde" },
+    { "id": "w2", "from": "uno:D9", "to": "pb1:a8", "color": "amarelo" },
+    { "id": "w3", "from": "uno:D10", "to": "pb1:a15", "color": "laranja" },
+    { "id": "w4", "from": "pb1:a6", "to": "pb1:cima-6", "color": "preto" },
+    { "id": "w5", "from": "pb1:a13", "to": "pb1:cima-11", "color": "preto" },
+    { "id": "w6", "from": "pb1:a20", "to": "pb1:cima-17", "color": "preto" },
+    { "id": "w7", "from": "uno:GND.1", "to": "pb1:cima-1", "color": "preto" }
+  ],
+  "sketch": "semaforo.ino",
+  "variantes": [
+    { "arquivo": "semaforo-sem-apagar.ino", "rotulo": "Com defeito: o vermelho não apaga" }
+  ],
+  "capabilities": ["gpio", "serial"],
+  "metadata": {
+    "instrucoes": "Verde no pino 8, amarelo no 9 e vermelho no 10, cada um com o seu resistor de 220 Ω.\n\nClique em Executar: verde por 5 s, amarelo por 2 s e vermelho por 5 s, e a aba Serial mostra a cor de cada fase. Cronometre um ciclo completo pelo tempo no topo: 12 s."
+  }
+}

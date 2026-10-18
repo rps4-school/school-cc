@@ -4,7 +4,7 @@
 
 **Nível:** 🟢 Iniciante
 
-Projetos guiados de Arduino, do primeiro LED ao semáforo, e experimentos de eletrônica num simulador de circuitos que roda aqui no site. Cada atividade traz a montagem, os casos de teste e dicas para destravar.
+Projetos guiados de Arduino, do primeiro LED ao semáforo, e experimentos de eletrônica, num laboratório que roda aqui no site: ele monta o circuito, calcula as correntes e roda o programa do Arduino. Cada atividade traz a montagem, os casos de teste e dicas para destravar.
 
 > 📖 **Antes, leia:** [Arduino Uno](../aulas/15-arduino-uno.md) e [Saídas digitais, LED e Blink](../aulas/17-saidas-digitais.md). Para o projeto 01, também o [Monitor serial](../aulas/18-monitor-serial.md).
 
@@ -24,7 +24,7 @@ Monte com protoboard, fios, pilhas, bateria, resistores, LEDs, interruptor, bot�
 
 ## 🧭 Como fazer cada projeto de Arduino
 
-1. **Escolha onde montar:** o programa do Arduino ainda não roda no simulador do site. Use o [Tinkercad Circuits](https://www.tinkercad.com/circuits) ou o [Wokwi](https://wokwi.com/) (grátis, no navegador), ou a placa, a protoboard e os componentes.
+1. **Escolha onde montar:** no laboratório do site (o botão **Abrir no laboratório** de cada projeto), com o circuito pronto e o programa rodando num Arduino Uno simulado. Para rodar um código escrito por você, use o [Tinkercad Circuits](https://www.tinkercad.com/circuits) ou o [Wokwi](https://wokwi.com/) (grátis, no navegador), ou a placa de verdade.
 2. **Monte** pela figura e pela tabela de ligações. Confira cada fio antes de ligar.
 3. **Programe** a partir do código inicial. Travou? Abra **uma** dica de cada vez.
 4. **Rode os casos de teste** do projeto: eles mostram o que acontece com a montagem certa e com cada defeito comum.
@@ -46,7 +46,8 @@ Monte com protoboard, fios, pilhas, bateria, resistores, LEDs, interruptor, bot�
 | Casos de teste e critérios de conclusão | ✅ Em todos os projetos, para conferir no simulador ou na placa |
 | Código das soluções | ✅ Compila para o Arduino Uno (o arquivo `.ino` de cada pasta) |
 | Montar e medir circuitos de eletrônica no site | ✅ Em corrente contínua: pilhas, bateria, 5V e 3.3V do Arduino, resistor, LED, interruptor, botão, potenciômetro, LDR e multímetro (V e A) |
-| Rodar o programa do Arduino no site | ❌ Ainda não: os pinos digitais e analógicos da placa ficam soltos. Use o Tinkercad ou o Wokwi |
+| Rodar os programas dos projetos no site | ✅ Num ATmega328P emulado (avr8js), com o firmware compilado no build do site: Executar, Parar, Reiniciar, monitor serial e as variantes com defeito |
+| Rodar um código escrito ou mudado por você | ❌ O site não compila C++. Baixe o `.ino` e use a IDE do Arduino ou o Wokwi |
 | Capacitor, transistor, motor e outros | ❌ Fora do simulador: ele não calcula transitórios nem componentes além do LED que não sejam lineares |
 
 > ⚠️ **Segurança:** monte e mude as ligações com a placa **desligada** do USB. LED sempre com resistor, e nunca ligue um pino direto no GND ou no 5V.
