@@ -19,7 +19,7 @@ Como o computador guarda números, letras e cores usando **só 0 e 1**, e como e
 3. **Errou?** Abra **Ver resposta** para ver a resolução comentada, refaça a conta e confira de novo.
 4. **Pratique com os [exercícios](exercicios/README.md)** do assunto: 9 por aula, do fácil ao difícil.
 5. Só passe para a próxima aula quando acertar a maioria. As aulas dependem umas das outras.
-6. **Terminou uma parte?** Faça os [simulados de Sistemas Digitais](../../simulados/README.md#-sistemas-digitais), com tempo marcado e pontuação: os simulados 01 a 04 cobrem a lógica digital (aulas 1 a 9) e o 05 cobre a eletrônica (aulas 10 a 14).
+6. **Terminou uma parte?** Faça os [simulados de Sistemas Digitais](../../simulados/README.md#-sistemas-digitais), com tempo marcado e pontuação: os simulados 01 a 04 cobrem a lógica digital (aulas 1 a 9), o 05 cobre a eletrônica (aulas 10 a 14), e os 06 a 08 cobrem o Arduino (aulas 15 a 23). O 08 é feito em parte no laboratório.
 7. **Na parte de Arduino, monte e programe:** faça os projetos do [Laboratório Arduino](laboratorio/README.md) que as aulas indicam, num simulador on-line ou com a placa.
 
 > 💡 **Estude com papel e lápis.** Nesta disciplina a prova é feita à mão e sem calculadora. Ler o exemplo não basta: copie a conta e refaça sozinho.

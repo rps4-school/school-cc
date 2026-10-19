@@ -24,7 +24,7 @@ Provas de treino no **formato de uma prova de verdade**: tempo marcado, pontuaç
 
 ## 🔌 Sistemas Digitais
 
-Os simulados 01 a 04 têm doze questões por prova, uma de cada assunto de lógica digital, da [aula 1 à 9](../conteudo/sistemas-digitais/README.md). O 05 tem dez questões de eletrônica básica, das aulas 10 a 14, e o corretor aceita a unidade junto (`3 mA` ou `0,003 A`). Cada item tem resolução comentada e, no site, um campo para conferir a resposta.
+Os simulados 01 a 04 têm doze questões por prova, uma de cada assunto de lógica digital, da [aula 1 à 9](../conteudo/sistemas-digitais/README.md). O 05 tem dez questões de eletrônica básica, das aulas 10 a 14, e o corretor aceita a unidade junto (`3 mA` ou `0,003 A`). O 06 e o 07 têm dez questões de Arduino cada, para responder lendo os programas. O 08 é prático: parte da prova é feita no laboratório do site, que confere a montagem sozinho, e a página diz o que é corrigido automaticamente e o que tem só resposta esperada. Cada item tem resolução comentada e, no site, um campo para conferir a resposta.
 
 | Simulado | Nível | Duração | Assuntos |
 | -------- | ----- | ------- | -------- |
@@ -33,6 +33,9 @@ Os simulados 01 a 04 têm doze questões por prova, uma de cada assunto de lógi
 | [**Simulado 03**](sistemas-digitais/simulado-03/README.md) | 🔴 Avançado | 1h30 | Todos, com ponto fixo, overflow e projeto de circuitos |
 | [**Simulado 04**](sistemas-digitais/simulado-04/README.md) | 🔴 Avançado | 1h30 | Todos, com ponto fixo, overflow e projeto de circuitos |
 | [**Simulado 05**](sistemas-digitais/simulado-05/README.md) | 🟡 Intermediário | 1h | Eletrônica básica: circuito, Lei de Ohm, LED, série e paralelo, divisor, protoboard, multímetro e componentes |
+| [**Simulado 06**](sistemas-digitais/simulado-06/README.md) | 🟡 Intermediário | 1h | Fundamentos de Arduino: a placa, limites de corrente, `setup()` e `loop()`, tipos, LED no pino, Blink, serial e botões |
+| [**Simulado 07**](sistemas-digitais/simulado-07/README.md) | 🔴 Avançado | 1h30 | Entradas, saídas e sensores: pull-down, `millis()`, ADC, LDR, PWM, LED RGB, buzzer, ultrassom, servo e motor |
+| [**Simulado 08**](sistemas-digitais/simulado-08/README.md) | 🔴 Avançado | 1h30 | Desafio prático integrado: montagem conferida no laboratório, semáforo com botão de pedestre e código no papel |
 
 ## 📈 Cálculo
 

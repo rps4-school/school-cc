@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "simulado-08-semaforo",
+  "title": "Simulado 08 · Ligue o semáforo",
+  "level": "avancado",
+  "board": "arduino-uno-r3",
+  "components": [
+    { "id": "uno", "type": "arduino-uno-r3", "x": 40, "y": 110 },
+    { "id": "pb1", "type": "protoboard-400", "x": 400, "y": 60 },
+    { "id": "r1", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 220 }, "mount": { "1": "pb1:b1", "2": "pb1:b5" } },
+    { "id": "led1", "type": "led", "x": 0, "y": 0, "props": { "cor": "vermelho" }, "mount": { "anodo": "pb1:e5", "catodo": "pb1:e6" } },
+    { "id": "r2", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 220 }, "mount": { "1": "pb1:b8", "2": "pb1:b12" } },
+    { "id": "led2", "type": "led", "x": 0, "y": 0, "props": { "cor": "verde" }, "mount": { "anodo": "pb1:e12", "catodo": "pb1:e13" } },
+    { "id": "r3", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 220 }, "mount": { "1": "pb1:b15", "2": "pb1:b19" } },
+    { "id": "led3", "type": "led", "x": 0, "y": 0, "props": { "cor": "amarelo" }, "mount": { "anodo": "pb1:e19", "catodo": "pb1:e20" } }
+  ],
+  "connections": [],
+  "sketch": "../../../conteudo/sistemas-digitais/laboratorio/projetos/03-semaforo/semaforo.ino",
+  "capabilities": ["gpio", "serial"],
+  "metadata": {
+    "instrucoes": "Os três LEDs já estão na protoboard, cada um com o seu resistor, mas fora da ordem do semáforo e sem fios. O programa é o semáforo: verde no pino 8, amarelo no 9 e vermelho no 10.\n\n1. Ligue cada pino ao LED da cor certa e os cátodos ao GND.\n2. Clique em Executar e confira a sequência.\n3. Clique em Conferir a montagem, aqui embaixo."
+  },
+  "desafio": {
+    "id": "simulado-08-semaforo",
+    "concluiPagina": false,
+    "criterios": [
+      { "tipo": "led-pelo-pino", "pino": "D8", "cor": "verde", "min": 0.005, "max": 0.02 },
+      { "tipo": "led-pelo-pino", "pino": "D9", "cor": "amarelo", "min": 0.005, "max": 0.02 },
+      { "tipo": "led-pelo-pino", "pino": "D10", "cor": "vermelho", "min": 0.005, "max": 0.02 },
+      { "tipo": "sem-erros", "pinos": { "D8": 1, "D9": 1, "D10": 1 } }
+    ]
+  }
+}
