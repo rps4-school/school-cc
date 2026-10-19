@@ -1,0 +1,19 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 760 320' width='760' height='320' role='img' aria-label='Trepidação do botão: no botão ideal o sinal cai de HIGH para LOW uma vez só; no botão real, os contatos batem e o sinal vai e volta por alguns milissegundos antes de firmar em LOW'>
+<title>Trepidação do botão: no botão ideal o sinal cai de HIGH para LOW uma vez só; no botão real, os contatos batem e o sinal vai e volta por alguns milissegundos antes de firmar em LOW</title>
+<rect width='760' height='320' rx='12' fill='#ffffff'/>
+<text x='30' y='44' font-size='14' fill='#1e293b' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Botão ideal</text>
+<text x='176' y='74' font-size='11' fill='#475569' text-anchor='end' font-family='Inter, Segoe UI, Arial, sans-serif'>HIGH</text>
+<text x='176' y='134' font-size='11' fill='#475569' text-anchor='end' font-family='Inter, Segoe UI, Arial, sans-serif'>LOW</text>
+<polyline points='184,144 730,144' fill='none' stroke='#cbd5e1' stroke-width='1.2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='30' y='174' font-size='14' fill='#dc2626' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Botão de verdade</text>
+<text x='176' y='204' font-size='11' fill='#475569' text-anchor='end' font-family='Inter, Segoe UI, Arial, sans-serif'>HIGH</text>
+<text x='176' y='264' font-size='11' fill='#475569' text-anchor='end' font-family='Inter, Segoe UI, Arial, sans-serif'>LOW</text>
+<polyline points='184,274 730,274' fill='none' stroke='#cbd5e1' stroke-width='1.2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='184,70 384,70 384,70 384,130 724,130' fill='none' stroke='#1e293b' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='400' y='62' font-size='12' fill='#475569' text-anchor='middle' font-family='Inter, Segoe UI, Arial, sans-serif'>apertou</text>
+<polyline points='184,200 384,200 384,200 384,260 398,260 398,260 398,200 406,200 406,200 406,260 424,260 424,260 424,200 430,200 430,200 430,260 446,260 446,260 446,200 450,200 450,200 450,260 724,260' fill='none' stroke='#dc2626' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='384,278 452,278' fill='none' stroke='#b45309' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='384,272 384,284' fill='none' stroke='#b45309' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='452,272 452,284' fill='none' stroke='#b45309' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='330' y='304' font-size='12' fill='#b45309' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>alguns ms de trepidação: o programa pode contar vários apertos</text>
+</svg>

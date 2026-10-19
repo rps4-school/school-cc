@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "id": "botao-e-led",
+  "title": "Projeto 04 · Botão e LED",
+  "level": "iniciante",
+  "board": "arduino-uno-r3",
+  "components": [
+    {
+      "id": "uno",
+      "type": "arduino-uno-r3",
+      "x": 40,
+      "y": 110
+    },
+    {
+      "id": "pb1",
+      "type": "protoboard-400",
+      "x": 400,
+      "y": 60
+    },
+    {
+      "id": "bt1",
+      "type": "botao",
+      "x": 0,
+      "y": 0,
+      "mount": {
+        "1a": "pb1:e10",
+        "2a": "pb1:e12",
+        "1b": "pb1:f10",
+        "2b": "pb1:f12"
+      }
+    },
+    {
+      "id": "r1",
+      "type": "resistor",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "ohms": 220
+      },
+      "mount": {
+        "1": "pb1:b20",
+        "2": "pb1:b24"
+      }
+    },
+    {
+      "id": "led1",
+      "type": "led",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "cor": "vermelho"
+      },
+      "mount": {
+        "anodo": "pb1:e24",
+        "catodo": "pb1:e25"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "w1",
+      "from": "uno:D2",
+      "to": "pb1:a10",
+      "color": "amarelo"
+    },
+    {
+      "id": "w2",
+      "from": "pb1:a12",
+      "to": "pb1:cima-11",
+      "color": "preto"
+    },
+    {
+      "id": "w3",
+      "from": "uno:D8",
+      "to": "pb1:a20",
+      "color": "verde"
+    },
+    {
+      "id": "w4",
+      "from": "pb1:a25",
+      "to": "pb1:cima-21",
+      "color": "preto"
+    },
+    {
+      "id": "w5",
+      "from": "uno:GND.1",
+      "to": "pb1:cima-1",
+      "color": "preto"
+    }
+  ],
+  "sketch": "botao-led.ino",
+  "variantes": [
+    {
+      "arquivo": "botao-sem-pullup.ino",
+      "rotulo": "Com defeito: sem o pull-up"
+    }
+  ],
+  "capabilities": [
+    "gpio"
+  ],
+  "metadata": {
+    "instrucoes": "Botão no pino 2 (com o pull-up interno) e LED no pino 8.\n\n1. Clique em Executar e segure o botão com o mouse (ou selecione e segure Enter): o LED acende só enquanto você segura.\n2. Na aba Código, escolha \"Com defeito: sem o pull-up\" e execute: com o botão solto, o pino fica solto."
+  }
+}

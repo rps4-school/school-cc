@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "desafio-botao-acende-o-led",
+  "title": "Desafio 03 · O botão acende o LED",
+  "level": "intermediario",
+  "board": "arduino-uno-r3",
+  "components": [
+    { "id": "uno", "type": "arduino-uno-r3", "x": 40, "y": 110 },
+    { "id": "pb1", "type": "protoboard-400", "x": 400, "y": 60 },
+    { "id": "bt1", "type": "botao", "x": 0, "y": 0, "mount": { "1a": "pb1:e10", "2a": "pb1:e12", "1b": "pb1:f10", "2b": "pb1:f12" } },
+    { "id": "r1", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 220 }, "mount": { "1": "pb1:b20", "2": "pb1:b24" } },
+    { "id": "led1", "type": "led", "x": 0, "y": 0, "props": { "cor": "vermelho" }, "mount": { "anodo": "pb1:e24", "catodo": "pb1:e25" } }
+  ],
+  "connections": [],
+  "sketch": "../../projetos/04-botao-e-led/botao-led.ino",
+  "capabilities": ["gpio"],
+  "metadata": {
+    "instrucoes": "As peças já estão na protoboard, mas nenhum fio. O programa é o do projeto 04: lê o botão no pino 2 com INPUT_PULLUP e acende o LED do pino 8 enquanto o botão está apertado.\n\n1. Ligue os fios para o programa funcionar (veja a aba Código).\n2. Clique em Executar e segure o botão para testar.\n3. Clique em Conferir a montagem, aqui embaixo: o laboratório roda o programa, aperta e solta o botão sozinho e olha o LED."
+  },
+  "desafio": {
+    "id": "botao-acende-o-led",
+    "criterios": [
+      { "tipo": "sem-erros", "pinos": { "D8": 1 } },
+      {
+        "tipo": "programa",
+        "texto": "Rodando o programa, o LED acende só enquanto o botão está apertado",
+        "dica": "O programa lê o pino 2 com o pull-up interno: o botão liga o pino 2 ao GND. O LED vai do pino 8, pelo resistor, até o GND.",
+        "passos": [
+          { "botoes": false, "esperar": 0.05, "led": false },
+          { "botoes": true, "esperar": 0.05, "led": true },
+          { "botoes": false, "esperar": 0.05, "led": false }
+        ]
+      }
+    ]
+  }
+}

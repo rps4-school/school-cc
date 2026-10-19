@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "desafio-resistor-certo",
+  "title": "Desafio 02 · O resistor certo",
+  "level": "iniciante",
+  "components": [
+    { "id": "bat", "type": "bateria-9v", "x": 80, "y": 70 },
+    { "id": "pb1", "type": "protoboard-400", "x": 220, "y": 20 },
+    { "id": "mm1", "type": "multimetro", "x": 60, "y": 230, "props": { "modo": "A" } },
+    { "id": "r1", "type": "resistor", "x": 0, "y": 0, "props": { "ohms": 100 }, "mount": { "1": "pb1:a3", "2": "pb1:a7" } },
+    { "id": "led1", "type": "led", "x": 0, "y": 0, "props": { "cor": "vermelho" }, "mount": { "anodo": "pb1:c7", "catodo": "pb1:c8" } }
+  ],
+  "connections": [
+    { "id": "w1", "from": "bat:+", "to": "pb1:cima+1", "color": "vermelho" },
+    { "id": "w2", "from": "bat:-", "to": "pb1:cima-1", "color": "preto" },
+    { "id": "w3", "from": "pb1:cima+3", "to": "pb1:e3", "color": "vermelho" },
+    { "id": "w4", "from": "pb1:e8", "to": "mm1:vermelha", "color": "amarelo" },
+    { "id": "w5", "from": "mm1:preta", "to": "pb1:cima-2", "color": "preto" }
+  ],
+  "metadata": {
+    "instrucoes": "Bateria de 9 V, resistor, LED vermelho (2 V) e o multímetro medindo a corrente. Com 100 Ω, a corrente passa do limite do LED.\n\n1. Calcule o resistor para uma corrente entre 10 mA e 15 mA.\n2. Selecione o resistor e escolha o valor na aba Selecionado. O multímetro mostra a corrente.\n3. Clique em Conferir a montagem, aqui embaixo."
+  },
+  "desafio": {
+    "id": "resistor-certo",
+    "criterios": [
+      { "tipo": "corrente-do-led", "min": 0.01, "max": 0.015 },
+      { "tipo": "sem-erros" }
+    ]
+  }
+}

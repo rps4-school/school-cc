@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "id": "luz-automatica",
+  "title": "Projeto 08 · Luz automática",
+  "level": "intermediario",
+  "board": "arduino-uno-r3",
+  "components": [
+    {
+      "id": "uno",
+      "type": "arduino-uno-r3",
+      "x": 40,
+      "y": 110
+    },
+    {
+      "id": "pb1",
+      "type": "protoboard-400",
+      "x": 400,
+      "y": 60
+    },
+    {
+      "id": "ldr1",
+      "type": "ldr",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "luz": 80
+      },
+      "mount": {
+        "1": "pb1:c10",
+        "2": "pb1:c12"
+      }
+    },
+    {
+      "id": "r2",
+      "type": "resistor",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "ohms": 10000
+      },
+      "mount": {
+        "1": "pb1:d12",
+        "2": "pb1:d16"
+      }
+    },
+    {
+      "id": "r1",
+      "type": "resistor",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "ohms": 220
+      },
+      "mount": {
+        "1": "pb1:b20",
+        "2": "pb1:b24"
+      }
+    },
+    {
+      "id": "led1",
+      "type": "led",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "cor": "vermelho"
+      },
+      "mount": {
+        "anodo": "pb1:e24",
+        "catodo": "pb1:e25"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "w1",
+      "from": "pb1:a10",
+      "to": "pb1:cima+9",
+      "color": "vermelho"
+    },
+    {
+      "id": "w2",
+      "from": "pb1:b12",
+      "to": "uno:A0",
+      "color": "amarelo"
+    },
+    {
+      "id": "w3",
+      "from": "pb1:e16",
+      "to": "pb1:cima-14",
+      "color": "preto"
+    },
+    {
+      "id": "w4",
+      "from": "uno:D8",
+      "to": "pb1:a20",
+      "color": "verde"
+    },
+    {
+      "id": "w5",
+      "from": "pb1:a25",
+      "to": "pb1:cima-21",
+      "color": "preto"
+    },
+    {
+      "id": "w6",
+      "from": "uno:5V",
+      "to": "pb1:cima+1",
+      "color": "vermelho"
+    },
+    {
+      "id": "w7",
+      "from": "uno:GND.1",
+      "to": "pb1:cima-1",
+      "color": "preto"
+    }
+  ],
+  "sketch": "luz-automatica.ino",
+  "capabilities": [
+    "adc",
+    "serial"
+  ],
+  "metadata": {
+    "instrucoes": "LDR do 5V ao A0 e resistor de 10 kΩ do A0 ao GND. LED no pino 8.\n\nExecute e diminua a luz do LDR na aba Selecionado: abaixo da leitura 300, o LED acende."
+  }
+}

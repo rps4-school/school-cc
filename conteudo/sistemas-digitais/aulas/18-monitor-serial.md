@@ -1,6 +1,6 @@
 # 📟 Monitor serial
 
-> [← Saídas digitais, LED e Blink](17-saidas-digitais.md) · [Voltar para Sistemas Digitais →](../README.md)
+> [← Saídas digitais, LED e Blink](17-saidas-digitais.md) · Próximo: [Entradas digitais e botões →](19-entradas-digitais.md)
 
 **Nível:** 🟢 Iniciante
 

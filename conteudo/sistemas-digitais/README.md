@@ -10,7 +10,7 @@ Como o computador guarda números, letras e cores usando **só 0 e 1**, e como e
 | ----- | ----- | --------- |
 | Lógica digital | 1 a 9 | Binário, hexadecimal, codificação, portas lógicas e Mapa de Karnaugh |
 | Eletrônica | 10 a 14 | Circuito elétrico, Lei de Ohm, série e paralelo, protoboard, multímetro e componentes (começa do zero, não depende da parte 1) |
-| Arduino | 15 a 18 | A placa Uno, programação em C/C++, saídas digitais (LED, Blink e semáforo) e monitor serial, com os projetos guiados do [Laboratório Arduino](laboratorio/README.md) |
+| Arduino | 15 a 23 | A placa Uno, programação em C/C++, saídas digitais, monitor serial, botões, `millis()`, leitura analógica, PWM, sensores e atuadores, com os projetos guiados do [Laboratório Arduino](laboratorio/README.md) |
 
 ## 🧭 Como estudar
 
@@ -48,6 +48,11 @@ Como o computador guarda números, letras e cores usando **só 0 e 1**, e como e
 | 16 | [Programação Arduino em C/C++](aulas/16-programacao-arduino.md) | 🟢 Iniciante | `setup()` e `loop()`, tipos de 8, 16 e 32 bits, estouro, divisão inteira e funções, comparando com Python | [🟢](exercicios/16-programacao-arduino/facil.md) · [🟡](exercicios/16-programacao-arduino/intermediario.md) · [🔴](exercicios/16-programacao-arduino/dificil.md) |
 | 17 | [Saídas digitais, LED e Blink](aulas/17-saidas-digitais.md) | 🟢 Iniciante | `pinMode`, `digitalWrite` e `delay`, o LED no pino, o Blink, dois LEDs e o semáforo | [🟢](exercicios/17-saidas-digitais/facil.md) · [🟡](exercicios/17-saidas-digitais/intermediario.md) · [🔴](exercicios/17-saidas-digitais/dificil.md) |
 | 18 | [Monitor serial](aulas/18-monitor-serial.md) | 🟢 Iniciante | `Serial.begin`, `print` e `println`, números em binário e hexadecimal e depuração | [🟢](exercicios/18-monitor-serial/facil.md) · [🟡](exercicios/18-monitor-serial/intermediario.md) · [🔴](exercicios/18-monitor-serial/dificil.md) |
+| 19 | [Entradas digitais e botões](aulas/19-entradas-digitais.md) | 🟢 Iniciante | `digitalRead`, pino solto, pull-up e pull-down, `INPUT_PULLUP`, borda e trepidação | [🟢](exercicios/19-entradas-digitais/facil.md) · [🟡](exercicios/19-entradas-digitais/intermediario.md) · [🔴](exercicios/19-entradas-digitais/dificil.md) |
+| 20 | [delay() e millis()](aulas/20-delay-e-millis.md) | 🟡 Intermediário | Por que o `delay` trava, o relógio `millis()`, `unsigned long`, várias tarefas, overflow e máquina de estados | [🟢](exercicios/20-delay-e-millis/facil.md) · [🟡](exercicios/20-delay-e-millis/intermediario.md) · [🔴](exercicios/20-delay-e-millis/dificil.md) |
+| 21 | [Leitura analógica](aulas/21-leitura-analogica.md) | 🟡 Intermediário | `analogRead`, o ADC de 10 bits, volts, `map()`, potenciômetro, LDR e histerese | [🟢](exercicios/21-leitura-analogica/facil.md) · [🟡](exercicios/21-leitura-analogica/intermediario.md) · [🔴](exercicios/21-leitura-analogica/dificil.md) |
+| 22 | [PWM e analogWrite()](aulas/22-pwm.md) | 🟡 Intermediário | Ciclo de trabalho, tensão média, frequência, brilho de LED, LED RGB e os timers | [🟢](exercicios/22-pwm/facil.md) · [🟡](exercicios/22-pwm/intermediario.md) · [🔴](exercicios/22-pwm/dificil.md) |
+| 23 | [Sensores e atuadores](aulas/23-sensores-e-atuadores.md) | 🔴 Avançado | Buzzer com `tone`, PIR, ultrassom com `pulseIn`, servo, motor com transistor, relé e ponte H | [🟢](exercicios/23-sensores-e-atuadores/facil.md) · [🟡](exercicios/23-sensores-e-atuadores/intermediario.md) · [🔴](exercicios/23-sensores-e-atuadores/dificil.md) |
 
 ```mermaid
 flowchart LR
@@ -73,6 +78,11 @@ flowchart LR
     O --> P[16 · Programação Arduino]
     P --> Q[17 · Saídas digitais]
     Q --> R[18 · Monitor serial]
+    R --> S[19 · Entradas digitais]
+    S --> T[20 · delay e millis]
+    T --> U[21 · Leitura analógica]
+    U --> V[22 · PWM]
+    V --> W[23 · Sensores e atuadores]
 ```
 
 ## ✍️ Como responder no corretor
@@ -99,7 +109,7 @@ Nas grandezas (V, A, Ω, W...), a unidade é opcional e qualquer prefixo vale: `
 - [CircuitVerse](https://circuitverse.org/simulator): monte e teste circuitos com portas lógicas no navegador, de graça.
 - [Tabela ASCII completa](https://www.asciitable.com/): códigos de todas as letras e símbolos.
 - [Kit para Montar Circuito DC (PhET)](https://phet.colorado.edu/pt_BR/simulations/circuit-construction-kit-dc): pilhas, lâmpadas, resistores, voltímetro e amperímetro no navegador, de graça e sem conta.
-- [Laboratório Arduino](laboratorio/README.md): simulador de circuitos deste site, com protoboard, LEDs e multímetro (sem conta).
+- [Laboratório Arduino](laboratorio/README.md): simulador de circuitos e de Arduino deste site, com protoboard, LEDs, multímetro, sensores e os programas dos projetos rodando (sem conta).
 - [Tinkercad Circuits](https://www.tinkercad.com/circuits): protoboard, multímetro, LEDs e Arduino no navegador (grátis, precisa de conta).
 - [Wokwi](https://wokwi.com/): simulador de Arduino no navegador, com monitor serial (grátis; salvar pede conta).
 
@@ -108,7 +118,7 @@ Nas grandezas (V, A, Ω, W...), a unidade é opcional e qualquer prefixo vale: `
 | Pasta | O que vai aqui |
 | ----- | -------------- |
 | [`aulas/`](aulas/) | Uma aula completa por assunto, com exemplos e teste rápido |
-| [`exercicios/`](exercicios/README.md) | 162 exercícios (9 por assunto) com resolução passo a passo |
+| [`exercicios/`](exercicios/README.md) | 207 exercícios (9 por assunto) com resolução passo a passo |
 | [`laboratorio/`](laboratorio/README.md) | Simulador de circuitos no site, experimentos de eletrônica e projetos guiados de Arduino |
 | `img/` | Figuras das aulas (portas, circuitos, mapas, esquemas elétricos e a placa Uno) |
 

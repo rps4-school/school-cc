@@ -1,6 +1,6 @@
 # 📟 Monitor serial · 🔴 Difícil
 
-> [← voltar para Exercícios](../README.md) · 📖 Antes, leia: [Monitor serial](../../aulas/18-monitor-serial.md)
+> [← voltar para Exercícios](../README.md) · 📖 Antes, leia: [Monitor serial](../../aulas/18-monitor-serial.md) · Próximo: [Entradas digitais →](../19-entradas-digitais/facil.md)
 
 Responda sem rodar o código: é assim na prova. No site, digite a resposta (com a unidade, se quiser) e clique em **Conferir**; no GitHub, abra **Ver resposta**.
 

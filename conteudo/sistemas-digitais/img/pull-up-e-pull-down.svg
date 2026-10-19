@@ -1,0 +1,90 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 780 380' width='780' height='380' role='img' aria-label='Três jeitos de ligar um botão: pull-down externo (botão no 5 V e resistor de 10 kΩ no GND: solto lê LOW, apertado lê HIGH), pull-up externo (resistor no 5 V e botão no GND: solto lê HIGH, apertado lê LOW) e pull-up interno com INPUT_PULLUP (o resistor fica dentro do Arduino)'>
+<title>Três jeitos de ligar um botão: pull-down externo (botão no 5 V e resistor de 10 kΩ no GND: solto lê LOW, apertado lê HIGH), pull-up externo (resistor no 5 V e botão no GND: solto lê HIGH, apertado lê LOW) e pull-up interno com INPUT_PULLUP (o resistor fica dentro do Arduino)</title>
+<rect width='780' height='380' rx='12' fill='#ffffff'/>
+<text x='130' y='34' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Pull-down externo</text>
+<text x='390' y='34' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Pull-up externo</text>
+<text x='650' y='34' font-size='15' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>INPUT_PULLUP</text>
+<polyline points='100,70 100,84' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='86,70 114,70' fill='none' stroke='#1e293b' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='100' y='62' font-size='13' fill='#dc2626' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>5 V</text>
+<polyline points='100,84 100,113' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='100,141 100,170' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='100' cy='113' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<circle cx='100' cy='141' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='88,107 88,147' fill='none' stroke='#1e293b' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='88,127 78,127' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='78,121 78,133' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='114' y='131' font-size='12' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>botão</text>
+<circle cx='100' cy='190' r='3.5' fill='#1e293b'/>
+<polyline points='100,190 140,190' fill='none' stroke='#4f46e5' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polygon points='152,190 138.23,194.31 138.23,185.69' fill='#4f46e5'/>
+<text x='154' y='195' font-size='13' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>pino 2</text>
+<polyline points='100,170 100,200' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='100,200 100,211' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='100,259 100,270' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(100,235) rotate(90)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<text x='86' y='240' font-size='12' fill='#475569' text-anchor='end' font-family='Inter, Segoe UI, Arial, sans-serif'>10 kΩ</text>
+<polyline points='100,270 100,280' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='86,280 114,280' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='91,285 109,285' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='96,290 104,290' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='360,70 360,84' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='346,70 374,70' fill='none' stroke='#1e293b' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='360' y='62' font-size='13' fill='#dc2626' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>5 V</text>
+<polyline points='360,84 360,98' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='360,146 360,160' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(360,122) rotate(90)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<text x='346' y='126' font-size='12' fill='#475569' text-anchor='end' font-family='Inter, Segoe UI, Arial, sans-serif'>10 kΩ</text>
+<polyline points='360,160 360,190' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='360' cy='190' r='3.5' fill='#1e293b'/>
+<polyline points='360,190 400,190' fill='none' stroke='#4f46e5' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polygon points='412,190 398.23,194.31 398.23,185.69' fill='#4f46e5'/>
+<text x='414' y='195' font-size='13' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>pino 2</text>
+<polyline points='360,190 360,216' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='360,244 360,270' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='360' cy='216' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<circle cx='360' cy='244' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='348,210 348,250' fill='none' stroke='#1e293b' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='348,230 338,230' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='338,224 338,236' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='374' y='234' font-size='12' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>botão</text>
+<polyline points='360,270 360,280' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='346,280 374,280' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='351,285 369,285' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='356,290 364,290' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<rect x='580' y='52' width='180' height='152' rx='10' fill='#eef2ff' stroke='#4f46e5' stroke-width='2' stroke-dasharray='6 4'/>
+<text x='748' y='70' font-size='11' fill='#4f46e5' text-anchor='end' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>dentro do Arduino</text>
+<polyline points='620,96 620,110' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='606,96 634,96' fill='none' stroke='#1e293b' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='620' y='88' font-size='13' fill='#dc2626' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>5 V</text>
+<polyline points='620,110 620,111' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='620,159 620,160' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<g transform='translate(620,135) rotate(90)'><polyline points='-24,0 -20,-7 -12,7 -4,-7 4,7 12,-7 20,7 24,0' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round'/></g>
+<text x='634' y='139' font-size='11' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>20–50 kΩ</text>
+<circle cx='620' cy='170' r='3.5' fill='#1e293b'/>
+<polyline points='620,160 620,222' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='620,170 660,170' fill='none' stroke='#4f46e5' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='666' y='166' font-size='13' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>pino 2</text>
+<circle cx='620' cy='222' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='620,222 620,242' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='620,270 620,290' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<circle cx='620' cy='242' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<circle cx='620' cy='270' r='3.5' fill='#ffffff' stroke='#1e293b' stroke-width='2'/>
+<polyline points='608,236 608,276' fill='none' stroke='#1e293b' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='608,256 598,256' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='598,250 598,262' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='634' y='260' font-size='12' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>botão</text>
+<polyline points='620,290 620,300' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='606,300 634,300' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='611,305 629,305' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='616,310 624,310' fill='none' stroke='#1e293b' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/>
+<rect x='38' y='322' width='184' height='44' rx='8' fill='#f8fafc' stroke='#475569' stroke-width='1.2'/>
+<text x='130' y='340' font-size='12' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>solto → LOW</text>
+<text x='130' y='358' font-size='12' fill='#059669' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>apertado → HIGH</text>
+<rect x='298' y='322' width='184' height='44' rx='8' fill='#f8fafc' stroke='#475569' stroke-width='1.2'/>
+<text x='390' y='340' font-size='12' fill='#059669' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>solto → HIGH</text>
+<text x='390' y='358' font-size='12' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>apertado → LOW</text>
+<rect x='558' y='322' width='184' height='44' rx='8' fill='#f8fafc' stroke='#475569' stroke-width='1.2'/>
+<text x='650' y='340' font-size='12' fill='#059669' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>solto → HIGH</text>
+<text x='650' y='358' font-size='12' fill='#1e293b' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>apertado → LOW</text>
+</svg>

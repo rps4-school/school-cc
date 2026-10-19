@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "desafio-monte-o-blink",
+  "title": "Desafio 01 · Monte o Blink",
+  "level": "iniciante",
+  "board": "arduino-uno-r3",
+  "components": [
+    { "id": "uno", "type": "arduino-uno-r3", "x": 40, "y": 110 },
+    { "id": "pb1", "type": "protoboard-400", "x": 400, "y": 60 }
+  ],
+  "connections": [],
+  "sketch": "../../projetos/01-blink/blink.ino",
+  "capabilities": ["gpio", "serial"],
+  "metadata": {
+    "instrucoes": "Só a placa e a protoboard. O programa já está carregado: é o Blink do projeto 01, com o LED no pino 8.\n\n1. Na aba Adicionar, ponha um LED e um resistor na protoboard.\n2. Ligue: pino 8 → resistor → perna longa do LED; perna curta → GND.\n3. Clique em Executar para ver o LED piscar.\n4. Clique em Conferir a montagem, aqui embaixo."
+  },
+  "desafio": {
+    "id": "monte-o-blink",
+    "criterios": [
+      { "tipo": "led-pelo-pino", "pino": "D8", "min": 0.005, "max": 0.02 },
+      { "tipo": "sem-erros", "pinos": { "D8": 1 } }
+    ]
+  }
+}

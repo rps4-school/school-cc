@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "alarme-de-movimento",
+  "title": "Projeto 11 · Alarme de movimento",
+  "level": "intermediario",
+  "board": "arduino-uno-r3",
+  "components": [
+    {
+      "id": "uno",
+      "type": "arduino-uno-r3",
+      "x": 40,
+      "y": 110
+    },
+    {
+      "id": "pb1",
+      "type": "protoboard-400",
+      "x": 400,
+      "y": 60
+    },
+    {
+      "id": "pir1",
+      "type": "pir",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "movimento": false
+      },
+      "mount": {
+        "vcc": "pb1:c10",
+        "saida": "pb1:c11",
+        "gnd": "pb1:c12"
+      }
+    },
+    {
+      "id": "bz1",
+      "type": "buzzer",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "som": false
+      },
+      "mount": {
+        "+": "pb1:c20",
+        "-": "pb1:c22"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "w1",
+      "from": "pb1:a10",
+      "to": "pb1:cima+9",
+      "color": "vermelho"
+    },
+    {
+      "id": "w2",
+      "from": "pb1:a11",
+      "to": "uno:D2",
+      "color": "amarelo"
+    },
+    {
+      "id": "w3",
+      "from": "pb1:a12",
+      "to": "pb1:cima-11",
+      "color": "preto"
+    },
+    {
+      "id": "w4",
+      "from": "uno:D8",
+      "to": "pb1:a20",
+      "color": "verde"
+    },
+    {
+      "id": "w5",
+      "from": "pb1:a22",
+      "to": "pb1:cima-19",
+      "color": "preto"
+    },
+    {
+      "id": "w6",
+      "from": "uno:5V",
+      "to": "pb1:cima+1",
+      "color": "vermelho"
+    },
+    {
+      "id": "w7",
+      "from": "uno:GND.1",
+      "to": "pb1:cima-1",
+      "color": "preto"
+    }
+  ],
+  "sketch": "alarme.ino",
+  "capabilities": [
+    "gpio",
+    "tone",
+    "serial"
+  ],
+  "metadata": {
+    "instrucoes": "Sensor PIR: VCC no 5V, OUT no pino 2, GND no GND. Buzzer no pino 8; o LED é o L da placa (pino 13).\n\nExecute e segure o sensor com o mouse (ou use Fazer movimento): o LED L pisca, o buzzer bipa e a serial avisa uma vez por movimento."
+  }
+}

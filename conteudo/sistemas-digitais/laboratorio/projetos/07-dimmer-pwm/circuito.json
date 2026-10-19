@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "id": "dimmer-pwm",
+  "title": "Projeto 07 · Dimmer com PWM",
+  "level": "intermediario",
+  "board": "arduino-uno-r3",
+  "components": [
+    {
+      "id": "uno",
+      "type": "arduino-uno-r3",
+      "x": 40,
+      "y": 110
+    },
+    {
+      "id": "pb1",
+      "type": "protoboard-400",
+      "x": 400,
+      "y": 60
+    },
+    {
+      "id": "pot1",
+      "type": "potenciometro",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "ohms": 10000,
+        "posicao": 50
+      },
+      "mount": {
+        "1": "pb1:a10",
+        "cursor": "pb1:a11",
+        "3": "pb1:a12"
+      }
+    },
+    {
+      "id": "r1",
+      "type": "resistor",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "ohms": 220
+      },
+      "mount": {
+        "1": "pb1:b20",
+        "2": "pb1:b24"
+      }
+    },
+    {
+      "id": "led1",
+      "type": "led",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "cor": "vermelho"
+      },
+      "mount": {
+        "anodo": "pb1:e24",
+        "catodo": "pb1:e25"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "w1",
+      "from": "pb1:e10",
+      "to": "pb1:cima-9",
+      "color": "preto"
+    },
+    {
+      "id": "w2",
+      "from": "pb1:e12",
+      "to": "pb1:cima+11",
+      "color": "vermelho"
+    },
+    {
+      "id": "w3",
+      "from": "pb1:c11",
+      "to": "uno:A0",
+      "color": "amarelo"
+    },
+    {
+      "id": "w4",
+      "from": "uno:D9",
+      "to": "pb1:a20",
+      "color": "verde"
+    },
+    {
+      "id": "w5",
+      "from": "pb1:a25",
+      "to": "pb1:cima-21",
+      "color": "preto"
+    },
+    {
+      "id": "w6",
+      "from": "uno:5V",
+      "to": "pb1:cima+1",
+      "color": "vermelho"
+    },
+    {
+      "id": "w7",
+      "from": "uno:GND.1",
+      "to": "pb1:cima-1",
+      "color": "preto"
+    }
+  ],
+  "sketch": "dimmer.ino",
+  "capabilities": [
+    "adc",
+    "pwm",
+    "serial"
+  ],
+  "metadata": {
+    "instrucoes": "Potenciômetro no A0 e LED no pino 9 (PWM).\n\nExecute e mova o cursor do potenciômetro: o brilho do LED acompanha, e a aba Serial mostra o valor de 0 a 255."
+  }
+}

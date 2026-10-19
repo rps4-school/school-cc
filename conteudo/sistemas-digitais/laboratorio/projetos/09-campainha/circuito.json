@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "id": "campainha",
+  "title": "Projeto 09 · Campainha",
+  "level": "iniciante",
+  "board": "arduino-uno-r3",
+  "components": [
+    {
+      "id": "uno",
+      "type": "arduino-uno-r3",
+      "x": 40,
+      "y": 110
+    },
+    {
+      "id": "pb1",
+      "type": "protoboard-400",
+      "x": 400,
+      "y": 60
+    },
+    {
+      "id": "bt1",
+      "type": "botao",
+      "x": 0,
+      "y": 0,
+      "mount": {
+        "1a": "pb1:e10",
+        "2a": "pb1:e12",
+        "1b": "pb1:f10",
+        "2b": "pb1:f12"
+      }
+    },
+    {
+      "id": "bz1",
+      "type": "buzzer",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "som": false
+      },
+      "mount": {
+        "+": "pb1:c20",
+        "-": "pb1:c22"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "w1",
+      "from": "uno:D2",
+      "to": "pb1:a10",
+      "color": "amarelo"
+    },
+    {
+      "id": "w2",
+      "from": "pb1:a12",
+      "to": "pb1:cima-11",
+      "color": "preto"
+    },
+    {
+      "id": "w3",
+      "from": "uno:D8",
+      "to": "pb1:a20",
+      "color": "verde"
+    },
+    {
+      "id": "w4",
+      "from": "pb1:a22",
+      "to": "pb1:cima-19",
+      "color": "preto"
+    },
+    {
+      "id": "w5",
+      "from": "uno:GND.1",
+      "to": "pb1:cima-1",
+      "color": "preto"
+    }
+  ],
+  "sketch": "campainha.ino",
+  "capabilities": [
+    "gpio",
+    "tone",
+    "serial"
+  ],
+  "metadata": {
+    "instrucoes": "Botão no pino 2 e buzzer no pino 8.\n\nExecute e aperte o botão: o buzzer toca duas notas (880 Hz e 659 Hz). Para ouvir, marque \"Tocar o som\" nas propriedades do buzzer."
+  }
+}

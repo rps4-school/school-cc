@@ -1,0 +1,26 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 760 420' width='760' height='420' role='img' aria-label='PWM com três ciclos de trabalho: com analogWrite 64 o pino fica 25 % do tempo em 5 V e a média é 1,25 V; com 128, 50 % e 2,5 V; com 191, 75 % e 3,75 V; o período é o mesmo, perto de 2 ms'>
+<title>PWM com três ciclos de trabalho: com analogWrite 64 o pino fica 25 % do tempo em 5 V e a média é 1,25 V; com 128, 50 % e 2,5 V; com 191, 75 % e 3,75 V; o período é o mesmo, perto de 2 ms</title>
+<rect width='760' height='420' rx='12' fill='#ffffff'/>
+<text x='30' y='60' font-size='13' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>analogWrite(9, 64)</text>
+<text x='30' y='80' font-size='12' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>25 % do tempo em 5 V</text>
+<text x='30' y='98' font-size='12' fill='#059669' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>média: 1,25 V</text>
+<polyline points='230,120 730,120' fill='none' stroke='#cbd5e1' stroke-width='1.2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='240,50 280,50 280,50 280,120 400,120 400,120 400,50 440,50 440,50 440,120 560,120 560,120 560,50 600,50 600,50 600,120 720,120' fill='none' stroke='#1e293b' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='240,102.5 720,102.5' fill='none' stroke='#059669' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round' stroke-dasharray='6 4'/>
+<text x='30' y='180' font-size='13' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>analogWrite(9, 128)</text>
+<text x='30' y='200' font-size='12' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>50 % do tempo em 5 V</text>
+<text x='30' y='218' font-size='12' fill='#059669' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>média: 2,5 V</text>
+<polyline points='230,240 730,240' fill='none' stroke='#cbd5e1' stroke-width='1.2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='240,170 320,170 320,170 320,240 400,240 400,240 400,170 480,170 480,170 480,240 560,240 560,240 560,170 640,170 640,170 640,240 720,240' fill='none' stroke='#1e293b' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='240,205 720,205' fill='none' stroke='#059669' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round' stroke-dasharray='6 4'/>
+<text x='30' y='300' font-size='13' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>analogWrite(9, 191)</text>
+<text x='30' y='320' font-size='12' fill='#475569' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>75 % do tempo em 5 V</text>
+<text x='30' y='338' font-size='12' fill='#059669' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>média: 3,75 V</text>
+<polyline points='230,360 730,360' fill='none' stroke='#cbd5e1' stroke-width='1.2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='240,290 360,290 360,290 360,360 400,360 400,360 400,290 520,290 520,290 520,360 560,360 560,360 560,290 680,290 680,290 680,360 720,360' fill='none' stroke='#1e293b' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='240,307.5 720,307.5' fill='none' stroke='#059669' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round' stroke-dasharray='6 4'/>
+<polyline points='240,390 400,390' fill='none' stroke='#b45309' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='240,384 240,396' fill='none' stroke='#b45309' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='400,384 400,396' fill='none' stroke='#b45309' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='410' y='395' font-size='12' fill='#b45309' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>1 período: ≈ 2,04 ms no pino 9 (≈ 490 Hz)</text>
+</svg>

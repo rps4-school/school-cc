@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "id": "cancela-automatica",
+  "title": "Projeto 12 · Cancela automática",
+  "level": "avancado",
+  "board": "arduino-uno-r3",
+  "components": [
+    {
+      "id": "uno",
+      "type": "arduino-uno-r3",
+      "x": 40,
+      "y": 110
+    },
+    {
+      "id": "pb1",
+      "type": "protoboard-400",
+      "x": 400,
+      "y": 60
+    },
+    {
+      "id": "us1",
+      "type": "hcsr04",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "distancia": 50
+      },
+      "mount": {
+        "vcc": "pb1:c10",
+        "trig": "pb1:c11",
+        "eco": "pb1:c12",
+        "gnd": "pb1:c13"
+      }
+    },
+    {
+      "id": "servo1",
+      "type": "servo",
+      "x": 500,
+      "y": -100
+    }
+  ],
+  "connections": [
+    {
+      "id": "w1",
+      "from": "pb1:a10",
+      "to": "pb1:cima+9",
+      "color": "vermelho"
+    },
+    {
+      "id": "w2",
+      "from": "pb1:a11",
+      "to": "uno:D9",
+      "color": "amarelo"
+    },
+    {
+      "id": "w3",
+      "from": "pb1:a12",
+      "to": "uno:D10",
+      "color": "verde"
+    },
+    {
+      "id": "w4",
+      "from": "pb1:a13",
+      "to": "pb1:cima-11",
+      "color": "preto"
+    },
+    {
+      "id": "w5",
+      "from": "servo1:gnd",
+      "to": "pb1:cima-2",
+      "color": "preto"
+    },
+    {
+      "id": "w6",
+      "from": "servo1:vcc",
+      "to": "pb1:cima+2",
+      "color": "vermelho"
+    },
+    {
+      "id": "w7",
+      "from": "servo1:sinal",
+      "to": "uno:D6",
+      "color": "laranja"
+    },
+    {
+      "id": "w8",
+      "from": "uno:5V",
+      "to": "pb1:cima+1",
+      "color": "vermelho"
+    },
+    {
+      "id": "w9",
+      "from": "uno:GND.1",
+      "to": "pb1:cima-1",
+      "color": "preto"
+    }
+  ],
+  "sketch": "cancela.ino",
+  "capabilities": [
+    "gpio",
+    "servo",
+    "serial"
+  ],
+  "metadata": {
+    "instrucoes": "Sensor ultrassônico: Trig no pino 9 e Echo no 10. Servo: sinal no pino 6, 5V e GND pelos barramentos.\n\nExecute e aproxime o objeto na aba Selecionado do sensor: abaixo de 20 cm, a cancela sobe para 90°. A aba Serial mostra a distância medida."
+  }
+}

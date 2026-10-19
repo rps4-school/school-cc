@@ -88,7 +88,7 @@ O botão comum de protoboard tem **4 pinos**, mas só **2 contatos**: os pinos a
 
 - Na protoboard, encaixe o botão **atravessando o canal central**, com A e B numa metade e C e D na outra.
 - Girado 90°, ele pode ficar com os pinos que já estão ligados em colunas diferentes: aí ele age como um fio, **sempre ligado**.
-- Ligar o botão ao Arduino pede um resistor de *pull-down* ou o *pull-up* interno: fica para a aula de entradas digitais.
+- Ligar o botão ao Arduino pede um resistor de *pull-down* ou o *pull-up* interno: veja a aula de [Entradas digitais e botões](19-entradas-digitais.md).
 
 ## 5. LED RGB e buzzer
 

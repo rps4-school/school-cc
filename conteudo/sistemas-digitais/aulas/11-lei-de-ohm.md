@@ -171,6 +171,7 @@ Os resistores dos kits são de **1/4 W (0,25 W)**. Passou disso, eles esquentam 
 2. Troque a pilha pela **bateria de 9 V** sem resistor e veja o que acontece com a lâmpada. Depois coloque um resistor e aumente o valor dele aos poucos.
 3. No [Tinkercad Circuits](https://www.tinkercad.com/circuits) (grátis, precisa de conta), ponha 4 pilhas AA num suporte e meça a tensão com o multímetro. Depois acenda um LED vermelho com o resistor que você calcular para 20 mA.
 4. No [laboratório do site](../laboratorio/experimentos/01-led-com-resistor/README.md), sem conta: meça a corrente do LED do Exemplo 4 e veja o que acontece com um resistor menor e sem resistor.
+5. **Desafio:** no [desafio 02 · O resistor certo](../laboratorio/desafios/02-resistor-certo/README.md), escolha o resistor para 10 a 15 mA. O laboratório confere e marca no seu progresso.
 
 ## ⚠️ Erros comuns
 

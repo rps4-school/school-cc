@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "id": "potenciometro-e-serial",
+  "title": "Projeto 06 · Potenciômetro e monitor serial",
+  "level": "iniciante",
+  "board": "arduino-uno-r3",
+  "components": [
+    {
+      "id": "uno",
+      "type": "arduino-uno-r3",
+      "x": 40,
+      "y": 110
+    },
+    {
+      "id": "pb1",
+      "type": "protoboard-400",
+      "x": 400,
+      "y": 60
+    },
+    {
+      "id": "pot1",
+      "type": "potenciometro",
+      "x": 0,
+      "y": 0,
+      "props": {
+        "ohms": 10000,
+        "posicao": 50
+      },
+      "mount": {
+        "1": "pb1:a10",
+        "cursor": "pb1:a11",
+        "3": "pb1:a12"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "w1",
+      "from": "pb1:e10",
+      "to": "pb1:cima-9",
+      "color": "preto"
+    },
+    {
+      "id": "w2",
+      "from": "pb1:e12",
+      "to": "pb1:cima+11",
+      "color": "vermelho"
+    },
+    {
+      "id": "w3",
+      "from": "pb1:c11",
+      "to": "uno:A0",
+      "color": "amarelo"
+    },
+    {
+      "id": "w4",
+      "from": "uno:5V",
+      "to": "pb1:cima+1",
+      "color": "vermelho"
+    },
+    {
+      "id": "w5",
+      "from": "uno:GND.1",
+      "to": "pb1:cima-1",
+      "color": "preto"
+    }
+  ],
+  "sketch": "potenciometro.ino",
+  "capabilities": [
+    "adc",
+    "serial"
+  ],
+  "metadata": {
+    "instrucoes": "Potenciômetro: pontas no GND e no 5V, cursor no A0.\n\nExecute, abra a aba Serial e mova o cursor na aba Selecionado: a leitura vai de 0 a 1023 e a tensão de 0 a 5 V."
+  }
+}

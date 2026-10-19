@@ -29,7 +29,7 @@
 | `digitalWrite(8, LOW);` | Põe **0 V** no pino 8 | No `loop()` |
 | `delay(1000);` | **Espera** 1 000 ms (1 s) sem fazer mais nada | No `loop()` |
 
-> ⚠️ Durante o `delay`, o Arduino **não faz mais nada**: não lê botão, não pisca outro LED. A aula de temporização mostra como fugir disso com `millis()`.
+> ⚠️ Durante o `delay`, o Arduino **não faz mais nada**: não lê botão, não pisca outro LED. A aula [delay() e millis()](20-delay-e-millis.md) mostra como fugir disso.
 
 ## 2. LED num pino
 
@@ -143,6 +143,7 @@ Dentro do ATmega328P, os pinos 8 a 13 são os bits 0 a 5 do registrador **PORTB*
 1. Faça o [projeto 01 · Blink](../laboratorio/projetos/01-blink/README.md) no laboratório do site (ou no Tinkercad, ou no Wokwi), com o LED no pino 8.
 2. Troque os dois `delay(1000)` por `delay(250)`. O que acontece com o período?
 3. **Desafio dos LEDs:** com dois LEDs, faça os três comportamentos da seção 5 (síncronos, alternados e ritmados). Depois, compare com o [projeto 02](../laboratorio/projetos/02-dois-leds-alternados/README.md).
+4. **Desafio com conferência:** no [desafio 01 · Monte o Blink](../laboratorio/desafios/01-monte-o-blink/README.md), monte o circuito do zero. O laboratório confere a montagem.
 
 ## ⚠️ Erros comuns
 

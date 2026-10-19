@@ -4,7 +4,7 @@
 
 **Nível:** 🟢 Iniciante
 
-162 exercícios, 9 por assunto, com contexto de computação, de eletrônica e de Arduino e **resolução passo a passo**. Eles seguem a ordem das [aulas](../aulas/): leia a aula, depois faça os exercícios do fácil ao difícil.
+207 exercícios, 9 por assunto, com contexto de computação, de eletrônica e de Arduino e **resolução passo a passo**. Eles seguem a ordem das [aulas](../aulas/): leia a aula, depois faça os exercícios do fácil ao difícil.
 
 ## 🧭 Como praticar
 
@@ -41,5 +41,10 @@
 | 💻 Programação Arduino | [Aula](../aulas/16-programacao-arduino.md) | [🟢 Fácil](16-programacao-arduino/facil.md) · [🟡 Intermediário](16-programacao-arduino/intermediario.md) · [🔴 Difícil](16-programacao-arduino/dificil.md) |
 | 💡 Saídas digitais | [Aula](../aulas/17-saidas-digitais.md) | [🟢 Fácil](17-saidas-digitais/facil.md) · [🟡 Intermediário](17-saidas-digitais/intermediario.md) · [🔴 Difícil](17-saidas-digitais/dificil.md) |
 | 📟 Monitor serial | [Aula](../aulas/18-monitor-serial.md) | [🟢 Fácil](18-monitor-serial/facil.md) · [🟡 Intermediário](18-monitor-serial/intermediario.md) · [🔴 Difícil](18-monitor-serial/dificil.md) |
+| 🔘 Entradas digitais | [Aula](../aulas/19-entradas-digitais.md) | [🟢 Fácil](19-entradas-digitais/facil.md) · [🟡 Intermediário](19-entradas-digitais/intermediario.md) · [🔴 Difícil](19-entradas-digitais/dificil.md) |
+| ⏱️ delay() e millis() | [Aula](../aulas/20-delay-e-millis.md) | [🟢 Fácil](20-delay-e-millis/facil.md) · [🟡 Intermediário](20-delay-e-millis/intermediario.md) · [🔴 Difícil](20-delay-e-millis/dificil.md) |
+| 🎛️ Leitura analógica | [Aula](../aulas/21-leitura-analogica.md) | [🟢 Fácil](21-leitura-analogica/facil.md) · [🟡 Intermediário](21-leitura-analogica/intermediario.md) · [🔴 Difícil](21-leitura-analogica/dificil.md) |
+| 🌗 PWM | [Aula](../aulas/22-pwm.md) | [🟢 Fácil](22-pwm/facil.md) · [🟡 Intermediário](22-pwm/intermediario.md) · [🔴 Difícil](22-pwm/dificil.md) |
+| 📡 Sensores e atuadores | [Aula](../aulas/23-sensores-e-atuadores.md) | [🟢 Fácil](23-sensores-e-atuadores/facil.md) · [🟡 Intermediário](23-sensores-e-atuadores/intermediario.md) · [🔴 Difícil](23-sensores-e-atuadores/dificil.md) |
 
 > 💡 **Terminou tudo?** Volte nas questões que errou depois de alguns dias. Acertar de novo, sem olhar, é o que fixa o conteúdo.

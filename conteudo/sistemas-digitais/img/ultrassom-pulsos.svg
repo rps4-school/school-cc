@@ -1,0 +1,19 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 760 330' width='760' height='330' role='img' aria-label='Pulsos do sensor ultrassônico HC-SR04: o Arduino manda um pulso de 10 microssegundos no Trig; o sensor emite o ultrassom e mantém o Echo em HIGH até o eco voltar; a largura t do pulso no Echo dá a distância, d = t / 58 em centímetros'>
+<title>Pulsos do sensor ultrassônico HC-SR04: o Arduino manda um pulso de 10 microssegundos no Trig; o sensor emite o ultrassom e mantém o Echo em HIGH até o eco voltar; a largura t do pulso no Echo dá a distância, d = t / 58 em centímetros</title>
+<rect width='760' height='330' rx='12' fill='#ffffff'/>
+<text x='30' y='60' font-size='13' fill='#4f46e5' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Trig (Arduino → sensor)</text>
+<polyline points='220,100 730,100' fill='none' stroke='#cbd5e1' stroke-width='1.2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='30' y='150' font-size='13' fill='#b45309' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Ultrassom (40 kHz)</text>
+<polyline points='220,190 730,190' fill='none' stroke='#cbd5e1' stroke-width='1.2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='30' y='240' font-size='13' fill='#059669' text-anchor='start' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>Echo (sensor → Arduino)</text>
+<polyline points='220,280 730,280' fill='none' stroke='#cbd5e1' stroke-width='1.2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='220,100 260,100 260,100 260,70 280,70 280,70 280,100 730,100' fill='none' stroke='#4f46e5' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='250' y='64' font-size='11' fill='#4f46e5' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>10 µs</text>
+<polyline points='220,190 300,190 300,190 300,160 303,160 303,160 303,190 306,190 306,190 306,160 309,160 309,160 309,190 312,190 312,190 312,160 315,160 315,160 315,190 318,190 318,190 318,160 321,160 321,160 321,190 324,190 324,190 324,160 327,160 327,160 327,190 330,190 330,190 330,160 333,160 333,160 333,190 336,190 336,190 336,160 339,160 339,160 339,190 342,190 342,190 342,160 345,160 345,160 345,190 348,190 730,190' fill='none' stroke='#b45309' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='330' y='152' font-size='11' fill='#b45309' text-anchor='start' font-family='Inter, Segoe UI, Arial, sans-serif'>8 pulsos</text>
+<polyline points='220,280 350,280 350,280 350,250 640,250 640,250 640,280 730,280' fill='none' stroke='#059669' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='350,300 640,300' fill='none' stroke='#059669' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='350,294 350,306' fill='none' stroke='#059669' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round'/>
+<polyline points='640,294 640,306' fill='none' stroke='#059669' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round'/>
+<text x='495' y='320' font-size='12' fill='#059669' text-anchor='middle' font-weight='bold' font-family='Inter, Segoe UI, Arial, sans-serif'>t: o som vai até o objeto e volta  →  d = t / 58 (cm)</text>
+</svg>
