@@ -665,7 +665,8 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
         const p = window.SchoolCC && window.SchoolCC.progresso;
         if (p) {
           p.conferiu(`desafio:${desafio.id || "laboratorio"}`, true, { valor: "montagem conferida no laboratório" });
-          p.concluir(null, true);
+          // Num simulado, a montagem é só uma questão: "concluiPagina": false registra o acerto sem concluir a página.
+          if (desafio.concluiPagina !== false) p.concluir(null, true);
         }
         avisar(`Desafio concluído: ${certos} de ${resultado.itens.length} itens certos.${p ? " Ficou marcado no seu progresso." : ""}`);
       } else {

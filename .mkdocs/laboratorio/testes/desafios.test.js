@@ -132,6 +132,48 @@ test("03 · O botão acende o LED: o laboratório roda o programa e aperta o bot
   assert.match(ledNo5v.itens[1].dica, /solto, o LED ficou aceso/);
 });
 
+// ---------- Simulado 08 · Ligue o semáforo (os LEDs estão fora da ordem das cores) ----------
+
+const SIMULADO = "simulados/sistemas-digitais/simulado-08";
+
+function semaforo(mudar = () => {}) {
+  const dados = JSON.parse(readFileSync(join(RAIZ, SIMULADO, "circuito.json"), "utf8"));
+  mudar(dados);
+  const r = validar(dados);
+  assert.ok(r.ok, r.erros.join("\n"));
+  return r.projeto;
+}
+
+// Na protoboard: vermelho nas colunas 1–6, verde nas 8–13, amarelo nas 15–20.
+const ENTRADA = { vermelho: "pb1:a1", verde: "pb1:a8", amarelo: "pb1:a15" };
+function fiosDoSemaforo(d, ordem = { D8: "verde", D9: "amarelo", D10: "vermelho" }) {
+  let n = 1;
+  for (const [pino, cor] of Object.entries(ordem)) d.connections.push(fio(`w${n++}`, `uno:${pino}`, ENTRADA[cor], "verde"));
+  d.connections.push(fio("w4", "pb1:a6", "pb1:cima-6"), fio("w5", "pb1:a13", "pb1:cima-11"), fio("w6", "pb1:a20", "pb1:cima-17"), fio("w7", "uno:GND.1", "pb1:cima-1"));
+}
+
+test("simulado 08 · o semáforo só passa com cada cor no seu pino, e não conclui a página sozinho", () => {
+  const inicio = semaforo();
+  assert.equal(inicio.desafio.concluiPagina, false, "a montagem é só uma questão do simulado");
+  assert.ok(existsSync(join(RAIZ, SIMULADO, inicio.sketch)), inicio.sketch);
+  assert.equal(conferir(inicio).ok, false);
+
+  const certo = conferir(semaforo((d) => fiosDoSemaforo(d)));
+  assert.ok(certo.ok, JSON.stringify(certo.itens));
+
+  // Na ordem da protoboard (pino 8 no primeiro LED, que é o vermelho): as cores ficam trocadas.
+  const naOrdem = conferir(semaforo((d) => fiosDoSemaforo(d, { D8: "vermelho", D9: "verde", D10: "amarelo" })));
+  assert.equal(naOrdem.ok, false);
+  assert.match(naOrdem.itens[0].dica, /quem acendeu foi o LED vermelho, e não o verde/);
+  assert.equal(naOrdem.itens.filter((i) => !i.ok).length, 3, "as três cores erradas");
+
+  const semGnd = conferir(semaforo((d) => {
+    fiosDoSemaforo(d);
+    d.connections = d.connections.filter((f) => f.id !== "w7");
+  }));
+  assert.equal(semGnd.ok, false, "sem o fio do GND, nada acende");
+});
+
 test("03 · sem o firmware, o critério do programa não passa e explica por quê", () => {
   const r = conferir(abrir("03-botao-acende-o-led", (d) => fiosDoBotao(d)), null);
   assert.equal(r.ok, false);

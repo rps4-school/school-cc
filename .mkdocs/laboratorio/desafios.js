@@ -5,9 +5,9 @@
 // No circuito.json: "desafio": { "id": "...", "criterios": [ { "tipo": ..., "texto"?, "dica"? }, ... ] }
 //   { tipo: "sem-erros", pinos?: { D8: 1 } }    nenhum diagnóstico de nível "erro" (curto, LED sem resistor,
 //                                                corrente demais no pino), com esses pinos de saída no nível dado
-//   { tipo: "led-pelo-pino", pino: "D8", min, max }
-//                                                com o pino em HIGH, um LED acende com corrente de min a max (A);
-//                                                com o pino em LOW, esse LED apaga
+//   { tipo: "led-pelo-pino", pino: "D8", min, max, cor? }
+//                                                com o pino em HIGH, um LED (da cor pedida, se houver) acende
+//                                                com corrente de min a max (A); com o pino em LOW, esse LED apaga
 //   { tipo: "corrente-do-led", min, max }       algum LED aceso com corrente de min a max, sem programa
 //   { tipo: "programa", passos: [{ botoes: true|false, esperar: s, led: true|false }, ...] }
 //                                                roda o firmware do projeto; em cada passo, aperta (ou solta)
@@ -35,13 +35,18 @@ function semErros(projeto, c) {
 
 function ledPeloPino(projeto, c) {
   const n = numeroDoPino(c.pino);
-  const texto = c.texto || `Com o pino ${n} em HIGH, um LED acende com ${corrente(c.min)} a ${corrente(c.max)}; com o pino em LOW, ele apaga`;
+  const qual = c.cor ? `o LED ${c.cor}` : "um LED";
+  const texto = c.texto || `Com o pino ${n} em HIGH, ${qual} acende com ${corrente(c.min)} a ${corrente(c.max)}; com o pino em LOW, ele apaga`;
   if (!temUno(projeto)) return { texto, ok: false, dica: "Falta o Arduino Uno no circuito." };
   const alto = analisar(projeto, { pinos: saidas({ [c.pino]: 1 }) });
   const baixo = analisar(projeto, { pinos: saidas({ [c.pino]: 0 }) });
-  const acesos = leds(projeto).filter((l) => alto.componentes[l.id] && alto.componentes[l.id].ligado);
+  const todos = leds(projeto).filter((l) => alto.componentes[l.id] && alto.componentes[l.id].ligado);
+  // Com cor pedida, só conta o LED dessa cor (os outros podem estar acesos por outros pinos).
+  const acesos = c.cor ? todos.filter((l) => (l.props || {}).cor === c.cor) : todos;
   if (!acesos.length) {
-    return { texto, ok: false, dica: c.dica || `Com o pino ${n} em HIGH, nenhum LED acendeu. Siga o caminho: pino ${n} → resistor → perna longa (ânodo) do LED → perna curta (cátodo) → GND.` };
+    const outro = todos.find((l) => !(baixo.componentes[l.id] && baixo.componentes[l.id].ligado));
+    if (c.cor && outro) return { texto, ok: false, dica: `Com o pino ${n} em HIGH, quem acendeu foi o LED ${(outro.props || {}).cor}, e não o ${c.cor}. Confira qual fio vai em qual LED.` };
+    return { texto, ok: false, dica: c.dica || `Com o pino ${n} em HIGH, ${c.cor ? `o LED ${c.cor} não acendeu` : "nenhum LED acendeu"}. Siga o caminho: pino ${n} → resistor → perna longa (ânodo) do LED → perna curta (cátodo) → GND.` };
   }
   const naFaixa = acesos.filter((l) => alto.componentes[l.id].corrente >= c.min && alto.componentes[l.id].corrente <= c.max);
   if (!naFaixa.length) {

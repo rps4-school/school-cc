@@ -108,11 +108,11 @@ Um desafio é um `circuito.json` com a chave `desafio` (em `conteudo/sistemas-di
 | Critério | O que confere |
 | -------- | ------------- |
 | `sem-erros` | Nenhum diagnóstico de nível erro, com os pinos de `pinos` como saída no nível dado |
-| `led-pelo-pino` | Com o pino em HIGH, um LED acende com corrente de `min` a `max` (A); com o pino em LOW, esse LED apaga |
+| `led-pelo-pino` | Com o pino em HIGH, um LED (da `cor` pedida, se houver) acende com corrente de `min` a `max` (A); com o pino em LOW, esse LED apaga |
 | `corrente-do-led` | Algum LED aceso com corrente de `min` a `max`, sem programa |
 | `programa` | Roda o firmware do `sketch` do projeto; em cada passo, aperta (ou solta) todos os botões, espera e confere se algum LED está aceso |
 
-Os critérios olham o **comportamento**, nunca a posição das peças: qualquer montagem que funcione passa. Cada critério aceita `texto` e `dica` para trocar as frases padrão. O `sketch` pode apontar para o `.ino` de um projeto (`../../projetos/04-botao-e-led/botao-led.ino`), sem copiar o código. Todo desafio novo precisa de casos em `testes/desafios.test.js`: o circuito inicial não passa, uma montagem certa passa e os erros típicos falham no critério certo.
+Os critérios olham o **comportamento**, nunca a posição das peças: qualquer montagem que funcione passa. Cada critério aceita `texto` e `dica` para trocar as frases padrão. O `sketch` pode apontar para o `.ino` de um projeto (`../../projetos/04-botao-e-led/botao-led.ino`), sem copiar o código. Num simulado, a montagem é só uma das questões: com `"concluiPagina": false`, o acerto vai para o progresso sem marcar a página como concluída (é o caso do simulado 08). Todo desafio novo precisa de casos em `testes/desafios.test.js`: o circuito inicial não passa, uma montagem certa passa e os erros típicos falham no critério certo.
 
 ## Formato do projeto
 
