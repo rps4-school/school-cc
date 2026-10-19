@@ -15,6 +15,8 @@ export const PARAMETROS = {
   voltimetro: 10e6, // Ω entre as pontas no modo V
   amperimetro: 0.05, // Ω entre as pontas no modo A
   pino: { rint: 25, pullup: 35000 }, // pino de saída e resistor de pull-up do ATmega328P
+  buzzer: 10000, // Ω de um buzzer piezo passivo: quase não puxa corrente
+  rgb: { r: 2.0, g: 3.0, b: 3.0 }, // tensão de cada cor do LED RGB
 };
 
 // Abaixo disso, o LED está tecnicamente conduzindo, mas não se vê luz nenhuma.
@@ -33,8 +35,22 @@ export function tensaoDoLed(cor) {
 
 // opcoes.pinos: { D8: { modo: "saida", nivel: 1 } | { modo: "pullup" } | { modo: "entrada" } } dos pinos
 // do Uno que o programa configurou (o emulador preenche; sem ele, todos ficam como entrada solta).
+// opcoes.estados: estado interno de sensores que mudam com o tempo, como { us1: { eco: true } } do HC-SR04.
 export function analisar(projeto, opcoes = {}) {
   const redes = montarRedes(projeto);
+  // Sensores e o servo só funcionam com o VCC num + (5V do Uno, pilhas, bateria) e o GND num −.
+  const positivos = new Set();
+  const negativos = new Set();
+  for (const x of projeto.components) {
+    if (x.type === "arduino-uno-r3") {
+      positivos.add(redes.rede(`${x.id}:5V`));
+      negativos.add(redes.rede(`${x.id}:GND.1`));
+    } else if (x.type === "pilhas" || x.type === "bateria-9v") {
+      positivos.add(redes.rede(`${x.id}:+`));
+      negativos.add(redes.rede(`${x.id}:-`));
+    }
+  }
+  const alimentados = new Set();
   const usados = new Map(); // rede → nó do sistema
   const no = (rede) => {
     if (rede < 0) return -1;
@@ -54,6 +70,15 @@ export function analisar(projeto, opcoes = {}) {
     origem.fontes.push(dono);
   };
   const ref = (c, t) => redes.rede(`${c.id}:${t}`);
+  const alimentado = (c) => {
+    const sim = positivos.has(ref(c, "vcc")) && negativos.has(ref(c, "gnd"));
+    if (sim) alimentados.add(c.id);
+    return sim;
+  };
+  const led = (a, k, vf, dono) => {
+    leds.push({ a: no(a), k: no(k), vf, rs: PARAMETROS.rsLed, joelho: PARAMETROS.joelhoLed, rs2: PARAMETROS.rs2Led });
+    origem.leds.push(dono);
+  };
 
   let terra = -1;
   for (const c of projeto.components) {
@@ -72,9 +97,31 @@ export function analisar(projeto, opcoes = {}) {
         r(ref(c, "1"), ref(c, "2"), resistenciaDoLdr(p.luz), { comp: c.id });
         break;
       case "led":
-        leds.push({ a: no(ref(c, "anodo")), k: no(ref(c, "catodo")), vf: tensaoDoLed(p.cor), rs: PARAMETROS.rsLed, joelho: PARAMETROS.joelhoLed, rs2: PARAMETROS.rs2Led });
-        origem.leds.push({ comp: c.id });
+        led(ref(c, "anodo"), ref(c, "catodo"), tensaoDoLed(p.cor), { comp: c.id });
         break;
+      case "led-rgb":
+        for (const canal of ["r", "g", "b"]) led(ref(c, canal), ref(c, "comum"), PARAMETROS.rgb[canal], { comp: c.id, canal });
+        break;
+      case "buzzer":
+        r(ref(c, "+"), ref(c, "-"), PARAMETROS.buzzer, { comp: c.id });
+        break;
+      case "servo":
+        alimentado(c);
+        r(ref(c, "sinal"), ref(c, "gnd"), 10000, { comp: c.id, parte: "sinal" });
+        r(ref(c, "vcc"), ref(c, "gnd"), 1000, { comp: c.id, parte: "motor" });
+        break;
+      case "pir":
+        r(ref(c, "vcc"), ref(c, "gnd"), 50000, { comp: c.id, parte: "consumo" });
+        // A saída do sensor é empurrada para 3,3 V (movimento) ou 0 V, como no HC-SR501.
+        if (alimentado(c)) fonte(ref(c, "saida"), ref(c, "gnd"), p.movimento ? 3.3 : 0, 100, { comp: c.id, parte: "saida", limite: Infinity });
+        break;
+      case "hcsr04": {
+        r(ref(c, "vcc"), ref(c, "gnd"), 330, { comp: c.id, parte: "consumo" });
+        r(ref(c, "trig"), ref(c, "gnd"), 10000, { comp: c.id, parte: "trig" });
+        const eco = Boolean(opcoes.estados && opcoes.estados[c.id] && opcoes.estados[c.id].eco);
+        if (alimentado(c)) fonte(ref(c, "eco"), ref(c, "gnd"), eco ? 5 : 0, 100, { comp: c.id, parte: "eco", limite: Infinity });
+        break;
+      }
       case "pilhas":
         fonte(ref(c, "+"), ref(c, "-"), 1.5 * p.quantidade, PARAMETROS.rintPilha * p.quantidade, { comp: c.id, limite: LIMITES.pilhas });
         if (terra < 0) terra = ref(c, "-");
@@ -130,13 +177,20 @@ export function analisar(projeto, opcoes = {}) {
     else Object.assign(res, { corrente, tensao, potencia: corrente * tensao });
   });
   origem.leds.forEach((dono, i) => {
-    const led = sol.leds[i];
-    Object.assign(componentes[dono.comp], {
-      ligado: led.ligado && led.i >= LED_VISIVEL, // nanoampères de fuga não acendem LED
-      corrente: led.i,
-      tensao: led.v,
-      brilho: led.ligado ? Math.min(1, led.i / 0.015) : 0,
-    });
+    const r = sol.leds[i];
+    const dados = {
+      ligado: r.ligado && r.i >= LED_VISIVEL, // nanoampères de fuga não acendem LED
+      corrente: r.i,
+      tensao: r.v,
+      brilho: r.ligado ? Math.min(1, r.i / 0.015) : 0,
+    };
+    const res = componentes[dono.comp];
+    if (dono.canal) {
+      (res.canais = res.canais || {})[dono.canal] = dados;
+      res.ligado = Object.values(res.canais).some((x) => x.ligado);
+    } else {
+      Object.assign(res, dados);
+    }
   });
   origem.fontes.forEach((dono, i) => {
     const res = componentes[dono.comp];
@@ -156,7 +210,7 @@ export function analisar(projeto, opcoes = {}) {
     }
   }
 
-  return { redes, componentes, tensaoDaRede, convergiu: sol.convergiu, iteracoes: sol.iteracoes, terra };
+  return { redes, componentes, tensaoDaRede, alimentados, convergiu: sol.convergiu, iteracoes: sol.iteracoes, terra };
 }
 
 const PREFIXOS = [[1e6, "M"], [1e3, "k"], [1, ""], [1e-3, "m"], [1e-6, "µ"], [1e-9, "n"]];

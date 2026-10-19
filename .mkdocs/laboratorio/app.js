@@ -10,6 +10,7 @@ import { ligarEdicao } from "./edicao.js";
 import { caixa, encaixarPelaPegada, porId, posicaoDoTerminal, primeiroEncaixeLivre } from "./geometria.js";
 import { montarPainel } from "./painel.js";
 import { criarPrograma } from "./programa.js";
+import { conferirDesafio } from "./desafios.js";
 import { copiar, novoId, projetoVazio, separarTerminal, serializar, validar } from "./projeto.js";
 import { ehProtoboard } from "./protoboard.js";
 import { desenharMarcas, desenharMundo, nomeDoTerminal } from "./vista.js";
@@ -94,11 +95,60 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
     pinos: null, // estado dos pinos do Uno enquanto um programa está carregado
     placa: {}, // LEDs da placa (L, TX)
     base: projetoUrl, // de onde vêm o sketch e o firmware do projeto
+    desafio: null, // { conferindo, resultado, versao }: a última conferência do desafio
   };
   let execucao = { tempo: 0, velocidade: null };
   let chaveDosPinos = "";
   let ultimoDesenho = "";
   const historico = { passado: [], futuro: [] };
+
+  // Som dos buzzers com "Tocar o som" ligado: uma onda quadrada baixinha na frequência medida.
+  const som = (() => {
+    let audio = null;
+    const tocando = new Map();
+    function parar() {
+      for (const o of tocando.values()) o.stop();
+      tocando.clear();
+    }
+    return {
+      atualizar(projeto, sons, rodando) {
+        const querem = new Map();
+        if (rodando) {
+          for (const c of projeto.components) if (c.type === "buzzer" && c.props.som && sons[c.id] > 20) querem.set(c.id, sons[c.id]);
+        }
+        for (const [id, o] of tocando) {
+          if (!querem.has(id)) {
+            o.stop();
+            tocando.delete(id);
+          }
+        }
+        if (!querem.size) return;
+        try {
+          audio = audio || new AudioContext();
+        } catch (e) {
+          return; // navegador sem áudio: só o desenho mostra a frequência
+        }
+        for (const [id, f] of querem) {
+          if (!tocando.has(id)) {
+            const osc = audio.createOscillator();
+            const ganho = audio.createGain();
+            osc.type = "square";
+            ganho.gain.value = 0.03;
+            osc.connect(ganho).connect(audio.destination);
+            osc.start();
+            tocando.set(id, { osc, stop: () => { osc.stop(); osc.disconnect(); } });
+          }
+          tocando.get(id).osc.frequency.setTargetAtTime(f, audio.currentTime, 0.01);
+        }
+      },
+      parar,
+      fechar() {
+        parar();
+        if (audio) audio.close();
+        audio = null;
+      },
+    };
+  })();
   let inicial = null;
   let exemplos = [];
   let espera = null;
@@ -191,6 +241,7 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
   }
 
   function carregar(projeto, mensagem, { comHistorico = true, base = estado.base } = {}) {
+    estado.desafio = null;
     const r = validar(projeto);
     if (!r.ok) {
       avisar(`Este projeto tem problemas: ${r.erros.slice(0, 3).join(" ")}`);
@@ -240,12 +291,25 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
       estado.diagnosticos = diagnosticar(estado.projeto, estado.analise, { pinos: q.pinos });
       mostrarFaixa();
     }
-    for (const [id, led] of Object.entries(q.leds)) {
-      if (estado.analise.componentes[id]) Object.assign(estado.analise.componentes[id], led);
+    for (const [chaveDoLed, led] of Object.entries(q.leds)) {
+      const [id, canal] = chaveDoLed.split(".");
+      const c = estado.analise.componentes[id];
+      if (!c) continue;
+      if (canal && c.canais && c.canais[canal]) {
+        Object.assign(c.canais[canal], led);
+        c.ligado = Object.values(c.canais).some((x) => x.ligado);
+      } else if (!canal) {
+        Object.assign(c, led);
+      }
     }
+    estado.sons = q.sons || {};
+    estado.servos = q.servos || {};
+    estado.estados = q.estados || {};
+    som.atualizar(estado.projeto, estado.sons, programa.estado === "rodando");
     const d13 = q.pinos.D13;
     estado.placa = { L: Boolean(d13 && d13.modo === "saida" && d13.nivel), TX: Boolean(q.serial) };
-    const visual = JSON.stringify([estado.placa, Object.values(q.leds).map((l) => Math.round(l.brilho * 20)), chave]);
+    const visual = JSON.stringify([estado.placa, Object.values(q.leds).map((l) => Math.round(l.brilho * 20)), chave,
+      Object.values(estado.sons).map(Math.round), Object.values(estado.servos).map(Math.round), estado.estados]);
     if (visual !== ultimoDesenho && !estado.rascunho) {
       ultimoDesenho = visual;
       redesenhar();
@@ -254,9 +318,13 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
   }
 
   function aoMudarExecucao() {
+    if (programa.estado !== "rodando") som.parar();
     if (programa.estado === "vazio") {
       estado.pinos = null;
       estado.placa = {};
+      estado.sons = {};
+      estado.servos = {};
+      estado.estados = {};
       execucao = { tempo: 0, velocidade: null };
       if (painel) reanalisar(null);
     }
@@ -572,7 +640,37 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
       }
     },
     comecarDoZero() {
-      if (confirm("Começar um circuito vazio? Dá para desfazer depois (Ctrl+Z).")) carregar(projetoVazio(), "Circuito vazio.");
+      if (!confirm("Começar um circuito vazio? Dá para desfazer depois (Ctrl+Z).")) return;
+      const vazio = projetoVazio();
+      // Num desafio, o circuito vazio continua sendo o desafio (com o programa e as instruções dele).
+      if (inicial && inicial.desafio) {
+        for (const k of ["title", "sketch", "variantes", "metadata", "desafio"]) if (inicial[k] !== undefined) vazio[k] = copiar(inicial)[k];
+      }
+      carregar(vazio, "Circuito vazio.");
+    },
+    desafio: () => estado.projeto.desafio || null,
+    desafioMudou: () => Boolean(estado.desafio && estado.desafio.versao && estado.desafio.versao !== serializar(estado.projeto)),
+    async conferirDesafio() {
+      const desafio = estado.projeto.desafio;
+      if (!desafio || (estado.desafio && estado.desafio.conferindo)) return;
+      estado.desafio = { conferindo: true, resultado: null, versao: null };
+      painel.atualizar();
+      avisar("Conferindo a montagem…");
+      await new Promise((r) => setTimeout(r, 30)); // deixa o "Conferindo…" aparecer antes da conta
+      const resultado = conferirDesafio(estado.projeto, desafio, { hex: programa.hexPrincipal() });
+      estado.desafio = { conferindo: false, resultado, versao: serializar(estado.projeto) };
+      painel.atualizar();
+      const certos = resultado.itens.filter((i) => i.ok).length;
+      if (resultado.ok) {
+        const p = window.SchoolCC && window.SchoolCC.progresso;
+        if (p) {
+          p.conferiu(`desafio:${desafio.id || "laboratorio"}`, true, { valor: "montagem conferida no laboratório" });
+          p.concluir(null, true);
+        }
+        avisar(`Desafio concluído: ${certos} de ${resultado.itens.length} itens certos.${p ? " Ficou marcado no seu progresso." : ""}`);
+      } else {
+        avisar(`Ainda não: ${certos} de ${resultado.itens.length} itens certos. Veja as dicas na aba Instruções.`);
+      }
     },
   };
 
@@ -610,6 +708,7 @@ function criar({ projetoUrl = null, exemplosUrl = null, retorno = null } = {}) {
       clearTimeout(espera);
       armazenamento.salvarRascunho(origem, estado.projeto);
       programa.encerrar();
+      som.fechar();
       edicao.destruir();
       observador.disconnect();
       if (inscricao && inscricao.unsubscribe) inscricao.unsubscribe();

@@ -124,6 +124,44 @@ export const TIPOS = {
     props: { luz: 50 },
     descricao: "A resistência cai com a luz",
   },
+  "led-rgb": {
+    nome: "LED RGB", categoria: "Componentes", prefixo: "rgb",
+    terminais: [
+      { id: "r", nome: "vermelho (R)" }, { id: "comum", nome: "comum (cátodo, a perna mais longa)" },
+      { id: "g", nome: "verde (G)" }, { id: "b", nome: "azul (B)" },
+    ],
+    pegada: [[0, 0], [1, 0], [2, 0], [3, 0]],
+    descricao: "Três LEDs num só, com o cátodo comum",
+  },
+  buzzer: {
+    nome: "Buzzer", categoria: "Atuadores", prefixo: "bz",
+    terminais: [{ id: "+", nome: "positivo (+, a perna longa)" }, { id: "-", nome: "negativo (−)" }],
+    pegada: [[0, 0], [2, 0]],
+    props: { som: false },
+    descricao: "Piezo passivo: toca a frequência do tone()",
+  },
+  servo: {
+    nome: "Servo motor", categoria: "Atuadores", prefixo: "servo", livre: true, largura: 96, altura: 56,
+    terminais: [
+      { id: "gnd", nome: "fio marrom (GND)", x: -36, y: 16 }, { id: "vcc", nome: "fio vermelho (5V)", x: -36, y: 28 },
+      { id: "sinal", nome: "fio laranja (sinal)", x: -36, y: 40 },
+    ],
+    descricao: "Gira de 0° a 180° conforme o pulso",
+  },
+  pir: {
+    nome: "Sensor de movimento (PIR)", categoria: "Sensores", prefixo: "pir",
+    terminais: [{ id: "vcc", nome: "VCC (5V)" }, { id: "saida", nome: "OUT (saída)" }, { id: "gnd", nome: "GND" }],
+    pegada: [[0, 0], [1, 0], [2, 0]],
+    props: { movimento: false },
+    descricao: "Saída em HIGH quando há movimento",
+  },
+  hcsr04: {
+    nome: "Sensor ultrassônico (HC-SR04)", categoria: "Sensores", prefixo: "us",
+    terminais: [{ id: "vcc", nome: "VCC (5V)" }, { id: "trig", nome: "Trig" }, { id: "eco", nome: "Echo" }, { id: "gnd", nome: "GND" }],
+    pegada: [[0, 0], [1, 0], [2, 0], [3, 0]],
+    props: { distancia: 50 },
+    descricao: "Mede distâncias de 2 cm a 4 m pelo eco",
+  },
   multimetro: {
     nome: "Multímetro", categoria: "Medição", prefixo: "mm", livre: true, largura: 112, altura: 150,
     terminais: [{ id: "vermelha", nome: "ponta vermelha (V/A)", x: 36, y: 168 }, { id: "preta", nome: "ponta preta (COM)", x: 76, y: 168 }],
@@ -211,6 +249,11 @@ export function rotulo(comp) {
     case "potenciometro": return `Pot${numero}`;
     case "ldr": return `LDR${numero}`;
     case "multimetro": return `Multímetro ${numero}`.trim();
+    case "led-rgb": return `RGB${numero}`;
+    case "buzzer": return `Buzzer ${numero}`.trim();
+    case "servo": return `Servo ${numero}`.trim();
+    case "pir": return `PIR ${numero}`.trim();
+    case "hcsr04": return `Ultrassom ${numero}`.trim();
     case "pilhas": return `Pilhas ${numero}`.trim();
     case "bateria-9v": return `Bateria ${numero}`.trim();
     case "arduino-uno-r3": return "Arduino Uno";
@@ -238,6 +281,9 @@ export function descricao(comp) {
     case "interruptor": return `${base} · ${p.fechado ? "fechado" : "aberto"}`;
     case "botao": return `${base} · ${p.apertado ? "apertado" : "solto"}`;
     case "multimetro": return `${base} · ${MODOS_DO_MULTIMETRO[p.modo] || p.modo}`;
+    case "pir": return `${base} · ${p.movimento ? "com movimento" : "parado"}`;
+    case "hcsr04": return `${base} · objeto a ${p.distancia} cm`;
+    case "buzzer": return `${base} · som ${p.som ? "ligado" : "desligado"}`;
     default: return base;
   }
 }

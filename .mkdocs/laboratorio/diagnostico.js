@@ -70,6 +70,28 @@ export function diagnosticar(projeto, analise, contexto = {}) {
     }
   }
 
+  // LED RGB: cada cor com o seu resistor; o comum (cátodo) no GND.
+  const NOMES_DAS_CORES = { r: "o vermelho", g: "o verde", b: "o azul" };
+  for (const c of projeto.components) {
+    if (c.type !== "led-rgb") continue;
+    const canais = analise.componentes[c.id].canais || {};
+    for (const [k, r] of Object.entries(canais)) {
+      if (r.ligado && r.corrente > LED_MAXIMO) {
+        add("erro", "led-sem-resistor", `No ${rotulo(c)}, ${NOMES_DAS_CORES[k]} recebe ${formatar(r.corrente, "A")}: queimaria. Cada cor precisa do seu resistor.`, [c.id]);
+      }
+    }
+    const invertido = Object.values(canais).some((r) => r.tensao !== null && r.tensao < -1);
+    if (invertido) add("aviso", "led-invertido", `${rotulo(c)} está com a tensão ao contrário: o comum (a perna mais longa, cátodo) tem que ir no GND.`, [c.id]);
+  }
+
+  // Sensores e servo sem VCC no + ou sem GND.
+  const QUEM_PRECISA = { pir: "VCC no 5V e GND no GND", hcsr04: "VCC no 5V e GND no GND", servo: "o fio vermelho no 5V e o marrom no GND" };
+  for (const c of projeto.components) {
+    if (!QUEM_PRECISA[c.type] || analise.alimentados.has(c.id)) continue;
+    const ligado = TIPOS[c.type].terminais.some((t) => redes.redes[redes.rede(`${c.id}:${t.id}`)].some((ref) => ref.split(":")[0] !== c.id && ehTerminalDeParte(porId, ref)));
+    if (ligado) add("aviso", "sem-alimentacao", `${rotulo(c)} precisa de ${QUEM_PRECISA[c.type]} para funcionar.`, [c.id]);
+  }
+
   // Pinos do Uno: tensão fora de 0 a 5 V e corrente demais num pino de saída.
   for (const c of projeto.components) {
     if (c.type !== "arduino-uno-r3") continue;

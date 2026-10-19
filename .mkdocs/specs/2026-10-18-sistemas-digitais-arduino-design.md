@@ -212,6 +212,30 @@ Sketch do enunciado: LED no **D8**, `Serial` a 9600, 1 s ligado e 1 s desligado.
 - **Menu:** `_mais_do_tema` deixa de listar páginas dentro de subpastas que têm README próprio, e só "Laboratório Arduino" entra em "Mais".
 - **CSS:** os estilos do laboratório entram no `tailwind.css` como CSS próprio (classes `lab-*`), sem utilitários do Tailwind nos módulos; por isso não precisam de `@source`.
 
+### 7.9 Entradas, sensores e atuadores (fase 5)
+
+| Peça | Modelo | Limite declarado ao aluno |
+| ---- | ------ | ------------------------- |
+| Botão | Chave ideal entre as pernas; pull-up interno de 35 kΩ | Não trepida |
+| Potenciômetro e LDR | Resistores; a tensão do pino vai para o ADC do avr8js | LDR com curva simplificada (1 MΩ a 1 kΩ) |
+| LED RGB | Três LEDs com cátodo comum (2 V, 3 V e 3 V) | — |
+| Buzzer | 10 kΩ; a frequência é medida nas bordas de subida (janela de 0,25 s); som opcional com Web Audio | Não há timbre nem volume |
+| PIR | Fonte de 3,3 V ou 0 V atrás de 100 Ω, controlada pelo aluno, só com 5V e GND ligados | Sem aquecimento nem tempo de espera |
+| HC-SR04 | Echo agendado no relógio da CPU: 450 µs depois do Trig, `d · 58,3 µs` em HIGH; sem eco acima de 4 m | Sempre devolve o eco certo |
+| Servo | Ângulo pela largura do pulso (544 a 2 400 µs, como a biblioteca `Servo`), só com 5V e GND ligados | Vai direto ao ângulo, sem velocidade nem carga |
+
+Os testes de `sensores.test.js` rodam os projetos 04 a 12 com o firmware de verdade e conferem cada um desses comportamentos. Uma medida do ultrassom mostrou que o `pulseIn()` do core mede uns 0,6 % a menos (as interrupções do `millis()` roubam ciclos durante a contagem), o mesmo que acontece na placa: o sketch da cancela arredonda a divisão em vez de mudar o modelo.
+
+### 7.10 Desafios com conferência (fase 5)
+
+O plano previa "desafios interativos com validação topológica e comportamental". A conferência ficou **pelo comportamento**, não pela topologia literal, porque o aluno pode montar o mesmo circuito em qualquer lugar da protoboard:
+
+- **Elétrica:** o circuito é resolvido com um pino em HIGH e depois em LOW (`led-pelo-pino`), ou sem programa (`corrente-do-led`), e os diagnósticos de nível erro reprovam (`sem-erros`).
+- **Programa:** o firmware do projeto roda no ATmega328P emulado, a conferência aperta e solta os botões e olha os LEDs (`programa`).
+- **Progresso:** passou tudo, o laboratório registra o acerto em `SchoolCC.progresso` e marca a página como concluída.
+
+Os critérios ficam no `circuito.json` (`"desafio"`), e `desafios.test.js` confere, para cada desafio, que o início não passa, que uma montagem certa passa e que os erros típicos falham no critério certo. Desafios em que o aluno **escreve código** continuam fora: precisariam do compilador da seção 8.
+
 ## 8. Compilador futuro (serviço, não implementado)
 
 | Item | Proposta |
@@ -234,7 +258,7 @@ No laboratório, só a função `compilar(texto)` muda. O aviso "este site não 
 | `corretor.test.js` | Gabaritos (inclusive `Grandeza` com unidade) e casos do tipo novo |
 | `test_catalogo.py` | `perguntas()` reconhece `Grandeza` |
 | `test_visual.py` | Publicação do laboratório e o grupo "Mais" do menu |
-| `laboratorio/testes/*.test.js` | Topologia das protoboards; redes; schema e ida e volta do JSON; solucionador (série, paralelo, divisor, LED, curto); diagnósticos; Intel HEX; emulador; Blink (7.6); desafios |
+| `laboratorio/testes/*.test.js` | Topologia das protoboards; redes; schema e ida e volta do JSON; solucionador (série, paralelo, divisor, LED, curto); diagnósticos; Intel HEX; emulador; Blink (7.6); sensores e atuadores dos projetos 04 a 12; desafios |
 
 ## 10. Fases
 
@@ -252,5 +276,6 @@ No laboratório, só a função `compilar(texto)` muda. O aviso "este site não 
 
 - **avr8js:** MIT, © Uri Shaked e colaboradores. A LICENSE vai junto da cópia em `vendor/`.
 - **Monaco Editor:** MIT. Já é usado pelo editor de Python, carregado do jsDelivr com SRI.
-- **arduino-cli e core `arduino:avr`:** usados só na CI, para gerar o firmware. Não são distribuídos com o site.
+- **arduino-cli:** usado só na CI, para gerar o firmware. Não é distribuído com o site.
+- **Core `arduino:avr` 1.8.8 e biblioteca `Servo` 1.3.0:** LGPL 2.1. O firmware (`.hex`) publicado ao lado de cada sketch contém código compilado deles. As versões estão fixas no `instalar-arduino-cli.sh`, o `.compilacao.json` de cada sketch lista as bibliotecas usadas, e o código-fonte de todos está nos repositórios oficiais do Arduino; os sketches estão no próprio repositório.
 - **Componentes e figuras do laboratório:** originais deste repositório (Apache 2.0).

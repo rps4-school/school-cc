@@ -33,6 +33,7 @@ Simulador de circuitos de corrente contínua que roda no navegador, sem framewor
 | `simulacao.js` | Programa + circuito no mesmo tempo simulado; brilho dos LEDs pela corrente média | Não |
 | `simulacao-worker.js` | Worker (`type: "module"`) que roda a simulação no ritmo do relógio e manda quadros | Só mensagens |
 | `programa.js` | Abas Código (Monaco em C++) e Serial, e o controle do worker: Executar, Parar e Reiniciar | Sim |
+| `desafios.js` | Critérios dos desafios: LED pelo pino (HIGH e LOW), corrente do LED, erros de montagem e o firmware rodando com os botões apertados e soltos | Não |
 | `vendor/avr8js/` | Cópia do avr8js 0.21.1 (MIT) com os imports em `.js`, gerada por `npm run vendor --prefix .mkdocs` | — |
 | `compilar.py` e `instalar-arduino-cli.sh` | Compilação dos sketches na CI (arduino-cli e core em versões fixas) | — |
 
@@ -47,14 +48,20 @@ A regra é a do spec: o que é lógica pura não toca o DOM e tem teste no Node.
   - multímetro: 10 MΩ entre as pontas em **V** e 0,05 Ω em **A**;
   - LED: aberto abaixo da tensão dele; até 30 mA, a tensão da cor com 0,05 Ω em série (bate com as contas das aulas); acima de 30 mA, 10 Ω, para que um LED sem resistor dê centenas de mA e não um curto de dezenas de ampères.
 - **Fontes e LEDs quase ideais:** as leituras saem iguais às contas do papel. O laboratório diz isso ao aluno.
+- **Componentes de Arduino** (fase 5):
+  - LED RGB: três LEDs com o cátodo comum (vermelho 2 V, verde e azul 3 V);
+  - buzzer: 10 kΩ entre as pernas (quase não puxa corrente); a nota vem do programa (veja abaixo);
+  - servo: 10 kΩ no sinal e 1 kΩ de consumo entre o 5V e o GND; só funciona com VCC num + e GND num −;
+  - PIR: com alimentação, a saída é uma fonte de 3,3 V (movimento) ou 0 V atrás de 100 Ω;
+  - HC-SR04: com alimentação, o Echo é uma fonte de 5 V ou 0 V atrás de 100 Ω, conforme o estado que a simulação passa em `opcoes.estados`.
 - **Pinos do Uno:** `analisar(projeto, { pinos: { D8: { modo: "saida", nivel: 1 } } })` transforma um pino em fonte de 5 V ou 0 V atrás de 25 Ω, ou liga o pull-up de 35 kΩ. Sem `pinos`, os pinos ficam soltos. É por aí que o emulador entra (`simulacao.js`).
 
 ## Programa do Arduino
 
 O site **não compila C++**. Cada sketch do laboratório (`conteudo/**/laboratorio/**/*.ino`) é compilado na CI:
 
-1. `instalar-arduino-cli.sh` instala o arduino-cli 1.5.1 (com o SHA-256 conferido) e o core `arduino:avr` 1.8.8.
-2. `compilar.py` copia cada `.ino` para uma pasta com o nome dele (o arduino-cli exige), compila para `arduino:avr:uno` e grava em `FIRMWARE_DIR` o `.hex` e o `.compilacao.json` (o relatório de tamanho), no mesmo caminho do `.ino`.
+1. `instalar-arduino-cli.sh` instala o arduino-cli 1.5.1 (com o SHA-256 conferido), o core `arduino:avr` 1.8.8 e as bibliotecas da lista `BIBLIOTECAS` (hoje, `Servo@1.3.0`), em versões fixas.
+2. `compilar.py` copia cada `.ino` para uma pasta com o nome dele (o arduino-cli exige), compila para `arduino:avr:uno` e grava em `FIRMWARE_DIR` o `.hex` e o `.compilacao.json` (tamanho e bibliotecas usadas), no mesmo caminho do `.ino`.
 3. O build recebe `FIRMWARE_DIR`, e o `visual.py` publica esses arquivos ao lado do `.ino`.
 
 No laboratório, o `circuito.json` do projeto diz qual é o sketch (`sketch`) e as variantes (`variantes`). O `programa.js` busca o texto e o firmware de cada um. **Executar** roda o firmware do sketch cujo texto é igual ao do editor (sem contar espaços no fim das linhas). Com o texto editado, ele avisa que o site não compila e não roda nada. Para ligar um compilador de verdade no futuro (spec, seção 8), é só a função `compilar()` do `programa.js` que muda.
@@ -65,6 +72,8 @@ O emulador roda num worker, em fatias de 2 ms de tempo simulado, segurado pelo r
 - `pinos`: modo e nível de cada pino;
 - `leds`: corrente média de cada LED desde o quadro anterior, o que já dá o brilho do PWM;
 - `serial`: o texto novo da USART.
+
+Desde a fase 5, o quadro também traz `sons` (frequência de cada buzzer, pelas bordas de subida da tensão nele numa janela de 0,25 s), `servos` (ângulo pela largura do pulso no sinal: 544 µs = 0° a 2 400 µs = 180°, como a biblioteca `Servo`) e `estados` (o Echo de cada HC-SR04). O ultrassom é agendado no relógio da CPU (`cpu.addClockEvent`): 450 µs depois da descida de um pulso de pelo menos 10 µs no Trig, o Echo sobe por `distância · 58,3 µs` (38 ms se o objeto estiver além de 4 m). O PIR e o botão mudam pelas propriedades (`movimento`, `apertado`), e o som no computador é opcional (`props.som` do buzzer, com Web Audio).
 
 Quando o programa muda um pino, `simulacao.js` resolve o circuito de novo, com os pinos de saída como fontes de 5 V ou 0 V atrás de 25 Ω. Os resultados ficam num cache por estado dos pinos, então um PWM não refaz a conta a cada borda. Os pinos de entrada recebem o nível da rede deles (LOW abaixo de 1,5 V, HIGH acima de 3 V), e A0 a A5, a tensão.
 
@@ -79,6 +88,31 @@ FIRMWARE_DIR=/tmp/firmware SITE_DIR=/tmp/school-cc-site mkdocs build --strict -f
 ```
 
 Sem `FIRMWARE_DIR`, os testes que rodam programa ficam *skip*, com o motivo. Na CI, `EXIGIR_FIRMWARE=1` transforma a falta do firmware em falha. Num build sem firmware, o laboratório avisa que o programa não foi compilado.
+
+## Desafios
+
+Um desafio é um `circuito.json` com a chave `desafio` (em `conteudo/sistemas-digitais/laboratorio/desafios/NN-nome/`). A aba **Instruções** ganha o botão **Conferir a montagem**, que roda `conferirDesafio()` e mostra cada critério com ✅ ou ❌ e uma dica. Quando tudo passa, o laboratório chama `SchoolCC.progresso.conferiu("desafio:<id>", ...)` e marca a página como concluída.
+
+```json
+"desafio": {
+  "id": "botao-acende-o-led",
+  "criterios": [
+    { "tipo": "sem-erros", "pinos": { "D8": 1 } },
+    { "tipo": "led-pelo-pino", "pino": "D8", "min": 0.005, "max": 0.02 },
+    { "tipo": "corrente-do-led", "min": 0.01, "max": 0.015 },
+    { "tipo": "programa", "passos": [{ "botoes": true, "esperar": 0.05, "led": true }] }
+  ]
+}
+```
+
+| Critério | O que confere |
+| -------- | ------------- |
+| `sem-erros` | Nenhum diagnóstico de nível erro, com os pinos de `pinos` como saída no nível dado |
+| `led-pelo-pino` | Com o pino em HIGH, um LED acende com corrente de `min` a `max` (A); com o pino em LOW, esse LED apaga |
+| `corrente-do-led` | Algum LED aceso com corrente de `min` a `max`, sem programa |
+| `programa` | Roda o firmware do `sketch` do projeto; em cada passo, aperta (ou solta) todos os botões, espera e confere se algum LED está aceso |
+
+Os critérios olham o **comportamento**, nunca a posição das peças: qualquer montagem que funcione passa. Cada critério aceita `texto` e `dica` para trocar as frases padrão. O `sketch` pode apontar para o `.ino` de um projeto (`../../projetos/04-botao-e-led/botao-led.ino`), sem copiar o código. Todo desafio novo precisa de casos em `testes/desafios.test.js`: o circuito inicial não passa, uma montagem certa passa e os erros típicos falham no critério certo.
 
 ## Formato do projeto
 
@@ -101,9 +135,14 @@ node --test ".mkdocs/laboratorio/testes/*.test.js"
 - `exemplos.test.js` valida todo `circuito.json` do conteúdo e confere as leituras citadas nos roteiros dos experimentos.
 - `blink.test.js` é o marco de aceite do spec (seção 7.6): o Blink do enunciado nos 9 casos, em tempo simulado. Ele precisa do firmware (veja acima).
 - `emulador.test.js` cobre o Intel HEX e o semáforo rodando no ATmega328P emulado.
+- `sensores.test.js` roda os projetos 04 a 12 com o firmware: botão, `millis()`, ADC, PWM, buzzer, LED RGB, PIR, ultrassom e servo.
+- `desafios.test.js` confere os desafios: o início não passa, a montagem certa passa e os erros típicos falham.
 
 ## Limites conhecidos
 
-- Só corrente contínua: sem capacitor, indutor, transitórios, transistor, motor ou não linearidade além do LED.
+- Só corrente contínua: sem capacitor, indutor, transitórios, transistor, motor, relé ou não linearidade além do LED.
+- Buzzer, servo, PIR e HC-SR04 são modelos de comportamento: o PIR não tem aquecimento nem tempo de espera, o servo vai direto ao ângulo e o ultrassom sempre devolve o eco certo até 4 m.
+- Um pino de entrada solto lê LOW (e 0 no ADC). Na placa, ele lê valores que mudam sozinhos: as páginas dizem isso ao aluno.
+- O botão é ideal: não trepida.
 - Código editado não compila no site: só rodam os sketches compilados na CI.
 - O LED não queima de verdade: acima de 30 mA, ele só mostra o erro.

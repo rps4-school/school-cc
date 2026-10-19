@@ -4,8 +4,9 @@
 import { descricao, rotulo, terminaisDoTipo, TIPOS } from "./catalogo.js";
 import { formatar } from "./circuito.js";
 import {
-  desenharBateria9v, desenharBotao, desenharFio, desenharInterruptor, desenharLdr, desenharLed, desenharMultimetro,
-  desenharPilhas, desenharPotenciometro, desenharProtoboard, desenharResistor, desenharUno, esc,
+  desenharBateria9v, desenharBotao, desenharBuzzer, desenharFio, desenharInterruptor, desenharLdr, desenharLed,
+  desenharMultimetro, desenharPilhas, desenharPir, desenharPotenciometro, desenharProtoboard, desenharResistor,
+  desenharRgb, desenharServo, desenharUltrassom, desenharUno, esc,
 } from "./desenhos.js";
 import { caixa, porId, posicaoDoTerminal, posicoesDoComponente } from "./geometria.js";
 import { ehProtoboard, nomeDoFuro } from "./protoboard.js";
@@ -66,6 +67,18 @@ function desenhoDoComponente(projeto, comp, analise, estado = {}) {
       return desenharPotenciometro(pts, p);
     case "botao":
       return desenharBotao(pts, p);
+    case "led-rgb":
+      return desenharRgb(pts, r.canais);
+    case "buzzer":
+      return desenharBuzzer(pts, p, (estado.sons || {})[comp.id] || 0);
+    case "pir":
+      return desenharPir(pts, p);
+    case "hcsr04":
+      return desenharUltrassom(pts, p, (estado.estados || {})[comp.id]);
+    case "servo": {
+      const angulo = (estado.servos || {})[comp.id];
+      return `<g transform="${transformDoLivre(comp)}">${desenharServo(angulo === undefined ? null : angulo)}</g>`;
+    }
     default:
       return "";
   }

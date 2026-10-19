@@ -65,5 +65,9 @@ export function criarEmulador(flash) {
     receberSerial(bytes) {
       fila.push(...bytes);
     },
+    // Chama fn daqui a `ciclos` ciclos, no tempo simulado (o eco do sensor ultrassônico usa isto).
+    agendar(ciclos, fn) {
+      cpu.addClockEvent(fn, Math.max(1, Math.round(ciclos)));
+    },
   };
 }

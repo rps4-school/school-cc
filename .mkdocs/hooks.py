@@ -51,6 +51,9 @@ TITULOS = {
     "arduino-uno": "Arduino Uno",
     "programacao-arduino": "Programação Arduino",
     "saidas-digitais": "Saídas digitais",
+    "delay-e-millis": "delay() e millis()",
+    "leitura-analogica": "Leitura analógica",
+    "pwm": "PWM",
     "sistemas-digitais": "Sistemas Digitais",  # pasta dos simulados
     # Assuntos dos exercícios de Python que precisam de acento.
     "dicionarios": "Dicionários",

@@ -57,6 +57,7 @@ function registrarCompletar(m) {
 
 export function criarPrograma(ctx) {
   let programas = []; // { arquivo, rotulo, fonte, hex, relatorio }
+  let principal = null; // arquivo do sketch do projeto (os outros são variantes)
   let escolhido = 0;
   let worker = null;
   let estadoDoWorker = "vazio"; // vazio | pronto | rodando | parado
@@ -130,7 +131,7 @@ export function criarPrograma(ctx) {
     const alvo = codigo.querySelector("[data-relatorio]");
     if (!alvo || !p) return;
     alvo.textContent = p.relatorio
-      ? `${p.relatorio.relatorio.join("\n")}\n\nCompilado no build do site com arduino-cli ${p.relatorio.arduinoCli} e o core arduino:avr ${p.relatorio.coreAvr}, para a placa ${p.relatorio.placa}.`
+      ? `${p.relatorio.relatorio.join("\n")}\n\nCompilado no build do site com arduino-cli ${p.relatorio.arduinoCli} e o core arduino:avr ${p.relatorio.coreAvr}, para a placa ${p.relatorio.placa}.${(p.relatorio.bibliotecas || []).length ? ` Bibliotecas: ${p.relatorio.bibliotecas.join(", ")}.` : ""}`
       : "O firmware deste programa não foi compilado neste build do site.";
   }
 
@@ -300,6 +301,7 @@ export function criarPrograma(ctx) {
       if (editor) editor.dispose();
       editor = null;
       pedidoDoEditor = null;
+      principal = projeto.sketch || null;
       if (projeto.sketch && base) {
         const lista = [{ arquivo: projeto.sketch, rotulo: `Código do projeto (${projeto.sketch})` }]
           .concat((projeto.variantes || []).map((v) => ({ arquivo: v.arquivo, rotulo: v.rotulo || v.arquivo })));
@@ -333,6 +335,11 @@ export function criarPrograma(ctx) {
       if (aba === "codigo") montarEditor();
     },
     temPrograma: () => programas.length > 0,
+    // Firmware do sketch do projeto (não o da variante escolhida): é com ele que os desafios conferem.
+    hexPrincipal() {
+      const p = programas.find((x) => x.arquivo === principal);
+      return p ? p.hex : null;
+    },
     get estado() {
       return estadoDoWorker;
     },

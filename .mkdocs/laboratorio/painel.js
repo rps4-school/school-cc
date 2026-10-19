@@ -54,6 +54,10 @@ function opcoesDeTerminal(projeto, atual = "", comVazio = "") {
   return partes.join("");
 }
 
+function textoDaDistancia(cm) {
+  return cm > 400 ? "mais de 4 m (sem eco)" : `${cm} cm`;
+}
+
 export function montarPainel(ctx) {
   const { estado } = ctx;
   const raiz = document.createElement("div");
@@ -128,6 +132,23 @@ export function montarPainel(ctx) {
       case "ldr":
         campos.push(`<label class="lab-campo">Luz no sensor: <output data-leitura-prop="luz">${p.luz} %</output><input type="range" min="0" max="100" step="1" value="${p.luz}" data-campo="luz"></label>`);
         break;
+      case "buzzer":
+        campos.push(`<label class="lab-radio"><input type="checkbox" data-campo="som"${p.som ? " checked" : ""}> Tocar o som no computador enquanto o programa roda</label>`);
+        campos.push('<p class="lab-nota">O buzzer passivo toca a frequência que o programa manda com <code>tone()</code>. Sem programa, ele fica mudo.</p>');
+        break;
+      case "led-rgb":
+        campos.push('<p class="lab-nota">Cátodo comum: a perna mais longa vai no GND, e cada cor recebe o seu resistor. Com <code>analogWrite</code>, cada cor ganha um brilho, e elas se misturam.</p>');
+        break;
+      case "pir":
+        campos.push(`<div class="lab-acoes">${botao("movimento", p.movimento ? "Parar o movimento" : "Fazer movimento")}</div><p class="lab-nota">Na área do circuito, segure o sensor com o mouse (ou Enter) para simular alguém passando só enquanto segura.</p>`);
+        break;
+      case "hcsr04":
+        campos.push(`<label class="lab-campo">Objeto na frente do sensor: <output data-leitura-prop="distancia">${textoDaDistancia(p.distancia)}</output><input type="range" min="2" max="450" step="1" value="${p.distancia}" data-campo="distancia"></label>`);
+        campos.push('<p class="lab-nota">O sensor responde a um pulso no Trig com um pulso no Echo: 58 µs para cada centímetro de ida e volta do som. Acima de 4 m, não volta eco.</p>');
+        break;
+      case "servo":
+        campos.push('<p class="lab-nota">Fio laranja num pino do Arduino, vermelho no 5V e marrom no GND. O programa escolhe o ângulo com a biblioteca Servo (pulsos de 0,5 a 2,4 ms).</p>');
+        break;
       case "multimetro":
         campos.push(`<fieldset class="lab-campo"><legend>Mede</legend>${Object.entries(MODOS_DO_MULTIMETRO).map(([m, nome]) =>
           `<label class="lab-radio"><input type="radio" name="lab-modo" value="${m}" data-campo="modo"${p.modo === m ? " checked" : ""}> ${esc(nome)}</label>`).join("")}</fieldset>`);
@@ -153,6 +174,21 @@ export function montarPainel(ctx) {
 
   function htmlResumo(comp, r) {
     switch (comp.type) {
+      case "led-rgb": {
+        const c = r.canais || {};
+        const t = (k, nome) => `${nome} ${c[k] && c[k].ligado ? esc(formatar(c[k].corrente, "A")) : "apagado"}`;
+        return `<p class="lab-leitura lab-leitura-pequena">${t("r", "R")} · ${t("g", "G")} · ${t("b", "B")}</p>`;
+      }
+      case "buzzer": {
+        const f = (estado.sons || {})[comp.id] || 0;
+        return `<p class="lab-leitura">${f > 0 ? `♪ ${Math.round(f)} Hz` : "Mudo"}</p>`;
+      }
+      case "servo": {
+        const a = (estado.servos || {})[comp.id];
+        return `<p class="lab-leitura">${a === undefined ? "Sem sinal" : `${Math.round(a)}°`}</p>`;
+      }
+      case "pir": return `<p class="lab-leitura">${comp.props.movimento ? "Movimento: saída em HIGH" : "Parado: saída em LOW"}</p>`;
+      case "hcsr04": return `<p class="lab-leitura">${esc(textoDaDistancia(comp.props.distancia))}</p>`;
       case "led": return `<p class="lab-leitura">${r.ligado ? `Aceso · ${esc(formatar(r.corrente, "A"))}` : "Apagado"}</p>`;
       case "resistor":
       case "ldr": return r.corrente === undefined ? "" : `<p class="lab-leitura">${esc(formatar(Math.abs(r.tensao), "V"))} · ${esc(formatar(Math.abs(r.corrente), "A"))}</p>`;
@@ -200,13 +236,28 @@ export function montarPainel(ctx) {
       `<div class="lab-acoes">${ctx.temInicial() ? botao("inicial", "Voltar ao circuito inicial") : ""}${botao("vazio", "Começar do zero")}</div>` +
       `<h3>Salvos neste navegador</h3>${salvos ? `<ul class="lab-lista">${salvos}</ul>` : '<p class="lab-nota">Nada salvo ainda. O circuito desta página também fica guardado sozinho enquanto você mexe.</p>'}` +
       (exemplos ? `<h3>Exemplos</h3><ul class="lab-lista">${exemplos}</ul>` : "") +
-      '<h3>O que este simulador faz</h3><p class="lab-nota">Corrente contínua: pilhas, bateria, 5V do Arduino, resistores, LEDs, interruptor, botão, potenciômetro, LDR e multímetro, com fontes e LEDs quase ideais (como nas contas das aulas). O programa do Arduino roda num ATmega328P emulado, a partir do firmware compilado no build do site: código editado aqui não compila. Não simula capacitores, motores nem transistores.</p>';
+      '<h3>O que este simulador faz</h3><p class="lab-nota">Corrente contínua: pilhas, bateria, 5V do Arduino, resistores, LEDs, LED RGB, interruptor, botão, potenciômetro, LDR e multímetro, com fontes e LEDs quase ideais (como nas contas das aulas). O programa do Arduino roda num ATmega328P emulado, a partir do firmware compilado no build do site: código editado aqui não compila. Buzzer, sensor PIR, ultrassom e servo seguem modelos de comportamento (frequência, pulso, distância e ângulo). Não simula capacitores, motores, relés nem transistores.</p>';
+  }
+
+  function htmlDesafio() {
+    if (!ctx.desafio()) return "";
+    const d = estado.desafio || {};
+    let resultado = "";
+    if (d.resultado) {
+      const itens = d.resultado.itens.map((i) => `<li class="${i.ok ? "lab-certo" : "lab-falta"}"><span aria-hidden="true">${i.ok ? "✅" : "❌"}</span> <span>${esc(i.texto)}${i.ok || !i.dica ? "" : `<small>${esc(i.dica)}</small>`}</span></li>`).join("");
+      resultado =
+        (ctx.desafioMudou() ? '<p class="lab-nota">Você mudou o circuito depois de conferir: confira de novo.</p>' : "") +
+        (d.resultado.ok ? '<p class="lab-sucesso">🎉 Desafio concluído! Ficou marcado no seu progresso.</p>' : "") +
+        `<ul class="lab-criterios">${itens}</ul>`;
+    }
+    return '<h3>Desafio</h3><p class="lab-nota">Monte do seu jeito: a conferência olha o que o circuito faz, e não onde cada peça está.</p>' +
+      `<div class="lab-acoes">${botao("conferir", d.conferindo ? "Conferindo…" : "Conferir a montagem", d.conferindo ? "disabled" : "")}</div>${resultado}`;
   }
 
   function htmlInstrucoes() {
     const meta = estado.projeto.metadata || {};
     const texto = meta.instrucoes ? `<div class="lab-instrucoes">${esc(meta.instrucoes).replace(/\n/g, "<br>")}</div>` : '<p class="lab-nota">Este circuito não tem instruções. Veja a página de onde você abriu o laboratório.</p>';
-    return `${texto}<h3>Como usar</h3><ul class="lab-ajuda"><li><b>Ligar:</b> arraste de um furo, pino ou polo até outro (ou toque em um e depois no outro).</li><li><b>Mover:</b> arraste o componente; os de encaixar mostram os furos em verde.</li><li><b>Ver o que está ligado:</b> passe o mouse num furo: os furos da mesma tira acendem.</li><li><b>Teclado:</b> Tab escolhe, setas movem, R gira, I inverte as pernas, Delete apaga, Enter aciona o interruptor e o botão.</li><li><b>Zoom:</b> roda do mouse ou os botões + e −.</li></ul>`;
+    return `${texto}${htmlDesafio()}<h3>Como usar</h3><ul class="lab-ajuda"><li><b>Ligar:</b> arraste de um furo, pino ou polo até outro (ou toque em um e depois no outro).</li><li><b>Mover:</b> arraste o componente; os de encaixar mostram os furos em verde.</li><li><b>Ver o que está ligado:</b> passe o mouse num furo: os furos da mesma tira acendem.</li><li><b>Teclado:</b> Tab escolhe, setas movem, R gira, I inverte as pernas, Delete apaga, Enter aciona o interruptor e o botão.</li><li><b>Zoom:</b> roda do mouse ou os botões + e −.</li></ul>`;
   }
 
   const HTML = { adicionar: htmlAdicionar, selecionado: htmlSelecionado, conexoes: htmlConexoes, medidas: htmlMedidas, projeto: htmlProjeto, instrucoes: htmlInstrucoes };
@@ -254,6 +305,7 @@ export function montarPainel(ctx) {
       case "apagar": return ctx.apagarSelecao();
       case "alternar": return ctx.mudarProp(estado.selecao.id, "fechado", (v) => !v);
       case "segurar": return ctx.mudarProp(estado.selecao.id, "apertado", (v) => !v);
+      case "movimento": return ctx.mudarProp(estado.selecao.id, "movimento", (v) => !v);
       case "ligar": {
         const de = raiz.querySelector('[data-campo="ligar-de"]').value;
         const ate = raiz.querySelector('[data-campo="ligar-ate"]').value;
@@ -272,6 +324,7 @@ export function montarPainel(ctx) {
       case "vazio": return ctx.comecarDoZero();
       case "desfazer": return ctx.desfazer();
       case "refazer": return ctx.refazer();
+      case "conferir": return ctx.conferirDesafio();
       default:
     }
   });
@@ -300,12 +353,14 @@ export function montarPainel(ctx) {
       case "cor": if (final) ctx.mudarProp(sel.id, "cor", () => valor); break;
       case "quantidade": if (final) ctx.mudarProp(sel.id, "quantidade", () => Number(valor)); break;
       case "posicao":
-      case "luz": {
+      case "luz":
+      case "distancia": {
         const out = raiz.querySelector(`[data-leitura-prop="${el.dataset.campo}"]`);
-        if (out) out.textContent = `${valor} %`;
+        if (out) out.textContent = el.dataset.campo === "distancia" ? textoDaDistancia(Number(valor)) : `${valor} %`;
         ctx.mudarProp(sel.id, el.dataset.campo, () => Number(valor), { semHistorico: !final });
         break;
       }
+      case "som": if (final) ctx.mudarProp(sel.id, "som", () => el.checked); break;
       case "modo": if (final) ctx.mudarProp(sel.id, "modo", () => valor); break;
       case "mount": if (final) ctx.encaixarPerna(sel.id, el.dataset.pino, valor); break;
       case "cor-fio": if (final) ctx.mudarCorDoFio(sel.id, valor); break;

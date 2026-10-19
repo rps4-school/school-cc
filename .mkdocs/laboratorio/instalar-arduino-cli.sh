@@ -11,6 +11,7 @@
 VERSAO_CLI="1.5.1"
 SHA256_CLI="28a8e119c498a25607821c36cb2dc49e8463941b261a0d99091baa7bc692dd2b" # arduino-cli_1.5.1_Linux_64bit.tar.gz
 CORE="arduino:avr@1.8.8"
+BIBLIOTECAS=("Servo@1.3.0") # usadas pelos sketches do laboratório (a Servo não vem no core)
 
 PASTA="${1:?informe a pasta onde instalar}"
 mkdir -p "$PASTA/bin"
@@ -30,3 +31,5 @@ if ! "$ARDUINO_CLI" version 2>/dev/null | grep -q "Version: $VERSAO_CLI "; then
 fi
 "$ARDUINO_CLI" core update-index
 "$ARDUINO_CLI" core install "$CORE"
+"$ARDUINO_CLI" lib update-index
+"$ARDUINO_CLI" lib install "${BIBLIOTECAS[@]}"

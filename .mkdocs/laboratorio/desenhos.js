@@ -257,6 +257,105 @@ export function desenharBotao(pts, props) {
   ].join("");
 }
 
+// Centro e ângulo de uma fileira de pernas (para desenhar o corpo do componente em cima delas).
+function fileira(pontos) {
+  const lista = pontos.filter(Boolean);
+  const cx = lista.reduce((s, p) => s + p.x, 0) / lista.length;
+  const cy = lista.reduce((s, p) => s + p.y, 0) / lista.length;
+  const a = lista[0];
+  const b = lista[lista.length - 1];
+  return { lista, cx, cy, angulo: (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI };
+}
+
+function pernasAte(lista, cx, cy) {
+  return lista.map((p) => perna(p, { x: cx + (p.x - cx) * 0.55, y: cy + (p.y - cy) * 0.55 })).join("");
+}
+
+export function desenharBuzzer(pts, props, frequencia = 0) {
+  const { lista, cx, cy } = fileira([pts["+"], pts["-"]]);
+  const p = [pernasAte(lista, cx, cy)];
+  if (frequencia > 0) {
+    for (const r of [18, 23, 28]) p.push(`<path d="M${n(cx - r * 0.6)} ${n(cy - r * 0.8)} A${r} ${r} 0 0 1 ${n(cx + r * 0.6)} ${n(cy - r * 0.8)}" stroke="#6366f1" stroke-width="1.6" fill="none" opacity="0.8" pointer-events="none"/>`);
+  }
+  p.push(`<circle cx="${n(cx)}" cy="${n(cy)}" r="13" fill="#111827" stroke="#374151" stroke-width="1.5"/>`);
+  p.push(`<circle cx="${n(cx)}" cy="${n(cy)}" r="3" fill="#4b5563"/>`);
+  p.push(texto(pts["+"].x, pts["+"].y - 10, "+", 9, 'fill="#64748b" font-weight="700" text-anchor="middle" pointer-events="none"'));
+  if (frequencia > 0) {
+    p.push(texto(cx, cy - 32, `♪ ${Math.round(frequencia)} Hz`, 10, 'fill="#4338ca" font-weight="700" text-anchor="middle" class="lab-som" pointer-events="none"'));
+  }
+  return p.join("");
+}
+
+// canais: { r: { brilho }, g: ..., b: ... }
+export function desenharRgb(pts, canais = {}) {
+  const { lista, cx, cy } = fileira([pts.r, pts.comum, pts.g, pts.b]);
+  const b = (k) => (canais[k] && canais[k].ligado ? Math.min(1, canais[k].brilho) : 0);
+  const [r, g, a] = [b("r"), b("g"), b("b")];
+  const forte = Math.max(r, g, a);
+  const aceso = forte > 0;
+  // O tom vem da proporção entre os canais (vermelho + verde = amarelo, mesmo com o verde mais fraco);
+  // o brilho do canal mais forte fica no tamanho e na opacidade do halo.
+  const tom = (x) => Math.round(40 + 215 * (aceso ? x / forte : 0));
+  const cor = `rgb(${tom(r)}, ${tom(g)}, ${tom(a)})`;
+  const p = [pernasAte(lista, cx, cy - 6)];
+  if (aceso) p.push(`<circle cx="${n(cx)}" cy="${n(cy - 12)}" r="${n(16 + 10 * forte)}" fill="${cor}" opacity="${n(0.2 + 0.3 * forte)}" pointer-events="none"/>`);
+  p.push(`<circle cx="${n(cx)}" cy="${n(cy - 12)}" r="11" fill="${aceso ? cor : "#e5e7eb"}" stroke="#94a3b8" stroke-width="1.2" opacity="0.95"/>`);
+  p.push('<g pointer-events="none">');
+  for (const [k, rotulo] of [["r", "R"], ["comum", "−"], ["g", "G"], ["b", "B"]]) {
+    if (pts[k]) p.push(texto(pts[k].x, pts[k].y + 13, rotulo, 7.5, 'fill="#64748b" font-weight="700" text-anchor="middle"'));
+  }
+  p.push("</g>");
+  return p.join("");
+}
+
+export function desenharPir(pts, props) {
+  const { lista, cx, cy } = fileira([pts.vcc, pts.saida, pts.gnd]);
+  const mov = Boolean(props.movimento);
+  return [
+    pernasAte(lista, cx, cy - 10),
+    `<rect x="${n(cx - 22)}" y="${n(cy - 46)}" width="44" height="36" rx="4" fill="#15803d"/>`,
+    `<circle cx="${n(cx)}" cy="${n(cy - 28)}" r="14" fill="${mov ? "#fef08a" : "#f8fafc"}" stroke="#cbd5e1"/>`,
+    `<path d="M${n(cx - 14)} ${n(cy - 28)} H${n(cx + 14)} M${n(cx)} ${n(cy - 42)} V${n(cy - 14)} M${n(cx - 10)} ${n(cy - 38)} L${n(cx + 10)} ${n(cy - 18)} M${n(cx + 10)} ${n(cy - 38)} L${n(cx - 10)} ${n(cy - 18)}" stroke="#cbd5e1" stroke-width="0.8"/>`,
+    mov ? texto(cx, cy - 52, "movimento!", 9, 'fill="#b45309" font-weight="700" text-anchor="middle" pointer-events="none"') : "",
+    '<g pointer-events="none">',
+    ...[["vcc", "V"], ["saida", "OUT"], ["gnd", "G"]].map(([k, t]) => texto(pts[k].x, pts[k].y + 13, t, 6.5, 'fill="#64748b" font-weight="700" text-anchor="middle"')),
+    "</g>",
+  ].join("");
+}
+
+export function desenharUltrassom(pts, props, estado = {}) {
+  const { lista, cx, cy } = fileira([pts.vcc, pts.trig, pts.eco, pts.gnd]);
+  const d = props.distancia;
+  return [
+    pernasAte(lista, cx, cy - 10),
+    `<rect x="${n(cx - 40)}" y="${n(cy - 44)}" width="80" height="32" rx="4" fill="#1d4ed8"/>`,
+    ...[-20, 20].map((dx) => `<circle cx="${n(cx + dx)}" cy="${n(cy - 28)}" r="12" fill="#cbd5e1" stroke="#64748b" stroke-width="1.2"/><circle cx="${n(cx + dx)}" cy="${n(cy - 28)}" r="7" fill="#475569"/>`),
+    estado.eco ? `<circle cx="${n(cx + 20)}" cy="${n(cy - 28)}" r="12" fill="#22c55e" opacity="0.45" pointer-events="none"/>` : "",
+    texto(cx, cy - 50, d > 400 ? "nada até 4 m" : `objeto a ${d} cm ↑`, 9, 'fill="#1d4ed8" font-weight="700" text-anchor="middle" pointer-events="none"'),
+    '<g pointer-events="none">',
+    ...[["vcc", "V"], ["trig", "T"], ["eco", "E"], ["gnd", "G"]].map(([k, t]) => texto(pts[k].x, pts[k].y + 13, t, 7, 'fill="#64748b" font-weight="700" text-anchor="middle"')),
+    "</g>",
+  ].join("");
+}
+
+// Servo na origem: corpo, cabo de três fios até os terminais (à esquerda) e o braço no ângulo.
+export function desenharServo(angulo = null) {
+  const a = angulo === null ? 90 : angulo;
+  const rad = (Math.PI * (180 - a)) / 180;
+  const [x0, y0] = [62, 30];
+  const ponta = { x: x0 + 26 * Math.cos(rad), y: y0 - 26 * Math.sin(rad) };
+  return [
+    '<path d="M0 26 C-14 26 -20 16 -36 16 M0 28 H-36 M0 30 C-14 30 -20 40 -36 40" stroke-width="3" fill="none" stroke-linecap="round" stroke="#94a3b8"/>',
+    '<path d="M0 26 C-14 26 -20 16 -36 16" stroke="#92400e" stroke-width="2.4" fill="none"/><path d="M0 28 H-36" stroke="#dc2626" stroke-width="2.4"/><path d="M0 30 C-14 30 -20 40 -36 40" stroke="#ea580c" stroke-width="2.4" fill="none"/>',
+    '<rect x="0" y="8" width="96" height="44" rx="4" fill="#2563eb"/><rect x="-6" y="22" width="108" height="10" rx="3" fill="#1d4ed8"/>',
+    `<circle cx="${x0}" cy="${y0}" r="9" fill="#e2e8f0"/>`,
+    `<line x1="${x0}" y1="${y0}" x2="${n(ponta.x)}" y2="${n(ponta.y)}" stroke="#f8fafc" stroke-width="7" stroke-linecap="round"/>`,
+    `<line x1="${x0}" y1="${y0}" x2="${n(ponta.x)}" y2="${n(ponta.y)}" stroke="#94a3b8" stroke-width="1" stroke-linecap="round"/>`,
+    texto(26, 46, "SG90", 8, 'fill="#dbeafe" font-weight="700" text-anchor="middle" pointer-events="none"'),
+    texto(x0, 64, angulo === null ? "sem sinal" : `${Math.round(a)}°`, 10, 'fill="currentColor" font-weight="700" text-anchor="middle" class="lab-legenda" pointer-events="none"'),
+  ].join("");
+}
+
 // ---------- Fios ----------
 
 export function caminhoDoFio(p1, p2) {

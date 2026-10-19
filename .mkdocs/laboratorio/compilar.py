@@ -38,14 +38,23 @@ def compilar(cli, ino, saida, temp, versao_cli, versao_core):
     pasta.mkdir(parents=True)
     shutil.copy(ino, pasta / f"{nome}.ino")
     build = temp / nome / "build"
-    r = subprocess.run([cli, "compile", "--fqbn", FQBN, "--build-path", str(build), str(pasta)], capture_output=True, text=True)
-    if r.returncode != 0:
-        sys.exit(f"Não compilou: {ino.relative_to(RAIZ)}\n{r.stdout}\n{r.stderr}")
+    r = subprocess.run([cli, "compile", "--fqbn", FQBN, "--build-path", str(build), "--format", "json", str(pasta)],
+                       capture_output=True, text=True, encoding="utf-8")
+    try:
+        resultado = json.loads(r.stdout)
+    except json.JSONDecodeError:
+        resultado = {"success": False, "compiler_err": r.stdout + r.stderr}
+    if r.returncode != 0 or not resultado.get("success"):
+        sys.exit(f"Não compilou: {ino.relative_to(RAIZ)}\n{resultado.get('compiler_out', '')}\n{resultado.get('compiler_err', '')}")
     destino = saida / ino.relative_to(RAIZ).with_suffix(".hex")
     destino.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy(build / f"{nome}.ino.hex", destino)
-    relatorio = [linha.strip() for linha in r.stdout.splitlines() if linha.startswith(("Sketch uses", "Global variables"))]
-    info = {"sketch": ino.name, "placa": FQBN, "arduinoCli": versao_cli, "coreAvr": versao_core, "relatorio": relatorio}
+    construcao = resultado.get("builder_result", {})
+    saida_texto = resultado.get("compiler_out", "")
+    relatorio = [linha.strip() for linha in saida_texto.splitlines() if linha.startswith(("Sketch uses", "Global variables"))]
+    bibliotecas = [f"{b.get('name')} {b.get('version')}" for b in construcao.get("used_libraries", [])]
+    info = {"sketch": ino.name, "placa": FQBN, "arduinoCli": versao_cli, "coreAvr": versao_core,
+            "bibliotecas": bibliotecas, "relatorio": relatorio}
     destino.with_suffix(".compilacao.json").write_text(json.dumps(info, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return destino
 

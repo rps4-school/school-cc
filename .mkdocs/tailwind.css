@@ -3063,3 +3063,49 @@ fieldset.lab-campo {
     height: 180px;
   }
 }
+
+/* Leituras curtas (LED RGB) e código dentro das notas do laboratório */
+.lab-leitura-pequena {
+  font-size: 0.9rem;
+}
+.lab code {
+  padding: 0 0.25em;
+  border-radius: 0.25em;
+  background: var(--lab-fundo);
+  font: 0.9em ui-monospace, "Cascadia Code", Consolas, monospace;
+}
+
+/* Desafios: a lista de critérios conferidos na aba Instruções */
+.lab-criterios {
+  margin: 0.5rem 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8rem;
+}
+.lab-criterios li {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0.35rem 0;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.4rem;
+  background: var(--lab-fundo);
+}
+.lab-criterios small {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--lab-suave);
+}
+.lab-falta {
+  border-left: 3px solid var(--lab-ruim);
+}
+.lab-certo {
+  border-left: 3px solid #059669;
+}
+.lab-sucesso {
+  margin: 0.5rem 0;
+  font-weight: 700;
+  color: #047857;
+}
+[data-md-color-scheme="slate"] .lab-sucesso {
+  color: #34d399;
+}

@@ -27,13 +27,14 @@ function abrir(caminho) {
   return r.projeto;
 }
 
-test("todo circuito.json do conteúdo é válido e começa sem erro nem aviso", () => {
+test("todo circuito.json do conteúdo é válido e começa sem erro nem aviso (os desafios começam errados de propósito)", () => {
   const todos = circuitos(LABORATORIOS);
   assert.ok(todos.length >= 3, "nenhum circuito encontrado");
   for (const caminho of todos) {
     const p = abrir(caminho);
     const a = analisar(p);
     assert.ok(a.convergiu, `${relative(RAIZ, caminho)}: a conta não fechou`);
+    if (p.desafio) continue; // o que o aluno precisa consertar; desafios.test.js confere que o início não passa
     const ruins = diagnosticar(p, a).filter((d) => d.nivel !== "dica");
     assert.deepEqual(ruins.map((d) => d.mensagem), [], relative(RAIZ, caminho));
   }

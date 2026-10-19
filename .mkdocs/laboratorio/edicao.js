@@ -54,11 +54,15 @@ export function ligarEdicao(ctx) {
     }, `Fio ligado: ${nomeDoTerminal(estado.projeto, de)} → ${nomeDoTerminal(estado.projeto, ate)}.`);
   }
 
+  // Botão e PIR: valem só enquanto o aluno segura (momentâneo, não entra no histórico).
+  const MOMENTANEOS = { botao: "apertado", pir: "movimento" };
   function apertar(id, sim) {
     const comp = porId(estado.projeto, id);
-    if (!comp || comp.type !== "botao" || Boolean(comp.props.apertado) === sim) return;
-    comp.props.apertado = sim; // momentâneo: não entra no histórico
-    ctx.reanalisar(sim ? "Botão apertado." : "Botão solto.");
+    const campo = comp && MOMENTANEOS[comp.type];
+    if (!campo || Boolean(comp.props[campo]) === sim) return;
+    comp.props[campo] = sim;
+    const frase = comp.type === "pir" ? (sim ? "Movimento na frente do sensor." : "Sem movimento.") : (sim ? "Botão apertado." : "Botão solto.");
+    ctx.reanalisar(frase);
   }
 
   function alternar(comp) {
@@ -115,7 +119,7 @@ export function ligarEdicao(ctx) {
       ctx.selecionar({ tipo: "comp", id: comp.id });
       const ancora = TIPOS[comp.type].pegada ? posicaoDoTerminal(estado.projeto, `${comp.id}:${TIPOS[comp.type].terminais[0].id}`) : { x: comp.x, y: comp.y };
       gesto = { tipo: "arrastar", id: comp.id, inicio: { x: e.clientX, y: e.clientY }, desloc: { x: ancora.x - p.x, y: ancora.y - p.y }, movido: false };
-      if (comp.type === "botao") apertar(comp.id, true);
+      if (MOMENTANEOS[comp.type]) apertar(comp.id, true);
       return;
     }
     ctx.selecionar(null);
@@ -154,7 +158,7 @@ export function ligarEdicao(ctx) {
 
   function arrastar(g, p) {
     const original = porId(estado.projeto, g.id);
-    if (original.type === "botao") apertar(g.id, false);
+    if (MOMENTANEOS[original.type]) apertar(g.id, false);
     const rascunho = copiar(estado.projeto);
     const comp = porId(rascunho, g.id);
     const alvo = { x: p.x + g.desloc.x, y: p.y + g.desloc.y };
@@ -201,7 +205,7 @@ export function ligarEdicao(ctx) {
     }
     if (g.tipo === "arrastar") {
       const comp = porId(estado.projeto, g.id);
-      if (comp && comp.type === "botao") apertar(g.id, false);
+      if (comp && MOMENTANEOS[comp.type]) apertar(g.id, false);
       estado.previa = null;
       if (!g.movido) {
         if (comp && comp.type === "interruptor") alternar(comp);
@@ -302,7 +306,7 @@ export function ligarEdicao(ctx) {
       case " ": {
         if (!sel || sel.tipo !== "comp") return;
         const comp = porId(estado.projeto, sel.id);
-        if (comp.type === "botao") {
+        if (MOMENTANEOS[comp.type]) {
           if (!e.repeat) apertar(comp.id, true);
         } else if (!alternar(comp)) {
           return;

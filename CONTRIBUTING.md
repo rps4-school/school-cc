@@ -157,9 +157,11 @@ Para criar um **experimento** com circuito pronto:
 4. Para aparecer na lista de exemplos, acrescente o circuito em `laboratorio/exemplos.json`.
 5. **Toda leitura citada no roteiro tem que sair do simulador.** Acrescente as principais em `.mkdocs/laboratorio/testes/exemplos.test.js` e rode os testes do laboratório.
 
-Para um **projeto de Arduino** que roda no laboratório, ponha o sketch (`nome.ino`) na pasta do projeto e, no `circuito.json`, `"sketch": "nome.ino"` (e, se quiser, `"variantes"` com outros `.ino`). O site não compila C++: a CI compila os `.ino` com o arduino-cli e publica o firmware ao lado deles. Para testar no seu computador, veja "Rodar os testes com firmware" em `.mkdocs/laboratorio/README.md`.
+Para um **projeto de Arduino** que roda no laboratório, ponha o sketch (`nome.ino`) na pasta do projeto e, no `circuito.json`, `"sketch": "nome.ino"` (e, se quiser, `"variantes"` com outros `.ino`). O site não compila C++: a CI compila os `.ino` com o arduino-cli e publica o firmware ao lado deles. Para testar no seu computador, veja "Rodar os testes com firmware" em `.mkdocs/laboratorio/README.md`. Se o sketch usa uma biblioteca, acrescente-a, com versão fixa, em `BIBLIOTECAS` no `.mkdocs/laboratorio/instalar-arduino-cli.sh` e mude a chave do cache do arduino-cli nos workflows.
 
-O simulador é de **corrente contínua**: pilhas, bateria, 5V e 3.3V do Arduino, resistor, LED, interruptor, botão, potenciômetro, LDR e multímetro, e o programa roda num ATmega328P emulado. Ele não simula capacitor, transistor nem motor. Não escreva atividade que dependa disso como se funcionasse.
+Para um **desafio** com conferência automática, crie `laboratorio/desafios/NN-nome/` com o `circuito.json` inicial (incompleto ou errado de propósito) e a chave `"desafio"` com os critérios (veja "Desafios" em `.mkdocs/laboratorio/README.md`), e um `README.md` que diga **o que é conferido**. Acrescente os casos em `.mkdocs/laboratorio/testes/desafios.test.js`: o início não passa, uma montagem certa passa e os erros típicos falham.
+
+O simulador é de **corrente contínua**: pilhas, bateria, 5V e 3.3V do Arduino, resistor, LED, LED RGB, interruptor, botão, potenciômetro, LDR e multímetro, e o programa roda num ATmega328P emulado, com buzzer, PIR, ultrassom e servo como modelos de comportamento. Ele não simula capacitor, transistor, relé nem motor. Não escreva atividade que dependa disso como se funcionasse.
 
 ## Boas práticas
 
